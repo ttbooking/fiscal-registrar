@@ -1,0 +1,56 @@
+{
+    "name": "ttbooking/fiscal-registrar",
+    "description": "Fiscal registrar service",
+    "type": "library",
+    "keywords": ["fiscal registrar"],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/ttbooking/fiscal-registrar/issues",
+        "source": "https://github.com/ttbooking/fiscal-registrar"
+    },
+    "authors": [
+        {
+            "name": "Sergey Danilchenko",
+            "email": "s.danilchenko@ttbooking.ru"
+        }
+    ],
+    "require": {
+        "php": "^7.4 || ^8.0",
+        "illuminate/contracts": "^7.0 || ^8.0",
+        "illuminate/database": "^7.0 || ^8.0",
+        "illuminate/support": "^7.0 || ^8.0",
+        "ttbooking/atol-client": "^1.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.4 || ^9.0"
+    },
+    "suggest": {
+        "illuminate/events": "Required to utilize registration events (^7.0 || ^8.0).",
+        "illuminate/console": "Required to register receipts via console commands (^7.0 || ^8.0)."
+    },
+    "autoload": {
+        "psr-4": {
+            "TTBooking\\FiscalRegistrar\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TTBooking\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TTBooking\\FiscalRegistrar\\FiscalRegistrarServiceProvider"
+            ],
+            "aliases": {
+                "FiscalRegistrar": "TTBooking\\FiscalRegistrar\\Facades\\FiscalRegistrar"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

@@ -6,6 +6,7 @@ namespace TTBooking\FiscalRegistrar;
 
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
+use Lamoda\AtolClient\V4\AtolApi;
 
 class FiscalRegistrarServiceProvider extends ServiceProvider implements DeferrableProvider
 {
@@ -16,6 +17,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider implements Deferrab
      */
     public array $singletons = [
         Contracts\FiscalRegistrar::class => FiscalRegistrarManager::class,
+        AtolApi::class => AtolApi::class,
     ];
 
     /**

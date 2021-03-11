@@ -5,10 +5,35 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar;
 
 use Illuminate\Contracts\Events\Dispatcher;
+use TTBooking\FiscalRegistrar\DTO\Register\Request;
+use TTBooking\FiscalRegistrar\DTO\Register\Response;
 
+/**
+ * @method Contracts\FiscalRegistrar connection(string $name = null)
+ */
 class FiscalRegistrarManager extends Support\Manager implements Contracts\FiscalRegistrar
 {
     protected string $configName = 'fiscal-registrar';
+
+    public function sell(string $externalId, Request\Receipt $receipt): Response
+    {
+        return $this->connection()->{__FUNCTION__}($externalId, $receipt);
+    }
+
+    public function sellRefund(string $externalId, Request\Receipt $receipt): Response
+    {
+        return $this->connection()->{__FUNCTION__}($externalId, $receipt);
+    }
+
+    public function buy(string $externalId, Request\Receipt $receipt): Response
+    {
+        return $this->connection()->{__FUNCTION__}($externalId, $receipt);
+    }
+
+    public function buyRefund(string $externalId, Request\Receipt $receipt): Response
+    {
+        return $this->connection()->{__FUNCTION__}($externalId, $receipt);
+    }
 
     /**
      * Re-set the event dispatcher on all resolved driver instances.
@@ -30,7 +55,9 @@ class FiscalRegistrarManager extends Support\Manager implements Contracts\Fiscal
      */
     protected function createAtolDriver(array $config): Contracts\FiscalRegistrar
     {
-        return $this->configureInstance(new AtolFiscalRegistrar($config));
+        return $this->configureInstance(
+            $this->container->make(AtolFiscalRegistrar::class, compact('config'))
+        );
     }
 
     /**

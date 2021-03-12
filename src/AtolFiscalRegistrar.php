@@ -54,6 +54,11 @@ class AtolFiscalRegistrar extends FiscalRegistrar
         return $atolResponse;
     }
 
+    public function processCallback($payload)
+    {
+        return $this->convertPayload($payload);
+    }
+
     /**
      * @param  string  $operation
      * @param  string  $externalId

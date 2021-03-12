@@ -39,6 +39,11 @@ class FiscalRegistrarManager extends Support\Manager implements
         return $this->connection()->{__FUNCTION__}($id);
     }
 
+    public function processCallback($payload)
+    {
+        return $this->connection()->{__FUNCTION__}($payload);
+    }
+
     /**
      * Re-set the event dispatcher on all resolved driver instances.
      *

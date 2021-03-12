@@ -17,6 +17,7 @@ use TTBooking\FiscalRegistrar\DTO\Register\Response;
  * @method static Response buy(string $externalId, Request\Receipt $receipt)
  * @method static Response buyRefund(string $externalId, Request\Receipt $receipt)
  * @method static object report(string $id)
+ * @method static mixed processCallback(mixed $payload)
  */
 class FiscalRegistrar extends Facade
 {

@@ -53,4 +53,10 @@ interface FiscalRegistrar
      * @throws FiscalRegistrarException
      */
     public function report(string $id): object;
+
+    /**
+     * @param  mixed  $payload
+     * @return mixed
+     */
+    public function processCallback($payload);
 }

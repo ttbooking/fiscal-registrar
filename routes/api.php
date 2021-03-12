@@ -13,5 +13,6 @@ Route::prefix('api/{connection}')->group(function () {
     // Report Routes...
     Route::get('/list', 'FiscalRegistrarController@list')->name('fiscal-registrar.list');
     Route::get('/report/{id}', 'FiscalRegistrarController@report')->name('fiscal-registrar.report');
+    Route::post('/callback', 'FiscalRegistrarController@callback')->name('fiscal-registrar.callback');
 
 });

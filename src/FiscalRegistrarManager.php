@@ -8,10 +8,9 @@ use Illuminate\Contracts\Events\Dispatcher;
 use TTBooking\FiscalRegistrar\DTO\Register\Request;
 use TTBooking\FiscalRegistrar\DTO\Register\Response;
 
-/**
- * @method Contracts\FiscalRegistrar connection(string $name = null)
- */
-class FiscalRegistrarManager extends Support\Manager implements Contracts\FiscalRegistrar
+class FiscalRegistrarManager extends Support\Manager implements
+    Contracts\FiscalRegistrarFactory,
+    Contracts\FiscalRegistrar
 {
     protected string $configName = 'fiscal-registrar';
 
@@ -33,6 +32,11 @@ class FiscalRegistrarManager extends Support\Manager implements Contracts\Fiscal
     public function buyRefund(string $externalId, Request\Receipt $receipt): Response
     {
         return $this->connection()->{__FUNCTION__}($externalId, $receipt);
+    }
+
+    public function report(string $id): object
+    {
+        return $this->connection()->{__FUNCTION__}($id);
     }
 
     /**

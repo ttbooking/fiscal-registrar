@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar;
 
 use Illuminate\Contracts\Support\DeferrableProvider;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Lamoda\AtolClient\V4\AtolApi;
 
 class FiscalRegistrarServiceProvider extends ServiceProvider implements DeferrableProvider
 {
@@ -16,8 +16,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider implements Deferrab
      * @var array<string, string>
      */
     public array $singletons = [
-        Contracts\FiscalRegistrar::class => FiscalRegistrarManager::class,
-        AtolApi::class => AtolApi::class,
+        'fiscal-registrar' => FiscalRegistrarManager::class,
     ];
 
     /**
@@ -31,7 +30,15 @@ class FiscalRegistrarServiceProvider extends ServiceProvider implements Deferrab
             $this->publishes([
                 __DIR__.'/../config/fiscal-registrar.php' => $this->app->configPath('fiscal-registrar.php'),
             ], 'config');
+
+            $this->publishes([
+                __DIR__.'/../database/migrations' => $this->app->databasePath('migrations'),
+            ], 'migrations');
+
+            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         }
+
+        $this->registerRoutes();
     }
 
     /**
@@ -43,7 +50,8 @@ class FiscalRegistrarServiceProvider extends ServiceProvider implements Deferrab
     {
         $this->mergeConfigFrom(__DIR__.'/../config/fiscal-registrar.php', 'fiscal-registrar');
 
-        $this->app->alias(Contracts\FiscalRegistrar::class, 'fiscal-registrar');
+        $this->app->alias('fiscal-registrar', Contracts\FiscalRegistrarFactory::class);
+        $this->app->alias('fiscal-registrar', Contracts\FiscalRegistrar::class);
         $this->app->singleton('fiscal-registrar.connection', fn ($app) => $app['fiscal-registrar']->connection());
     }
 
@@ -55,8 +63,28 @@ class FiscalRegistrarServiceProvider extends ServiceProvider implements Deferrab
     public function provides(): array
     {
         return array_merge(
-            array_keys($this->singletons),
-            ['fiscal-registrar', 'fiscal-registrar.connection']
+            array_keys($this->singletons), [
+                Contracts\FiscalRegistrarFactory::class,
+                Contracts\FiscalRegistrar::class,
+                'fiscal-registrar.connection',
+            ]
         );
+    }
+
+    /**
+     * Register the Fiscal Registrar routes.
+     *
+     * @return void
+     */
+    protected function registerRoutes(): void
+    {
+        Route::group([
+            'domain' => $this->app['config']['fiscal-registrar.domain'] ?? null,
+            'prefix' => $this->app['config']['fiscal-registrar.path'] ?? null,
+            'namespace' => 'TTBooking\\FiscalRegistrar\\Http\\Controllers',
+            'middleware' => $this->app['config']['fiscal-registrar.middleware'] ?? 'web',
+        ], function () {
+            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+        });
     }
 }

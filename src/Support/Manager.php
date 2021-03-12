@@ -9,8 +9,9 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use TTBooking\FiscalRegistrar\Contracts\Factory;
 
-abstract class Manager
+abstract class Manager implements Factory
 {
     /**
      * The container instance.
@@ -71,14 +72,6 @@ abstract class Manager
         return $this->config->get("{$configName}.default", 'default');
     }
 
-    /**
-     * Get a connection instance.
-     *
-     * @param  string|null  $name
-     * @return object
-     *
-     * @throws InvalidArgumentException
-     */
     public function connection(string $name = null): object
     {
         $name ??= $this->getDefaultDriver();
@@ -86,25 +79,6 @@ abstract class Manager
         return $this->connections[$name] ??= $this->resolve($name);
     }
 
-    /**
-     * Register a custom driver creator Closure.
-     *
-     * @param  string  $driver
-     * @param  Closure  $callback
-     * @return $this
-     */
-    public function extend(string $driver, Closure $callback): self
-    {
-        $this->customCreators[$driver] = $callback->bindTo($this, $this);
-
-        return $this;
-    }
-
-    /**
-     * Get all of the created connections.
-     *
-     * @return array<string, object>
-     */
     public function getConnections(): array
     {
         return $this->connections;
@@ -120,6 +94,20 @@ abstract class Manager
     public function __call(string $method, array $parameters)
     {
         return $this->connection()->$method(...$parameters);
+    }
+
+    /**
+     * Register a custom driver creator Closure.
+     *
+     * @param  string  $driver
+     * @param  Closure  $callback
+     * @return $this
+     */
+    public function extend(string $driver, Closure $callback): self
+    {
+        $this->customCreators[$driver] = $callback->bindTo($this, $this);
+
+        return $this;
     }
 
     /**

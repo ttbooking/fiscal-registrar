@@ -45,4 +45,12 @@ interface FiscalRegistrar
      * @throws FiscalRegistrarException
      */
     public function buyRefund(string $externalId, Request\Receipt $receipt): Response;
+
+    /**
+     * @param  string  $id
+     * @return object
+     *
+     * @throws FiscalRegistrarException
+     */
+    public function report(string $id): object;
 }

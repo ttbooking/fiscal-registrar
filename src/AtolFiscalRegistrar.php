@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar;
 
+use Illuminate\Support\Str;
 use Lamoda\AtolClient\V4\AtolApi;
 use Lamoda\AtolClient\V4\DTO\Register as AtolRegister;
 use RuntimeException;
@@ -40,6 +41,19 @@ class AtolFiscalRegistrar extends FiscalRegistrar
         return $this->register(__FUNCTION__, $externalId, $receipt);
     }
 
+    public function report(string $id): object
+    {
+        // TODO: implement
+
+        try {
+            $atolResponse = $this->api->report($this->config['group_code'], '', $id);
+        } catch (RuntimeException $e) {
+            throw new Exceptions\FiscalRegistrarException("Report operation failed.", $e->getCode(), $e);
+        }
+
+        return $atolResponse;
+    }
+
     /**
      * @param  string  $operation
      * @param  string  $externalId
@@ -50,18 +64,29 @@ class AtolFiscalRegistrar extends FiscalRegistrar
      */
     protected function register(string $operation, string $externalId, Request\Receipt $receipt): Response
     {
-        $service = isset($config['callback_url']) ? new Request\Service($config['callback_url']) : null;
+        $service = isset($this->config['callback_url']) ? new Request\Service($this->config['callback_url']) : null;
         $request = new Request($externalId, $receipt, $service);
 
         $atolRequest = $this->convertRequest($request);
 
+        $this->event(new (static::eventClass($operation))($receipt));
+
         try {
-            $atolResponse = $this->api->{$operation}($config['group_code'], '', $atolRequest);
+            $atolResponse = $this->api->{$operation}($this->config['group_code'], '', $atolRequest);
         } catch (RuntimeException $e) {
             throw new Exceptions\FiscalRegistrarException("{$operation} operation failed.", $e->getCode(), $e);
         }
 
+        $this->event(new (static::eventClass($operation, true))($receipt));
+
         return $this->convertResponse($atolResponse);
+    }
+
+    protected static function eventClass(string $operation, bool $registered = false): string
+    {
+        $stage = $registered ? 'Registered' : 'Registering';
+
+        return 'TTBooking\\FiscalRegistrar\\Events\\'.Str::studly($operation).'Receipt'.$stage;
     }
 
     protected function convertRequest(Request $request): AtolRegister\RegisterRequest

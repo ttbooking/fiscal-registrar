@@ -78,7 +78,7 @@ class AtolFiscalRegistrar extends FiscalRegistrar
      */
     protected function getToken(bool $force = false): string
     {
-        $key = "fiscal-registrar::{$this->connection}::token";
+        $key = "fiscal-registrar:{$this->connection}:token";
 
         $tokenRetriever = function () {
             $tokenResponse = $this->api->getToken(new AtolGetToken\GetTokenRequest(

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TTBooking\FiscalRegistrar\DTO\Register\Request\Receipt\AgentInfo;
+namespace TTBooking\FiscalRegistrar\DTO\Receipt\AgentInfo;
 
 final class ReceivePaymentsOperator
 {

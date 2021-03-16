@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar;
 
 use Illuminate\Contracts\Events\Dispatcher;
-use TTBooking\FiscalRegistrar\DTO\Register\Request;
-use TTBooking\FiscalRegistrar\DTO\Register\Response;
+use TTBooking\FiscalRegistrar\DTO\Receipt;
+use TTBooking\FiscalRegistrar\DTO\Result;
 
 class FiscalRegistrarManager extends Support\Manager implements
     Contracts\FiscalRegistrarFactory,
@@ -14,27 +14,27 @@ class FiscalRegistrarManager extends Support\Manager implements
 {
     protected string $configName = 'fiscal-registrar';
 
-    public function sell(string $externalId, Request\Receipt $receipt): Response
+    public function sell(string $externalId, Receipt $receipt): Result
     {
         return $this->connection()->{__FUNCTION__}($externalId, $receipt);
     }
 
-    public function sellRefund(string $externalId, Request\Receipt $receipt): Response
+    public function sellRefund(string $externalId, Receipt $receipt): Result
     {
         return $this->connection()->{__FUNCTION__}($externalId, $receipt);
     }
 
-    public function buy(string $externalId, Request\Receipt $receipt): Response
+    public function buy(string $externalId, Receipt $receipt): Result
     {
         return $this->connection()->{__FUNCTION__}($externalId, $receipt);
     }
 
-    public function buyRefund(string $externalId, Request\Receipt $receipt): Response
+    public function buyRefund(string $externalId, Receipt $receipt): Result
     {
         return $this->connection()->{__FUNCTION__}($externalId, $receipt);
     }
 
-    public function report(string $id): object
+    public function report(string $id): Result
     {
         return $this->connection()->{__FUNCTION__}($id);
     }
@@ -60,12 +60,13 @@ class FiscalRegistrarManager extends Support\Manager implements
      * Create an instance of the Atol fiscal registrar Driver.
      *
      * @param  array  $config
+     * @param  string  $connection
      * @return AtolFiscalRegistrar
      */
-    protected function createAtolDriver(array $config): Contracts\FiscalRegistrar
+    protected function createAtolDriver(array $config, string $connection): Contracts\FiscalRegistrar
     {
         return $this->configureInstance(
-            $this->container->make(AtolFiscalRegistrar::class, compact('config'))
+            $this->container->make(AtolFiscalRegistrar::class, compact('config', 'connection'))
         );
     }
 

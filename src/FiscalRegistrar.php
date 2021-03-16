@@ -13,8 +13,14 @@ abstract class FiscalRegistrar implements Contracts\FiscalRegistrar, Contracts\D
      */
     protected array $config;
 
-    public function __construct(array $config = [])
+    /**
+     * @var string
+     */
+    protected string $connection;
+
+    public function __construct(array $config = [], string $connection = 'default')
     {
         $this->config = $config;
+        $this->connection = $connection;
     }
 }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TTBooking\FiscalRegistrar\DTO\Register\Request;
+namespace TTBooking\FiscalRegistrar\DTO;
 
 use Illuminate\Support\Collection;
 

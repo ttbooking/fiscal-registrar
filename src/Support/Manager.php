@@ -128,7 +128,7 @@ abstract class Manager implements Factory
             $method = 'create'.Str::studly($config['driver']).'Driver';
 
             if (method_exists($this, $method)) {
-                return $this->$method($config);
+                return $this->$method($config, $name);
             }
         }
 

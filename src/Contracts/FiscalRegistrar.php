@@ -4,55 +4,55 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Contracts;
 
-use TTBooking\FiscalRegistrar\DTO\Register\Request;
-use TTBooking\FiscalRegistrar\DTO\Register\Response;
+use TTBooking\FiscalRegistrar\DTO\Receipt;
+use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Exceptions\FiscalRegistrarException;
 
 interface FiscalRegistrar
 {
     /**
      * @param  string  $externalId
-     * @param  Request\Receipt  $receipt
-     * @return Response
+     * @param  Receipt  $receipt
+     * @return Result
      *
      * @throws FiscalRegistrarException
      */
-    public function sell(string $externalId, Request\Receipt $receipt): Response;
+    public function sell(string $externalId, Receipt $receipt): Result;
 
     /**
      * @param  string  $externalId
-     * @param  Request\Receipt  $receipt
-     * @return Response
+     * @param  Receipt  $receipt
+     * @return Result
      *
      * @throws FiscalRegistrarException
      */
-    public function sellRefund(string $externalId, Request\Receipt $receipt): Response;
+    public function sellRefund(string $externalId, Receipt $receipt): Result;
 
     /**
      * @param  string  $externalId
-     * @param  Request\Receipt  $receipt
-     * @return Response
+     * @param  Receipt  $receipt
+     * @return Result
      *
      * @throws FiscalRegistrarException
      */
-    public function buy(string $externalId, Request\Receipt $receipt): Response;
+    public function buy(string $externalId, Receipt $receipt): Result;
 
     /**
      * @param  string  $externalId
-     * @param  Request\Receipt  $receipt
-     * @return Response
+     * @param  Receipt  $receipt
+     * @return Result
      *
      * @throws FiscalRegistrarException
      */
-    public function buyRefund(string $externalId, Request\Receipt $receipt): Response;
+    public function buyRefund(string $externalId, Receipt $receipt): Result;
 
     /**
      * @param  string  $id
-     * @return object
+     * @return Result
      *
      * @throws FiscalRegistrarException
      */
-    public function report(string $id): object;
+    public function report(string $id): Result;
 
     /**
      * @param  mixed  $payload

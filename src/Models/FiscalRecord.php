@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
 
 /**
@@ -16,7 +17,7 @@ class FiscalRecord extends Model
 {
     protected $table = 'fiscal_registry';
 
-    public function report(): object
+    public function report(): Result
     {
         return FiscalRegistrar::connection($this->connection)->report($this->internal_id);
     }

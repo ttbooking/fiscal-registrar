@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TTBooking\FiscalRegistrar\DTO\Register\Request\Receipt;
+namespace TTBooking\FiscalRegistrar\DTO\Receipt;
 
 final class Payment
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TTBooking\FiscalRegistrar\DTO\Report\Response;
+namespace TTBooking\FiscalRegistrar\DTO\Result;
 
 use DateTimeInterface;
 

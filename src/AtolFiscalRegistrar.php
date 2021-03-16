@@ -108,7 +108,8 @@ class AtolFiscalRegistrar extends FiscalRegistrar
     {
         $registerRequest = $this->makeRequest($externalId, $receipt);
 
-        $this->event(new (static::eventClass($operation))($receipt));
+        $eventClass = static::eventClass($operation);
+        $this->event(new $eventClass($receipt));
 
         $force = false;
         do try {
@@ -120,7 +121,8 @@ class AtolFiscalRegistrar extends FiscalRegistrar
             throw new Exceptions\FiscalRegistrarException("{$operation} operation failed.", $e->getCode(), $e);
         } while (static::tokenHasExpired($registerResponse));
 
-        $this->event(new (static::eventClass($operation, true))($receipt));
+        $eventClass = static::eventClass($operation, true);
+        $this->event(new $eventClass($receipt));
 
         return $this->processRegisterResponse($registerResponse);
     }

@@ -37,7 +37,7 @@ return [
     'connections' => [
 
         'atol' => [
-            'url' => 'https://testonline.atol.ru/possystem/v4',
+            'url' => 'https://testonline.atol.ru/possystem',
             'login' => 'v4-online-atol-ru',
             'password' => 'iGFFuihss',
             'inn' => '5544332219',

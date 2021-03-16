@@ -70,7 +70,7 @@ final class Receipt
         $this->agentInfo = $agentInfo;
         $this->supplierInfo = $supplierInfo;
         $this->items = collect($items);
-        $this->payments = $payments;
+        $this->payments = collect($payments);
         $this->vats = isset($vats) ? collect($vats) : $vats;
         $this->total = $total;
         $this->additionalCheckProps = $additionalCheckProps;

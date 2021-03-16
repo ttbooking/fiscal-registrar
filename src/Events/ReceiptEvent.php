@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Events;
 
-use TTBooking\FiscalRegistrar\DTO\Register\Request\Receipt;
+use TTBooking\FiscalRegistrar\DTO\Receipt;
 
 abstract class ReceiptEvent
 {

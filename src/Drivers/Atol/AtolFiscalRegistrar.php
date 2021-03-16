@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TTBooking\FiscalRegistrar;
+namespace TTBooking\FiscalRegistrar\Drivers\Atol;
 
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Support\Str;
@@ -12,8 +12,10 @@ use Lamoda\AtolClient\V4\DTO\Register as AtolRegister;
 use Lamoda\AtolClient\V4\DTO\Report as AtolReport;
 use Lamoda\AtolClient\V4\DTO\Shared\ErrorType;
 use RuntimeException;
+use TTBooking\FiscalRegistrar\Drivers\FiscalRegistrar;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
+use TTBooking\FiscalRegistrar\Exceptions;
 
 class AtolFiscalRegistrar extends FiscalRegistrar
 {
@@ -21,10 +23,10 @@ class AtolFiscalRegistrar extends FiscalRegistrar
 
     protected Repository $cache;
 
-    public function __construct(AtolApi $api, Repository $cache, array $config = [], string $connection = 'default')
+    public function __construct(ApiFactory $factory, Repository $cache, array $config = [], string $connection = 'default')
     {
         parent::__construct($config, $connection);
-        $this->api = $api;
+        $this->api = $factory->make($config['url']);
         $this->cache = $cache;
     }
 

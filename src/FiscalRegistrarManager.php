@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar;
 
 use Illuminate\Contracts\Events\Dispatcher;
+use TTBooking\FiscalRegistrar\Drivers\Atol\AtolFiscalRegistrar;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 

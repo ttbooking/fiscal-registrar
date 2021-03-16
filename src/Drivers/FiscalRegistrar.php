@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace TTBooking\FiscalRegistrar;
+namespace TTBooking\FiscalRegistrar\Drivers;
+
+use TTBooking\FiscalRegistrar\Concerns;
+use TTBooking\FiscalRegistrar\Contracts;
 
 abstract class FiscalRegistrar implements Contracts\FiscalRegistrar, Contracts\DispatchesEvents
 {

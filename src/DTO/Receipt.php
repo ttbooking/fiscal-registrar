@@ -10,7 +10,7 @@ final class Receipt
 {
     public Receipt\Client $client;
 
-    public Receipt\Company $company;
+    public ?Receipt\Company $company;
 
     public ?Receipt\AgentInfo $agentInfo;
 

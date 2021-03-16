@@ -41,7 +41,7 @@ final class Receipt
      * Receipt constructor.
      *
      * @param  Receipt\Client  $client
-     * @param  Receipt\Company  $company
+     * @param  Receipt\Company|null  $company
      * @param  Receipt\AgentInfo|null  $agentInfo
      * @param  Receipt\SupplierInfo|null  $supplierInfo
      * @param  Collection|array  $items
@@ -54,7 +54,7 @@ final class Receipt
      */
     public function __construct(
         Receipt\Client $client,
-        Receipt\Company $company,
+        Receipt\Company $company = null,
         Receipt\AgentInfo $agentInfo = null,
         Receipt\SupplierInfo $supplierInfo = null,
         $items = [],

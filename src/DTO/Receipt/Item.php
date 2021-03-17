@@ -54,7 +54,7 @@ final class Item
      * @param  string  $name
      * @param  float  $price
      * @param  int  $quantity
-     * @param  float  $sum
+     * @param  float|null  $sum
      * @param  string|null  $measurementUnit
      * @param  string|null  $nomenclatureCode
      * @param  string  $paymentMethod
@@ -71,7 +71,7 @@ final class Item
         string $name,
         float $price,
         int $quantity,
-        float $sum,
+        float $sum = null,
         string $measurementUnit = null,
         string $nomenclatureCode = null,
         string $paymentMethod = 'full_prepayment',
@@ -87,7 +87,7 @@ final class Item
         $this->name = $name;
         $this->price = $price;
         $this->quantity = $quantity;
-        $this->sum = $sum;
+        $this->sum = $sum ?? $price * $quantity;
         $this->measurementUnit = $measurementUnit;
         $this->nomenclatureCode = $nomenclatureCode;
         $this->paymentMethod = $paymentMethod;

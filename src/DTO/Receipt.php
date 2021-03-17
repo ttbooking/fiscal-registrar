@@ -47,7 +47,7 @@ final class Receipt
      * @param  Collection|array  $items
      * @param  Collection|array  $payments
      * @param  Collection|array|null  $vats
-     * @param  float  $total
+     * @param  float|null  $total
      * @param  string|null  $additionalCheckProps
      * @param  string|null  $cashier
      * @param  Receipt\AdditionalUserProps|null  $additionalUserProps
@@ -60,7 +60,7 @@ final class Receipt
         $items = [],
         $payments = [],
         $vats = null,
-        float $total = 0,
+        float $total = null,
         string $additionalCheckProps = null,
         string $cashier = null,
         Receipt\AdditionalUserProps $additionalUserProps = null
@@ -70,9 +70,11 @@ final class Receipt
         $this->agentInfo = $agentInfo;
         $this->supplierInfo = $supplierInfo;
         $this->items = collect($items);
-        $this->payments = collect($payments);
+        $this->total = $total ?? $this->items->sum('sum');
+        $this->payments = collect($payments)->whenEmpty(
+            fn (Collection $payments) => $payments->add(new Receipt\Payment(1, $this->total))
+        );
         $this->vats = isset($vats) ? collect($vats) : $vats;
-        $this->total = $total;
         $this->additionalCheckProps = $additionalCheckProps;
         $this->cashier = $cashier;
         $this->additionalUserProps = $additionalUserProps;

@@ -57,7 +57,7 @@ final class Payload
         string $ecrRegistrationNumber,
         int $fiscalDocumentNumber,
         int $fiscalDocumentAttribute,
-        string $fnsSite = 'https://www.nalog.ru'
+        string $fnsSite = 'www.nalog.ru'
     ) {
         $this->fiscalReceiptNumber = $fiscalReceiptNumber;
         $this->shiftNumber = $shiftNumber;

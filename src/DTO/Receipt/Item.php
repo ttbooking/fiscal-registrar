@@ -70,7 +70,7 @@ final class Item
     public function __construct(
         string $name,
         float $price,
-        int $quantity,
+        int $quantity = 1,
         float $sum = null,
         string $measurementUnit = null,
         string $nomenclatureCode = null,

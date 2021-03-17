@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Drivers\Atol;
 
 use Illuminate\Contracts\Cache\Repository;
+use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Str;
 use Lamoda\AtolClient\V4\AtolApi;
 use Lamoda\AtolClient\V4\DTO\GetToken as AtolGetToken;
@@ -23,10 +24,15 @@ class AtolFiscalRegistrar extends FiscalRegistrar
 
     protected Repository $cache;
 
-    public function __construct(ApiFactory $factory, Repository $cache, array $config = [], string $connection = 'default')
-    {
-        parent::__construct($config, $connection);
-        $this->api = $factory->make($config['url']);
+    public function __construct(
+        ApiFactory $factory,
+        Repository $cache,
+        UrlGenerator $urlGenerator,
+        array $config = [],
+        string $connection = 'default'
+    ) {
+        parent::__construct($urlGenerator, $config, $connection);
+        $this->api = $factory->make($config['url'] ?? null);
         $this->cache = $cache;
     }
 
@@ -186,8 +192,8 @@ class AtolFiscalRegistrar extends FiscalRegistrar
 
         );
 
-        if (isset($this->config['callback_url'])) {
-            $registerRequest->setService(new AtolRegister\Service($this->config['callback_url']));
+        if ($callbackUrl = $this->getCallbackUrl()) {
+            $registerRequest->setService(new AtolRegister\Service($callbackUrl));
         }
 
         return $registerRequest;

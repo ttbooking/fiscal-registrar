@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Validation;
 
 final class ApiFactory
 {
-    public function make(string $baseUri): AtolApi
+    public function make(string $baseUri = null): AtolApi
     {
         return new AtolApi(
             new ObjectConverter(
@@ -33,7 +33,7 @@ final class ApiFactory
                 Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator()
 
             ),
-            new Client, [], $baseUri
+            new Client, [], $baseUri ?? 'https://online.atol.ru/possystem'
         );
     }
 }

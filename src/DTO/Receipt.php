@@ -6,7 +6,7 @@ namespace TTBooking\FiscalRegistrar\DTO;
 
 use Illuminate\Support\Collection;
 
-final class Receipt
+final class Receipt extends DataTransferObject
 {
     public Receipt\Client $client;
 
@@ -16,16 +16,14 @@ final class Receipt
 
     public ?Receipt\SupplierInfo $supplierInfo;
 
-    /** @var Collection<Receipt\Item> */
-    public Collection $items;
+    public Receipt\ItemCollection $items;
 
-    /** @var Collection<Receipt\Payment> */
-    public Collection $payments;
+    public Receipt\PaymentCollection $payments;
 
-    /** @var Collection<Receipt\VAT>|null */
-    public ?Collection $vats;
+    public ?Receipt\VATCollection $vats;
 
     // 1020
+    /** @var float|int */
     public float $total;
 
     // 1192
@@ -44,15 +42,16 @@ final class Receipt
      * @param  Receipt\Company|null  $company
      * @param  Receipt\AgentInfo|null  $agentInfo
      * @param  Receipt\SupplierInfo|null  $supplierInfo
-     * @param  Collection|array  $items
-     * @param  Collection|array  $payments
-     * @param  Collection|array|null  $vats
+     * @param  array  $items
+     * @param  array  $payments
+     * @param  array|null  $vats
      * @param  float|null  $total
      * @param  string|null  $additionalCheckProps
      * @param  string|null  $cashier
      * @param  Receipt\AdditionalUserProps|null  $additionalUserProps
+     * @return self
      */
-    public function __construct(
+    public static function new(
         Receipt\Client $client,
         Receipt\Company $company = null,
         Receipt\AgentInfo $agentInfo = null,
@@ -64,8 +63,8 @@ final class Receipt
         string $additionalCheckProps = null,
         string $cashier = null,
         Receipt\AdditionalUserProps $additionalUserProps = null
-    ) {
-        $this->client = $client;
+    ): self {
+        /*$this->client = $client;
         $this->company = $company;
         $this->agentInfo = $agentInfo;
         $this->supplierInfo = $supplierInfo;
@@ -77,6 +76,22 @@ final class Receipt
         $this->vats = isset($vats) ? collect($vats) : $vats;
         $this->additionalCheckProps = $additionalCheckProps;
         $this->cashier = $cashier;
-        $this->additionalUserProps = $additionalUserProps;
+        $this->additionalUserProps = $additionalUserProps;*/
+
+        return new self([
+            'client' => $client,
+            'company' => $company,
+            'agentInfo' => $agentInfo,
+            'supplierInfo' => $supplierInfo,
+            'items' => new Receipt\ItemCollection($items),
+            'total' => $total ??= collect($items)->sum('sum'),
+            'payments' => new Receipt\PaymentCollection(collect($payments)->whenEmpty(
+                fn (Collection $payments) => $payments->add(Receipt\Payment::new(1, $total))
+            )->all()),
+            'vats' => isset($vats) ? new Receipt\VATCollection($vats) : $vats,
+            'additionalCheckProps' => $additionalCheckProps,
+            'cashier' => $cashier,
+            'additionalUserProps' => $additionalUserProps,
+        ]);
     }
 }

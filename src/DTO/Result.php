@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\DTO;
 
 use DateTimeInterface;
-use TTBooking\FiscalRegistrar\DTO\Result\Payload;
 
-final class Result
+final class Result extends DataTransferObject
 {
     public string $externalId;
 
@@ -17,7 +16,7 @@ final class Result
 
     public string $status;
 
-    public ?Payload $payload;
+    public ?Result\Payload $payload;
 
     public ?object $extra;
 
@@ -28,22 +27,18 @@ final class Result
      * @param  string  $internalId
      * @param  DateTimeInterface  $timestamp
      * @param  string  $status
-     * @param  Payload|null  $payload
+     * @param  Result\Payload|null  $payload
      * @param  object|null  $extra
+     * @return self
      */
-    public function __construct(
+    public static function new(
         string $externalId,
         string $internalId,
         DateTimeInterface $timestamp,
         string $status,
-        Payload $payload = null,
+        Result\Payload $payload = null,
         object $extra = null
-    ) {
-        $this->externalId = $externalId;
-        $this->internalId = $internalId;
-        $this->timestamp = $timestamp;
-        $this->status = $status;
-        $this->payload = $payload;
-        $this->extra = $extra;
+    ): self {
+        return new self(compact('externalId', 'internalId', 'timestamp', 'status', 'payload', 'extra'));
     }
 }

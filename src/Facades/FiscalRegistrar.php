@@ -11,7 +11,7 @@ use TTBooking\FiscalRegistrar\DTO\Result;
 
 /**
  * @method static FiscalRegistrarContract connection(string $name = null)
- * @method static FiscalRegistrarContract[] getConnections()
+ * @method static FiscalRegistrarContract[] getConnections
  * @method static Result sell(string $externalId, Receipt $receipt)
  * @method static Result sellRefund(string $externalId, Receipt $receipt)
  * @method static Result buy(string $externalId, Receipt $receipt)

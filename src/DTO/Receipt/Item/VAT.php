@@ -4,23 +4,26 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\DTO\Receipt\Item;
 
-final class VAT
+use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
+
+final class VAT extends DataTransferObject
 {
     // 1199 (enum)
     public string $type;
 
     // 1200
+    /** @var float|int|null */
     public ?float $sum;
 
     /**
      * VAT constructor.
      *
      * @param  string  $type
-     * @param  float|null  $sum
+     * @param  float|int|null  $sum
+     * @return self
      */
-    public function __construct(string $type, float $sum = null)
+    public static function new(string $type, float $sum = null): self
     {
-        $this->type = $type;
-        $this->sum = $sum;
+        return new self(compact('type', 'sum'));
     }
 }

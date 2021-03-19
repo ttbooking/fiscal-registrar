@@ -16,6 +16,7 @@ use RuntimeException;
 use TTBooking\FiscalRegistrar\Drivers\FiscalRegistrar;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
+use TTBooking\FiscalRegistrar\Events\ReceiptEvent;
 use TTBooking\FiscalRegistrar\Exceptions;
 
 class AtolFiscalRegistrar extends FiscalRegistrar
@@ -116,8 +117,9 @@ class AtolFiscalRegistrar extends FiscalRegistrar
     {
         $registerRequest = $this->makeRequest($externalId, $receipt);
 
-        $eventClass = static::eventClass($operation);
-        $this->event(new $eventClass($receipt));
+        $this->event($this->eventName($operation).'.registering', new ReceiptEvent(
+            $this->connection, $externalId, $receipt
+        ));
 
         $force = false;
         do try {
@@ -129,8 +131,9 @@ class AtolFiscalRegistrar extends FiscalRegistrar
             throw new Exceptions\FiscalRegistrarException("{$operation} operation failed.", $e->getCode(), $e);
         } while (static::tokenHasExpired($registerResponse));
 
-        $eventClass = static::eventClass($operation, true);
-        $this->event(new $eventClass($receipt));
+        $this->event($this->eventName($operation).'.registered', new ReceiptEvent(
+            $this->connection, $externalId, $receipt
+        ));
 
         return $this->processRegisterResponse($registerResponse);
     }
@@ -146,11 +149,9 @@ class AtolFiscalRegistrar extends FiscalRegistrar
             && $error->getCode() === 11;
     }
 
-    protected static function eventClass(string $operation, bool $registered = false): string
+    protected function eventName(string $operation): string
     {
-        $stage = $registered ? 'Registered' : 'Registering';
-
-        return 'TTBooking\\FiscalRegistrar\\Events\\'.Str::studly($operation).'Receipt'.$stage;
+        return "fiscal-registrar.{$this->connection}.{$operation}";
     }
 
     protected function makeRequest(string $externalId, Receipt $receipt): AtolRegister\RegisterRequest
@@ -172,7 +173,7 @@ class AtolFiscalRegistrar extends FiscalRegistrar
                     $receipt->company->paymentAddress ?? $this->config['payment_address']
                 ),
 
-                $receipt->items->map(function (Receipt\Item $item) {
+                collect($receipt->items)->map(function (Receipt\Item $item) {
                     return new AtolRegister\Item(
                         $item->name, $item->price, $item->quantity, $item->sum,
                         AtolRegister\PaymentMethod::from($item->paymentMethod),
@@ -180,7 +181,7 @@ class AtolFiscalRegistrar extends FiscalRegistrar
                     );
                 })->all(),
 
-                $receipt->payments->map(function (Receipt\Payment $payment) {
+                collect($receipt->payments)->map(function (Receipt\Payment $payment) {
                     return new AtolRegister\Payment(AtolRegister\PaymentType::from($payment->type), $payment->sum);
                 })->all(),
 
@@ -205,7 +206,7 @@ class AtolFiscalRegistrar extends FiscalRegistrar
             throw new Exceptions\FiscalRegistrarException($error->getText(), $error->getCode());
         }
 
-        return new Result(
+        return Result::new(
             '',
             $registerResponse->getUuid(),
             $registerResponse->getTimestamp(),
@@ -215,12 +216,12 @@ class AtolFiscalRegistrar extends FiscalRegistrar
 
     protected function processReportResponse(AtolReport\ReportResponse $reportResponse): Result
     {
-        return new Result(
+        return Result::new(
             '',
             $reportResponse->getUuid(),
             $reportResponse->getTimestamp(),
             $reportResponse->getStatus()->getValue(),
-            new Result\Payload(
+            Result\Payload::new(
                 $reportResponse->getPayload()->getFiscalReceiptNumber(),
                 $reportResponse->getPayload()->getShiftNumber(),
                 $reportResponse->getPayload()->getReceiptDatetime(),

@@ -18,6 +18,9 @@ class CreateFiscalRegistryTable extends Migration
             $table->string('connection', 32)->index();
             $table->string('external_id', 128)->index();
             $table->string('internal_id', 128)->index();
+            $table->json('receipt');
+            $table->string('operation', 32);
+            $table->json('result');
             $table->timestamps();
             $table->unique(['connection', 'external_id']);
             $table->unique(['connection', 'internal_id']);

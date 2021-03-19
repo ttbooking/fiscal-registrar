@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\DTO\Receipt;
 
-final class Company
+use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
+
+final class Company extends DataTransferObject
 {
     // 1117
     public string $email;
@@ -25,12 +27,10 @@ final class Company
      * @param  string  $inn
      * @param  string  $paymentAddress
      * @param  string|null  $sno
+     * @return self
      */
-    public function __construct(string $email, string $inn, string $paymentAddress, string $sno = null)
+    public static function new(string $email, string $inn, string $paymentAddress, string $sno = null): self
     {
-        $this->email = $email;
-        $this->sno = $sno;
-        $this->inn = $inn;
-        $this->paymentAddress = $paymentAddress;
+        return new self(compact('email', 'sno', 'inn', 'paymentAddress'));
     }
 }

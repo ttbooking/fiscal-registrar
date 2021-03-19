@@ -6,23 +6,25 @@ namespace TTBooking\FiscalRegistrar\Events;
 
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 
-abstract class ReceiptEvent
+final class ReceiptEvent
 {
-    /** @var Receipt */
-    protected Receipt $receipt;
+    public string $connection;
+
+    public string $externalId;
+
+    public Receipt $receipt;
 
     /**
      * Create a new event instance.
      *
-     * @param Receipt $receipt
+     * @param  string  $connection
+     * @param  string  $externalId
+     * @param  Receipt  $receipt
      */
-    public function __construct(Receipt $receipt)
+    public function __construct(string $connection, string $externalId, Receipt $receipt)
     {
+        $this->connection = $connection;
+        $this->externalId = $externalId;
         $this->receipt = $receipt;
-    }
-
-    public function getReceipt(): Receipt
-    {
-        return $this->receipt;
     }
 }

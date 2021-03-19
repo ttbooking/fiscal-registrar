@@ -4,18 +4,22 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\DTO\Receipt;
 
-final class Item
+use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
+
+final class Item extends DataTransferObject
 {
     // 1030
     public string $name;
 
     // 1079
+    /** @var float|int */
     public float $price;
 
     // 1023
     public int $quantity;
 
     // 1043
+    /** @var float|int */
     public float $sum;
 
     // 1197
@@ -66,8 +70,9 @@ final class Item
      * @param  float|null  $excise
      * @param  string|null  $countryCode
      * @param  string|null  $declarationNumber
+     * @return self
      */
-    public function __construct(
+    public static function new(
         string $name,
         float $price,
         int $quantity = 1,
@@ -83,8 +88,8 @@ final class Item
         float $excise = null,
         string $countryCode = null,
         string $declarationNumber = null
-    ) {
-        $this->name = $name;
+    ): self {
+        /*$this->name = $name;
         $this->price = $price;
         $this->quantity = $quantity;
         $this->sum = $sum ?? $price * $quantity;
@@ -98,6 +103,12 @@ final class Item
         $this->userData = $userData;
         $this->excise = $excise;
         $this->countryCode = $countryCode;
-        $this->declarationNumber = $declarationNumber;
+        $this->declarationNumber = $declarationNumber;*/
+
+        return new self(compact(
+            'name', 'price', 'quantity', 'measurementUnit', 'nomenclatureCode',
+            'paymentMethod', 'paymentObject', 'vat', 'agentInfo', 'supplierInfo', 'userData',
+            'excise', 'countryCode', 'declarationNumber'
+        ) + ['sum' => $sum ?? $price * $quantity]);
     }
 }

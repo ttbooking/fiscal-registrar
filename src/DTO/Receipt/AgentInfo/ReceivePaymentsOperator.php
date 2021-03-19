@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\DTO\Receipt\AgentInfo;
 
-final class ReceivePaymentsOperator
+use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
+
+final class ReceivePaymentsOperator extends DataTransferObject
 {
     // 1074
     /** @var string[]|null */
@@ -14,9 +16,10 @@ final class ReceivePaymentsOperator
      * ReceivePaymentsOperator constructor.
      *
      * @param  string[]|null  $phones
+     * @return self
      */
-    public function __construct(array $phones = null)
+    public static function new(array $phones = null): self
     {
-        $this->phones = $phones;
+        return new self(compact('phones'));
     }
 }

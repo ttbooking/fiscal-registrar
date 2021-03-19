@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\DTO\Receipt;
 
-final class AdditionalUserProps
+use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
+
+final class AdditionalUserProps extends DataTransferObject
 {
     // 1085
     public string $name;
@@ -17,10 +19,10 @@ final class AdditionalUserProps
      *
      * @param  string  $name
      * @param  string  $value
+     * @return self
      */
-    public function __construct(string $name, string $value)
+    public static function new(string $name, string $value): self
     {
-        $this->name = $name;
-        $this->value = $value;
+        return new self(compact('name', 'value'));
     }
 }

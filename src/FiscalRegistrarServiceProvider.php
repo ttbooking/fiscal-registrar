@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar;
 
 use Illuminate\Contracts\Support\DeferrableProvider;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
@@ -39,6 +40,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider implements Deferrab
         }
 
         $this->registerRoutes();
+        $this->registerListeners();
     }
 
     /**
@@ -86,5 +88,15 @@ class FiscalRegistrarServiceProvider extends ServiceProvider implements Deferrab
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
         });
+    }
+
+    /**
+     * Register the Fiscal Registrar event listeners.
+     *
+     * @return void
+     */
+    protected function registerListeners(): void
+    {
+        Event::listen('fiscal-registrar.*.*.registering', Listeners\StoreReceipt::class);
     }
 }

@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\DTO\Result;
 
 use DateTimeInterface;
+use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 
-final class Payload
+final class Payload extends DataTransferObject
 {
     // 1042
     public int $fiscalReceiptNumber;
@@ -47,8 +48,9 @@ final class Payload
      * @param  int  $fiscalDocumentNumber
      * @param  int  $fiscalDocumentAttribute
      * @param  string  $fnsSite
+     * @return self
      */
-    public function __construct(
+    public static function new(
         int $fiscalReceiptNumber,
         int $shiftNumber,
         DateTimeInterface $receiptDateTime,
@@ -58,15 +60,10 @@ final class Payload
         int $fiscalDocumentNumber,
         int $fiscalDocumentAttribute,
         string $fnsSite = 'www.nalog.ru'
-    ) {
-        $this->fiscalReceiptNumber = $fiscalReceiptNumber;
-        $this->shiftNumber = $shiftNumber;
-        $this->receiptDateTime = $receiptDateTime;
-        $this->total = $total;
-        $this->fnNumber = $fnNumber;
-        $this->ecrRegistrationNumber = $ecrRegistrationNumber;
-        $this->fiscalDocumentNumber = $fiscalDocumentNumber;
-        $this->fiscalDocumentAttribute = $fiscalDocumentAttribute;
-        $this->fnsSite = $fnsSite;
+    ): self {
+        return new self(compact(
+            'fiscalReceiptNumber', 'shiftNumber', 'receiptDateTime', 'total', 'fnNumber',
+            'ecrRegistrationNumber', 'fiscalDocumentNumber', 'fiscalDocumentAttribute', 'fnsSite'
+        ));
     }
 }

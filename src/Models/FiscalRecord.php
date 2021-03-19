@@ -22,6 +22,11 @@ class FiscalRecord extends Model
 
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'receipt' => Receipt::class,
+        'result' => Result::class,
+    ];
+
     public function report(): Result
     {
         return FiscalRegistrar::connection($this->connection)->report($this->internal_id);

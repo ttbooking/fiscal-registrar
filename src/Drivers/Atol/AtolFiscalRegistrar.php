@@ -6,7 +6,6 @@ namespace TTBooking\FiscalRegistrar\Drivers\Atol;
 
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Routing\UrlGenerator;
-use Illuminate\Support\Str;
 use Lamoda\AtolClient\V4\AtolApi;
 use Lamoda\AtolClient\V4\DTO\GetToken as AtolGetToken;
 use Lamoda\AtolClient\V4\DTO\Register as AtolRegister;
@@ -16,7 +15,6 @@ use RuntimeException;
 use TTBooking\FiscalRegistrar\Drivers\FiscalRegistrar;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
-use TTBooking\FiscalRegistrar\Events\ReceiptEvent;
 use TTBooking\FiscalRegistrar\Exceptions;
 
 class AtolFiscalRegistrar extends FiscalRegistrar
@@ -35,26 +33,6 @@ class AtolFiscalRegistrar extends FiscalRegistrar
         parent::__construct($urlGenerator, $config, $connection);
         $this->api = $factory->make($config['url'] ?? null);
         $this->cache = $cache;
-    }
-
-    public function sell(string $externalId, Receipt $receipt): Result
-    {
-        return $this->register(__FUNCTION__, $externalId, $receipt);
-    }
-
-    public function sellRefund(string $externalId, Receipt $receipt): Result
-    {
-        return $this->register(__FUNCTION__, $externalId, $receipt);
-    }
-
-    public function buy(string $externalId, Receipt $receipt): Result
-    {
-        return $this->register(__FUNCTION__, $externalId, $receipt);
-    }
-
-    public function buyRefund(string $externalId, Receipt $receipt): Result
-    {
-        return $this->register(__FUNCTION__, $externalId, $receipt);
     }
 
     public function report(string $id): Result
@@ -105,21 +83,9 @@ class AtolFiscalRegistrar extends FiscalRegistrar
             : $this->cache->remember($key, 86400, $tokenRetriever);
     }
 
-    /**
-     * @param  string  $operation
-     * @param  string  $externalId
-     * @param  Receipt  $receipt
-     * @return Result
-     *
-     * @throws Exceptions\FiscalRegistrarException
-     */
-    protected function register(string $operation, string $externalId, Receipt $receipt): Result
+    protected function doRegister(string $operation, string $externalId, Receipt $receipt): Result
     {
         $registerRequest = $this->makeRequest($externalId, $receipt);
-
-        $this->event($this->eventName($operation).'.registering', new ReceiptEvent(
-            $this->connection, $receipt, $externalId
-        ));
 
         $force = false;
         do try {
@@ -131,13 +97,7 @@ class AtolFiscalRegistrar extends FiscalRegistrar
             throw new Exceptions\FiscalRegistrarException("{$operation} operation failed.", $e->getCode(), $e);
         } while (static::tokenHasExpired($registerResponse));
 
-        $result = $this->processRegisterResponse($registerResponse);
-
-        $this->event($this->eventName($operation).'.registered', new ReceiptEvent(
-            $this->connection, $receipt, $externalId, $result->internalId
-        ));
-
-        return $result;
+        return $this->processRegisterResponse($registerResponse);
     }
 
     /**
@@ -149,11 +109,6 @@ class AtolFiscalRegistrar extends FiscalRegistrar
         return ! is_null($error = $atolResponse->getError())
             && $error->getType()->equals(ErrorType::SYSTEM())
             && $error->getCode() === 11;
-    }
-
-    protected function eventName(string $operation): string
-    {
-        return "fiscal-registrar.{$this->connection}.{$operation}";
     }
 
     protected function makeRequest(string $externalId, Receipt $receipt): AtolRegister\RegisterRequest

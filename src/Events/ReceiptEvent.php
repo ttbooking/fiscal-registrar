@@ -10,21 +10,25 @@ final class ReceiptEvent
 {
     public string $connection;
 
+    public Receipt $receipt;
+
     public string $externalId;
 
-    public Receipt $receipt;
+    public ?string $internalId;
 
     /**
      * Create a new event instance.
      *
      * @param  string  $connection
-     * @param  string  $externalId
      * @param  Receipt  $receipt
+     * @param  string  $externalId
+     * @param  string|null  $internalId
      */
-    public function __construct(string $connection, string $externalId, Receipt $receipt)
+    public function __construct(string $connection, Receipt $receipt, string $externalId, string $internalId = null)
     {
         $this->connection = $connection;
-        $this->externalId = $externalId;
         $this->receipt = $receipt;
+        $this->externalId = $externalId;
+        $this->internalId = $internalId;
     }
 }

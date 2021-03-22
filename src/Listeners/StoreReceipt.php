@@ -21,6 +21,8 @@ class StoreReceipt
         FiscalRecord::query()->updateOrCreate([
             'connection' => $event[0]->connection,
             'external_id' => $event[0]->externalId,
+        ], [
+            'internal_id' => $event[0]->internalId,
             'receipt' => $event[0]->receipt,
         ]);
     }

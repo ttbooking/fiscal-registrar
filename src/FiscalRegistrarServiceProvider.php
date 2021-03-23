@@ -97,8 +97,6 @@ class FiscalRegistrarServiceProvider extends ServiceProvider implements Deferrab
      */
     protected function registerListeners(): void
     {
-        Event::listen('fiscal-registrar.*.*.*', Listeners\StoreReceipt::class);
-        //Event::listen('fiscal-registrar.*.*.registering', Listeners\StoreReceipt::class);
-        //Event::listen('fiscal-registrar.*.*.registered', Listeners\AssignIdentifier::class);
+        Event::listen([Events\Registering::class, Events\Registered::class], Listeners\StoreReceipt::class);
     }
 }

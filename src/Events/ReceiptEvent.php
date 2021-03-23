@@ -6,10 +6,11 @@ namespace TTBooking\FiscalRegistrar\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Support\Str;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 
-class ReceiptEvent implements ShouldBroadcast
+abstract class ReceiptEvent implements ShouldBroadcast
 {
     public string $connection;
 
@@ -22,6 +23,8 @@ class ReceiptEvent implements ShouldBroadcast
     public Receipt $receipt;
 
     public Result $result;
+
+    protected ?string $broadcastAs;
 
     /**
      * Create a new event instance.
@@ -52,5 +55,10 @@ class ReceiptEvent implements ShouldBroadcast
     public function broadcastOn()
     {
         return new Channel('fiscal-registrar');
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'fiscal-registrar.'.($this->broadcastAs ?? Str::kebab(class_basename(static::class)));
     }
 }

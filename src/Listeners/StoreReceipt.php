@@ -12,18 +12,19 @@ class StoreReceipt
     /**
      * Handle the event.
      *
-     * @param  string  $name
-     * @param  ReceiptEvent[]  $event
+     * @param  ReceiptEvent  $event
      * @return void
      */
-    public function handle(string $name, array $event)
+    public function handle(ReceiptEvent $event)
     {
         FiscalRecord::query()->updateOrCreate([
-            'connection' => $event[0]->connection,
-            'external_id' => $event[0]->externalId,
+            'connection' => $event->connection,
+            'external_id' => $event->externalId,
         ], [
-            'internal_id' => $event[0]->internalId,
-            'receipt' => $event[0]->receipt,
+            'operation' => $event->operation,
+            'internal_id' => $event->internalId,
+            'receipt' => $event->receipt,
+            'result' => $event->result,
         ]);
     }
 }

@@ -8,7 +8,7 @@ use TTBooking\FiscalRegistrar\Concerns;
 use TTBooking\FiscalRegistrar\Contracts;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
-use TTBooking\FiscalRegistrar\Events\ReceiptEvent;
+use TTBooking\FiscalRegistrar\Events;
 use TTBooking\FiscalRegistrar\Exceptions;
 
 class FiscalRegistrarDispatchingDecorator implements
@@ -51,13 +51,13 @@ class FiscalRegistrarDispatchingDecorator implements
      */
     protected function register(string $operation, string $externalId, Receipt $receipt): Result
     {
-        $this->event(new ReceiptEvent(
+        $this->event(new Events\Registering(
             $this->getConnectionName(), $operation, $externalId, null, $receipt, null
         ));
 
         $result = $this->fiscalRegistrar->{$operation}($externalId, $receipt);
 
-        $this->event(new ReceiptEvent(
+        $this->event(new Events\Registered(
             $this->getConnectionName(), $operation, $externalId, $result->internalId, $receipt, $result
         ));
 

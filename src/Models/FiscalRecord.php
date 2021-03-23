@@ -11,6 +11,7 @@ use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
 
 /**
  * @property string $connection
+ * @property string $operation
  * @property string $external_id
  * @property string $internal_id
  * @property Receipt $receipt

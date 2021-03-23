@@ -77,11 +77,22 @@ class FiscalRegistrarManager extends Support\Manager implements
      */
     protected function configureInstance(Contracts\FiscalRegistrar $fiscalRegistrar): Contracts\FiscalRegistrar
     {
-        if ($fiscalRegistrar instanceof Contracts\DispatchesEvents) {
-            $this->setEventDispatcher($fiscalRegistrar);
+        if (! $fiscalRegistrar instanceof Contracts\DispatchesEvents) {
+            $fiscalRegistrar = $this->decorateInstance($fiscalRegistrar);
         }
 
+        $this->setEventDispatcher($fiscalRegistrar);
+
         return $fiscalRegistrar;
+    }
+
+    /**
+     * @param  Contracts\FiscalRegistrar  $fiscalRegistrar
+     * @return Contracts\FiscalRegistrar|Contracts\DispatchesEvents
+     */
+    protected function decorateInstance(Contracts\FiscalRegistrar $fiscalRegistrar): Contracts\FiscalRegistrar
+    {
+        return new Support\FiscalRegistrarDispatchingDecorator($fiscalRegistrar);
     }
 
     /**

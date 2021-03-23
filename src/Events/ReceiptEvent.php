@@ -4,31 +4,53 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Events;
 
+use Illuminate\Broadcasting\Channel;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
+use TTBooking\FiscalRegistrar\DTO\Result;
 
-final class ReceiptEvent
+class ReceiptEvent implements ShouldBroadcast
 {
     public string $connection;
 
-    public Receipt $receipt;
+    public string $operation;
 
     public string $externalId;
 
-    public ?string $internalId;
+    public string $internalId;
+
+    public Receipt $receipt;
+
+    public Result $result;
 
     /**
      * Create a new event instance.
      *
      * @param  string  $connection
-     * @param  Receipt  $receipt
+     * @param  string  $operation
      * @param  string  $externalId
-     * @param  string|null  $internalId
+     * @param  string  $internalId
+     * @param  Receipt  $receipt
+     * @param  Result  $result
      */
-    public function __construct(string $connection, Receipt $receipt, string $externalId, string $internalId = null)
-    {
+    public function __construct(
+        string $connection,
+        string $operation,
+        string $externalId,
+        string $internalId,
+        Receipt $receipt,
+        Result $result
+    ) {
         $this->connection = $connection;
-        $this->receipt = $receipt;
+        $this->operation = $operation;
         $this->externalId = $externalId;
         $this->internalId = $internalId;
+        $this->receipt = $receipt;
+        $this->result = $result;
+    }
+
+    public function broadcastOn()
+    {
+        return new Channel('fiscal-registrar');
     }
 }

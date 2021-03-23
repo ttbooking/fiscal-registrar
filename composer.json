@@ -17,6 +17,7 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "ext-json": "*",
+        "illuminate/broadcasting": "^7.0 || ^8.0",
         "illuminate/contracts": "^7.0 || ^8.0",
         "illuminate/database": "^7.0 || ^8.0",
         "illuminate/routing": "^7.0 || ^8.0",

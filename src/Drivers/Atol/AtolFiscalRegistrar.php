@@ -12,13 +12,16 @@ use Lamoda\AtolClient\V4\DTO\Register as AtolRegister;
 use Lamoda\AtolClient\V4\DTO\Report as AtolReport;
 use Lamoda\AtolClient\V4\DTO\Shared\ErrorType;
 use RuntimeException;
-use TTBooking\FiscalRegistrar\Drivers\FiscalRegistrar;
+use TTBooking\FiscalRegistrar\Concerns\SingleMethodRegistration;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Exceptions;
+use TTBooking\FiscalRegistrar\Support\FiscalRegistrar;
 
 class AtolFiscalRegistrar extends FiscalRegistrar
 {
+    use SingleMethodRegistration;
+
     protected AtolApi $api;
 
     protected Repository $cache;
@@ -83,7 +86,7 @@ class AtolFiscalRegistrar extends FiscalRegistrar
             : $this->cache->remember($key, 86400, $tokenRetriever);
     }
 
-    protected function doRegister(string $operation, string $externalId, Receipt $receipt): Result
+    protected function register(string $operation, string $externalId, Receipt $receipt): Result
     {
         $registerRequest = $this->makeRequest($externalId, $receipt);
 

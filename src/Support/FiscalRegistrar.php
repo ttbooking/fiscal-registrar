@@ -7,7 +7,7 @@ namespace TTBooking\FiscalRegistrar\Support;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use TTBooking\FiscalRegistrar\Contracts;
 
-abstract class FiscalRegistrar implements Contracts\FiscalRegistrar
+abstract class FiscalRegistrar implements Contracts\ConnectionAware, Contracts\FiscalRegistrar
 {
     protected UrlGenerator $urlGenerator;
 
@@ -20,6 +20,11 @@ abstract class FiscalRegistrar implements Contracts\FiscalRegistrar
         $this->urlGenerator = $urlGenerator;
         $this->config = $config;
         $this->connection = $connection;
+    }
+
+    public function getConnectionName(): string
+    {
+        return $this->connection;
     }
 
     protected function getCallbackUrl(): ?string

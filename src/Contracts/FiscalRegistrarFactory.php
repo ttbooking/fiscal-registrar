@@ -6,7 +6,7 @@ namespace TTBooking\FiscalRegistrar\Contracts;
 
 /**
  * @method FiscalRegistrar connection(string $name = null)
- * @method FiscalRegistrar[] getConnections()
+ * @method FiscalRegistrar[] getConnections
  */
 interface FiscalRegistrarFactory extends Factory
 {

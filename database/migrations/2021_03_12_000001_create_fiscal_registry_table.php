@@ -16,10 +16,10 @@ class CreateFiscalRegistryTable extends Migration
         Schema::create('fiscal_registry', function (Blueprint $table) {
             $table->id();
             $table->string('connection', 32)->index();
+            $table->string('operation', 32);
             $table->string('external_id', 128)->index();
             $table->string('internal_id', 128)->index();
             $table->json('receipt');
-            $table->string('operation', 32);
             $table->json('result');
             $table->timestamps();
             $table->unique(['connection', 'external_id']);

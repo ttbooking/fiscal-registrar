@@ -10,10 +10,16 @@ use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 
 class FiscalRegistrarManager extends Support\Manager implements
+    Contracts\ConnectionAware,
     Contracts\FiscalRegistrarFactory,
     Contracts\FiscalRegistrar
 {
     protected string $configName = 'fiscal-registrar';
+
+    public function getConnectionName(): string
+    {
+        return $this->getDefaultDriver();
+    }
 
     public function sell(string $externalId, Receipt $receipt): Result
     {

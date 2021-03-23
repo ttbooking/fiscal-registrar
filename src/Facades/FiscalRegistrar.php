@@ -10,6 +10,7 @@ use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 
 /**
+ * @method static string getConnectionName
  * @method static FiscalRegistrarContract connection(string $name = null)
  * @method static FiscalRegistrarContract[] getConnections
  * @method static Result sell(string $externalId, Receipt $receipt)

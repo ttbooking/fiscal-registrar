@@ -11,7 +11,10 @@ use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Events\ReceiptEvent;
 use TTBooking\FiscalRegistrar\Exceptions;
 
-class FiscalRegistrarDispatchingDecorator implements Contracts\FiscalRegistrar, Contracts\DispatchesEvents
+class FiscalRegistrarDispatchingDecorator implements
+    Contracts\ConnectionAware,
+    Contracts\FiscalRegistrar,
+    Contracts\DispatchesEvents
 {
     use Concerns\HasEvents, Concerns\SingleMethodRegistration;
 
@@ -20,6 +23,12 @@ class FiscalRegistrarDispatchingDecorator implements Contracts\FiscalRegistrar, 
     public function __construct(Contracts\FiscalRegistrar $fiscalRegistrar)
     {
         $this->fiscalRegistrar = $fiscalRegistrar;
+    }
+
+    public function getConnectionName(): string
+    {
+        return $this->fiscalRegistrar instanceof Contracts\ConnectionAware
+            ? $this->fiscalRegistrar->{__FUNCTION__}() : 'unknown';
     }
 
     public function report(string $id): Result
@@ -43,13 +52,13 @@ class FiscalRegistrarDispatchingDecorator implements Contracts\FiscalRegistrar, 
     protected function register(string $operation, string $externalId, Receipt $receipt): Result
     {
         $this->event(new ReceiptEvent(
-            $this->fiscalRegistrar->connection, $operation, $externalId, null, $receipt, null
+            $this->getConnectionName(), $operation, $externalId, null, $receipt, null
         ));
 
         $result = $this->fiscalRegistrar->{$operation}($externalId, $receipt);
 
         $this->event(new ReceiptEvent(
-            $this->fiscalRegistrar->connection, $operation, $externalId, $result->internalId, $receipt, $result
+            $this->getConnectionName(), $operation, $externalId, $result->internalId, $receipt, $result
         ));
 
         return $result;

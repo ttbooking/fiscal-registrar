@@ -18,13 +18,13 @@ class StoreReceipt
     public function handle(ReceiptEvent $event)
     {
         FiscalRecord::query()->updateOrCreate([
-            'connection' => $event->connection,
-            'external_id' => $event->externalId,
+            'connection' => $event->payload->connection,
+            'external_id' => $event->payload->externalId,
         ], [
-            'operation' => $event->operation,
-            'internal_id' => $event->internalId,
-            'receipt' => $event->receipt,
-            'result' => $event->result,
+            'operation' => $event->payload->operation,
+            'internal_id' => $event->payload->internalId,
+            'receipt' => $event->payload->receipt,
+            'result' => $event->payload->result,
         ]);
     }
 }

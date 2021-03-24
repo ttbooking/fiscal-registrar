@@ -7,22 +7,13 @@ namespace TTBooking\FiscalRegistrar\Events;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Support\Str;
+use TTBooking\FiscalRegistrar\DTO\EventPayload;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 
 abstract class ReceiptEvent implements ShouldBroadcast
 {
-    public string $connection;
-
-    public string $operation;
-
-    public string $externalId;
-
-    public string $internalId;
-
-    public Receipt $receipt;
-
-    public Result $result;
+    public EventPayload $payload;
 
     protected ?string $broadcastAs;
 
@@ -32,24 +23,24 @@ abstract class ReceiptEvent implements ShouldBroadcast
      * @param  string  $connection
      * @param  string  $operation
      * @param  string  $externalId
-     * @param  string  $internalId
-     * @param  Receipt  $receipt
-     * @param  Result  $result
+     * @param  string|null  $internalId
+     * @param  Receipt|null  $receipt
+     * @param  Result|null  $result
      */
     public function __construct(
         string $connection,
         string $operation,
         string $externalId,
-        string $internalId,
-        Receipt $receipt,
-        Result $result
+        string $internalId = null,
+        Receipt $receipt = null,
+        Result $result = null
     ) {
-        $this->connection = $connection;
-        $this->operation = $operation;
-        $this->externalId = $externalId;
-        $this->internalId = $internalId;
-        $this->receipt = $receipt;
-        $this->result = $result;
+        $this->payload = EventPayload::new(...func_get_args());
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'fiscal-registrar.'.($this->broadcastAs ?? Str::kebab(class_basename(static::class)));
     }
 
     public function broadcastOn()
@@ -57,8 +48,8 @@ abstract class ReceiptEvent implements ShouldBroadcast
         return new Channel('fiscal-registrar');
     }
 
-    public function broadcastAs(): string
+    public function broadcastWith(): array
     {
-        return 'fiscal-registrar.'.($this->broadcastAs ?? Str::kebab(class_basename(static::class)));
+        return $this->payload->toArray();
     }
 }

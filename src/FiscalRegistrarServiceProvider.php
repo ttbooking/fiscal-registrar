@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
-class FiscalRegistrarServiceProvider extends ServiceProvider implements DeferrableProvider
+class FiscalRegistrarServiceProvider extends ServiceProvider //implements DeferrableProvider
 {
     /**
      * All of the container singletons that should be registered.
@@ -29,7 +29,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider implements Deferrab
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../public' => $this->app->publicPath('vendor/fiscal-registrar'),
+                __DIR__.'/../public' => public_path('vendor/fiscal-registrar'),
             ], 'assets');
 
             $this->publishes([

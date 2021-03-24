@@ -29,6 +29,10 @@ class FiscalRegistrarServiceProvider extends ServiceProvider implements Deferrab
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
+                __DIR__.'/../public' => $this->app->publicPath('vendor/fiscal-registrar'),
+            ], 'assets');
+
+            $this->publishes([
                 __DIR__.'/../config/fiscal-registrar.php' => $this->app->configPath('fiscal-registrar.php'),
             ], 'config');
 
@@ -40,6 +44,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider implements Deferrab
         }
 
         $this->registerRoutes();
+        $this->registerResources();
         $this->registerListeners();
     }
 
@@ -86,8 +91,18 @@ class FiscalRegistrarServiceProvider extends ServiceProvider implements Deferrab
             'namespace' => 'TTBooking\\FiscalRegistrar\\Http\\Controllers',
             'middleware' => $this->app['config']['fiscal-registrar.middleware'] ?? 'web',
         ], function () {
-            $this->loadRoutesFrom(__DIR__.'/../routes/api.php');
+            $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         });
+    }
+
+    /**
+     * Register the Fiscal Registrar resources.
+     *
+     * @return void
+     */
+    protected function registerResources(): void
+    {
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'fiscal-registrar');
     }
 
     /**

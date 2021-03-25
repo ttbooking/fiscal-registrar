@@ -9,12 +9,12 @@ window.Echo = new Echo({
     forceTLS: window.FiscalRegistrar.pusher.options.useTLS ?? true
 });
 
-Echo.channel('fiscal-registrar')
-    .listen('fiscal-registrar.registering', (e) => {
+window.Echo.channel('fiscal-registrar')
+    .listen('.receipt.registering', (e) => {
         console.log('Receipt registering:');
         console.log(e);
     })
-    .listen('fiscal-registrar.registered', (e) => {
+    .listen('.receipt.registered', (e) => {
         console.log('Receipt registered:');
         console.log(e);
     });

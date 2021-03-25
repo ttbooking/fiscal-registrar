@@ -40,7 +40,7 @@ abstract class ReceiptEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'fiscal-registrar.'.($this->broadcastAs ?? Str::kebab(class_basename(static::class)));
+        return 'receipt.'.($this->broadcastAs ?? Str::kebab(class_basename(static::class)));
     }
 
     public function broadcastOn()

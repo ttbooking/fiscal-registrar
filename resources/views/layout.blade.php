@@ -15,6 +15,11 @@
 Welcome to Fiscal Registrar home page!
 </div>
 
-<script type="text/javascript" src="{{asset(mix('app.js', 'vendor/fiscal-registrar'))}}"></script>
+<!-- Global Fiscal Registrar Object -->
+<script type="text/javascript">
+    window.FiscalRegistrar = @json($fiscalRegistrarScriptVariables);
+</script>
+
+<script type="text/javascript" src="{{ asset(mix('app.js', 'vendor/fiscal-registrar')) }}"></script>
 </body>
 </html>

@@ -15,6 +15,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('fiscal-registrar::layout');
+        return view('fiscal-registrar::layout', [
+            'fiscalRegistrarScriptVariables' => [
+                'pusher' => config('broadcasting.connections.pusher'),
+            ],
+        ]);
     }
 }

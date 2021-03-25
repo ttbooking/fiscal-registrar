@@ -4,9 +4,9 @@ window.Pusher = require('pusher-js');
 
 window.Echo = new Echo({
     broadcaster: 'pusher',
-    key: process.env.MIX_PUSHER_APP_KEY,
-    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-    forceTLS: true
+    key: window.FiscalRegistrar.pusher.key,
+    cluster: window.FiscalRegistrar.pusher.options.cluster ?? 'eu',
+    forceTLS: window.FiscalRegistrar.pusher.options.useTLS ?? true
 });
 
 Echo.channel('fiscal-registrar')

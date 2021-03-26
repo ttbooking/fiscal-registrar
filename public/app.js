@@ -26,6 +26,9 @@ window.Echo.channel('fiscal-registrar').listen('.receipt.registering', function 
 }).listen('.receipt.registered', function (e) {
   console.log('Receipt registered:');
   console.log(e);
+}).listen('.receipt.processed', function (e) {
+  console.log('Receipt processed:');
+  console.log(e);
 });
 
 /***/ }),

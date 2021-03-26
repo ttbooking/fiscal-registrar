@@ -38,7 +38,13 @@ class FiscalRegistrarDispatchingDecorator implements
 
     public function processCallback($payload)
     {
-        return $this->fiscalRegistrar->{__FUNCTION__}($payload);
+        $result = $this->fiscalRegistrar->{__FUNCTION__}($payload);
+
+        $this->event(new Events\Processed(
+            $this->getConnectionName(), '', '', '', null, null
+        ));
+
+        return $result;
     }
 
     /**

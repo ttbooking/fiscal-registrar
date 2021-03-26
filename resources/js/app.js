@@ -17,4 +17,8 @@ window.Echo.channel('fiscal-registrar')
     .listen('.receipt.registered', (e) => {
         console.log('Receipt registered:');
         console.log(e);
+    })
+    .listen('.receipt.processed', (e) => {
+        console.log('Receipt processed:');
+        console.log(e);
     });

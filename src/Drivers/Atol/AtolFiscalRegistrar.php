@@ -55,7 +55,7 @@ class AtolFiscalRegistrar extends FiscalRegistrar
 
     public function processCallback($payload)
     {
-        return $this->convertPayload($payload);
+        return []; //$this->convertPayload($payload);
     }
 
     /**

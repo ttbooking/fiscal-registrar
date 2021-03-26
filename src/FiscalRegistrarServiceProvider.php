@@ -116,6 +116,10 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
      */
     protected function registerListeners(): void
     {
-        Event::listen([Events\Registering::class, Events\Registered::class], Listeners\StoreReceipt::class);
+        Event::listen([
+            Events\Registering::class,
+            Events\Registered::class,
+            //Events\Processed::class,
+        ], Listeners\StoreReceipt::class);
     }
 }

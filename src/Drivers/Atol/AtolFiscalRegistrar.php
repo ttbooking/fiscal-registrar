@@ -6,6 +6,7 @@ namespace TTBooking\FiscalRegistrar\Drivers\Atol;
 
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Lamoda\AtolClient\Converter\ObjectConverter;
 use Lamoda\AtolClient\V4\AtolApi;
 use Lamoda\AtolClient\V4\DTO\GetToken as AtolGetToken;
 use Lamoda\AtolClient\V4\DTO\Register as AtolRegister;
@@ -24,6 +25,8 @@ class AtolFiscalRegistrar extends FiscalRegistrar
 
     protected AtolApi $api;
 
+    protected ObjectConverter $converter;
+
     protected Repository $cache;
 
     public function __construct(
@@ -35,6 +38,7 @@ class AtolFiscalRegistrar extends FiscalRegistrar
     ) {
         parent::__construct($urlGenerator, $config, $connection);
         $this->api = $factory->make($config['url'] ?? null);
+        $this->converter = $factory->getConverter();
         $this->cache = $cache;
     }
 
@@ -53,9 +57,11 @@ class AtolFiscalRegistrar extends FiscalRegistrar
         return $this->processReportResponse($reportResponse);
     }
 
-    public function processCallback($payload)
+    public function processCallback($payload): Result
     {
-        return []; //$this->convertPayload($payload);
+        $payloadObject = $this->converter->getResponseObject(AtolReport\ReportResponse::class, $payload);
+
+        return $this->processReportResponse($payloadObject);
     }
 
     /**

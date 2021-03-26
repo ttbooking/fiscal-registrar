@@ -56,7 +56,7 @@ interface FiscalRegistrar
 
     /**
      * @param  mixed  $payload
-     * @return mixed
+     * @return Result
      */
-    public function processCallback($payload);
+    public function processCallback($payload): Result;
 }

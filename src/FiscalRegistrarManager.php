@@ -46,7 +46,7 @@ class FiscalRegistrarManager extends Support\Manager implements
         return $this->connection()->{__FUNCTION__}($id);
     }
 
-    public function processCallback($payload)
+    public function processCallback($payload): Result
     {
         return $this->connection()->{__FUNCTION__}($payload);
     }

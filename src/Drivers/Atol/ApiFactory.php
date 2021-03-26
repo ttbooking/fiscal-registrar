@@ -17,23 +17,33 @@ use Symfony\Component\Validator\Validation;
 
 final class ApiFactory
 {
+    /** @var array<string, AtolApi> */
+    private array $instances = [];
+
+    /** @var ObjectConverter|null */
+    private ?ObjectConverter $converter;
+
     public function make(string $baseUri = null): AtolApi
     {
-        return new AtolApi(
-            new ObjectConverter(
+        $baseUri = isset($baseUri) ? rtrim($baseUri, '/') : 'https://online.atol.ru/possystem';
 
-                SerializerBuilder::create()
-                    ->setSerializationVisitor('atol_client', new JsonSerializationVisitorFactory)
-                    ->setDeserializationVisitor('atol_client', new JsonDeserializationVisitorFactory)
-                    ->configureHandlers(function (HandlerRegistry $handlerRegistry) {
-                        $handlerRegistry->registerSubscribingHandler(new EnumHandler);
-                        $handlerRegistry->registerSubscribingHandler(new ExtendedDateHandler);
-                    })->build(),
+        return $this->instances[$baseUri] ??= new AtolApi($this->getConverter(), new Client, [], $baseUri);
+    }
 
-                Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator()
+    public function getConverter(): ObjectConverter
+    {
+        return $this->converter ??= new ObjectConverter(
 
-            ),
-            new Client, [], $baseUri ?? 'https://online.atol.ru/possystem'
+            SerializerBuilder::create()
+                ->setSerializationVisitor('atol_client', new JsonSerializationVisitorFactory)
+                ->setDeserializationVisitor('atol_client', new JsonDeserializationVisitorFactory)
+                ->configureHandlers(function (HandlerRegistry $handlerRegistry) {
+                    $handlerRegistry->registerSubscribingHandler(new EnumHandler);
+                    $handlerRegistry->registerSubscribingHandler(new ExtendedDateHandler);
+                })->build(),
+
+            Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator()
+
         );
     }
 }

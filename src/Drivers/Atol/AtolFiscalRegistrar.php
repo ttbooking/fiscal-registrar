@@ -59,9 +59,9 @@ class AtolFiscalRegistrar extends FiscalRegistrar
 
     public function processCallback($payload): Result
     {
-        $payloadObject = $this->converter->getResponseObject(AtolReport\ReportResponse::class, $payload);
-
-        return $this->processReportResponse($payloadObject);
+        return $this->processReportResponse(
+            $this->converter->getResponseObject(AtolReport\ReportResponse::class, json_encode($payload))
+        );
     }
 
     /**

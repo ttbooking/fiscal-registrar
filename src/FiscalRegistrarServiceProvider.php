@@ -29,6 +29,10 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
+                __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/fiscal-registrar'),
+            ], 'views');
+
+            $this->publishes([
                 __DIR__.'/../public' => public_path('vendor/fiscal-registrar'),
             ], 'assets');
 

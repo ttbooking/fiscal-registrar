@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
@@ -27,6 +28,16 @@ class FiscalRecord extends Model
         'receipt' => Receipt::class,
         'result' => Result::class,
     ];
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        if (Str::contains($value, ':')) {
+            [$connection, $external_id] = explode(':', $value, 2);
+            return $this->newQuery()->where(array_filter(compact('connection', 'external_id')))->first();
+        }
+
+        return parent::resolveRouteBinding($value, $field);
+    }
 
     public function report(): Result
     {

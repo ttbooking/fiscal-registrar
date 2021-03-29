@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Response;
 use TTBooking\FiscalRegistrar\Models\FiscalRecord;
 
 class ReceiptController extends Controller
@@ -14,18 +14,18 @@ class ReceiptController extends Controller
     /**
      * Display a listing of the fiscal records.
      *
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        return FiscalRecord::query()->paginate();
     }
 
     /**
      * Store a newly created fiscal record in storage.
      *
      * @param  Request  $request
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -36,11 +36,11 @@ class ReceiptController extends Controller
      * Display the specified fiscal record.
      *
      * @param  FiscalRecord  $fiscalRecord
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function show(FiscalRecord $fiscalRecord)
     {
-        //
+        return $fiscalRecord;
     }
 
     /**
@@ -48,7 +48,7 @@ class ReceiptController extends Controller
      *
      * @param  Request  $request
      * @param  FiscalRecord  $fiscalRecord
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, FiscalRecord $fiscalRecord)
     {
@@ -59,10 +59,12 @@ class ReceiptController extends Controller
      * Remove the specified fiscal record from storage.
      *
      * @param  FiscalRecord  $fiscalRecord
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     public function destroy(FiscalRecord $fiscalRecord)
     {
-        //
+        $fiscalRecord->delete();
+
+        return Response::noContent();
     }
 }

@@ -17,6 +17,7 @@ class HomeController extends Controller
     {
         return view('fiscal-registrar::layout', [
             'fiscalRegistrarScriptVariables' => [
+                'path' => config('fiscal-registrar.path'),
                 'pusher' => config('broadcasting.connections.pusher'),
             ],
         ]);

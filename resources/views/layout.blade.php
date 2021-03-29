@@ -11,8 +11,8 @@
     <link href="{{ asset(mix('app.css', 'vendor/fiscal-registrar')) }}" rel="stylesheet" />
 </head>
 <body>
-<div id="fiscal-registrar">
-Welcome to Fiscal Registrar home page!
+<div id="fiscal-registrar" v-cloak>
+    <router-view></router-view>
 </div>
 
 <!-- Global Fiscal Registrar Object -->

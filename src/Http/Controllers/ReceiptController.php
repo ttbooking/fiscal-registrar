@@ -19,7 +19,7 @@ class ReceiptController extends Controller
     }
 
     /**
-     * Display a listing of the fiscal records.
+     * Display a listing of the receipts.
      *
      * @return \Illuminate\Http\Response
      */
@@ -29,7 +29,7 @@ class ReceiptController extends Controller
     }
 
     /**
-     * Store a newly created fiscal record in storage.
+     * Store a newly created receipt in storage.
      *
      * @param  Request  $request
      * @return \Illuminate\Http\Response
@@ -40,7 +40,7 @@ class ReceiptController extends Controller
     }
 
     /**
-     * Display the specified fiscal record.
+     * Display the specified receipt.
      *
      * @param  Receipt  $receipt
      * @return \Illuminate\Http\Response
@@ -51,7 +51,7 @@ class ReceiptController extends Controller
     }
 
     /**
-     * Update the specified fiscal record in storage.
+     * Update the specified receipt in storage.
      *
      * @param  Request  $request
      * @param  Receipt  $receipt
@@ -63,7 +63,7 @@ class ReceiptController extends Controller
     }
 
     /**
-     * Remove the specified fiscal record from storage.
+     * Remove the specified receipt from storage.
      *
      * @param  Receipt  $receipt
      * @return \Illuminate\Http\Response

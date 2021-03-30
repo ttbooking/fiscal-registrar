@@ -8,6 +8,7 @@ use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class FiscalRegistrarServiceProvider extends ServiceProvider //implements DeferrableProvider
 {
@@ -64,13 +65,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         $this->app->alias('fiscal-registrar', Contracts\FiscalRegistrarFactory::class);
         $this->app->alias('fiscal-registrar', Contracts\FiscalRegistrar::class);
         $this->app->singleton('fiscal-registrar.connection', fn ($app) => $app['fiscal-registrar']->connection());
-        $this->app
-            ->when([
-                \TTBooking\FiscalRegistrar\Http\Controllers\ReceiptController::class,
-                \TTBooking\FiscalRegistrar\Listeners\StoreReceipt::class,
-            ])
-            ->needs('$receiptModel')
-            ->giveConfig('fiscal-registrar.model', \TTBooking\FiscalRegistrar\Models\Receipt::class);
+        $this->app->bind(Receipt::class, $app['config']['fiscal-registrar.model'] ?? Receipt::class);
     }
 
     /**
@@ -85,6 +80,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
                 Contracts\FiscalRegistrarFactory::class,
                 Contracts\FiscalRegistrar::class,
                 'fiscal-registrar.connection',
+                Receipt::class,
             ]
         );
     }

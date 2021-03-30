@@ -11,15 +11,11 @@ use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class ReceiptController extends Controller
 {
-    protected string $receiptModel;
+    protected Receipt $receipt;
 
-    public function __construct(string $receiptModel)
+    public function __construct(Receipt $receipt)
     {
-        if (! is_a($receiptModel, Receipt::class, true)) {
-            throw new \InvalidArgumentException('Custom receipt model must extend '.Receipt::class.' class.');
-        }
-
-        $this->receiptModel = $receiptModel;
+        $this->receipt = $receipt;
     }
 
     /**
@@ -29,7 +25,7 @@ class ReceiptController extends Controller
      */
     public function index()
     {
-        return $this->receiptModel::query()->paginate();
+        return $this->receipt->newQuery()->paginate();
     }
 
     /**

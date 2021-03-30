@@ -9,21 +9,17 @@ use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class StoreReceipt
 {
-    protected string $receiptModel;
+    protected Receipt $receipt;
 
     /**
      * Create the event listener.
      *
-     * @param  string  $receiptModel
+     * @param  Receipt  $receipt
      * @return void
      */
-    public function __construct(string $receiptModel)
+    public function __construct(Receipt $receipt)
     {
-        if (! is_a($receiptModel, Receipt::class, true)) {
-            throw new \InvalidArgumentException('Custom receipt model must extend '.Receipt::class.' class.');
-        }
-
-        $this->receiptModel = $receiptModel;
+        $this->receipt = $receipt;
     }
 
     /**
@@ -34,7 +30,7 @@ class StoreReceipt
      */
     public function handle(ReceiptEvent $event)
     {
-        $this->receiptModel::query()->updateOrCreate([
+        $this->receipt->newQuery()->updateOrCreate([
             'connection' => $event->receipt->connection,
             'external_id' => $event->receipt->externalId,
         ], [

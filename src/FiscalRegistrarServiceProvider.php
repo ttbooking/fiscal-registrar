@@ -65,7 +65,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         $this->app->alias('fiscal-registrar', Contracts\FiscalRegistrarFactory::class);
         $this->app->alias('fiscal-registrar', Contracts\FiscalRegistrar::class);
         $this->app->singleton('fiscal-registrar.connection', fn ($app) => $app['fiscal-registrar']->connection());
-        $this->app->bind(Receipt::class, $app['config']['fiscal-registrar.model'] ?? Receipt::class);
+        $this->app->bind(Receipt::class, $this->app['config']['fiscal-registrar.model'] ?? Receipt::class);
     }
 
     /**

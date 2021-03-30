@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFiscalRegistryTable extends Migration
+class CreateReceiptsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,14 @@ class CreateFiscalRegistryTable extends Migration
      */
     public function up()
     {
-        Schema::create('fiscal_registry', function (Blueprint $table) {
+        Schema::create('receipts', function (Blueprint $table) {
             $table->id();
-            $table->string('connection', 32)->index();
-            $table->string('operation', 32);
-            $table->string('external_id', 128)->index();
-            $table->string('internal_id', 128)->index();
-            $table->json('receipt');
-            $table->json('result');
+            $table->string('connection', 32)->nullable()->index();
+            $table->string('operation', 32)->nullable();
+            $table->string('external_id', 128)->nullable()->index();
+            $table->string('internal_id', 128)->nullable()->index();
+            $table->json('data');
+            $table->json('result')->nullable();
             $table->timestamps();
             $table->unique(['connection', 'external_id']);
             $table->unique(['connection', 'internal_id']);
@@ -34,6 +34,6 @@ class CreateFiscalRegistryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fiscal_registry');
+        Schema::dropIfExists('receipts');
     }
 }

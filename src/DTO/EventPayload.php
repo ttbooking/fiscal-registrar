@@ -14,7 +14,7 @@ class EventPayload extends DataTransferObject
 
     public ?string $internalId;
 
-    public ?Receipt $receipt;
+    public ?Receipt $data;
 
     public ?Result $result;
 
@@ -25,7 +25,7 @@ class EventPayload extends DataTransferObject
      * @param  string  $operation
      * @param  string  $externalId
      * @param  string|null  $internalId
-     * @param  Receipt|null  $receipt
+     * @param  Receipt|null  $data
      * @param  Result|null  $result
      * @return self
      */
@@ -34,9 +34,9 @@ class EventPayload extends DataTransferObject
         string $operation,
         string $externalId,
         string $internalId = null,
-        Receipt $receipt = null,
+        Receipt $data = null,
         Result $result = null
     ): self {
-        return new self(compact('connection', 'operation', 'externalId', 'internalId', 'receipt', 'result'));
+        return new self(compact('connection', 'operation', 'externalId', 'internalId', 'data', 'result'));
     }
 }

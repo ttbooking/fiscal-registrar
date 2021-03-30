@@ -13,7 +13,7 @@ use TTBooking\FiscalRegistrar\DTO\Result;
 
 abstract class ReceiptEvent implements ShouldBroadcast
 {
-    public EventPayload $payload;
+    public EventPayload $receipt;
 
     protected ?string $broadcastAs;
 
@@ -24,7 +24,7 @@ abstract class ReceiptEvent implements ShouldBroadcast
      * @param  string  $operation
      * @param  string  $externalId
      * @param  string|null  $internalId
-     * @param  Receipt|null  $receipt
+     * @param  Receipt|null  $data
      * @param  Result|null  $result
      */
     public function __construct(
@@ -32,10 +32,10 @@ abstract class ReceiptEvent implements ShouldBroadcast
         string $operation,
         string $externalId,
         string $internalId = null,
-        Receipt $receipt = null,
+        Receipt $data = null,
         Result $result = null
     ) {
-        $this->payload = EventPayload::new(...func_get_args());
+        $this->receipt = EventPayload::new(...func_get_args());
     }
 
     public function broadcastAs(): string
@@ -50,6 +50,6 @@ abstract class ReceiptEvent implements ShouldBroadcast
 
     public function broadcastWith(): array
     {
-        return $this->payload->toArray();
+        return $this->receipt->toArray();
     }
 }

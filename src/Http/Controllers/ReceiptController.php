@@ -7,10 +7,22 @@ namespace TTBooking\FiscalRegistrar\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
-use TTBooking\FiscalRegistrar\Models\FiscalRecord;
+use TTBooking\FiscalRegistrar\Contracts\OperatesCustomizableReceipt;
+use TTBooking\FiscalRegistrar\Models\Receipt;
 
-class ReceiptController extends Controller
+class ReceiptController extends Controller implements OperatesCustomizableReceipt
 {
+    protected string $receiptModel;
+
+    public function __construct(string $receiptModel)
+    {
+        if (! is_a($receiptModel, Receipt::class, true)) {
+            throw new \InvalidArgumentException('Custom receipt model must extend '.Receipt::class.' class.');
+        }
+
+        $this->receiptModel = $receiptModel;
+    }
+
     /**
      * Display a listing of the fiscal records.
      *
@@ -18,7 +30,7 @@ class ReceiptController extends Controller
      */
     public function index()
     {
-        return FiscalRecord::query()->paginate();
+        return $this->receiptModel::query()->paginate();
     }
 
     /**
@@ -35,22 +47,22 @@ class ReceiptController extends Controller
     /**
      * Display the specified fiscal record.
      *
-     * @param  FiscalRecord  $fiscalRecord
+     * @param  Receipt  $receipt
      * @return \Illuminate\Http\Response
      */
-    public function show(FiscalRecord $fiscalRecord)
+    public function show(Receipt $receipt)
     {
-        return $fiscalRecord;
+        return $receipt;
     }
 
     /**
      * Update the specified fiscal record in storage.
      *
      * @param  Request  $request
-     * @param  FiscalRecord  $fiscalRecord
+     * @param  Receipt  $receipt
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, FiscalRecord $fiscalRecord)
+    public function update(Request $request, Receipt $receipt)
     {
         //
     }
@@ -58,12 +70,12 @@ class ReceiptController extends Controller
     /**
      * Remove the specified fiscal record from storage.
      *
-     * @param  FiscalRecord  $fiscalRecord
+     * @param  Receipt  $receipt
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FiscalRecord $fiscalRecord)
+    public function destroy(Receipt $receipt)
     {
-        $fiscalRecord->delete();
+        $receipt->delete();
 
         return Response::noContent();
     }

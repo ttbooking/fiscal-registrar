@@ -7,7 +7,7 @@ namespace TTBooking\FiscalRegistrar\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use TTBooking\FiscalRegistrar\Contracts\FiscalRegistrarFactory;
-use TTBooking\FiscalRegistrar\Models\FiscalRecord;
+use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class FiscalRegistrarController extends Controller
 {
@@ -45,7 +45,7 @@ class FiscalRegistrarController extends Controller
 
     public function list(string $connection)
     {
-        return FiscalRecord::query()->where(compact('connection'))->get();
+        return Receipt::query()->where(compact('connection'))->get();
     }
 
     public function report(string $connection, string $id)

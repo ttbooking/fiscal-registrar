@@ -6,27 +6,24 @@ namespace TTBooking\FiscalRegistrar\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use TTBooking\FiscalRegistrar\DTO\Receipt;
-use TTBooking\FiscalRegistrar\DTO\Result;
+use TTBooking\FiscalRegistrar\DTO;
 use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
 
 /**
- * @property string $connection
- * @property string $operation
- * @property string $external_id
- * @property string $internal_id
- * @property Receipt $receipt
- * @property Result|null $result
+ * @property string|null $connection
+ * @property string|null $operation
+ * @property string|null $external_id
+ * @property string|null $internal_id
+ * @property DTO\Receipt $data
+ * @property DTO\Result|null $result
  */
-class FiscalRecord extends Model
+class Receipt extends Model
 {
-    protected $table = 'fiscal_registry';
-
     protected $guarded = ['id'];
 
     protected $casts = [
-        'receipt' => Receipt::class,
-        'result' => Result::class,
+        'data' => DTO\Receipt::class,
+        'result' => DTO\Result::class,
     ];
 
     public function resolveRouteBinding($value, $field = null)
@@ -39,7 +36,7 @@ class FiscalRecord extends Model
         return parent::resolveRouteBinding($value, $field);
     }
 
-    public function report(): Result
+    public function report(): DTO\Result
     {
         return FiscalRegistrar::connection($this->connection)->report($this->internal_id);
     }

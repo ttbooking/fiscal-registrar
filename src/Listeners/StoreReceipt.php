@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Listeners;
 
-use TTBooking\FiscalRegistrar\Contracts\OperatesCustomizableReceipt;
 use TTBooking\FiscalRegistrar\Events\ReceiptEvent;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
-class StoreReceipt implements OperatesCustomizableReceipt
+class StoreReceipt
 {
     protected string $receiptModel;
 

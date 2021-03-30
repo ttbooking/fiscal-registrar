@@ -65,7 +65,10 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         $this->app->alias('fiscal-registrar', Contracts\FiscalRegistrar::class);
         $this->app->singleton('fiscal-registrar.connection', fn ($app) => $app['fiscal-registrar']->connection());
         $this->app
-            ->when(\TTBooking\FiscalRegistrar\Contracts\OperatesCustomizableReceipt::class)
+            ->when([
+                \TTBooking\FiscalRegistrar\Http\Controllers\ReceiptController::class,
+                \TTBooking\FiscalRegistrar\Listeners\StoreReceipt::class,
+            ])
             ->needs('$receiptModel')
             ->giveConfig('fiscal-registrar.model', \TTBooking\FiscalRegistrar\Models\Receipt::class);
     }

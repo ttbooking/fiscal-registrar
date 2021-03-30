@@ -7,10 +7,9 @@ namespace TTBooking\FiscalRegistrar\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
-use TTBooking\FiscalRegistrar\Contracts\OperatesCustomizableReceipt;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
-class ReceiptController extends Controller implements OperatesCustomizableReceipt
+class ReceiptController extends Controller
 {
     protected string $receiptModel;
 

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ config('app.locale', 'en') }}">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-    <title>Fiscal Registrar{{ config('app.name') ? ' - ' . config('app.name') : '' }}</title>
+    <title>{{ __('fiscal-registrar::main.title') }}{{ config('app.name') ? ' - ' . config('app.name') : '' }}</title>
 
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" />
     <link href="{{ asset(mix('app.css', 'vendor/fiscal-registrar')) }}" rel="stylesheet" />

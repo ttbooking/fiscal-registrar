@@ -31,6 +31,7 @@
 <template>
     <div>
         <h4>{{ this.$root.message }}</h4>
+        <p>{{ $t('message.hello') }}</p>
         <span v-if="!ready">Loading...</span>
         <span v-if="ready">{{ this.receipt.internalId }}</span>
     </div>

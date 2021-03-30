@@ -3,6 +3,7 @@ import Vue from 'vue';
 import axios from 'axios';
 import Routes from './routes';
 import VueRouter from 'vue-router';
+import VueI18n from 'vue-i18n';
 
 window.Pusher = require('pusher-js');
 
@@ -36,6 +37,7 @@ if (token) {
 }
 
 Vue.use(VueRouter);
+Vue.use(VueI18n);
 
 Vue.prototype.$http = axios.create();
 
@@ -54,10 +56,29 @@ const router = new VueRouter({
     base: routerBasePath,
 });
 
+const i18n = new VueI18n({
+    locale: document.documentElement.lang || 'en',
+    fallbackLocale: 'en',
+    messages: {
+        en: {
+            message: {
+                hello: 'Hello, world!'
+            }
+        },
+        ru: {
+            message: {
+                hello: 'Привет, мир!'
+            }
+        }
+    }
+});
+
 new Vue({
     el: '#fiscal-registrar',
 
     router,
+
+    i18n,
 
     data: {
         message: 'Welcome to Fiscal Registrar home page!'

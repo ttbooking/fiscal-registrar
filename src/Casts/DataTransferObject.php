@@ -17,7 +17,7 @@ class DataTransferObject implements CastsAttributes
 
     public function get($model, string $key, $value, array $attributes)
     {
-        return isset($value) ? new ($this->dtoClass)(json_decode($value, true)) : null;
+        return isset($value) ? new $this->dtoClass(json_decode($value, true)) : null;
     }
 
     public function set($model, string $key, $value, array $attributes)

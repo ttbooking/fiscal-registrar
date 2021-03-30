@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
@@ -21,33 +22,35 @@ class ReceiptController extends Controller
     /**
      * Display a listing of the receipts.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        return $this->receipt->newQuery()->paginate();
+        return Response::json($this->receipt->newQuery()->paginate());
     }
 
     /**
      * Store a newly created receipt in storage.
      *
      * @param  Request  $request
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        //
+        $receipt = $this->receipt->newQuery()->create($request->all());
+
+        return Response::json($receipt, JsonResponse::HTTP_CREATED);
     }
 
     /**
      * Display the specified receipt.
      *
      * @param  Receipt  $receipt
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function show(Receipt $receipt)
+    public function show(Receipt $receipt): JsonResponse
     {
-        return $receipt;
+        return Response::json($receipt);
     }
 
     /**
@@ -55,11 +58,13 @@ class ReceiptController extends Controller
      *
      * @param  Request  $request
      * @param  Receipt  $receipt
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
-    public function update(Request $request, Receipt $receipt)
+    public function update(Request $request, Receipt $receipt): JsonResponse
     {
-        //
+        $receipt->update($request->all());
+
+        return Response::json($receipt);
     }
 
     /**
@@ -68,7 +73,7 @@ class ReceiptController extends Controller
      * @param  Receipt  $receipt
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Receipt $receipt)
+    public function destroy(Receipt $receipt): \Illuminate\Http\Response
     {
         $receipt->delete();
 

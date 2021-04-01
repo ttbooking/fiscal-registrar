@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
 use TTBooking\FiscalRegistrar\Models\Receipt;
+use TTBooking\FiscalRegistrar\Rules;
 
 class ReceiptController extends Controller
 {
@@ -37,7 +38,16 @@ class ReceiptController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $receipt = $this->receipt->newQuery()->create($request->all());
+        $attributes = $request->validate([
+            'connection' => 'sometimes|nullable|string|max:32',
+            'operation' => 'sometimes|nullable|string|max:32',
+            'external_id' => 'sometimes|nullable|string|max:128',
+            'internal_id' => 'sometimes|nullable|string|max:128',
+            'data' => ['array', new Rules\Receipt],
+            'result' => ['array', new Rules\Result],
+        ]);
+
+        $receipt = $this->receipt->newQuery()->create($attributes);
 
         return Response::json($receipt, JsonResponse::HTTP_CREATED);
     }

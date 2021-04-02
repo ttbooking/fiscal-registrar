@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use TTBooking\FiscalRegistrar\Database\Factories\ReceiptFactory;
 use TTBooking\FiscalRegistrar\DTO;
 use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
 
@@ -19,6 +21,8 @@ use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
  */
 class Receipt extends Model
 {
+    use HasFactory;
+
     protected $guarded = ['id'];
 
     protected $casts = [
@@ -47,8 +51,53 @@ class Receipt extends Model
         return $this->resolveRouteBinding($id, null, true);
     }
 
+    /**
+     * @return $this
+     */
+    public function sell(): self
+    {
+        FiscalRegistrar::connection($this->connection)->sell($this->external_id, $this->data);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function sellRefund(): self
+    {
+        FiscalRegistrar::connection($this->connection)->sellRefund($this->external_id, $this->data);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function buy(): self
+    {
+        FiscalRegistrar::connection($this->connection)->buy($this->external_id, $this->data);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function buyRefund(): self
+    {
+        FiscalRegistrar::connection($this->connection)->buyRefund($this->external_id, $this->data);
+
+        return $this;
+    }
+
     public function report(): DTO\Result
     {
         return FiscalRegistrar::connection($this->connection)->report($this->internal_id);
+    }
+
+    protected static function newFactory(): ReceiptFactory
+    {
+        return ReceiptFactory::new();
     }
 }

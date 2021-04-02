@@ -72,7 +72,7 @@ final class Receipt extends DataTransferObject
             'items' => new Receipt\ItemCollection($items),
             'total' => $total ??= collect($items)->sum('sum'),
             'payments' => new Receipt\PaymentCollection(collect($payments)->whenEmpty(
-                fn (Collection $payments) => $payments->add(new Receipt\Payment(['sum' => $total]))
+                fn (Collection $payments) => $payments->add(Receipt\Payment::new($total))
             )->all()),
             'vats' => isset($vats) ? new Receipt\VATCollection($vats) : $vats,
             'additionalCheckProps' => $additionalCheckProps,

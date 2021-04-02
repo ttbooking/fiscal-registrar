@@ -93,9 +93,8 @@ final class Item extends DataTransferObject
         string $declarationNumber = null
     ): self {
         return new self(compact(
-            'name', 'price', 'quantity', 'measurementUnit', 'nomenclatureCode',
-            'paymentMethod', 'paymentObject', 'vat', 'agentInfo', 'supplierInfo', 'userData',
-            'excise', 'countryCode', 'declarationNumber'
+            'name', 'price', 'quantity', 'measurementUnit', 'nomenclatureCode', 'vat',
+            'agentInfo', 'supplierInfo', 'userData', 'excise', 'countryCode', 'declarationNumber'
         ) + [
             'sum' => $sum ?? $price * $quantity,
             'paymentMethod' => $paymentMethod ?? PaymentMethod::FullPrepayment(),

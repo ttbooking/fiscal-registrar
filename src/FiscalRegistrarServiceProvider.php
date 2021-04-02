@@ -28,70 +28,29 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
      */
     public function boot(): void
     {
-        if ($this->app->runningInConsole()) {
-            $this->publishes([
-                __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/fiscal-registrar'),
-            ], 'views');
-
-            $this->publishes([
-                __DIR__.'/../public' => public_path('vendor/fiscal-registrar'),
-            ], 'assets');
-
-            $this->publishes([
-                __DIR__.'/../config/fiscal-registrar.php' => $this->app->configPath('fiscal-registrar.php'),
-            ], 'config');
-
-            $this->publishes([
-                __DIR__.'/../database/migrations' => $this->app->databasePath('migrations'),
-            ], 'migrations');
-
-            //$this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-
-            $this->commands([
-                Console\ReceiptSellCommand::class,
-                Console\ReceiptSellRefundCommand::class,
-                Console\ReceiptBuyCommand::class,
-                Console\ReceiptBuyRefundCommand::class,
-                Console\ReceiptCopyCommand::class,
-                Console\ReceiptDeleteCommand::class,
-            ]);
-        }
-
+        $this->registerEvents();
         $this->registerRoutes();
         $this->registerResources();
-        $this->registerListeners();
+
+        if ($this->app->runningInConsole()) {
+            $this->offerPublishing();
+            $this->registerMigrations();
+            $this->registerCommands();
+        }
     }
 
     /**
-     * Register any application services.
+     * Register the Fiscal Registrar event listeners.
      *
      * @return void
      */
-    public function register(): void
+    protected function registerEvents(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/fiscal-registrar.php', 'fiscal-registrar');
-
-        $this->app->alias('fiscal-registrar', Contracts\FiscalRegistrarFactory::class);
-        $this->app->alias('fiscal-registrar', Contracts\FiscalRegistrar::class);
-        $this->app->singleton('fiscal-registrar.connection', fn ($app) => $app['fiscal-registrar']->connection());
-        $this->app->bind(Receipt::class, $this->app['config']['fiscal-registrar.model'] ?? Receipt::class);
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return string[]
-     */
-    public function provides(): array
-    {
-        return array_merge(
-            array_keys($this->singletons), [
-                Contracts\FiscalRegistrarFactory::class,
-                Contracts\FiscalRegistrar::class,
-                'fiscal-registrar.connection',
-                Receipt::class,
-            ]
-        );
+        Event::listen([
+            Events\Registering::class,
+            Events\Registered::class,
+            //Events\Processed::class,
+        ], Listeners\StoreReceipt::class);
     }
 
     /**
@@ -122,17 +81,80 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'fiscal-registrar');
     }
 
+    protected function offerPublishing(): void
+    {
+        $this->publishes([
+            __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/fiscal-registrar'),
+        ], 'views');
+
+        $this->publishes([
+            __DIR__.'/../public' => public_path('vendor/fiscal-registrar'),
+        ], 'assets');
+
+        $this->publishes([
+            __DIR__.'/../config/fiscal-registrar.php' => $this->app->configPath('fiscal-registrar.php'),
+        ], 'config');
+
+        $this->publishes([
+            __DIR__.'/../database/migrations' => $this->app->databasePath('migrations'),
+        ], 'migrations');
+    }
+
+    protected function registerMigrations(): void
+    {
+        //$this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+    }
+
+    protected function registerCommands(): void
+    {
+        $this->commands([
+            Console\ReceiptSellCommand::class,
+            Console\ReceiptSellRefundCommand::class,
+            Console\ReceiptBuyCommand::class,
+            Console\ReceiptBuyRefundCommand::class,
+            Console\ReceiptCopyCommand::class,
+            Console\ReceiptDeleteCommand::class,
+        ]);
+    }
+
     /**
-     * Register the Fiscal Registrar event listeners.
+     * Register any application services.
      *
      * @return void
      */
-    protected function registerListeners(): void
+    public function register(): void
     {
-        Event::listen([
-            Events\Registering::class,
-            Events\Registered::class,
-            //Events\Processed::class,
-        ], Listeners\StoreReceipt::class);
+        $this->configure();
+        $this->registerServices();
+    }
+
+    protected function configure(): void
+    {
+        $this->mergeConfigFrom(__DIR__.'/../config/fiscal-registrar.php', 'fiscal-registrar');
+    }
+
+    protected function registerServices(): void
+    {
+        $this->app->alias('fiscal-registrar', Contracts\FiscalRegistrarFactory::class);
+        $this->app->alias('fiscal-registrar', Contracts\FiscalRegistrar::class);
+        $this->app->singleton('fiscal-registrar.connection', fn ($app) => $app['fiscal-registrar']->connection());
+        $this->app->bind(Receipt::class, $this->app['config']['fiscal-registrar.model'] ?? Receipt::class);
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return string[]
+     */
+    public function provides(): array
+    {
+        return array_merge(
+            array_keys($this->singletons), [
+                Contracts\FiscalRegistrarFactory::class,
+                Contracts\FiscalRegistrar::class,
+                'fiscal-registrar.connection',
+                Receipt::class,
+            ]
+        );
     }
 }

@@ -31,7 +31,7 @@ class ReceiptCopyCommand extends Command
      */
     public function handle(Receipt $receipt)
     {
-        $receipt->resolve($this->argument('id'))->replicate()->save();
+        $receipt->resolve($this->argument('id'))->replicate(['external_id', 'internal_id', 'result'])->save();
 
         $this->info('Receipt successfully copied.');
     }

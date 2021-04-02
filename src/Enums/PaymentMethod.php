@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Enums;
 
-use MyCLabs\Enum\Enum;
-
 /**
  * @method static self FullPrepayment
  * @method static self Prepayment

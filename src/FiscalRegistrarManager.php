@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar;
 
 use Illuminate\Contracts\Events\Dispatcher;
-use TTBooking\FiscalRegistrar\Drivers\Atol\AtolFiscalRegistrar;
+use TTBooking\FiscalRegistrar\Drivers\Atol\AtolDriver;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 
@@ -68,12 +68,12 @@ class FiscalRegistrarManager extends Support\Manager implements
      *
      * @param  array  $config
      * @param  string  $connection
-     * @return AtolFiscalRegistrar
+     * @return AtolDriver
      */
     protected function createAtolDriver(array $config, string $connection): Contracts\FiscalRegistrar
     {
         return $this->configureInstance(
-            $this->container->make(AtolFiscalRegistrar::class, compact('config', 'connection'))
+            $this->container->make(AtolDriver::class, compact('config', 'connection'))
         );
     }
 

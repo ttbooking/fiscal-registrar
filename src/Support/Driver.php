@@ -7,7 +7,7 @@ namespace TTBooking\FiscalRegistrar\Support;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use TTBooking\FiscalRegistrar\Contracts;
 
-abstract class FiscalRegistrar implements Contracts\ConnectionAware, Contracts\FiscalRegistrar
+abstract class Driver implements Contracts\ConnectionAware, Contracts\FiscalRegistrar
 {
     protected UrlGenerator $urlGenerator;
 

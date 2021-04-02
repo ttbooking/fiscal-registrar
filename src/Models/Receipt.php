@@ -7,25 +7,30 @@ namespace TTBooking\FiscalRegistrar\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use RuntimeException;
+use TTBooking\FiscalRegistrar\Concerns\FluentOperation;
+use TTBooking\FiscalRegistrar\Contracts;
 use TTBooking\FiscalRegistrar\Database\Factories\ReceiptFactory;
 use TTBooking\FiscalRegistrar\DTO;
-use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
+use TTBooking\FiscalRegistrar\Enums\Operation;
+use TTBooking\FiscalRegistrar\Exceptions\ResolverException;
 
 /**
  * @property string|null $connection
- * @property string|null $operation
+ * @property Operation|null $operation
  * @property string|null $external_id
  * @property string|null $internal_id
  * @property DTO\Receipt $data
  * @property DTO\Result|null $result
  */
-class Receipt extends Model
+class Receipt extends Model implements Contracts\Receipt, Contracts\SelfResolvable
 {
-    use HasFactory;
+    use FluentOperation, HasFactory;
 
     protected $guarded = ['id'];
 
     protected $casts = [
+        'operation' => Operation::class,
         'data' => DTO\Receipt::class,
         'result' => DTO\Result::class,
     ];
@@ -45,55 +50,16 @@ class Receipt extends Model
     /**
      * @param  mixed  $id
      * @return Model|static
+     *
+     * @throws ResolverException
      */
     public function resolve($id): self
     {
-        return $this->resolveRouteBinding($id, null, true);
-    }
-
-    /**
-     * @return $this
-     */
-    public function sell(): self
-    {
-        FiscalRegistrar::connection($this->connection)->sell($this->external_id, $this->data);
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function sellRefund(): self
-    {
-        FiscalRegistrar::connection($this->connection)->sellRefund($this->external_id, $this->data);
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function buy(): self
-    {
-        FiscalRegistrar::connection($this->connection)->buy($this->external_id, $this->data);
-
-        return $this;
-    }
-
-    /**
-     * @return $this
-     */
-    public function buyRefund(): self
-    {
-        FiscalRegistrar::connection($this->connection)->buyRefund($this->external_id, $this->data);
-
-        return $this;
-    }
-
-    public function report(): DTO\Result
-    {
-        return FiscalRegistrar::connection($this->connection)->report($this->internal_id);
+        try {
+            return $this->resolveRouteBinding($id, null, true);
+        } catch (RuntimeException $e) {
+            throw new ResolverException('Cannot resolve ['.static::class."] by identifier \"$id\".", $e->getCode(), $e);
+        }
     }
 
     protected static function newFactory(): ReceiptFactory

@@ -17,9 +17,9 @@ use TTBooking\FiscalRegistrar\Concerns\SingleMethodRegistration;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Exceptions;
-use TTBooking\FiscalRegistrar\Support\FiscalRegistrar;
+use TTBooking\FiscalRegistrar\Support\Driver;
 
-class AtolFiscalRegistrar extends FiscalRegistrar
+class AtolDriver extends Driver
 {
     use SingleMethodRegistration;
 
@@ -51,7 +51,7 @@ class AtolFiscalRegistrar extends FiscalRegistrar
             $reportResponse = $this->api->report($this->config['group_code'], $this->getToken($force), $id);
             $force = true;
         } catch (RuntimeException $e) {
-            throw new Exceptions\FiscalRegistrarException('Report operation failed.', $e->getCode(), $e);
+            throw new Exceptions\DriverException('Report operation failed.', $e->getCode(), $e);
         } while (static::tokenHasExpired($reportResponse));
 
         return $this->processReportResponse($reportResponse);
@@ -68,7 +68,7 @@ class AtolFiscalRegistrar extends FiscalRegistrar
      * @param  bool  $force
      * @return string
      *
-     * @throws Exceptions\FiscalRegistrarException
+     * @throws Exceptions\DriverException
      */
     protected function getToken(bool $force = false): string
     {
@@ -81,7 +81,7 @@ class AtolFiscalRegistrar extends FiscalRegistrar
             ));
 
             if (! is_null($error = $tokenResponse->getError())) {
-                throw new Exceptions\FiscalRegistrarException($error->getText(), $error->getCode());
+                throw new Exceptions\DriverException($error->getText(), $error->getCode());
             }
 
             return $tokenResponse->getToken();
@@ -103,7 +103,7 @@ class AtolFiscalRegistrar extends FiscalRegistrar
                 ($this->config['group_code'], $this->getToken($force), $registerRequest);
             $force = true;
         } catch (RuntimeException $e) {
-            throw new Exceptions\FiscalRegistrarException("{$operation} operation failed.", $e->getCode(), $e);
+            throw new Exceptions\DriverException("{$operation} operation failed.", $e->getCode(), $e);
         } while (static::tokenHasExpired($registerResponse));
 
         return $this->processRegisterResponse($registerResponse);
@@ -174,7 +174,7 @@ class AtolFiscalRegistrar extends FiscalRegistrar
     protected function processRegisterResponse(AtolRegister\RegisterResponse $registerResponse): Result
     {
         if (! is_null($error = $registerResponse->getError())) {
-            throw new Exceptions\FiscalRegistrarException($error->getText(), $error->getCode());
+            throw new Exceptions\DriverException($error->getText(), $error->getCode());
         }
 
         return Result::new(

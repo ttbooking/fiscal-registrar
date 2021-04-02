@@ -3,15 +3,16 @@
 declare(strict_types=1);
 
 use Illuminate\Container\Container;
+use TTBooking\FiscalRegistrar\Contracts\Receipt as ReceiptContract;
 use TTBooking\FiscalRegistrar\DTO;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
 if (! function_exists('receipt')) {
     /**
      * @param  mixed  $data
-     * @return Receipt
+     * @return ReceiptContract
      */
-    function receipt($data = null): Receipt
+    function receipt($data = null): ReceiptContract
     {
         /** @var Receipt $receipt */
         $receipt = Container::getInstance()->make(Receipt::class);

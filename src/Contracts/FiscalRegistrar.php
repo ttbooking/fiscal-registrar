@@ -6,51 +6,51 @@ namespace TTBooking\FiscalRegistrar\Contracts;
 
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
-use TTBooking\FiscalRegistrar\Exceptions\FiscalRegistrarException;
+use TTBooking\FiscalRegistrar\Exceptions\DriverException;
 
 interface FiscalRegistrar
 {
     /**
      * @param  string  $externalId
-     * @param  Receipt  $receipt
+     * @param  Receipt  $data
      * @return Result
      *
-     * @throws FiscalRegistrarException
+     * @throws DriverException
      */
-    public function sell(string $externalId, Receipt $receipt): Result;
+    public function sell(string $externalId, Receipt $data): Result;
 
     /**
      * @param  string  $externalId
-     * @param  Receipt  $receipt
+     * @param  Receipt  $data
      * @return Result
      *
-     * @throws FiscalRegistrarException
+     * @throws DriverException
      */
-    public function sellRefund(string $externalId, Receipt $receipt): Result;
+    public function sellRefund(string $externalId, Receipt $data): Result;
 
     /**
      * @param  string  $externalId
-     * @param  Receipt  $receipt
+     * @param  Receipt  $data
      * @return Result
      *
-     * @throws FiscalRegistrarException
+     * @throws DriverException
      */
-    public function buy(string $externalId, Receipt $receipt): Result;
+    public function buy(string $externalId, Receipt $data): Result;
 
     /**
      * @param  string  $externalId
-     * @param  Receipt  $receipt
+     * @param  Receipt  $data
      * @return Result
      *
-     * @throws FiscalRegistrarException
+     * @throws DriverException
      */
-    public function buyRefund(string $externalId, Receipt $receipt): Result;
+    public function buyRefund(string $externalId, Receipt $data): Result;
 
     /**
      * @param  string  $id
      * @return Result
      *
-     * @throws FiscalRegistrarException
+     * @throws DriverException
      */
     public function report(string $id): Result;
 

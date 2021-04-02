@@ -45,7 +45,7 @@ final class Receipt extends DataTransferObject
      * @param  array  $items
      * @param  array  $payments
      * @param  array|null  $vats
-     * @param  float|null  $total
+     * @param  float|int|null  $total
      * @param  string|null  $additionalCheckProps
      * @param  string|null  $cashier
      * @param  Receipt\AdditionalUserProps|null  $additionalUserProps
@@ -64,20 +64,6 @@ final class Receipt extends DataTransferObject
         string $cashier = null,
         Receipt\AdditionalUserProps $additionalUserProps = null
     ): self {
-        /*$this->client = $client;
-        $this->company = $company;
-        $this->agentInfo = $agentInfo;
-        $this->supplierInfo = $supplierInfo;
-        $this->items = collect($items);
-        $this->total = $total ?? $this->items->sum('sum');
-        $this->payments = collect($payments)->whenEmpty(
-            fn (Collection $payments) => $payments->add(new Receipt\Payment(1, $this->total))
-        );
-        $this->vats = isset($vats) ? collect($vats) : $vats;
-        $this->additionalCheckProps = $additionalCheckProps;
-        $this->cashier = $cashier;
-        $this->additionalUserProps = $additionalUserProps;*/
-
         return new self([
             'client' => $client,
             'company' => $company,
@@ -86,7 +72,7 @@ final class Receipt extends DataTransferObject
             'items' => new Receipt\ItemCollection($items),
             'total' => $total ??= collect($items)->sum('sum'),
             'payments' => new Receipt\PaymentCollection(collect($payments)->whenEmpty(
-                fn (Collection $payments) => $payments->add(Receipt\Payment::new(1, $total))
+                fn (Collection $payments) => $payments->add(new Receipt\Payment(['sum' => $total]))
             )->all()),
             'vats' => isset($vats) ? new Receipt\VATCollection($vats) : $vats,
             'additionalCheckProps' => $additionalCheckProps,

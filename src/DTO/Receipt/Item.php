@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\DTO\Receipt;
 
 use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
+use TTBooking\FiscalRegistrar\Enums\PaymentMethod;
+use TTBooking\FiscalRegistrar\Enums\PaymentObject;
 
 final class Item extends DataTransferObject
 {
@@ -28,11 +30,11 @@ final class Item extends DataTransferObject
     // 1162
     public ?string $nomenclatureCode;
 
-    // 1214 (enum)
-    public string $paymentMethod;
+    // 1214
+    public PaymentMethod $paymentMethod;
 
-    // 1212 (enum)
-    public string $paymentObject;
+    // 1212
+    public PaymentObject $paymentObject;
 
     public ?Item\VAT $vat;
 
@@ -44,6 +46,7 @@ final class Item extends DataTransferObject
     public ?string $userData;
 
     // 1229
+    /** @var float|int|null */
     public ?float $excise;
 
     // 1230
@@ -56,18 +59,18 @@ final class Item extends DataTransferObject
      * Item constructor.
      *
      * @param  string  $name
-     * @param  float  $price
+     * @param  float|int  $price
      * @param  int  $quantity
-     * @param  float|null  $sum
+     * @param  float|int|null  $sum
      * @param  string|null  $measurementUnit
      * @param  string|null  $nomenclatureCode
-     * @param  string  $paymentMethod
-     * @param  string  $paymentObject
+     * @param  PaymentMethod|null  $paymentMethod
+     * @param  PaymentObject|null  $paymentObject
      * @param  Item\VAT|null  $vat
      * @param  AgentInfo|null  $agentInfo
      * @param  Item\SupplierInfo|null  $supplierInfo
      * @param  string|null  $userData
-     * @param  float|null  $excise
+     * @param  float|int|null  $excise
      * @param  string|null  $countryCode
      * @param  string|null  $declarationNumber
      * @return self
@@ -79,8 +82,8 @@ final class Item extends DataTransferObject
         float $sum = null,
         string $measurementUnit = null,
         string $nomenclatureCode = null,
-        string $paymentMethod = 'full_prepayment',
-        string $paymentObject = 'commodity',
+        PaymentMethod $paymentMethod = null,
+        PaymentObject $paymentObject = null,
         Item\VAT $vat = null,
         AgentInfo $agentInfo = null,
         Item\SupplierInfo $supplierInfo = null,
@@ -89,26 +92,14 @@ final class Item extends DataTransferObject
         string $countryCode = null,
         string $declarationNumber = null
     ): self {
-        /*$this->name = $name;
-        $this->price = $price;
-        $this->quantity = $quantity;
-        $this->sum = $sum ?? $price * $quantity;
-        $this->measurementUnit = $measurementUnit;
-        $this->nomenclatureCode = $nomenclatureCode;
-        $this->paymentMethod = $paymentMethod;
-        $this->paymentObject = $paymentObject;
-        $this->vat = $vat;
-        $this->agentInfo = $agentInfo;
-        $this->supplierInfo = $supplierInfo;
-        $this->userData = $userData;
-        $this->excise = $excise;
-        $this->countryCode = $countryCode;
-        $this->declarationNumber = $declarationNumber;*/
-
         return new self(compact(
             'name', 'price', 'quantity', 'measurementUnit', 'nomenclatureCode',
             'paymentMethod', 'paymentObject', 'vat', 'agentInfo', 'supplierInfo', 'userData',
             'excise', 'countryCode', 'declarationNumber'
-        ) + ['sum' => $sum ?? $price * $quantity]);
+        ) + [
+            'sum' => $sum ?? $price * $quantity,
+            'paymentMethod' => $paymentMethod ?? PaymentMethod::FullPrepayment(),
+            'paymentObject' => $paymentObject ?? PaymentObject::Commodity(),
+        ]);
     }
 }

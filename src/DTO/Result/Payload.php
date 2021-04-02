@@ -19,6 +19,7 @@ final class Payload extends DataTransferObject
     public DateTimeInterface $receiptDateTime;
 
     // 1020
+    /** @var float|int */
     public float $total;
 
     // 1041
@@ -42,7 +43,7 @@ final class Payload extends DataTransferObject
      * @param  int  $fiscalReceiptNumber
      * @param  int  $shiftNumber
      * @param  DateTimeInterface  $receiptDateTime
-     * @param  float  $total
+     * @param  float|int  $total
      * @param  string  $fnNumber
      * @param  string  $ecrRegistrationNumber
      * @param  int  $fiscalDocumentNumber

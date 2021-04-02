@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\DTO\Receipt;
 
 use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
+use TTBooking\FiscalRegistrar\Enums\PaymentType;
 
 final class Payment extends DataTransferObject
 {
-    // 1031, 1081, 1215, 1216, 1217 (enum)
-    public int $type;
+    // 1031, 1081, 1215, 1216, 1217
+    public PaymentType $type;
 
     // 1031, 1081, 1215, 1216, 1217
     /** @var float|int */
@@ -18,12 +19,12 @@ final class Payment extends DataTransferObject
     /**
      * Payment constructor.
      *
-     * @param  int  $type
-     * @param  float  $sum
+     * @param  float|int  $sum
+     * @param  PaymentType|null  $type
      * @return self
      */
-    public static function new(int $type, float $sum): self
+    public static function new(float $sum, PaymentType $type = null): self
     {
-        return new self(compact('type', 'sum'));
+        return new self(compact('sum') + ['type' => $type ?? PaymentType::Electronic()]);
     }
 }

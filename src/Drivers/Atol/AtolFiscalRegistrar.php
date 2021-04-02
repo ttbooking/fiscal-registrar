@@ -142,13 +142,18 @@ class AtolFiscalRegistrar extends FiscalRegistrar
                 collect($receipt->items)->map(function (Receipt\Item $item) {
                     return new AtolRegister\Item(
                         $item->name, $item->price, $item->quantity, $item->sum,
-                        AtolRegister\PaymentMethod::from($item->paymentMethod),
-                        new AtolRegister\Vat(AtolRegister\VatType::from($item->vat->type), $item->vat->sum)
+                        AtolRegister\PaymentMethod::from($item->paymentMethod->getValue()),
+                        new AtolRegister\Vat(
+                            AtolRegister\VatType::from($item->vat->type->getValue()),
+                            $item->vat->sum
+                        )
                     );
                 })->all(),
 
                 collect($receipt->payments)->map(function (Receipt\Payment $payment) {
-                    return new AtolRegister\Payment(AtolRegister\PaymentType::from($payment->type), $payment->sum);
+                    return new AtolRegister\Payment(AtolRegister\PaymentType::from(
+                        $payment->type->getValue()), $payment->sum
+                    );
                 })->all(),
 
                 $receipt->total

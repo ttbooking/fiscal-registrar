@@ -45,7 +45,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
                 __DIR__.'/../database/migrations' => $this->app->databasePath('migrations'),
             ], 'migrations');
 
-            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+            //$this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         }
 
         $this->registerRoutes();

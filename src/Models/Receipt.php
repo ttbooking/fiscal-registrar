@@ -26,14 +26,25 @@ class Receipt extends Model
         'result' => DTO\Result::class,
     ];
 
-    public function resolveRouteBinding($value, $field = null)
+    public function resolveRouteBinding($value, $field = null, $sole = false)
     {
+        $method = $sole ? 'sole' : 'first';
+
         if (Str::contains($value, ':')) {
             [$connection, $external_id] = explode(':', $value, 2);
-            return $this->newQuery()->where(array_filter(compact('connection', 'external_id')))->first();
+            return $this->newQuery()->where(array_filter(compact('connection', 'external_id')))->$method();
         }
 
-        return parent::resolveRouteBinding($value, $field);
+        return $this->newQuery()->where($field ?? $this->getRouteKeyName(), $value)->$method();
+    }
+
+    /**
+     * @param  mixed  $id
+     * @return Model|static
+     */
+    public function resolve($id): self
+    {
+        return $this->resolveRouteBinding($id, null, true);
     }
 
     public function report(): DTO\Result

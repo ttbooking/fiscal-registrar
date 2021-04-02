@@ -46,6 +46,15 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
             ], 'migrations');
 
             //$this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+            $this->commands([
+                Console\ReceiptSellCommand::class,
+                Console\ReceiptSellRefundCommand::class,
+                Console\ReceiptBuyCommand::class,
+                Console\ReceiptBuyRefundCommand::class,
+                Console\ReceiptCopyCommand::class,
+                Console\ReceiptDeleteCommand::class,
+            ]);
         }
 
         $this->registerRoutes();

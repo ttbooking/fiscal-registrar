@@ -2,7 +2,7 @@
     "name": "ttbooking/fiscal-registrar",
     "description": "Fiscal Registrar service.",
     "type": "library",
-    "keywords": ["fiscal registrar", "receipt", "atol", "atol online", "54fz", "fz54"],
+    "keywords": ["fiscal registrar", "receipt", "atol", "atol online", "kkm", "54fz", "fz54"],
     "license": "MIT",
     "support": {
         "issues": "https://github.com/ttbooking/fiscal-registrar/issues",

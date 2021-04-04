@@ -6,10 +6,15 @@ namespace TTBooking\FiscalRegistrar\Contracts;
 
 use TTBooking\FiscalRegistrar\DTO;
 use TTBooking\FiscalRegistrar\Enums\Operation;
-use TTBooking\FiscalRegistrar\Exceptions\DriverException;
 
-interface Receipt extends FiscalRegistrar
+interface Receipt extends SelfResolvable, StatefulFiscalRegistrar
 {
+    /**
+     * @param  DTO\Receipt  $data
+     * @return $this
+     */
+    public function make(DTO\Receipt $data);
+
     /**
      * @param  string  $connection
      * @return $this
@@ -21,6 +26,12 @@ interface Receipt extends FiscalRegistrar
      * @return $this
      */
     public function do(Operation $operation);
+
+    /**
+     * @param  string  $id
+     * @return $this
+     */
+    public function as(string $id);
 
     /**
      * @return bool
@@ -36,54 +47,4 @@ interface Receipt extends FiscalRegistrar
      * @return bool|null
      */
     public function delete();
-
-    /**
-     * @param  string|null  $externalId
-     * @param  DTO\Receipt|null  $data
-     * @return DTO\Result
-     *
-     * @throws DriverException
-     */
-    public function sell(string $externalId = null, DTO\Receipt $data = null): DTO\Result;
-
-    /**
-     * @param  string|null  $externalId
-     * @param  DTO\Receipt|null  $data
-     * @return DTO\Result
-     *
-     * @throws DriverException
-     */
-    public function sellRefund(string $externalId = null, DTO\Receipt $data = null): DTO\Result;
-
-    /**
-     * @param  string|null  $externalId
-     * @param  DTO\Receipt|null  $data
-     * @return DTO\Result
-     *
-     * @throws DriverException
-     */
-    public function buy(string $externalId = null, DTO\Receipt $data = null): DTO\Result;
-
-    /**
-     * @param  string|null  $externalId
-     * @param  DTO\Receipt|null  $data
-     * @return DTO\Result
-     *
-     * @throws DriverException
-     */
-    public function buyRefund(string $externalId = null, DTO\Receipt $data = null): DTO\Result;
-
-    /**
-     * @param  string|null  $id
-     * @return DTO\Result
-     *
-     * @throws DriverException
-     */
-    public function report(string $id = null): DTO\Result;
-
-    /**
-     * @param  mixed  $payload
-     * @return DTO\Result
-     */
-    public function processCallback($payload): DTO\Result;
 }

@@ -10,6 +10,13 @@ use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
 
 trait FluentOperation
 {
+    public function make(DTO\Receipt $data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
     public function for(string $connection)
     {
         $this->connection = $connection;
@@ -20,6 +27,13 @@ trait FluentOperation
     public function do(Operation $operation)
     {
         $this->operation = $operation;
+
+        return $this;
+    }
+
+    public function as(string $id)
+    {
+        $this->external_id = $id;
 
         return $this;
     }

@@ -23,7 +23,7 @@ use TTBooking\FiscalRegistrar\Exceptions\ResolverException;
  * @property DTO\Receipt $data
  * @property DTO\Result|null $result
  */
-class Receipt extends Model implements Contracts\Receipt, Contracts\SelfResolvable
+class Receipt extends Model implements Contracts\Receipt //, Contracts\SelfResolvable
 {
     use FluentOperation, HasFactory;
 

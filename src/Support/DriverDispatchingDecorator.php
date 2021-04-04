@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Support;
 
+use Illuminate\Support\Str;
 use TTBooking\FiscalRegistrar\Concerns;
 use TTBooking\FiscalRegistrar\Contracts;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
+use TTBooking\FiscalRegistrar\Enums\Operation;
 use TTBooking\FiscalRegistrar\Events;
 use TTBooking\FiscalRegistrar\Exceptions;
 
@@ -48,20 +50,22 @@ class DriverDispatchingDecorator implements
     }
 
     /**
-     * @param  string  $operation
+     * @param  Operation  $operation
      * @param  string  $externalId
      * @param  Receipt  $receipt
      * @return Result
      *
      * @throws Exceptions\FiscalRegistrarException
      */
-    protected function register(string $operation, string $externalId, Receipt $receipt): Result
+    protected function register(Operation $operation, string $externalId, Receipt $receipt): Result
     {
+        $operationMethod = Str::camel($operation->getValue());
+
         $this->event(new Events\Registering(
             $this->getConnectionName(), $operation, $externalId, null, $receipt, null
         ));
 
-        $result = $this->fiscalRegistrar->{$operation}($externalId, $receipt);
+        $result = $this->fiscalRegistrar->{$operationMethod}($externalId, $receipt);
 
         $this->event(new Events\Registered(
             $this->getConnectionName(), $operation, $externalId, $result->internalId, $receipt, $result

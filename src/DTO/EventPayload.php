@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\DTO;
 
+use TTBooking\FiscalRegistrar\Enums\Operation;
+
 class EventPayload extends DataTransferObject
 {
     public string $connection;
 
-    public string $operation;
+    public Operation $operation;
 
     public string $externalId;
 
@@ -22,7 +24,7 @@ class EventPayload extends DataTransferObject
      * Create a new event payload instance.
      *
      * @param  string  $connection
-     * @param  string  $operation
+     * @param  Operation  $operation
      * @param  string  $externalId
      * @param  string|null  $internalId
      * @param  Receipt|null  $data
@@ -31,7 +33,7 @@ class EventPayload extends DataTransferObject
      */
     public static function new(
         string $connection,
-        string $operation,
+        Operation $operation,
         string $externalId,
         string $internalId = null,
         Receipt $data = null,

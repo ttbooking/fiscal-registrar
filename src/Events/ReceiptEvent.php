@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use TTBooking\FiscalRegistrar\DTO\EventPayload;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
+use TTBooking\FiscalRegistrar\Enums\Operation;
 
 abstract class ReceiptEvent implements ShouldBroadcast
 {
@@ -21,7 +22,7 @@ abstract class ReceiptEvent implements ShouldBroadcast
      * Create a new event instance.
      *
      * @param  string  $connection
-     * @param  string  $operation
+     * @param  Operation  $operation
      * @param  string  $externalId
      * @param  string|null  $internalId
      * @param  Receipt|null  $data
@@ -29,7 +30,7 @@ abstract class ReceiptEvent implements ShouldBroadcast
      */
     public function __construct(
         string $connection,
-        string $operation,
+        Operation $operation,
         string $externalId,
         string $internalId = null,
         Receipt $data = null,

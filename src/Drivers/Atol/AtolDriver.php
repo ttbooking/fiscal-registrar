@@ -6,6 +6,7 @@ namespace TTBooking\FiscalRegistrar\Drivers\Atol;
 
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Support\Str;
 use Lamoda\AtolClient\Converter\ObjectConverter;
 use Lamoda\AtolClient\V4\AtolApi;
 use Lamoda\AtolClient\V4\DTO\GetToken as AtolGetToken;
@@ -16,6 +17,7 @@ use RuntimeException;
 use TTBooking\FiscalRegistrar\Concerns\SingleMethodRegistration;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
+use TTBooking\FiscalRegistrar\Enums\Operation;
 use TTBooking\FiscalRegistrar\Exceptions;
 use TTBooking\FiscalRegistrar\Support\Driver;
 
@@ -92,18 +94,20 @@ class AtolDriver extends Driver
             : $this->cache->remember($key, 86400, $tokenRetriever);
     }
 
-    protected function register(string $operation, string $externalId, Receipt $receipt): Result
+    protected function register(Operation $operation, string $externalId, Receipt $receipt): Result
     {
+        $operationString = Str::camel($operation->getValue());
+
         $registerRequest = $this->makeRequest($externalId, $receipt);
 
         $force = false;
         do try {
             /** @var AtolRegister\RegisterResponse $registerResponse */
-            $registerResponse = $this->api->{$operation}
+            $registerResponse = $this->api->{$operationString}
                 ($this->config['group_code'], $this->getToken($force), $registerRequest);
             $force = true;
         } catch (RuntimeException $e) {
-            throw new Exceptions\DriverException("{$operation} operation failed.", $e->getCode(), $e);
+            throw new Exceptions\DriverException("{$operationString} operation failed.", $e->getCode(), $e);
         } while (static::tokenHasExpired($registerResponse));
 
         return $this->processRegisterResponse($registerResponse);

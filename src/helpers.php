@@ -14,6 +14,10 @@ if (! function_exists('receipt')) {
      */
     function receipt($data = null): ReceiptContract
     {
+        if ($data instanceof ReceiptContract) {
+            return $data;
+        }
+
         /** @var Receipt $receipt */
         $receipt = Container::getInstance()->make(Receipt::class);
 

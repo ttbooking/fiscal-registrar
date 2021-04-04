@@ -84,20 +84,24 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
     protected function offerPublishing(): void
     {
         $this->publishes([
-            __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/fiscal-registrar'),
-        ], 'views');
-
-        $this->publishes([
-            __DIR__.'/../public' => public_path('vendor/fiscal-registrar'),
-        ], 'assets');
-
-        $this->publishes([
             __DIR__.'/../config/fiscal-registrar.php' => $this->app->configPath('fiscal-registrar.php'),
         ], 'config');
 
         $this->publishes([
             __DIR__.'/../database/migrations' => $this->app->databasePath('migrations'),
         ], 'migrations');
+
+        $this->publishes([
+            __DIR__.'/../stubs/Receipt.stub' => $this->app->path('Models/Receipt.php'),
+        ], 'model');
+
+        $this->publishes([
+            __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/fiscal-registrar'),
+        ], 'views');
+
+        $this->publishes([
+            __DIR__.'/../public' => public_path('vendor/fiscal-registrar'),
+        ], 'assets');
     }
 
     protected function registerMigrations(): void

@@ -1,0 +1,12 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Models;
+
+use TTBooking\FiscalRegistrar\Models\Receipt as BaseReceipt;
+
+class Receipt extends BaseReceipt
+{
+    protected $table = 'receipts';
+}

@@ -23,6 +23,21 @@ interface Receipt extends FiscalRegistrar
     public function do(Operation $operation);
 
     /**
+     * @return bool
+     */
+    public function save();
+
+    /**
+     * @return static
+     */
+    public function clone();
+
+    /**
+     * @return bool|null
+     */
+    public function delete();
+
+    /**
      * @param  string|null  $externalId
      * @param  DTO\Receipt|null  $data
      * @return DTO\Result

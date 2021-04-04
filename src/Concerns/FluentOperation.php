@@ -24,6 +24,11 @@ trait FluentOperation
         return $this;
     }
 
+    public function clone()
+    {
+        return $this->replicate(['external_id', 'internal_id', 'result']);
+    }
+
     public function sell(string $externalId = null, DTO\Receipt $data = null): DTO\Result
     {
         return FiscalRegistrar::connection($this->connection)

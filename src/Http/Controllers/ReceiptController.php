@@ -8,6 +8,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Validation\Rule;
+use TTBooking\FiscalRegistrar\Enums\Operation;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 use TTBooking\FiscalRegistrar\Rules;
 
@@ -38,16 +40,7 @@ class ReceiptController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $attributes = $request->validate([
-            'connection' => 'sometimes|nullable|string|max:32',
-            'operation' => 'sometimes|nullable|string|max:32',
-            'external_id' => 'sometimes|nullable|string|max:128',
-            'internal_id' => 'sometimes|nullable|string|max:128',
-            'data' => ['array', new Rules\Receipt],
-            'result' => ['array', new Rules\Result],
-        ]);
-
-        $receipt = $this->receipt->newQuery()->create($attributes);
+        $receipt = $this->receipt->newQuery()->create(static::validateRequest($request));
 
         return Response::json($receipt, JsonResponse::HTTP_CREATED);
     }
@@ -72,7 +65,7 @@ class ReceiptController extends Controller
      */
     public function update(Request $request, Receipt $receipt): JsonResponse
     {
-        $receipt->update($request->all());
+        $receipt->update(static::validateRequest($request));
 
         return Response::json($receipt);
     }
@@ -88,5 +81,23 @@ class ReceiptController extends Controller
         $receipt->delete();
 
         return Response::noContent();
+    }
+
+    /**
+     * Validate the request.
+     *
+     * @param  Request  $request
+     * @return array
+     */
+    protected static function validateRequest(Request $request): array
+    {
+        return $request->validate([
+            'connection' => 'sometimes|nullable|string|max:32',
+            'operation' => ['sometimes', 'nullable', 'string', Rule::in(Operation::toArray())],
+            'external_id' => 'sometimes|nullable|string|max:128',
+            //'internal_id' => 'sometimes|nullable|string|max:128',
+            'data' => ['array', new Rules\Receipt],
+            //'result' => ['array', new Rules\Result],
+        ]);
     }
 }

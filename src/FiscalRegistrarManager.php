@@ -98,7 +98,7 @@ class FiscalRegistrarManager extends Support\Manager implements
      */
     protected function decorateInstance(Contracts\FiscalRegistrar $fiscalRegistrar): Contracts\FiscalRegistrar
     {
-        return new Support\FiscalRegistrarDispatchingDecorator($fiscalRegistrar);
+        return new Support\DriverDispatchingDecorator($fiscalRegistrar);
     }
 
     /**

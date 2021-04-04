@@ -11,7 +11,7 @@ use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Events;
 use TTBooking\FiscalRegistrar\Exceptions;
 
-class FiscalRegistrarDispatchingDecorator implements
+class DriverDispatchingDecorator implements
     Contracts\ConnectionAware,
     Contracts\FiscalRegistrar,
     Contracts\DispatchesEvents

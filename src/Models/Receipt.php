@@ -27,7 +27,7 @@ class Receipt extends Model implements Contracts\Receipt, Contracts\SelfResolvab
 {
     use FluentOperation, HasFactory;
 
-    protected $guarded = ['id'];
+    protected $fillable = ['connection', 'operation', 'external_id', 'data'];
 
     protected $casts = [
         'operation' => Operation::class,

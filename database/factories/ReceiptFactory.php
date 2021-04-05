@@ -37,13 +37,13 @@ class ReceiptFactory extends Factory
             'operation' => $this->faker->optional()->randomElement(Operation::values()),
             'external_id' => $this->faker->uuid,
             'internal_id' => $this->faker->uuid,
-            'data' => DTO\Receipt::new(
+            'data' => fn () => DTO\Receipt::new(
 
                 DTO\Receipt\Client::new(config('fiscal-registrar.test_email', $this->faker->safeEmail)),
 
                 null, null, null,
 
-                [
+                array_map(fn () => [
                     'name' => $this->faker->unique()->productName,
                     'price' => $price = $this->faker->numberBetween(1, 10000),
                     'quantity' => $quantity = $this->faker->numberBetween(1, 10),
@@ -52,7 +52,7 @@ class ReceiptFactory extends Factory
                     'paymentMethod' => PaymentMethod::FullPrepayment(),
                     'paymentObject' => PaymentObject::Commodity(),
                     'vat' => DTO\Receipt\Item\VAT::new(VATType::VAT20()),
-                ],
+                ], range(1, $this->faker->numberBetween(1, 10))),
 
             ),
         ];

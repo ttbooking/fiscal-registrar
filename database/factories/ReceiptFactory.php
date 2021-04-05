@@ -7,6 +7,8 @@ namespace TTBooking\FiscalRegistrar\Database\Factories;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use TTBooking\FiscalRegistrar\DTO;
+use TTBooking\FiscalRegistrar\Enums\Operation;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class ReceiptFactory extends Factory
@@ -18,6 +20,8 @@ class ReceiptFactory extends Factory
      */
     protected $model = Receipt::class;
 
+    protected Repository $config;
+
     /**
      * Define the model's default state.
      *
@@ -26,8 +30,32 @@ class ReceiptFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'connection' => 'atol',
+            'operation' => $this->faker->optional()->randomElement(Operation::values()),
+            'external_id' => $this->faker->uuid,
+            'internal_id' => $this->faker->uuid,
+            'data' => DTO\Receipt::new(
+
+                DTO\Receipt\Client::new($this->config['fiscal-registrar.test_email'] ?? $this->faker->safeEmail),
+
+                null, null, null,
+
+                DTO\Receipt\Item::factory()->count(rand(1, 10))->make()->toArray(),
+
+            ),
         ];
+    }
+
+    /**
+     * Configure the factory.
+     *
+     * @return $this
+     */
+    public function configure(): self
+    {
+        $this->config = Container::getInstance()->make(Repository::class);
+
+        return $this;
     }
 
     /**
@@ -37,8 +65,6 @@ class ReceiptFactory extends Factory
      */
     public function modelName(): string
     {
-        $config = Container::getInstance()->make(Repository::class);
-
-        return $config['fiscal-registrar.model'] ?? parent::modelName();
+        return $this->config['fiscal-registrar.model'] ?? parent::modelName();
     }
 }

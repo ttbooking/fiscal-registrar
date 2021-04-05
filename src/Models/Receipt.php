@@ -62,6 +62,11 @@ class Receipt extends Model implements Contracts\Receipt //, Contracts\SelfResol
         }
     }
 
+    public function processCallback($payload): DTO\Result
+    {
+        throw new \RuntimeException;
+    }
+
     protected static function newFactory(): ReceiptFactory
     {
         return ReceiptFactory::new();

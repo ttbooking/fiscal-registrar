@@ -36,6 +36,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Client Email for Testing
+    |--------------------------------------------------------------------------
+    */
+
+    'test_email' => null,
+
+    /*
+    |--------------------------------------------------------------------------
     | Default Fiscal Registrar Connection Name
     |--------------------------------------------------------------------------
     */
@@ -45,6 +53,7 @@ return [
     'connections' => [
 
         'atol' => [
+            'test' => true,
             'url' => 'https://testonline.atol.ru/possystem',
             'login' => 'v4-online-atol-ru',
             'password' => 'iGFFuihss',
@@ -52,7 +61,6 @@ return [
             'email' => 'info@atol.ru',
             'payment_address' => 'https://v4.online.atol.ru',
             'group_code' => 'v4-online-atol-ru_4179',
-            'callback' => false,
         ],
 
     ],

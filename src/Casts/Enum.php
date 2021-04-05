@@ -22,6 +22,6 @@ class Enum implements CastsAttributes
 
     public function set($model, string $key, $value, array $attributes)
     {
-        return $value->getValue();
+        return isset($value) ? $value->getValue() : null;
     }
 }

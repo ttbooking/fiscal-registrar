@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\DTO\Receipt;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use TTBooking\FiscalRegistrar\Database\Factories\ReceiptItemFactory;
 use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 use TTBooking\FiscalRegistrar\Enums\PaymentMethod;
 use TTBooking\FiscalRegistrar\Enums\PaymentObject;
 
 final class Item extends DataTransferObject
 {
-    use HasFactory;
-
     // 1030
     public string $name;
 
@@ -104,10 +100,5 @@ final class Item extends DataTransferObject
             'paymentMethod' => $paymentMethod ?? PaymentMethod::FullPrepayment(),
             'paymentObject' => $paymentObject ?? PaymentObject::Commodity(),
         ]);
-    }
-
-    protected static function newFactory(): ReceiptItemFactory
-    {
-        return ReceiptItemFactory::new();
     }
 }

@@ -9,6 +9,9 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use TTBooking\FiscalRegistrar\DTO;
 use TTBooking\FiscalRegistrar\Enums\Operation;
+use TTBooking\FiscalRegistrar\Enums\PaymentMethod;
+use TTBooking\FiscalRegistrar\Enums\PaymentObject;
+use TTBooking\FiscalRegistrar\Enums\VATType;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class ReceiptFactory extends Factory
@@ -40,7 +43,16 @@ class ReceiptFactory extends Factory
 
                 null, null, null,
 
-                DTO\Receipt\Item::factory()->count(rand(1, 10))->make()->toArray(),
+                [
+                    'name' => $this->faker->unique()->productName,
+                    'price' => $price = $this->faker->numberBetween(1, 10000),
+                    'quantity' => $quantity = $this->faker->numberBetween(1, 10),
+                    'sum' => $price * $quantity,
+                    'measurementUnit' => $this->faker->optional()->randomElement(['шт.', 'кг']),
+                    'paymentMethod' => PaymentMethod::FullPrepayment(),
+                    'paymentObject' => PaymentObject::Commodity(),
+                    'vat' => DTO\Receipt\Item\VAT::new(VATType::VAT20()),
+                ],
 
             ),
         ];

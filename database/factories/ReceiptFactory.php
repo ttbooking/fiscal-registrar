@@ -44,7 +44,7 @@ class ReceiptFactory extends Factory
                 null, null, null,
 
                 array_map(fn () => [
-                    'name' => $this->faker->unique()->productName,
+                    'name' => $this->faker->unique()->commodity,
                     'price' => $price = $this->faker->numberBetween(1, 10000),
                     'quantity' => $quantity = $this->faker->numberBetween(1, 10),
                     'sum' => $price * $quantity,

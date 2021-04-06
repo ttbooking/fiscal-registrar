@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar;
 
+use Faker\Generator;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use TTBooking\FiscalRegistrar\Faker\Extension;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class FiscalRegistrarServiceProvider extends ServiceProvider //implements DeferrableProvider
@@ -130,6 +132,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
     {
         $this->configure();
         $this->registerServices();
+        $this->registerFakerProviders();
     }
 
     protected function configure(): void
@@ -143,6 +146,13 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         $this->app->alias('fiscal-registrar', Contracts\FiscalRegistrar::class);
         $this->app->singleton('fiscal-registrar.connection', fn ($app) => $app['fiscal-registrar']->connection());
         $this->app->bind(Receipt::class, $this->app['config']['fiscal-registrar.model'] ?? Receipt::class);
+    }
+
+    protected function registerFakerProviders(): void
+    {
+        $this->callAfterResolving(Generator::class,
+            fn ($faker, $app) => Extension::extend($faker, $app['config']['app.faker_locale'] ?? 'en_US')
+        );
     }
 
     /**

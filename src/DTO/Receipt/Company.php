@@ -19,19 +19,19 @@ final class Company extends DataTransferObject
     public string $inn;
 
     // 1187
-    public string $paymentAddress;
+    public string $payment_address;
 
     /**
      * Company constructor.
      *
      * @param  string  $email
      * @param  string  $inn
-     * @param  string  $paymentAddress
+     * @param  string  $payment_address
      * @param  SNO|null  $sno
      * @return self
      */
-    public static function new(string $email, string $inn, string $paymentAddress, SNO $sno = null): self
+    public static function new(string $email, string $inn, string $payment_address, SNO $sno = null): self
     {
-        return new self(compact('email', 'sno', 'inn', 'paymentAddress'));
+        return new self(compact('email', 'sno', 'inn', 'payment_address'));
     }
 }

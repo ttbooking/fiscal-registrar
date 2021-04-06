@@ -8,13 +8,15 @@ use DateTimeInterface;
 
 final class Result extends DataTransferObject
 {
-    public string $externalId;
+    public string $external_id;
 
-    public string $internalId;
+    public string $internal_id;
 
     public DateTimeInterface $timestamp;
 
     public string $status;
+
+    public ?string $ofd_receipt_url;
 
     public ?Result\Payload $payload;
 
@@ -23,22 +25,26 @@ final class Result extends DataTransferObject
     /**
      * Result constructor.
      *
-     * @param  string  $externalId
-     * @param  string  $internalId
+     * @param  string  $external_id
+     * @param  string  $internal_id
      * @param  DateTimeInterface  $timestamp
      * @param  string  $status
+     * @param  string|null  $ofd_receipt_url
      * @param  Result\Payload|null  $payload
      * @param  object|null  $extra
      * @return self
      */
     public static function new(
-        string $externalId,
-        string $internalId,
+        string $external_id,
+        string $internal_id,
         DateTimeInterface $timestamp,
         string $status,
+        string $ofd_receipt_url = null,
         Result\Payload $payload = null,
         object $extra = null
     ): self {
-        return new self(compact('externalId', 'internalId', 'timestamp', 'status', 'payload', 'extra'));
+        return new self(
+            compact('external_id', 'internal_id', 'timestamp', 'status', 'ofd_receipt_url', 'payload', 'extra')
+        );
     }
 }

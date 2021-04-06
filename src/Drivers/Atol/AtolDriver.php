@@ -140,13 +140,13 @@ class AtolDriver extends Driver
                 new AtolRegister\Company(
                     $receipt->company->email ?? $this->config['email'],
                     $receipt->company->inn ?? $this->config['inn'],
-                    $receipt->company->paymentAddress ?? $this->config['payment_address']
+                    $receipt->company->payment_address ?? $this->config['payment_address']
                 ),
 
                 collect($receipt->items)->map(function (Receipt\Item $item) {
                     return new AtolRegister\Item(
                         $item->name, $item->price, $item->quantity, $item->sum,
-                        AtolRegister\PaymentMethod::from($item->paymentMethod->getValue()),
+                        AtolRegister\PaymentMethod::from($item->payment_method->getValue()),
                         new AtolRegister\Vat(
                             AtolRegister\VatType::from($item->vat->type->getValue()),
                             $item->vat->sum
@@ -196,6 +196,7 @@ class AtolDriver extends Driver
             $reportResponse->getUuid(),
             $reportResponse->getTimestamp(),
             $reportResponse->getStatus()->getValue(),
+            null, // $reportResponse->getPayload()->getOfdReceiptUrl(),
             Result\Payload::new(
                 $reportResponse->getPayload()->getFiscalReceiptNumber(),
                 $reportResponse->getPayload()->getShiftNumber(),
@@ -212,7 +213,6 @@ class AtolDriver extends Driver
                 'daemon_code' => $reportResponse->getDaemonCode(),
                 'device_code' => $reportResponse->getDeviceCode(),
                 'callback_url' => $reportResponse->getCallbackUrl(),
-                //'ofd_receipt_url' => $reportResponse->getPayload()->getOfdReceiptUrl(),
             ]
         );
     }

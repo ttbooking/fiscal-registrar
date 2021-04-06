@@ -25,35 +25,35 @@ final class Item extends DataTransferObject
     public float $sum;
 
     // 1197
-    public ?string $measurementUnit;
+    public ?string $measurement_unit;
 
     // 1162
-    public ?string $nomenclatureCode;
+    public ?string $nomenclature_code;
 
     // 1214
-    public PaymentMethod $paymentMethod;
+    public PaymentMethod $payment_method;
 
     // 1212
-    public PaymentObject $paymentObject;
+    public PaymentObject $payment_object;
 
     public ?Item\VAT $vat;
 
-    public ?AgentInfo $agentInfo;
+    public ?AgentInfo $agent_info;
 
-    public ?Item\SupplierInfo $supplierInfo;
+    public ?Item\SupplierInfo $supplier_info;
 
     // 1191
-    public ?string $userData;
+    public ?string $user_data;
 
     // 1229
     /** @var float|int|null */
     public ?float $excise;
 
     // 1230
-    public ?string $countryCode;
+    public ?string $country_code;
 
     // 1231
-    public ?string $declarationNumber;
+    public ?string $declaration_number;
 
     /**
      * Item constructor.
@@ -62,17 +62,17 @@ final class Item extends DataTransferObject
      * @param  float|int  $price
      * @param  int  $quantity
      * @param  float|int|null  $sum
-     * @param  string|null  $measurementUnit
-     * @param  string|null  $nomenclatureCode
-     * @param  PaymentMethod|null  $paymentMethod
-     * @param  PaymentObject|null  $paymentObject
+     * @param  string|null  $measurement_unit
+     * @param  string|null  $nomenclature_code
+     * @param  PaymentMethod|null  $payment_method
+     * @param  PaymentObject|null  $payment_object
      * @param  Item\VAT|null  $vat
-     * @param  AgentInfo|null  $agentInfo
-     * @param  Item\SupplierInfo|null  $supplierInfo
-     * @param  string|null  $userData
+     * @param  AgentInfo|null  $agent_info
+     * @param  Item\SupplierInfo|null  $supplier_info
+     * @param  string|null  $user_data
      * @param  float|int|null  $excise
-     * @param  string|null  $countryCode
-     * @param  string|null  $declarationNumber
+     * @param  string|null  $country_code
+     * @param  string|null  $declaration_number
      * @return self
      */
     public static function new(
@@ -80,25 +80,25 @@ final class Item extends DataTransferObject
         float $price,
         int $quantity = 1,
         float $sum = null,
-        string $measurementUnit = null,
-        string $nomenclatureCode = null,
-        PaymentMethod $paymentMethod = null,
-        PaymentObject $paymentObject = null,
+        string $measurement_unit = null,
+        string $nomenclature_code = null,
+        PaymentMethod $payment_method = null,
+        PaymentObject $payment_object = null,
         Item\VAT $vat = null,
-        AgentInfo $agentInfo = null,
-        Item\SupplierInfo $supplierInfo = null,
-        string $userData = null,
+        AgentInfo $agent_info = null,
+        Item\SupplierInfo $supplier_info = null,
+        string $user_data = null,
         float $excise = null,
-        string $countryCode = null,
-        string $declarationNumber = null
+        string $country_code = null,
+        string $declaration_number = null
     ): self {
         return new self(compact(
-            'name', 'price', 'quantity', 'measurementUnit', 'nomenclatureCode', 'vat',
-            'agentInfo', 'supplierInfo', 'userData', 'excise', 'countryCode', 'declarationNumber'
+            'name', 'price', 'quantity', 'measurement_unit', 'nomenclature_code', 'vat',
+            'agent_info', 'supplier_info', 'user_data', 'excise', 'country_code', 'declaration_number'
         ) + [
             'sum' => $sum ?? $price * $quantity,
-            'paymentMethod' => $paymentMethod ?? PaymentMethod::FullPrepayment(),
-            'paymentObject' => $paymentObject ?? PaymentObject::Commodity(),
+            'payment_method' => $payment_method ?? PaymentMethod::FullPrepayment(),
+            'payment_object' => $payment_object ?? PaymentObject::Commodity(),
         ]);
     }
 }

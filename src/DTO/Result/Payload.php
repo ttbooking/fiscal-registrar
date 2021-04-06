@@ -10,61 +10,61 @@ use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 final class Payload extends DataTransferObject
 {
     // 1042
-    public int $fiscalReceiptNumber;
+    public int $fiscal_receipt_number;
 
     // 1038
-    public int $shiftNumber;
+    public int $shift_number;
 
     // 1012
-    public DateTimeInterface $receiptDateTime;
+    public DateTimeInterface $receipt_datetime;
 
     // 1020
     /** @var float|int */
     public float $total;
 
     // 1041
-    public string $fnNumber;
+    public string $fn_number;
 
     // 1037
-    public string $ecrRegistrationNumber;
+    public string $ecr_registration_number;
 
     // 1040
-    public int $fiscalDocumentNumber;
+    public int $fiscal_document_number;
 
     // 1077
-    public int $fiscalDocumentAttribute;
+    public int $fiscal_document_attribute;
 
     // 1060
-    public string $fnsSite;
+    public string $fns_site;
 
     /**
      * Payload constructor.
      *
-     * @param  int  $fiscalReceiptNumber
-     * @param  int  $shiftNumber
-     * @param  DateTimeInterface  $receiptDateTime
+     * @param  int  $fiscal_receipt_number
+     * @param  int  $shift_number
+     * @param  DateTimeInterface  $receipt_datetime
      * @param  float|int  $total
-     * @param  string  $fnNumber
-     * @param  string  $ecrRegistrationNumber
-     * @param  int  $fiscalDocumentNumber
-     * @param  int  $fiscalDocumentAttribute
-     * @param  string  $fnsSite
+     * @param  string  $fn_number
+     * @param  string  $ecr_registration_number
+     * @param  int  $fiscal_document_number
+     * @param  int  $fiscal_document_attribute
+     * @param  string  $fns_site
      * @return self
      */
     public static function new(
-        int $fiscalReceiptNumber,
-        int $shiftNumber,
-        DateTimeInterface $receiptDateTime,
+        int $fiscal_receipt_number,
+        int $shift_number,
+        DateTimeInterface $receipt_datetime,
         float $total,
-        string $fnNumber,
-        string $ecrRegistrationNumber,
-        int $fiscalDocumentNumber,
-        int $fiscalDocumentAttribute,
-        string $fnsSite = 'www.nalog.ru'
+        string $fn_number,
+        string $ecr_registration_number,
+        int $fiscal_document_number,
+        int $fiscal_document_attribute,
+        string $fns_site = 'www.nalog.ru'
     ): self {
         return new self(compact(
-            'fiscalReceiptNumber', 'shiftNumber', 'receiptDateTime', 'total', 'fnNumber',
-            'ecrRegistrationNumber', 'fiscalDocumentNumber', 'fiscalDocumentAttribute', 'fnsSite'
+            'fiscal_receipt_number', 'shift_number', 'receipt_datetime', 'total', 'fn_number',
+            'ecr_registration_number', 'fiscal_document_number', 'fiscal_document_attribute', 'fns_site'
         ));
     }
 }

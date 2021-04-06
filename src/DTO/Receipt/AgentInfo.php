@@ -12,27 +12,27 @@ final class AgentInfo extends DataTransferObject
     // 1057 / 1222
     public AgentType $type;
 
-    public ?AgentInfo\PayingAgent $payingAgent;
+    public ?AgentInfo\PayingAgent $paying_agent;
 
-    public ?AgentInfo\ReceivePaymentsOperator $receivePaymentsOperator;
+    public ?AgentInfo\ReceivePaymentsOperator $receive_payments_operator;
 
-    public ?AgentInfo\MoneyTransferOperator $moneyTransferOperator;
+    public ?AgentInfo\MoneyTransferOperator $money_transfer_operator;
 
     /**
      * AgentInfo constructor.
      *
      * @param  AgentType  $type
-     * @param  AgentInfo\PayingAgent|null  $payingAgent
-     * @param  AgentInfo\ReceivePaymentsOperator|null  $receivePaymentsOperator
-     * @param  AgentInfo\MoneyTransferOperator|null  $moneyTransferOperator
+     * @param  AgentInfo\PayingAgent|null  $paying_agent
+     * @param  AgentInfo\ReceivePaymentsOperator|null  $receive_payments_operator
+     * @param  AgentInfo\MoneyTransferOperator|null  $money_transfer_operator
      * @return self
      */
     public static function new(
         AgentType $type,
-        AgentInfo\PayingAgent $payingAgent = null,
-        AgentInfo\ReceivePaymentsOperator $receivePaymentsOperator = null,
-        AgentInfo\MoneyTransferOperator $moneyTransferOperator = null
+        AgentInfo\PayingAgent $paying_agent = null,
+        AgentInfo\ReceivePaymentsOperator $receive_payments_operator = null,
+        AgentInfo\MoneyTransferOperator $money_transfer_operator = null
     ): self {
-        return new self(compact('type', 'payingAgent', 'receivePaymentsOperator', 'moneyTransferOperator'));
+        return new self(compact('type', 'paying_agent', 'receive_payments_operator', 'money_transfer_operator'));
     }
 }

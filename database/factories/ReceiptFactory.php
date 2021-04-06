@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Database\Factories;
 
-use Illuminate\Container\Container;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use TTBooking\FiscalRegistrar\DTO;
@@ -48,9 +47,9 @@ class ReceiptFactory extends Factory
                     'price' => $price = $this->faker->numberBetween(1, 10000),
                     'quantity' => $quantity = $this->faker->numberBetween(1, 10),
                     'sum' => $price * $quantity,
-                    'measurementUnit' => $this->faker->optional()->randomElement(['шт.', 'кг']),
-                    'paymentMethod' => PaymentMethod::FullPrepayment(),
-                    'paymentObject' => PaymentObject::Commodity(),
+                    'measurement_unit' => $this->faker->optional()->randomElement(['шт.', 'кг']),
+                    'payment_method' => PaymentMethod::FullPrepayment(),
+                    'payment_object' => PaymentObject::Commodity(),
                     'vat' => DTO\Receipt\Item\VAT::new(VATType::VAT20()),
                 ], range(1, $this->faker->numberBetween(1, 10))),
 

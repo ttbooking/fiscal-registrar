@@ -32,10 +32,10 @@ class StoreReceipt
     {
         $this->receipt->newQuery()->updateOrCreate([
             'connection' => $event->receipt->connection,
-            'external_id' => $event->receipt->externalId,
+            'external_id' => $event->receipt->external_id,
         ], [
             'operation' => $event->receipt->operation,
-            'internal_id' => $event->receipt->internalId,
+            'internal_id' => $event->receipt->internal_id,
             'data' => $event->receipt->data,
             'result' => $event->receipt->result,
         ]);

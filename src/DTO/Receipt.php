@@ -12,9 +12,9 @@ final class Receipt extends DataTransferObject
 
     public ?Receipt\Company $company;
 
-    public ?Receipt\AgentInfo $agentInfo;
+    public ?Receipt\AgentInfo $agent_info;
 
-    public ?Receipt\SupplierInfo $supplierInfo;
+    public ?Receipt\SupplierInfo $supplier_info;
 
     public Receipt\ItemCollection $items;
 
@@ -27,57 +27,53 @@ final class Receipt extends DataTransferObject
     public float $total;
 
     // 1192
-    public ?string $additionalCheckProps;
+    public ?string $additional_check_props;
 
     // 1021
     public ?string $cashier;
 
     // 1084
-    public ?Receipt\AdditionalUserProps $additionalUserProps;
+    public ?Receipt\AdditionalUserProps $additional_user_props;
 
     /**
      * Receipt constructor.
      *
      * @param  Receipt\Client  $client
      * @param  Receipt\Company|null  $company
-     * @param  Receipt\AgentInfo|null  $agentInfo
-     * @param  Receipt\SupplierInfo|null  $supplierInfo
+     * @param  Receipt\AgentInfo|null  $agent_info
+     * @param  Receipt\SupplierInfo|null  $supplier_info
      * @param  array  $items
      * @param  array  $payments
      * @param  array|null  $vats
      * @param  float|int|null  $total
-     * @param  string|null  $additionalCheckProps
+     * @param  string|null  $additional_check_props
      * @param  string|null  $cashier
-     * @param  Receipt\AdditionalUserProps|null  $additionalUserProps
+     * @param  Receipt\AdditionalUserProps|null  $additional_user_props
      * @return self
      */
     public static function new(
         Receipt\Client $client,
         Receipt\Company $company = null,
-        Receipt\AgentInfo $agentInfo = null,
-        Receipt\SupplierInfo $supplierInfo = null,
+        Receipt\AgentInfo $agent_info = null,
+        Receipt\SupplierInfo $supplier_info = null,
         $items = [],
         $payments = [],
         $vats = null,
         float $total = null,
-        string $additionalCheckProps = null,
+        string $additional_check_props = null,
         string $cashier = null,
-        Receipt\AdditionalUserProps $additionalUserProps = null
+        Receipt\AdditionalUserProps $additional_user_props = null
     ): self {
-        return new self([
-            'client' => $client,
-            'company' => $company,
-            'agentInfo' => $agentInfo,
-            'supplierInfo' => $supplierInfo,
+        return new self(compact(
+            'client', 'company', 'agent_info', 'supplier_info',
+            'additional_check_props', 'cashier', 'additional_user_props'
+        ) + [
             'items' => new Receipt\ItemCollection($items),
             'total' => $total ??= collect($items)->sum('sum'),
             'payments' => new Receipt\PaymentCollection(collect($payments)->whenEmpty(
                 fn (Collection $payments) => $payments->add(Receipt\Payment::new($total))
             )->all()),
             'vats' => isset($vats) ? new Receipt\VATCollection($vats) : $vats,
-            'additionalCheckProps' => $additionalCheckProps,
-            'cashier' => $cashier,
-            'additionalUserProps' => $additionalUserProps,
         ]);
     }
 }

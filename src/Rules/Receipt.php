@@ -22,13 +22,13 @@ class Receipt extends AggregateRule
             'company.email' => 'required|string|max:64|email',
             'company.sno' => ['sometimes', 'nullable', 'string', Rule::in(Enums\SNO::toArray())],
             'company.inn' => 'required|string|numeric|size:10,12',
-            'company.paymentAddress' => 'required|string|max:256',
+            'company.payment_address' => 'required|string|max:256',
 
-            'agentInfo' => ['sometimes', 'nullable', 'array', new AgentInfo],
+            'agent_info' => ['sometimes', 'nullable', 'array', new AgentInfo],
 
-            'supplierInfo' => 'required_with:agentInfo|nullable|array',
-            'supplierInfo.phones' => 'sometimes|nullable|array',
-            'supplierInfo.phones.*' => 'required|string|max:19',
+            'supplier_info' => 'required_with:agent_info|nullable|array',
+            'supplier_info.phones' => 'sometimes|nullable|array',
+            'supplier_info.phones.*' => 'required|string|max:19',
 
             'items' => 'required|array|between:1,100',
             'items.*' => 'required|array',
@@ -36,23 +36,23 @@ class Receipt extends AggregateRule
             'items.*.price' => 'required|numeric|between:0,42949672.95',
             'items.*.quantity' => 'required|numeric|between:0,99999.999',
             'items.*.sum' => 'required|numeric|between:0,42949672.95',
-            'items.*.measurementUnit' => 'sometimes|nullable|string|max:16',
-            'items.*.nomenclatureCode' => 'sometimes|nullable|string|max:32',
-            'items.*.paymentMethod' => ['sometimes', 'nullable', 'string', Rule::in(Enums\PaymentMethod::toArray())],
-            'items.*.paymentObject' => ['sometimes', 'nullable', 'string', Rule::in(Enums\PaymentObject::toArray())],
+            'items.*.measurement_unit' => 'sometimes|nullable|string|max:16',
+            'items.*.nomenclature_code' => 'sometimes|nullable|string|max:32',
+            'items.*.payment_method' => ['sometimes', 'nullable', 'string', Rule::in(Enums\PaymentMethod::toArray())],
+            'items.*.payment_object' => ['sometimes', 'nullable', 'string', Rule::in(Enums\PaymentObject::toArray())],
             'items.*.vat' => 'sometimes|nullable|array',
             'items.*.vat.type' => ['required', 'string', Rule::in(Enums\VATType::toArray())],
             'items.*.vat.sum' => 'required|numeric|between:0,99999999.99',
-            'items.*.agentInfo' => ['sometimes', 'nullable', 'array', new AgentInfo],
-            'items.*.supplierInfo' => 'required_with:items.*.agentInfo|nullable|array',
-            'items.*.supplierInfo.phones' => 'sometimes|nullable|array',
-            'items.*.supplierInfo.phones.*' => 'required|string|max:19',
-            'items.*.supplierInfo.name' => 'sometimes|nullable|string|max:64',
-            'items.*.supplierInfo.inn' => 'sometimes|nullable|string|numeric|size:10,12',
-            'items.*.userData' => 'sometimes|nullable|string|max:64',
+            'items.*.agent_info' => ['sometimes', 'nullable', 'array', new AgentInfo],
+            'items.*.supplier_info' => 'required_with:items.*.agent_info|nullable|array',
+            'items.*.supplier_info.phones' => 'sometimes|nullable|array',
+            'items.*.supplier_info.phones.*' => 'required|string|max:19',
+            'items.*.supplier_info.name' => 'sometimes|nullable|string|max:64',
+            'items.*.supplier_info.inn' => 'sometimes|nullable|string|numeric|size:10,12',
+            'items.*.user_data' => 'sometimes|nullable|string|max:64',
             'items.*.excise' => 'sometimes|nullable|numeric|between:0,42949672.95',
-            'items.*.countryCode' => 'sometimes|nullable|integer|between:0,999',
-            'items.*.declarationNumber' => 'sometimes|nullable|string|max:32',
+            'items.*.country_code' => 'sometimes|nullable|integer|between:0,999',
+            'items.*.declaration_number' => 'sometimes|nullable|string|max:32',
 
             'payments' => 'required|array|between:1,10',
             'payments.*' => 'required|array',
@@ -66,13 +66,13 @@ class Receipt extends AggregateRule
 
             'total' => 'required|numeric|between:0,99999999.99',
 
-            'additionalCheckProps' => 'sometimes|nullable|string|max:16',
+            'additional_check_props' => 'sometimes|nullable|string|max:16',
 
             'cashier' => 'sometimes|nullable|string|max:64',
 
-            'additionalUserProps' => 'sometimes|nullable|array',
-            'additionalUserProps.name' => 'required|string|max:64',
-            'additionalUserProps.value' => 'required|string|max:256',
+            'additional_user_props' => 'sometimes|nullable|array',
+            'additional_user_props.name' => 'required|string|max:64',
+            'additional_user_props.value' => 'required|string|max:256',
         ] + parent::getRules();
     }
 }

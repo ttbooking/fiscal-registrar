@@ -65,15 +65,30 @@ final class Receipt extends DataTransferObject
         Receipt\AdditionalUserProps $additional_user_props = null
     ): self {
         return new self(compact(
-            'client', 'company', 'agent_info', 'supplier_info',
+            'client', 'company', 'agent_info', 'supplier_info', 'items', 'total', 'payments', 'vats',
             'additional_check_props', 'cashier', 'additional_user_props'
-        ) + [
-            'items' => new Receipt\ItemCollection($items),
-            'total' => $total ??= collect($items)->sum('sum'),
-            'payments' => new Receipt\PaymentCollection(collect($payments)->whenEmpty(
-                fn (Collection $payments) => $payments->add(Receipt\Payment::new($total))
-            )->all()),
-            'vats' => isset($vats) ? new Receipt\VATCollection($vats) : $vats,
-        ]);
+        ));
+    }
+
+    protected static function transformItems($items)
+    {
+        return new Receipt\ItemCollection($items);
+    }
+
+    protected static function transformTotal($total, array $parameters)
+    {
+        return $total ?? collect($parameters['items'] ?? [])->sum('sum');
+    }
+
+    protected static function transformPayments($payments, array $parameters)
+    {
+        return new Receipt\PaymentCollection(collect($payments)->whenEmpty(
+            fn (Collection $payments) => $payments->add(Receipt\Payment::new($parameters['total'] ?? 0))
+        )->all());
+    }
+
+    protected static function transformVats($vats)
+    {
+        return isset($vats) ? new Receipt\VATCollection($vats) : $vats;
     }
 }

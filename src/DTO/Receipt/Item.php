@@ -18,7 +18,7 @@ final class Item extends DataTransferObject
     public float $price;
 
     // 1023
-    public int $quantity;
+    public int $quantity = 1;
 
     // 1043
     /** @var float|int */
@@ -93,12 +93,23 @@ final class Item extends DataTransferObject
         string $declaration_number = null
     ): self {
         return new self(compact(
-            'name', 'price', 'quantity', 'measurement_unit', 'nomenclature_code', 'vat',
-            'agent_info', 'supplier_info', 'user_data', 'excise', 'country_code', 'declaration_number'
-        ) + [
-            'sum' => $sum ?? $price * $quantity,
-            'payment_method' => $payment_method ?? PaymentMethod::FullPrepayment(),
-            'payment_object' => $payment_object ?? PaymentObject::Commodity(),
-        ]);
+            'name', 'price', 'quantity', 'sum', 'measurement_unit', 'nomenclature_code', 'payment_method', 'payment_object',
+            'vat', 'agent_info', 'supplier_info', 'user_data', 'excise', 'country_code', 'declaration_number'
+        ));
+    }
+
+    protected static function transformSum($sum, array $parameters)
+    {
+        return $sum ?? ($parameters['price'] ?? 0) * ($parameters['quantity'] ?? 1);
+    }
+
+    protected static function transformPaymentMethod($payment_method)
+    {
+        return $payment_method ?? PaymentMethod::FullPrepayment();
+    }
+
+    protected static function transformPaymentObject($payment_object)
+    {
+        return $payment_object ?? PaymentObject::Commodity();
     }
 }

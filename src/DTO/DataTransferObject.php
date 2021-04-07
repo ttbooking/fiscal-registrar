@@ -15,7 +15,7 @@ abstract class DataTransferObject extends SpatieDTO implements Arrayable, Castab
 {
     public function __construct(array $parameters = [])
     {
-        parent::__construct(static::transformParameters($parameters));
+        parent::__construct($this->transformParameters($parameters));
     }
 
     public function jsonSerialize()
@@ -37,12 +37,11 @@ abstract class DataTransferObject extends SpatieDTO implements Arrayable, Castab
      * @param  array<string, mixed>  $parameters
      * @return array<string, mixed>
      */
-    protected static function transformParameters(array $parameters): array
+    protected function transformParameters(array $parameters): array
     {
-        // TODO: итерировать не по параметрам, а по фактическим свойствам
-        foreach ($parameters as $key => &$value) {
-            if (method_exists(static::class, $transform = 'transform'.Str::studly($key))) {
-                $value = static::$transform($value, $parameters);
+        foreach (array_keys($this->getFieldValidators()) as $field) {
+            if (method_exists(static::class, $transform = 'transform'.Str::studly($field))) {
+                $parameters[$field] = static::$transform($parameters[$field] ?? null, $parameters);
             }
         }
 

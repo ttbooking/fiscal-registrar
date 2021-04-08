@@ -120,6 +120,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
             Console\ReceiptBuyRefundCommand::class,
             Console\ReceiptCloneCommand::class,
             Console\ReceiptDeleteCommand::class,
+            Console\ReceiptShowCommand::class,
         ]);
     }
 

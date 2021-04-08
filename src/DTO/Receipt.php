@@ -83,7 +83,7 @@ final class Receipt extends DataTransferObject
     protected static function transformPayments($payments, array $parameters)
     {
         return new Receipt\PaymentCollection(collect($payments)->whenEmpty(fn (Collection $payments) =>
-            $payments->add(Receipt\Payment::new(self::transformTotal($parameters['total'], $parameters)))
+            $payments->add(Receipt\Payment::new(self::transformTotal($parameters['total'] ?? null, $parameters)))
         )->all());
     }
 

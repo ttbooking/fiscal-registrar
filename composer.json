@@ -36,7 +36,8 @@
         "vimeo/psalm": "^4.7"
     },
     "suggest": {
-        "illuminate/events": "Required to utilize registration events (^8.23)."
+        "illuminate/events": "Required to utilize registration events (^8.23).",
+        "illuminate/notifications": "Required to send receipts to the end users (^8.23)."
     },
     "autoload": {
         "psr-4": {

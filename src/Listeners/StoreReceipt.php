@@ -28,7 +28,7 @@ class StoreReceipt
      * @param  ReceiptEvent  $event
      * @return void
      */
-    public function handle(ReceiptEvent $event)
+    public function handle(ReceiptEvent $event): void
     {
         $this->receipt->newQuery()->updateOrCreate([
             'connection' => $event->receipt->connection,

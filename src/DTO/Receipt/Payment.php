@@ -30,6 +30,6 @@ final class Payment extends DataTransferObject
 
     protected static function transformType($type): PaymentType
     {
-        return $type ?? PaymentType::Electronic();
+        return isset($type) ? new PaymentType($type) : PaymentType::Electronic();
     }
 }

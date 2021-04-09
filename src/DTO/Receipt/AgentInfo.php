@@ -35,4 +35,9 @@ final class AgentInfo extends DataTransferObject
     ): self {
         return new self(compact('type', 'paying_agent', 'receive_payments_operator', 'money_transfer_operator'));
     }
+
+    protected static function transformType($type): AgentType
+    {
+        return new AgentType($type);
+    }
 }

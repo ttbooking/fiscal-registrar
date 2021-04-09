@@ -27,4 +27,9 @@ final class VAT extends DataTransferObject
     {
         return new self(compact('type', 'sum'));
     }
+
+    protected static function transformType($type): VATType
+    {
+        return new VATType($type);
+    }
 }

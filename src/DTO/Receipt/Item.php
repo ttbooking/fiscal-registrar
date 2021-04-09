@@ -103,13 +103,13 @@ final class Item extends DataTransferObject
         return $sum ?? ($parameters['price'] ?? 0) * ($parameters['quantity'] ?? 1);
     }
 
-    protected static function transformPaymentMethod($payment_method)
+    protected static function transformPaymentMethod($payment_method): PaymentMethod
     {
-        return $payment_method ?? PaymentMethod::FullPrepayment();
+        return isset($payment_method) ? new PaymentMethod($payment_method) : PaymentMethod::FullPrepayment();
     }
 
-    protected static function transformPaymentObject($payment_object)
+    protected static function transformPaymentObject($payment_object): PaymentObject
     {
-        return $payment_object ?? PaymentObject::Commodity();
+        return isset($payment_object) ? new PaymentObject($payment_object) : PaymentObject::Commodity();
     }
 }

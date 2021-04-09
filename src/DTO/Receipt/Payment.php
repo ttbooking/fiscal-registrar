@@ -28,7 +28,7 @@ final class Payment extends DataTransferObject
         return new self(compact('sum', 'type'));
     }
 
-    protected static function transformType($type)
+    protected static function transformType($type): PaymentType
     {
         return $type ?? PaymentType::Electronic();
     }

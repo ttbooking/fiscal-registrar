@@ -41,4 +41,9 @@ class EventPayload extends DataTransferObject
     ): self {
         return new self(compact('connection', 'operation', 'external_id', 'internal_id', 'data', 'result'));
     }
+
+    protected static function transformOperation($operation): Operation
+    {
+        return new Operation($operation);
+    }
 }

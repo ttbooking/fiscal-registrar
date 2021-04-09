@@ -34,4 +34,9 @@ final class Company extends DataTransferObject
     {
         return new self(compact('email', 'sno', 'inn', 'payment_address'));
     }
+
+    protected static function transformSno($sno): SNO
+    {
+        return new SNO($sno);
+    }
 }

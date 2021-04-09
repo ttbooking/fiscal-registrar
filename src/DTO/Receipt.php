@@ -16,11 +16,14 @@ final class Receipt extends DataTransferObject
 
     public ?Receipt\SupplierInfo $supplier_info;
 
-    public Receipt\ItemCollection $items;
+    /** @var \TTBooking\FiscalRegistrar\DTO\Receipt\Item[] */
+    public $items;
 
-    public Receipt\PaymentCollection $payments;
+    /** @var \TTBooking\FiscalRegistrar\DTO\Receipt\Payment[] */
+    public $payments;
 
-    public ?Receipt\VATCollection $vats;
+    /** @var \TTBooking\FiscalRegistrar\DTO\Receipt\VAT[]|null */
+    public $vats;
 
     // 1020
     /** @var float|int */
@@ -70,25 +73,15 @@ final class Receipt extends DataTransferObject
         ));
     }
 
-    protected static function transformItems($items)
-    {
-        return new Receipt\ItemCollection($items);
-    }
-
-    protected static function transformTotal($total, array $parameters)
+    protected static function transformTotal($total, array $parameters): float
     {
         return $total ?? collect($parameters['items'] ?? [])->sum('sum');
     }
 
-    protected static function transformPayments($payments, array $parameters)
+    protected static function transformPayments($payments, array $parameters): array
     {
-        return new Receipt\PaymentCollection(collect($payments)->whenEmpty(fn (Collection $payments) =>
+        return collect($payments)->whenEmpty(fn (Collection $payments) =>
             $payments->add(Receipt\Payment::new(self::transformTotal($parameters['total'] ?? null, $parameters)))
-        )->all());
-    }
-
-    protected static function transformVats($vats)
-    {
-        return isset($vats) ? new Receipt\VATCollection($vats) : $vats;
+        )->all();
     }
 }

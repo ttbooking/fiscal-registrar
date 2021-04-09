@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Console;
 
 use Illuminate\Console\Command;
-use TTBooking\FiscalRegistrar\Models\Receipt;
+use TTBooking\FiscalRegistrar\Contracts\ReceiptFactory;
 
 abstract class ReceiptRegisterCommand extends Command
 {
     /**
      * Execute the console command.
      *
-     * @param  Receipt  $receipt
+     * @param  ReceiptFactory  $receipt
      * @return void
      */
-    public function handle(Receipt $receipt)
+    public function handle(ReceiptFactory $receipt)
     {
 
     }

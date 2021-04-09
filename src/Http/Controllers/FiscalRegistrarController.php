@@ -7,7 +7,6 @@ namespace TTBooking\FiscalRegistrar\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use TTBooking\FiscalRegistrar\Contracts\FiscalRegistrarFactory;
-use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class FiscalRegistrarController extends Controller
 {
@@ -23,29 +22,9 @@ class FiscalRegistrarController extends Controller
         $this->factory = $factory;
     }
 
-    public function sell(string $connection)
+    public function register(string $connection)
     {
         return $this->factory->connection($connection)->{__FUNCTION__}();
-    }
-
-    public function sellRefund(string $connection)
-    {
-        return $this->factory->connection($connection)->{__FUNCTION__}();
-    }
-
-    public function buy(string $connection)
-    {
-        return $this->factory->connection($connection)->{__FUNCTION__}();
-    }
-
-    public function buyRefund(string $connection)
-    {
-        return $this->factory->connection($connection)->{__FUNCTION__}();
-    }
-
-    public function list(string $connection)
-    {
-        return Receipt::query()->where(compact('connection'))->get();
     }
 
     public function report(string $connection, string $id)

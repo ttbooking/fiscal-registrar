@@ -63,7 +63,8 @@
                 "TTBooking\\FiscalRegistrar\\FiscalRegistrarServiceProvider"
             ],
             "aliases": {
-                "FiscalRegistrar": "TTBooking\\FiscalRegistrar\\Facades\\FiscalRegistrar"
+                "FiscalRegistrar": "TTBooking\\FiscalRegistrar\\Facades\\FiscalRegistrar",
+                "Receipt": "TTBooking\\FiscalRegistrar\\Facades\\Receipt"
             }
         }
     },

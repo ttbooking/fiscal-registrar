@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Console;
 
-use TTBooking\FiscalRegistrar\Models\Receipt;
+use TTBooking\FiscalRegistrar\Contracts\ReceiptFactory;
 
 class ReceiptSellCommand extends ReceiptRegisterCommand
 {
@@ -25,10 +25,10 @@ class ReceiptSellCommand extends ReceiptRegisterCommand
     /**
      * Execute the console command.
      *
-     * @param  Receipt  $receipt
+     * @param  ReceiptFactory  $receipt
      * @return void
      */
-    public function handle(Receipt $receipt)
+    public function handle(ReceiptFactory $receipt)
     {
         parent::handle($receipt);
 

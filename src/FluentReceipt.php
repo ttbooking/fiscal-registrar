@@ -1,0 +1,104 @@
+<?php
+
+declare(strict_types=1);
+
+namespace TTBooking\FiscalRegistrar;
+
+use RuntimeException;
+use TTBooking\FiscalRegistrar\Enums\Operation;
+use TTBooking\FiscalRegistrar\Exceptions\ResolverException;
+use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
+use TTBooking\FiscalRegistrar\Models\Receipt;
+
+class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
+{
+    protected Receipt $model;
+
+    public function __construct(Receipt $model)
+    {
+        $this->model = $model;
+    }
+
+    public function for(string $connection): self
+    {
+        $this->model->connection = $connection;
+
+        return $this;
+    }
+
+    public function do(Operation $operation): self
+    {
+        $this->model->operation = $operation;
+
+        return $this;
+    }
+
+    public function as(string $id): self
+    {
+        $this->model->external_id = $id;
+
+        return $this;
+    }
+
+    public function with(string $key, $value): self
+    {
+        $this->model->setAttribute($key, $value);
+
+        return $this;
+    }
+
+    public function save(): bool
+    {
+        return $this->model->save();
+    }
+
+    public function clone(): self
+    {
+        return new static($this->model->replicate(['external_id', 'internal_id', 'result']));
+    }
+
+    public function delete(): bool
+    {
+        return (bool) $this->model->delete();
+    }
+
+    public function getModel(): Receipt
+    {
+        return $this->model;
+    }
+
+    public function setModel(Receipt $model): self
+    {
+        $this->model = $model;
+
+        return $this;
+    }
+
+    public function make(DTO\Receipt $data): self
+    {
+        return new static(new Receipt(compact('data')));
+    }
+
+    public function resolve($id): self
+    {
+        try {
+            return new static($this->model->resolveRouteBinding($id, null, true));
+        } catch (RuntimeException $e) {
+            throw new ResolverException('Cannot resolve ['.static::class."] by identifier \"$id\".", $e->getCode(), $e);
+        }
+    }
+
+    public function register(Operation $operation = null, string $externalId = null, DTO\Receipt $data = null): DTO\Result
+    {
+        return FiscalRegistrar::connection($this->model->connection)->register(
+            $operation ?? $this->model->operation,
+            $externalId ?? $this->model->external_id,
+            $data ?? $this->model->data
+        );
+    }
+
+    public function report(string $id = null): DTO\Result
+    {
+        return FiscalRegistrar::connection($this->model->connection)->report($id ?? $this->model->internal_id);
+    }
+}

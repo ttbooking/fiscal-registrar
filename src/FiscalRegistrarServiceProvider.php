@@ -21,6 +21,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
      */
     public array $singletons = [
         'fiscal-registrar' => FiscalRegistrarManager::class,
+        'fiscal-registrar.receipt' => FluentReceipt::class,
     ];
 
     /**
@@ -151,6 +152,8 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         $this->app->alias('fiscal-registrar', Contracts\FiscalRegistrarFactory::class);
         $this->app->alias('fiscal-registrar', Contracts\FiscalRegistrar::class);
         $this->app->singleton('fiscal-registrar.connection', fn ($app) => $app['fiscal-registrar']->connection());
+        $this->app->alias('fiscal-registrar.receipt', Contracts\ReceiptFactory::class);
+        $this->app->alias('fiscal-registrar.receipt', Contracts\Receipt::class);
         $this->app->bind(Receipt::class, $this->app['config']['fiscal-registrar.model'] ?? Receipt::class);
     }
 
@@ -173,6 +176,8 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
                 Contracts\FiscalRegistrarFactory::class,
                 Contracts\FiscalRegistrar::class,
                 'fiscal-registrar.connection',
+                Contracts\ReceiptFactory::class,
+                Contracts\Receipt::class,
                 Receipt::class,
             ]
         );

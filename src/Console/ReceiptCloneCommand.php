@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Console;
 
 use Illuminate\Console\Command;
-use TTBooking\FiscalRegistrar\Models\Receipt;
+use TTBooking\FiscalRegistrar\Contracts\ReceiptFactory;
 
 class ReceiptCloneCommand extends Command
 {
@@ -26,10 +26,10 @@ class ReceiptCloneCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param  Receipt  $receipt
+     * @param  ReceiptFactory  $receipt
      * @return void
      */
-    public function handle(Receipt $receipt)
+    public function handle(ReceiptFactory $receipt)
     {
         $receipt->resolve($this->argument('id'))->clone()->save();
 

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Support;
 
-use Illuminate\Support\Str;
 use TTBooking\FiscalRegistrar\Concerns;
 use TTBooking\FiscalRegistrar\Contracts;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
@@ -16,9 +15,10 @@ use TTBooking\FiscalRegistrar\Exceptions;
 class DriverDispatchingDecorator implements
     Contracts\ConnectionAware,
     Contracts\FiscalRegistrar,
+    Contracts\SupportsCallbacks,
     Contracts\DispatchesEvents
 {
-    use Concerns\HasEvents, Concerns\SingleMethodRegistration;
+    use Concerns\HasEvents;
 
     protected Contracts\FiscalRegistrar $fiscalRegistrar;
 
@@ -30,20 +30,24 @@ class DriverDispatchingDecorator implements
     public function getConnectionName(): string
     {
         return $this->fiscalRegistrar instanceof Contracts\ConnectionAware
-            ? $this->fiscalRegistrar->{__FUNCTION__}() : 'unknown';
+            ? $this->fiscalRegistrar->getConnectionName() : 'unknown';
     }
 
     public function report(string $id): Result
     {
-        return $this->fiscalRegistrar->{__FUNCTION__}($id);
+        return $this->fiscalRegistrar->report($id);
     }
 
     public function processCallback($payload): Result
     {
-        $result = $this->fiscalRegistrar->{__FUNCTION__}($payload);
+        if (! $this->fiscalRegistrar instanceof Contracts\SupportsCallbacks) {
+            throw new \Exception('Callback feature is not supported by the driver.');
+        }
+
+        $result = $this->fiscalRegistrar->processCallback($payload);
 
         $this->event(new Events\Processed(
-            $this->getConnectionName(), '', '', $result->internalId, null, $result
+            $this->getConnectionName(), '', '', $result->internal_id, null, $result
         ));
 
         return $result;
@@ -52,23 +56,21 @@ class DriverDispatchingDecorator implements
     /**
      * @param  Operation  $operation
      * @param  string  $externalId
-     * @param  Receipt  $receipt
+     * @param  Receipt  $data
      * @return Result
      *
      * @throws Exceptions\FiscalRegistrarException
      */
-    protected function register(Operation $operation, string $externalId, Receipt $receipt): Result
+    public function register(Operation $operation, string $externalId, Receipt $data): Result
     {
-        $operationMethod = Str::camel($operation->getValue());
-
         $this->event(new Events\Registering(
-            $this->getConnectionName(), $operation, $externalId, null, $receipt, null
+            $this->getConnectionName(), $operation, $externalId, null, $data, null
         ));
 
-        $result = $this->fiscalRegistrar->{$operationMethod}($externalId, $receipt);
+        $result = $this->fiscalRegistrar->register($operation, $externalId, $data);
 
         $this->event(new Events\Registered(
-            $this->getConnectionName(), $operation, $externalId, $result->internalId, $receipt, $result
+            $this->getConnectionName(), $operation, $externalId, $result->internal_id, $data, $result
         ));
 
         return $result;

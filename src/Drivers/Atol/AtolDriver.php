@@ -14,17 +14,15 @@ use Lamoda\AtolClient\V4\DTO\Register as AtolRegister;
 use Lamoda\AtolClient\V4\DTO\Report as AtolReport;
 use Lamoda\AtolClient\V4\DTO\Shared\ErrorType;
 use RuntimeException;
-use TTBooking\FiscalRegistrar\Concerns\SingleMethodRegistration;
+use TTBooking\FiscalRegistrar\Contracts\SupportsCallbacks;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Enums\Operation;
 use TTBooking\FiscalRegistrar\Exceptions;
 use TTBooking\FiscalRegistrar\Support\Driver;
 
-class AtolDriver extends Driver
+class AtolDriver extends Driver implements SupportsCallbacks
 {
-    use SingleMethodRegistration;
-
     protected AtolApi $api;
 
     protected ObjectConverter $converter;
@@ -94,11 +92,11 @@ class AtolDriver extends Driver
             : $this->cache->remember($key, 86400, $tokenRetriever);
     }
 
-    protected function register(Operation $operation, string $externalId, Receipt $receipt): Result
+    public function register(Operation $operation, string $externalId, Receipt $data): Result
     {
         $operationString = Str::camel($operation->getValue());
 
-        $registerRequest = $this->makeRequest($externalId, $receipt);
+        $registerRequest = $this->makeRequest($externalId, $data);
 
         $force = false;
         do try {

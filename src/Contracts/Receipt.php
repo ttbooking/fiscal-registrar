@@ -4,47 +4,58 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Contracts;
 
-use TTBooking\FiscalRegistrar\DTO;
 use TTBooking\FiscalRegistrar\Enums\Operation;
+use TTBooking\FiscalRegistrar\Models\Receipt as Model;
 
-interface Receipt extends SelfResolvable, StatefulFiscalRegistrar
+interface Receipt extends StatefulFiscalRegistrar
 {
-    /**
-     * @param  DTO\Receipt  $data
-     * @return $this
-     */
-    public function make(DTO\Receipt $data);
-
     /**
      * @param  string  $connection
      * @return $this
      */
-    public function for(string $connection);
+    public function for(string $connection): self;
 
     /**
      * @param  Operation  $operation
      * @return $this
      */
-    public function do(Operation $operation);
+    public function do(Operation $operation): self;
 
     /**
      * @param  string  $id
      * @return $this
      */
-    public function as(string $id);
+    public function as(string $id): self;
+
+    /**
+     * @param  string  $key
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function with(string $key, $value): self;
 
     /**
      * @return bool
      */
-    public function save();
+    public function save(): bool;
 
     /**
      * @return static
      */
-    public function clone();
+    public function clone(): self;
 
     /**
-     * @return bool|null
+     * @return bool
      */
-    public function delete();
+    public function delete(): bool;
+
+    /**
+     * @return Model
+     */
+    public function getModel(): Model;
+
+    /**
+     * @return $this
+     */
+    public function setModel(Model $model): self;
 }

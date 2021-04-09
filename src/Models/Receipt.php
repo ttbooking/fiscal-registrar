@@ -8,8 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use RuntimeException;
-use TTBooking\FiscalRegistrar\Concerns\FluentOperation;
-use TTBooking\FiscalRegistrar\Contracts;
 use TTBooking\FiscalRegistrar\Database\Factories\ReceiptFactory;
 use TTBooking\FiscalRegistrar\DTO;
 use TTBooking\FiscalRegistrar\Enums\Operation;
@@ -23,9 +21,9 @@ use TTBooking\FiscalRegistrar\Exceptions\ResolverException;
  * @property DTO\Receipt $data
  * @property DTO\Result|null $result
  */
-class Receipt extends Model implements Contracts\Receipt //, Contracts\SelfResolvable
+class Receipt extends Model
 {
-    use FluentOperation, HasFactory;
+    use HasFactory;
 
     protected $fillable = ['connection', 'operation', 'external_id', 'data'];
 
@@ -45,26 +43,6 @@ class Receipt extends Model implements Contracts\Receipt //, Contracts\SelfResol
         }
 
         return $this->newQuery()->where($field ?? $this->getRouteKeyName(), $value)->$method();
-    }
-
-    /**
-     * @param  mixed  $id
-     * @return Model|static
-     *
-     * @throws ResolverException
-     */
-    public function resolve($id): self
-    {
-        try {
-            return $this->resolveRouteBinding($id, null, true);
-        } catch (RuntimeException $e) {
-            throw new ResolverException('Cannot resolve ['.static::class."] by identifier \"$id\".", $e->getCode(), $e);
-        }
-    }
-
-    public function processCallback($payload): DTO\Result
-    {
-        throw new \RuntimeException;
     }
 
     protected static function newFactory(): ReceiptFactory

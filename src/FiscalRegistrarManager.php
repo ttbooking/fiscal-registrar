@@ -8,6 +8,7 @@ use Illuminate\Contracts\Events\Dispatcher;
 use TTBooking\FiscalRegistrar\Drivers\Atol\AtolDriver;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
+use TTBooking\FiscalRegistrar\Enums\Operation;
 
 class FiscalRegistrarManager extends Support\Manager implements
     Contracts\ConnectionAware,
@@ -21,24 +22,9 @@ class FiscalRegistrarManager extends Support\Manager implements
         return $this->getDefaultDriver();
     }
 
-    public function sell(string $externalId, Receipt $receipt): Result
+    public function register(Operation $operation, string $externalId, Receipt $data): Result
     {
-        return $this->connection()->{__FUNCTION__}($externalId, $receipt);
-    }
-
-    public function sellRefund(string $externalId, Receipt $receipt): Result
-    {
-        return $this->connection()->{__FUNCTION__}($externalId, $receipt);
-    }
-
-    public function buy(string $externalId, Receipt $receipt): Result
-    {
-        return $this->connection()->{__FUNCTION__}($externalId, $receipt);
-    }
-
-    public function buyRefund(string $externalId, Receipt $receipt): Result
-    {
-        return $this->connection()->{__FUNCTION__}($externalId, $receipt);
+        return $this->connection()->{__FUNCTION__}($operation, $externalId, $data);
     }
 
     public function report(string $id): Result

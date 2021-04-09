@@ -4,33 +4,44 @@ declare(strict_types=1);
 
 use Illuminate\Container\Container;
 use TTBooking\FiscalRegistrar\Contracts\Receipt as ReceiptContract;
+use TTBooking\FiscalRegistrar\Contracts\ReceiptFactory;
 use TTBooking\FiscalRegistrar\DTO;
-use TTBooking\FiscalRegistrar\Models\Receipt;
+use TTBooking\FiscalRegistrar\Facades\Receipt;
+use TTBooking\FiscalRegistrar\Models\Receipt as Model;
 
 if (! function_exists('receipt')) {
     /**
      * @param  mixed  $data
-     * @return ReceiptContract
+     * @return ReceiptFactory|ReceiptContract
      */
-    function receipt($data = null): ReceiptContract
+    function receipt($data = null)
     {
-        if ($data instanceof ReceiptContract) {
+        // Pass-thru receipt contracts
+        if ($data instanceof ReceiptContract || $data instanceof ReceiptFactory) {
             return $data;
         }
 
-        /** @var Receipt $receipt */
-        $receipt = Container::getInstance()->make(Receipt::class);
+        // Return receipt factory if no parameters passed
+        if (is_null($data)) {
+            return Container::getInstance()->make(ReceiptFactory::class);
+        }
 
+        // Make new fluent receipt interface for given model
+        if ($data instanceof Model) {
+            return Container::getInstance()->make(ReceiptContract::class)->setModel($data);
+        }
+
+        // Try to convert array to receipt DTO
         if (is_array($data)) {
             $data = new DTO\Receipt($data);
         }
 
+        // Make new receipt from receipt DTO
         if ($data instanceof DTO\Receipt) {
-            $receipt->data = $data;
-        } elseif (! is_null($data)) {
-            $receipt = $receipt->resolve($data);
+            return Receipt::make($data);
         }
 
-        return $receipt;
+        // Resolve receipt by its identifier
+        return Receipt::resolve($data);
     }
 }

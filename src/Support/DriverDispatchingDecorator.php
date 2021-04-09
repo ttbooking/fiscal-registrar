@@ -38,17 +38,17 @@ class DriverDispatchingDecorator implements
         return $this->fiscalRegistrar->report($id);
     }
 
-    public function processCallback($payload): Result
+    public function processCallback($payload): ?Result
     {
         if (! $this->fiscalRegistrar instanceof Contracts\SupportsCallbacks) {
-            throw new \Exception('Callback feature is not supported by the driver.');
+            return null;
         }
 
-        $result = $this->fiscalRegistrar->processCallback($payload);
-
-        $this->event(new Events\Processed(
-            $this->getConnectionName(), '', '', $result->internal_id, null, $result
-        ));
+        if (! is_null($result = $this->fiscalRegistrar->processCallback($payload))) {
+            $this->event(new Events\Processed(
+                $this->getConnectionName(), '', '', $result->internal_id, null, $result
+            ));
+        }
 
         return $result;
     }

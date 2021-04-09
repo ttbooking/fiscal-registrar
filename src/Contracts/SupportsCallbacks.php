@@ -10,7 +10,7 @@ interface SupportsCallbacks
 {
     /**
      * @param  mixed  $payload
-     * @return Result
+     * @return Result|null
      */
-    public function processCallback($payload): Result;
+    public function processCallback($payload): ?Result;
 }

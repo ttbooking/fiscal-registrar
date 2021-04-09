@@ -7,7 +7,6 @@ namespace TTBooking\FiscalRegistrar;
 use RuntimeException;
 use TTBooking\FiscalRegistrar\Enums\Operation;
 use TTBooking\FiscalRegistrar\Exceptions\ResolverException;
-use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
@@ -90,15 +89,11 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
 
     public function register(Operation $operation = null, string $externalId = null, DTO\Receipt $data = null): DTO\Result
     {
-        return FiscalRegistrar::connection($this->model->connection)->register(
-            $operation ?? $this->model->operation,
-            $externalId ?? $this->model->external_id,
-            $data ?? $this->model->data
-        );
+        return $this->model->register($operation, $externalId, $data);
     }
 
     public function report(string $id = null): DTO\Result
     {
-        return FiscalRegistrar::connection($this->model->connection)->report($id ?? $this->model->internal_id);
+        return $this->model->report($id);
     }
 }

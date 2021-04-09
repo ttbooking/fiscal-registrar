@@ -7,11 +7,11 @@ namespace TTBooking\FiscalRegistrar\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
-use RuntimeException;
+use TTBooking\FiscalRegistrar\Contracts\StatefulFiscalRegistrar;
 use TTBooking\FiscalRegistrar\Database\Factories\ReceiptFactory;
 use TTBooking\FiscalRegistrar\DTO;
 use TTBooking\FiscalRegistrar\Enums\Operation;
-use TTBooking\FiscalRegistrar\Exceptions\ResolverException;
+use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
 
 /**
  * @property string|null $connection
@@ -21,7 +21,7 @@ use TTBooking\FiscalRegistrar\Exceptions\ResolverException;
  * @property DTO\Receipt $data
  * @property DTO\Result|null $result
  */
-class Receipt extends Model
+class Receipt extends Model implements StatefulFiscalRegistrar
 {
     use HasFactory;
 
@@ -43,6 +43,20 @@ class Receipt extends Model
         }
 
         return $this->newQuery()->where($field ?? $this->getRouteKeyName(), $value)->$method();
+    }
+
+    public function register(Operation $operation = null, string $externalId = null, DTO\Receipt $data = null): DTO\Result
+    {
+        return FiscalRegistrar::connection($this->connection)->register(
+            $operation ?? $this->operation,
+            $externalId ?? $this->external_id,
+            $data ?? $this->data
+        );
+    }
+
+    public function report(string $id = null): DTO\Result
+    {
+        return FiscalRegistrar::connection($this->connection)->report($id ?? $this->internal_id);
     }
 
     protected static function newFactory(): ReceiptFactory

@@ -26,14 +26,14 @@ if (! function_exists('receipt')) {
             return Container::getInstance()->make(ReceiptFactory::class);
         }
 
-        // Make new fluent receipt interface for given model
-        if ($data instanceof Model) {
-            return Container::getInstance()->make(ReceiptContract::class)->setModel($data);
-        }
-
         // Try to convert array to receipt DTO
         if (is_array($data)) {
             $data = new DTO\Receipt($data);
+        }
+
+        // Extract receipt DTO from model
+        elseif ($data instanceof Model) {
+            $data = $data->data;
         }
 
         // Make new receipt from receipt DTO

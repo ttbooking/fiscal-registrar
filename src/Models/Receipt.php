@@ -33,7 +33,7 @@ class Receipt extends Model implements StatefulFiscalRegistrar
         'result' => DTO\Result::class,
     ];
 
-    public function resolveRouteBinding($value, $field = null, $sole = false)
+    public function resolveRouteBinding($value, $field = null, $sole = false): ?self
     {
         $method = $sole ? 'sole' : 'first';
 

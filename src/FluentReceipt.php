@@ -13,7 +13,7 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
 {
     protected Receipt $model;
 
-    public function __construct(Receipt $model)
+    final public function __construct(Receipt $model)
     {
         $this->model = $model;
     }
@@ -66,16 +66,9 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         return $this->model;
     }
 
-    public function setModel(Receipt $model): self
-    {
-        $this->model = $model;
-
-        return $this;
-    }
-
     public function make(DTO\Receipt $data): self
     {
-        return new static(new Receipt(compact('data')));
+        return new static($this->model->newInstance(compact('data')));
     }
 
     public function resolve($id): self

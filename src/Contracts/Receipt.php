@@ -53,9 +53,4 @@ interface Receipt extends StatefulFiscalRegistrar
      * @return Model
      */
     public function getModel(): Model;
-
-    /**
-     * @return $this
-     */
-    public function setModel(Model $model): self;
 }

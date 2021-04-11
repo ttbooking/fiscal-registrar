@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar;
 
+use Illuminate\Support\Str;
 use RuntimeException;
 use TTBooking\FiscalRegistrar\Enums\Operation;
 use TTBooking\FiscalRegistrar\Exceptions\ResolverException;
@@ -94,5 +95,12 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
     public function report(string $id = null): DTO\Result
     {
         return $this->model->report($id);
+    }
+
+    public function __call(string $method, array $parameters)
+    {
+        if (Str::startsWith($method, 'with')) {
+            return $this->with(Str::snake(Str::after($method, 'with')), $parameters[0] ?? null);
+        }
     }
 }

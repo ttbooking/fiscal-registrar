@@ -46,11 +46,14 @@ class ReceiptFactory extends Factory
                     'name' => $this->faker->unique()->commodity,
                     'price' => $price = $this->faker->numberBetween(1, 10000),
                     'quantity' => $quantity = $this->faker->numberBetween(1, 10),
-                    'sum' => $price * $quantity,
+                    'sum' => $sum = $price * $quantity,
                     'measurement_unit' => $this->faker->optional()->randomElement(['шт.', 'кг']),
                     'payment_method' => PaymentMethod::FullPrepayment(),
                     'payment_object' => PaymentObject::Commodity(),
-                    'vat' => DTO\Receipt\Item\VAT::new(VATType::VAT20()),
+                    'vat' => DTO\Receipt\Item\VAT::new(
+                        VATType::VAT20(),
+                        round($sum - $sum / 1.2, 2, PHP_ROUND_HALF_EVEN)
+                    ),
                 ], range(1, $this->faker->numberBetween(1, 10))),
 
             ),

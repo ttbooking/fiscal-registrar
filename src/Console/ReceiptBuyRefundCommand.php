@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Console;
 
 use TTBooking\FiscalRegistrar\Contracts\ReceiptFactory;
+use TTBooking\FiscalRegistrar\Enums\Operation;
 
 class ReceiptBuyRefundCommand extends ReceiptRegisterCommand
 {
@@ -13,7 +14,10 @@ class ReceiptBuyRefundCommand extends ReceiptRegisterCommand
      *
      * @var string
      */
-    protected $signature = 'receipt:buy-refund {id : Receipt identifier}';
+    protected $signature = 'receipt:buy-refund
+        {id : Receipt identifier}
+        {--for= : Connection name}
+        {--as= : New identifier}';
 
     /**
      * The console command description.
@@ -30,7 +34,11 @@ class ReceiptBuyRefundCommand extends ReceiptRegisterCommand
      */
     public function handle(ReceiptFactory $receipt)
     {
-        parent::handle($receipt);
+        $receipt
+            ->resolve($this->argument('id'))
+            ->for($this->option('for'))
+            ->as($this->option('as'))
+            ->register(Operation::Sell());
 
         $this->info('Buy refund receipt successfully registered.');
     }

@@ -18,23 +18,29 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         $this->model = $model;
     }
 
-    public function for(string $connection): self
+    public function for(string $connection = null): self
     {
-        $this->model->connection = $connection;
+        if (! is_null($connection)) {
+            $this->model->connection = $connection;
+        }
 
         return $this;
     }
 
-    public function do(Operation $operation): self
+    public function do(Operation $operation = null): self
     {
-        $this->model->operation = $operation;
+        if (! is_null($operation)) {
+            $this->model->operation = $operation;
+        }
 
         return $this;
     }
 
-    public function as(string $id): self
+    public function as(string $id = null): self
     {
-        $this->model->external_id = $id;
+        if (! is_null($id)) {
+            $this->model->external_id = $id;
+        }
 
         return $this;
     }

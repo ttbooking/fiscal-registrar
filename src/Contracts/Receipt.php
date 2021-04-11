@@ -10,22 +10,22 @@ use TTBooking\FiscalRegistrar\Models\Receipt as Model;
 interface Receipt extends StatefulFiscalRegistrar
 {
     /**
-     * @param  string  $connection
+     * @param  string|null  $connection
      * @return $this
      */
-    public function for(string $connection): self;
+    public function for(string $connection = null): self;
 
     /**
-     * @param  Operation  $operation
+     * @param  Operation|null  $operation
      * @return $this
      */
-    public function do(Operation $operation): self;
+    public function do(Operation $operation = null): self;
 
     /**
-     * @param  string  $id
+     * @param  string|null  $id
      * @return $this
      */
-    public function as(string $id): self;
+    public function as(string $id = null): self;
 
     /**
      * @param  string  $key

@@ -47,7 +47,7 @@ class Receipt extends Model implements StatefulFiscalRegistrar
 
     public function register(Operation $operation = null, string $externalId = null, DTO\Receipt $data = null): DTO\Result
     {
-        return FiscalRegistrar::connection($this->connection)->register(
+        return FiscalRegistrar::connection($this->getAttribute('connection'))->register(
             $operation ?? $this->operation,
             $externalId ?? $this->external_id,
             $data ?? $this->data
@@ -56,7 +56,7 @@ class Receipt extends Model implements StatefulFiscalRegistrar
 
     public function report(string $id = null): DTO\Result
     {
-        return FiscalRegistrar::connection($this->connection)->report($id ?? $this->internal_id);
+        return FiscalRegistrar::connection($this->getAttribute('connection'))->report($id ?? $this->internal_id);
     }
 
     protected static function newFactory(): ReceiptFactory

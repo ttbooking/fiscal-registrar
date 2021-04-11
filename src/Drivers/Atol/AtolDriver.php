@@ -42,6 +42,25 @@ class AtolDriver extends Driver implements SupportsCallbacks
         $this->cache = $cache;
     }
 
+    public function register(Operation $operation, string $externalId, Receipt $data): Result
+    {
+        $operationString = Str::camel($operation->getValue());
+
+        $registerRequest = $this->makeRequest($externalId, $data);
+
+        $force = false;
+        do try {
+            /** @var AtolRegister\RegisterResponse $registerResponse */
+            $registerResponse = $this->api->{$operationString}
+            ($this->config['group_code'], $this->getToken($force), $registerRequest);
+            $force = true;
+        } catch (RuntimeException $e) {
+            throw new Exceptions\DriverException("{$operationString} operation failed.", $e->getCode(), $e);
+        } while (static::tokenHasExpired($registerResponse));
+
+        return $this->processRegisterResponse($registerResponse);
+    }
+
     public function report(string $id): Result
     {
         // TODO: implement
@@ -90,25 +109,6 @@ class AtolDriver extends Driver implements SupportsCallbacks
         return $force
             ? tap($tokenRetriever(), fn ($token) => $this->cache->put($key, $token, 86400))
             : $this->cache->remember($key, 86400, $tokenRetriever);
-    }
-
-    public function register(Operation $operation, string $externalId, Receipt $data): Result
-    {
-        $operationString = Str::camel($operation->getValue());
-
-        $registerRequest = $this->makeRequest($externalId, $data);
-
-        $force = false;
-        do try {
-            /** @var AtolRegister\RegisterResponse $registerResponse */
-            $registerResponse = $this->api->{$operationString}
-                ($this->config['group_code'], $this->getToken($force), $registerRequest);
-            $force = true;
-        } catch (RuntimeException $e) {
-            throw new Exceptions\DriverException("{$operationString} operation failed.", $e->getCode(), $e);
-        } while (static::tokenHasExpired($registerResponse));
-
-        return $this->processRegisterResponse($registerResponse);
     }
 
     /**

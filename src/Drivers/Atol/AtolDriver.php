@@ -147,7 +147,7 @@ class AtolDriver extends Driver implements SupportsCallbacks
                         AtolRegister\PaymentMethod::from($item->payment_method->getValue()),
                         new AtolRegister\Vat(
                             AtolRegister\VatType::from($item->vat->type->getValue()),
-                            $item->vat->sum
+                            $item->vat->sum ?? round($item->sum - $item->sum / 1.2, 2, PHP_ROUND_HALF_EVEN)
                         )
                     );
                 })->all(),

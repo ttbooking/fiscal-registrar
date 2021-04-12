@@ -24,4 +24,18 @@ final class VATType extends Enum
     private const VAT110 = 'vat110';
     private const VAT118 = 'vat118';
     private const VAT120 = 'vat120';
+
+    public function getRate(): ?float
+    {
+        switch ($this->getValue()) {
+            case 'null': return null;
+            case 'vat0': return 0;
+            case 'vat10': return .10;
+            case 'vat18': return .18;
+            case 'vat20': return .20;
+            case 'vat110': return 10 / 110;
+            case 'vat118': return 18 / 118;
+            case 'vat120': return 20 / 120;
+        }
+    }
 }

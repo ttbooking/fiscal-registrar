@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar;
 
+use Closure;
 use Faker\Generator;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\Event;
@@ -155,6 +156,9 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         $this->app->alias('fiscal-registrar.receipt', Contracts\ReceiptFactory::class);
         $this->app->alias('fiscal-registrar.receipt', Contracts\Receipt::class);
         $this->app->bind(Receipt::class, $this->app['config']['fiscal-registrar.model'] ?? Receipt::class);
+        $this->app->when(FluentReceipt::class)->needs(Closure::class)->give(
+            fn () => $this->app['config']['fiscal-registrar.id_generator'] ?? null
+        );
     }
 
     protected function registerFakerProviders(): void

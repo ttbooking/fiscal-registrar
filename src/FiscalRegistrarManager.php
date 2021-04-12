@@ -10,6 +10,9 @@ use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Enums\Operation;
 
+/**
+ * @method Contracts\FiscalRegistrar connection(string $name = null)
+ */
 class FiscalRegistrarManager extends Support\Manager implements
     Contracts\ConnectionAware,
     Contracts\FiscalRegistrarFactory,
@@ -24,17 +27,17 @@ class FiscalRegistrarManager extends Support\Manager implements
 
     public function register(Operation $operation, string $externalId, Receipt $data): Result
     {
-        return $this->connection()->{__FUNCTION__}($operation, $externalId, $data);
+        return $this->connection()->register($operation, $externalId, $data);
     }
 
     public function report(string $id): Result
     {
-        return $this->connection()->{__FUNCTION__}($id);
+        return $this->connection()->report($id);
     }
 
     public function processCallback($payload): Result
     {
-        return $this->connection()->{__FUNCTION__}($payload);
+        return $this->connection()->processCallback($payload);
     }
 
     /**

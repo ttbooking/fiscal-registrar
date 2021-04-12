@@ -47,12 +47,14 @@ class Receipt extends Model implements StatefulFiscalRegistrar
 
     public function register(Operation $operation = null, string $externalId = null, DTO\Receipt $data = null): DTO\Result
     {
-        $this->save();
+        $this->update([
+            'operation' => $operation ?? $this->operation,
+            'external_id' => $externalId ?? $this->external_id,
+            'data' => $data ?? $this->data,
+        ]);
 
         return FiscalRegistrar::connection($this->getAttribute('connection'))->register(
-            $operation ?? $this->operation,
-            $externalId ?? $this->external_id,
-            $data ?? $this->data
+            $this->operation, $this->external_id, $this->data
         );
     }
 

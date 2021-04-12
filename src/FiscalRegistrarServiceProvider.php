@@ -157,7 +157,8 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         $this->app->alias('fiscal-registrar.receipt', Contracts\Receipt::class);
         $this->app->bind(Receipt::class, $this->app['config']['fiscal-registrar.model'] ?? Receipt::class);
         $this->app->when(FluentReceipt::class)->needs(Closure::class)->give(
-            fn () => $this->app['config']['fiscal-registrar.id_generator'] ?? null
+            fn () => isset($this->app['config']['fiscal-registrar.id_generator'])
+                ? Closure::fromCallable($this->app['config']['fiscal-registrar.id_generator']) : null
         );
     }
 

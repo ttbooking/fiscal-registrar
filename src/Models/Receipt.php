@@ -25,7 +25,7 @@ class Receipt extends Model implements StatefulFiscalRegistrar
 {
     use HasFactory;
 
-    protected $fillable = ['connection', 'operation', 'external_id', 'data'];
+    protected $fillable = ['connection', 'operation', 'external_id', 'internal_id', 'data', 'result'];
 
     protected $casts = [
         'operation' => Operation::class,

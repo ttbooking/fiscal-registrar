@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\DTO\Result;
 
+use Carbon\Carbon;
 use DateTimeInterface;
 use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 
@@ -66,5 +67,10 @@ final class Payload extends DataTransferObject
             'fiscal_receipt_number', 'shift_number', 'receipt_datetime', 'total', 'fn_number',
             'ecr_registration_number', 'fiscal_document_number', 'fiscal_document_attribute', 'fns_site'
         ));
+    }
+
+    protected static function transformReceiptDatetime($receiptDatetime): DateTimeInterface
+    {
+        return Carbon::instance($receiptDatetime)->settings(['toJsonFormat' => 'c']);
     }
 }

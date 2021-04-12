@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\DTO;
 
+use Carbon\Carbon;
 use DateTimeInterface;
 
 final class Result extends DataTransferObject
@@ -46,5 +47,10 @@ final class Result extends DataTransferObject
         return new self(
             compact('external_id', 'internal_id', 'timestamp', 'status', 'ofd_receipt_url', 'payload', 'extra')
         );
+    }
+
+    protected static function transformTimestamp($timestamp): DateTimeInterface
+    {
+        return Carbon::instance($timestamp)->settings(['toJsonFormat' => 'c']);
     }
 }

@@ -31,8 +31,13 @@ class ReceiptFactory extends Factory
      */
     public function definition(): array
     {
+        $connections = array_keys(array_filter(
+            config('fiscal-registrar.connections'),
+            fn ($connection) => $connection['test'] ?? false
+        ));
+
         return [
-            'connection' => 'atol',
+            'connection' => $this->faker->optional()->randomElement($connections),
             'operation' => $this->faker->optional()->randomElement(Operation::values()),
             'external_id' => $this->faker->uuid,
             'internal_id' => $this->faker->uuid,

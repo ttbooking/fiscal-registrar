@@ -15,6 +15,7 @@ class CreateReceiptsTable extends Migration
     {
         Schema::create('receipts', function (Blueprint $table) {
             $table->id();
+            $table->unsignedTinyInteger('state')->default(0)->index();
             $table->string('connection', 32)->nullable()->index();
             $table->string('operation', 32)->nullable();
             $table->string('external_id', 128)->nullable()->index();

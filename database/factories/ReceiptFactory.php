@@ -10,6 +10,7 @@ use TTBooking\FiscalRegistrar\DTO;
 use TTBooking\FiscalRegistrar\Enums\Operation;
 use TTBooking\FiscalRegistrar\Enums\PaymentMethod;
 use TTBooking\FiscalRegistrar\Enums\PaymentObject;
+use TTBooking\FiscalRegistrar\Enums\State;
 use TTBooking\FiscalRegistrar\Enums\VATType;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
@@ -37,6 +38,7 @@ class ReceiptFactory extends Factory
         ));
 
         return [
+            'state' => $this->faker->randomElement(State::values()),
             'connection' => $this->faker->optional()->randomElement($connections),
             'operation' => $this->faker->optional()->randomElement(Operation::values()),
             'external_id' => $this->faker->uuid,

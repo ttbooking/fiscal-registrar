@@ -10,12 +10,13 @@ use Illuminate\Support\Str;
 use TTBooking\FiscalRegistrar\Contracts\StatefulFiscalRegistrar;
 use TTBooking\FiscalRegistrar\Database\Factories\ReceiptFactory;
 use TTBooking\FiscalRegistrar\DTO;
-use TTBooking\FiscalRegistrar\Enums\Operation;
+use TTBooking\FiscalRegistrar\Enums;
 use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
 
 /**
+ * @property Enums\State $state
  * @property string|null $connection
- * @property Operation|null $operation
+ * @property Enums\Operation|null $operation
  * @property string|null $external_id
  * @property string|null $internal_id
  * @property DTO\Receipt $data
@@ -25,10 +26,11 @@ class Receipt extends Model implements StatefulFiscalRegistrar
 {
     use HasFactory;
 
-    protected $fillable = ['connection', 'operation', 'external_id', 'internal_id', 'data', 'result'];
+    protected $fillable = ['state', 'connection', 'operation', 'external_id', 'internal_id', 'data', 'result'];
 
     protected $casts = [
-        'operation' => Operation::class,
+        'state' => Enums\State::class,
+        'operation' => Enums\Operation::class,
         'data' => DTO\Receipt::class,
         'result' => DTO\Result::class,
     ];
@@ -45,8 +47,11 @@ class Receipt extends Model implements StatefulFiscalRegistrar
         return $this->newQuery()->where($field ?? $this->getRouteKeyName(), $value)->$method();
     }
 
-    public function register(Operation $operation = null, string $externalId = null, DTO\Receipt $data = null): DTO\Result
-    {
+    public function register(
+        Enums\Operation $operation = null,
+        string $externalId = null,
+        DTO\Receipt $data = null
+    ): DTO\Result {
         $this->update([
             'operation' => $operation ?? $this->operation,
             'external_id' => $externalId ?? $this->external_id,

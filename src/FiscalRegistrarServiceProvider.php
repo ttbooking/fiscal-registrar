@@ -115,7 +115,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
 
     protected function registerMigrations(): void
     {
-        //$this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 
     protected function registerCommands(): void

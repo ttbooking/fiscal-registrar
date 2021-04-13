@@ -11,10 +11,11 @@ use TTBooking\FiscalRegistrar\Contracts\StatefulFiscalRegistrar;
 use TTBooking\FiscalRegistrar\Database\Factories\ReceiptFactory;
 use TTBooking\FiscalRegistrar\DTO;
 use TTBooking\FiscalRegistrar\Enums;
+use TTBooking\FiscalRegistrar\Exceptions\StateException;
 use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
 
 /**
- * @property Enums\State $state
+ * @property int $state
  * @property string|null $connection
  * @property Enums\Operation|null $operation
  * @property string|null $external_id
@@ -26,10 +27,17 @@ class Receipt extends Model implements StatefulFiscalRegistrar
 {
     use HasFactory;
 
+    const STATE_CREATED = 0;
+    const STATE_REGISTERED = 1;
+    const STATE_PROCESSED = 2;
+
     protected $fillable = ['state', 'connection', 'operation', 'external_id', 'internal_id', 'data', 'result'];
 
+    protected $attributes = [
+        'state' => self::STATE_CREATED,
+    ];
+
     protected $casts = [
-        'state' => Enums\State::class,
         'operation' => Enums\Operation::class,
         'data' => DTO\Receipt::class,
         'result' => DTO\Result::class,
@@ -52,6 +60,8 @@ class Receipt extends Model implements StatefulFiscalRegistrar
         string $externalId = null,
         DTO\Receipt $data = null
     ): DTO\Result {
+        $this->checkState(self::STATE_CREATED);
+
         $this->update([
             'operation' => $operation ?? $this->operation,
             'external_id' => $externalId ?? $this->external_id,
@@ -65,11 +75,26 @@ class Receipt extends Model implements StatefulFiscalRegistrar
 
     public function report(string $id = null): DTO\Result
     {
+        $this->checkState(self::STATE_REGISTERED);
+
         return FiscalRegistrar::connection($this->getAttribute('connection'))->report($id ?? $this->internal_id);
     }
 
     protected static function newFactory(): ReceiptFactory
     {
         return ReceiptFactory::new();
+    }
+
+    /**
+     * @param  int  $state
+     * @return void
+     *
+     * @throws StateException
+     */
+    public function checkState(int $state): void
+    {
+        if ($this->state > $state) {
+            throw new StateException('Receipt has invalid state for operation.');
+        }
     }
 }

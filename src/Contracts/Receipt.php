@@ -45,9 +45,10 @@ interface Receipt extends StatefulFiscalRegistrar
     public function clone(): self;
 
     /**
+     * @param  bool  $force
      * @return bool
      */
-    public function delete(): bool;
+    public function delete(bool $force = false): bool;
 
     /**
      * @return Model

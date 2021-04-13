@@ -30,6 +30,8 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
 
     public function for(string $connection = null): self
     {
+        $this->model->checkState(Receipt::STATE_CREATED);
+
         if (! is_null($connection)) {
             $this->model->connection = $connection;
         }
@@ -39,6 +41,8 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
 
     public function do(Operation $operation = null): self
     {
+        $this->model->checkState(Receipt::STATE_CREATED);
+
         if (! is_null($operation)) {
             $this->model->operation = $operation;
         }
@@ -48,6 +52,8 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
 
     public function as(string $id = null): self
     {
+        $this->model->checkState(Receipt::STATE_CREATED);
+
         if (! is_null($id)) {
             $this->model->external_id = $id;
         }
@@ -57,6 +63,8 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
 
     public function with(string $key, $value): self
     {
+        $this->model->checkState(Receipt::STATE_CREATED);
+
         $this->model->setAttribute($key, $value);
 
         return $this;
@@ -69,12 +77,16 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
 
     public function clone(): self
     {
-        return $this->newInstance($this->model->replicate(['external_id', 'internal_id', 'result']));
+        return $this->newInstance($this->model->replicate(['state', 'external_id', 'internal_id', 'result']));
     }
 
-    public function delete(): bool
+    public function delete(bool $force = false): bool
     {
-        return (bool) $this->model->delete();
+        if ($force || $this->model->state === Receipt::STATE_CREATED) {
+            return (bool) $this->model->delete();
+        }
+
+        return false;
     }
 
     public function getModel(): Receipt

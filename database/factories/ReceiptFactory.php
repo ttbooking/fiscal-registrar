@@ -38,11 +38,10 @@ class ReceiptFactory extends Factory
         ));
 
         return [
-            'state' => $this->faker->randomElement(State::values()),
-            'connection' => $this->faker->optional()->randomElement($connections),
-            'operation' => $this->faker->optional()->randomElement(Operation::values()),
+            'state' => State::Created(),
+            'connection' => $this->faker->randomElement($connections),
+            'operation' => $this->faker->randomElement(Operation::values()),
             'external_id' => $this->faker->uuid,
-            'internal_id' => $this->faker->uuid,
             'data' => fn () => DTO\Receipt::new(
 
                 DTO\Receipt\Client::new(config('fiscal-registrar.test_email', $this->faker->safeEmail)),
@@ -62,6 +61,27 @@ class ReceiptFactory extends Factory
 
             ),
         ];
+    }
+
+    /**
+     * @return static
+     */
+    public function registered(): self
+    {
+        return $this->state(fn () => [
+            'state' => State::Registered(),
+            'internal_id' => $this->faker->uuid,
+        ]);
+    }
+
+    /**
+     * @return static
+     */
+    public function processed(): self
+    {
+        return $this->registered()->state(fn () => [
+            'state' => State::Processed(),
+        ]);
     }
 
     /**

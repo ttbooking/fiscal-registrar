@@ -43,14 +43,12 @@ class DriverDispatchingDecorator implements
      */
     public function register(Operation $operation, string $externalId, Receipt $data): Result
     {
-        $this->event(new Events\Registering(
-            $this->getConnectionName(), $operation, $externalId, null, $data, null
-        ));
+        $this->event(new Events\Registering($this->getConnectionName(), $operation, $externalId, $data));
 
         $result = $this->fiscalRegistrar->register($operation, $externalId, $data);
 
         $this->event(new Events\Registered(
-            $this->getConnectionName(), $operation, $externalId, $result->internal_id, $data, $result
+            $this->getConnectionName(), $operation, $externalId, $result->internal_id, $data
         ));
 
         return $result;
@@ -68,9 +66,7 @@ class DriverDispatchingDecorator implements
         }
 
         if (! is_null($result = $this->fiscalRegistrar->processCallback($payload))) {
-            $this->event(new Events\Processed(
-                $this->getConnectionName(), '', '', $result->internal_id, null, $result
-            ));
+            $this->event(new Events\Processed($this->getConnectionName(), $result->internal_id, $result));
         }
 
         return $result;

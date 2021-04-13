@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Listeners;
 
-use TTBooking\FiscalRegistrar\Events\ReceiptEvent;
+use TTBooking\FiscalRegistrar\Events\RegistrationEvent;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class StoreReceipt
@@ -25,19 +25,18 @@ class StoreReceipt
     /**
      * Handle the event.
      *
-     * @param  ReceiptEvent  $event
+     * @param  RegistrationEvent  $event
      * @return void
      */
-    public function handle(ReceiptEvent $event): void
+    public function handle(RegistrationEvent $event): void
     {
         $this->receipt->newQuery()->updateOrCreate([
-            'connection' => $event->receipt->connection,
-            'external_id' => $event->receipt->external_id,
+            'connection' => $event->reg_conn,
+            'external_id' => $event->external_id,
         ], [
-            'operation' => $event->receipt->operation,
-            'internal_id' => $event->receipt->internal_id,
-            'data' => $event->receipt->data,
-            'result' => $event->receipt->result,
+            'operation' => $event->operation,
+            'internal_id' => $event->internal_id ?? null,
+            'data' => $event->data,
         ]);
     }
 }

@@ -33,26 +33,6 @@ class DriverDispatchingDecorator implements
             ? $this->fiscalRegistrar->getConnectionName() : 'unknown';
     }
 
-    public function report(string $id): Result
-    {
-        return $this->fiscalRegistrar->report($id);
-    }
-
-    public function processCallback($payload): ?Result
-    {
-        if (! $this->fiscalRegistrar instanceof Contracts\SupportsCallbacks) {
-            return null;
-        }
-
-        if (! is_null($result = $this->fiscalRegistrar->processCallback($payload))) {
-            $this->event(new Events\Processed(
-                $this->getConnectionName(), '', '', $result->internal_id, null, $result
-            ));
-        }
-
-        return $result;
-    }
-
     /**
      * @param  Operation  $operation
      * @param  string  $externalId
@@ -72,6 +52,26 @@ class DriverDispatchingDecorator implements
         $this->event(new Events\Registered(
             $this->getConnectionName(), $operation, $externalId, $result->internal_id, $data, $result
         ));
+
+        return $result;
+    }
+
+    public function report(string $id): Result
+    {
+        return $this->fiscalRegistrar->report($id);
+    }
+
+    public function processCallback($payload): ?Result
+    {
+        if (! $this->fiscalRegistrar instanceof Contracts\SupportsCallbacks) {
+            return null;
+        }
+
+        if (! is_null($result = $this->fiscalRegistrar->processCallback($payload))) {
+            $this->event(new Events\Processed(
+                $this->getConnectionName(), '', '', $result->internal_id, null, $result
+            ));
+        }
 
         return $result;
     }

@@ -22,6 +22,6 @@ class DataTransferObject implements CastsAttributes
 
     public function set($model, string $key, $value, array $attributes)
     {
-        return $value;
+        return isset($value) ? (string) $value : null;
     }
 }

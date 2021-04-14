@@ -91,7 +91,7 @@ class DriverDispatchingDecorator implements
      */
     protected function resolveOrMakeReceipt(Operation $operation, string $externalId, DTO\Receipt $data): Receipt
     {
-        return $this->receipt->newQuery()->firstOrNew([
+        return $this->receipt->newQuery()->updateOrCreate([
             'connection' => $this->getConnectionName(),
             'external_id' => $externalId,
         ], compact('operation', 'data'));

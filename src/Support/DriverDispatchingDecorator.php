@@ -41,24 +41,22 @@ class DriverDispatchingDecorator implements
      * @param  Operation  $operation
      * @param  string  $externalId
      * @param  DTO\Receipt  $data
-     * @return DTO\Result
+     * @return string
      *
      * @throws Exceptions\FiscalRegistrarException
      */
-    public function register(Operation $operation, string $externalId, DTO\Receipt $data): DTO\Result
+    public function register(Operation $operation, string $externalId, DTO\Receipt $data): string
     {
         $receipt = $this->resolveOrMakeReceipt(...func_get_args());
 
         $this->event(new Events\Registering($receipt));
 
-        $result = $this->fiscalRegistrar->register($operation, $externalId, $data);
-
-        $receipt->internal_id = $result->internal_id;
+        $receipt->internal_id = $this->fiscalRegistrar->register($operation, $externalId, $data);
         $receipt->save();
 
         $this->event(new Events\Registered($receipt));
 
-        return $result;
+        return $receipt->internal_id;
     }
 
     public function report(string $id): DTO\Result

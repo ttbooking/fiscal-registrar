@@ -25,7 +25,7 @@ class FiscalRegistrarManager extends Support\Manager implements
         return $this->getDefaultDriver();
     }
 
-    public function register(Operation $operation, string $externalId, Receipt $data): Result
+    public function register(Operation $operation, string $externalId, Receipt $data): string
     {
         return $this->connection()->register($operation, $externalId, $data);
     }

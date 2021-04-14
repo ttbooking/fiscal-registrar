@@ -108,7 +108,7 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         }
     }
 
-    public function register(Operation $operation = null, string $externalId = null, DTO\Receipt $data = null): DTO\Result
+    public function register(Operation $operation = null, string $externalId = null, DTO\Receipt $data = null): string
     {
         $externalId ??= $this->model->external_id ?? $this->generateIdentifier();
 

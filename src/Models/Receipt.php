@@ -59,7 +59,7 @@ class Receipt extends Model implements StatefulFiscalRegistrar
         Enums\Operation $operation = null,
         string $externalId = null,
         DTO\Receipt $data = null
-    ): DTO\Result {
+    ): string {
         $this->checkState(self::STATE_CREATED);
 
         return FiscalRegistrar::connection($this->getAttribute('connection'))->register(

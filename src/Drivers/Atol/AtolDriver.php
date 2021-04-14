@@ -42,7 +42,7 @@ class AtolDriver extends Driver implements SupportsCallbacks
         $this->cache = $cache;
     }
 
-    public function register(Operation $operation, string $externalId, Receipt $data): Result
+    public function register(Operation $operation, string $externalId, Receipt $data): string
     {
         $operationString = Str::camel($operation->getValue());
 
@@ -180,17 +180,13 @@ class AtolDriver extends Driver implements SupportsCallbacks
         return $registerRequest;
     }
 
-    protected function processRegisterResponse(AtolRegister\RegisterResponse $registerResponse): Result
+    protected function processRegisterResponse(AtolRegister\RegisterResponse $registerResponse): string
     {
         if (! is_null($error = $registerResponse->getError())) {
             throw new Exceptions\DriverException($error->getText(), $error->getCode());
         }
 
-        return Result::new(
-            $registerResponse->getUuid(),
-            $registerResponse->getTimestamp(),
-            $registerResponse->getStatus()->getValue()
-        );
+        return $registerResponse->getUuid();
     }
 
     protected function processReportResponse(AtolReport\ReportResponse $reportResponse): Result

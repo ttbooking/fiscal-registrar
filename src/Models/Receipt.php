@@ -62,14 +62,8 @@ class Receipt extends Model implements StatefulFiscalRegistrar
     ): DTO\Result {
         $this->checkState(self::STATE_CREATED);
 
-        $this->update([
-            'operation' => $operation ?? $this->operation,
-            'external_id' => $externalId ?? $this->external_id,
-            'data' => $data ?? $this->data,
-        ]);
-
         return FiscalRegistrar::connection($this->getAttribute('connection'))->register(
-            $this->operation, $this->external_id, $this->data
+            $operation ?? $this->operation, $externalId ?? $this->external_id, $data ?? $this->data
         );
     }
 

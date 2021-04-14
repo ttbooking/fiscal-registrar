@@ -71,7 +71,11 @@ class Receipt extends Model implements StatefulFiscalRegistrar
     {
         $this->checkState(self::STATE_REGISTERED);
 
-        return FiscalRegistrar::connection($this->getAttribute('connection'))->report($id ?? $this->internal_id);
+        if ($force || $this->state < self::STATE_PROCESSED) {
+            return FiscalRegistrar::connection($this->getAttribute('connection'))->report($id ?? $this->internal_id);
+        }
+
+        return $this->result;
     }
 
     protected static function newFactory(): ReceiptFactory

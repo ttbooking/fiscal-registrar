@@ -51,6 +51,11 @@ final class Result extends DataTransferObject
 
     protected static function transformTimestamp($timestamp): DateTimeInterface
     {
-        return Carbon::instance($timestamp)->settings(['toJsonFormat' => 'c']);
+        return Carbon::parse($timestamp)->settings(['toJsonFormat' => 'c']);
+    }
+
+    protected static function transformExtra($extra): ?object
+    {
+        return isset($extra) ? (object) $extra : null;
     }
 }

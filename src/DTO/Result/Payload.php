@@ -71,6 +71,6 @@ final class Payload extends DataTransferObject
 
     protected static function transformReceiptDatetime($receiptDatetime): DateTimeInterface
     {
-        return Carbon::instance($receiptDatetime)->settings(['toJsonFormat' => 'c']);
+        return Carbon::parse($receiptDatetime)->settings(['toJsonFormat' => 'c']);
     }
 }

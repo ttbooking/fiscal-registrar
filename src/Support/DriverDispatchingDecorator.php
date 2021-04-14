@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Support;
 
+use Closure;
 use Illuminate\Database\Eloquent\Model;
 use TTBooking\FiscalRegistrar\Concerns;
 use TTBooking\FiscalRegistrar\Contracts;
@@ -68,17 +69,16 @@ class DriverDispatchingDecorator implements
         return $result;
     }
 
-    public function processCallback($payload): ?DTO\Result
+    public function processCallback($payload, Closure $handler = null): void
     {
         if (! $this->fiscalRegistrar instanceof Contracts\SupportsCallbacks) {
-            return null;
+            return;
         }
 
-        if (! is_null($result = $this->fiscalRegistrar->processCallback($payload))) {
+        $this->fiscalRegistrar->processCallback($payload, function (DTO\Result $result) use ($handler) {
+            $handler && $handler($result);
             $this->event(new Events\Processed($this->updateReceipt($result)));
-        }
-
-        return $result;
+        });
     }
 
     /**

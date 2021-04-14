@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar;
 
+use Closure;
 use Illuminate\Contracts\Events\Dispatcher;
 use TTBooking\FiscalRegistrar\Drivers\Atol\AtolDriver;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
@@ -35,9 +36,9 @@ class FiscalRegistrarManager extends Support\Manager implements
         return $this->connection()->report($id);
     }
 
-    public function processCallback($payload): Result
+    public function processCallback($payload, Closure $handler = null): void
     {
-        return $this->connection()->processCallback($payload);
+        $this->connection()->processCallback($payload, $handler);
     }
 
     /**

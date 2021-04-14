@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Facades;
 
+use Closure;
 use Illuminate\Support\Facades\Facade;
 use TTBooking\FiscalRegistrar\Contracts\FiscalRegistrar as FiscalRegistrarContract;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
@@ -16,7 +17,7 @@ use TTBooking\FiscalRegistrar\Enums\Operation;
  * @method static FiscalRegistrarContract[] getConnections
  * @method static string register(Operation $operation, string $externalId, Receipt $receipt)
  * @method static Result|null report(string $id)
- * @method static Result processCallback(mixed $payload)
+ * @method static void processCallback(mixed $payload, Closure $handler = null)
  */
 class FiscalRegistrar extends Facade
 {

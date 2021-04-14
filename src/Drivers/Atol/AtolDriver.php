@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Drivers\Atol;
 
+use Closure;
 use Illuminate\Contracts\Cache\Repository;
 use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\Str;
@@ -76,12 +77,12 @@ class AtolDriver extends Driver implements SupportsCallbacks
         return $this->processReportResponse($reportResponse);
     }
 
-    public function processCallback($payload): Result
+    public function processCallback($payload, Closure $handler = null): void
     {
         try {
-            return $this->processReportResponse(
+            $handler && $handler($this->processReportResponse(
                 $this->converter->getResponseObject(AtolReport\ReportResponse::class, json_encode($payload))
-            );
+            ));
         } catch (Exceptions\DriverException $e) {
             // Suppress driver exceptions during callback execution
         }

@@ -78,9 +78,13 @@ class AtolDriver extends Driver implements SupportsCallbacks
 
     public function processCallback($payload): Result
     {
-        return $this->processReportResponse(
-            $this->converter->getResponseObject(AtolReport\ReportResponse::class, json_encode($payload))
-        );
+        try {
+            return $this->processReportResponse(
+                $this->converter->getResponseObject(AtolReport\ReportResponse::class, json_encode($payload))
+            );
+        } catch (Exceptions\DriverException $e) {
+            // Suppress driver exceptions during callback execution
+        }
     }
 
     /**

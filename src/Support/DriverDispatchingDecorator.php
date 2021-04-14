@@ -59,11 +59,11 @@ class DriverDispatchingDecorator implements
         return $receipt->internal_id;
     }
 
-    public function report(string $id): DTO\Result
+    public function report(string $id): ?DTO\Result
     {
-        $result = $this->fiscalRegistrar->report($id);
-
-        $this->event(new Events\Processed($this->updateReceipt($result)));
+        if ($result = $this->fiscalRegistrar->report($id)) {
+            $this->event(new Events\Processed($this->updateReceipt($result)));
+        }
 
         return $result;
     }

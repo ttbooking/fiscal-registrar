@@ -115,7 +115,7 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         return $this->model->register($operation, $externalId, $data);
     }
 
-    public function report(string $id = null, bool $force = false): DTO\Result
+    public function report(string $id = null, bool $force = false): ?DTO\Result
     {
         return $this->model->report($id);
     }

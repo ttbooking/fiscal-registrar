@@ -61,7 +61,7 @@ class AtolDriver extends Driver implements SupportsCallbacks
         return $this->processRegisterResponse($registerResponse);
     }
 
-    public function report(string $id): Result
+    public function report(string $id): ?Result
     {
         // TODO: implement
 
@@ -189,9 +189,12 @@ class AtolDriver extends Driver implements SupportsCallbacks
         return $registerResponse->getUuid();
     }
 
-    protected function processReportResponse(AtolReport\ReportResponse $reportResponse): Result
+    protected function processReportResponse(AtolReport\ReportResponse $reportResponse): ?Result
     {
         if (! is_null($error = $reportResponse->getError())) {
+            if ($error->getCode() === 34) {
+                return null;
+            }
             throw new Exceptions\DriverException($error->getText(), $error->getCode());
         }
 

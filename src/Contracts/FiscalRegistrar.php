@@ -23,9 +23,9 @@ interface FiscalRegistrar
 
     /**
      * @param  string  $id
-     * @return Result
+     * @return Result|null
      *
      * @throws DriverException
      */
-    public function report(string $id): Result;
+    public function report(string $id): ?Result;
 }

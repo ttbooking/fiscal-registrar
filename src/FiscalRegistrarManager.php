@@ -30,7 +30,7 @@ class FiscalRegistrarManager extends Support\Manager implements
         return $this->connection()->register($operation, $externalId, $data);
     }
 
-    public function report(string $id): Result
+    public function report(string $id): ?Result
     {
         return $this->connection()->report($id);
     }

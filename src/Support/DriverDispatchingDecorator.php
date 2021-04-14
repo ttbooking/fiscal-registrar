@@ -53,6 +53,7 @@ class DriverDispatchingDecorator implements
         $this->event(new Events\Registering($receipt));
 
         $receipt->internal_id = $this->fiscalRegistrar->register($operation, $externalId, $data);
+        $receipt->state = Receipt::STATE_REGISTERED;
         $receipt->save();
 
         $this->event(new Events\Registered($receipt));
@@ -104,6 +105,8 @@ class DriverDispatchingDecorator implements
         return tap($this->receipt->newQuery()->where([
             'connection' => $this->getConnectionName(),
             'internal_id' => $result->internal_id,
-        ])->firstOrFail())->update(compact('result'));
+        ])->firstOrFail())->update(
+            compact('result') + ['state' => Receipt::STATE_PROCESSED]
+        );
     }
 }

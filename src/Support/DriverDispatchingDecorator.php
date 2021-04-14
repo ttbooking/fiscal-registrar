@@ -103,9 +103,9 @@ class DriverDispatchingDecorator implements
      */
     protected function updateReceipt(DTO\Result $result): Receipt
     {
-        return tap($this->receipt->newQuery()->firstOrFail([
+        return tap($this->receipt->newQuery()->where([
             'connection' => $this->getConnectionName(),
             'internal_id' => $result->internal_id,
-        ]))->update(compact('result'));
+        ])->firstOrFail())->update(compact('result'));
     }
 }

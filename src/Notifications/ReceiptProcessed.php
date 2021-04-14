@@ -6,20 +6,21 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use TTBooking\FiscalRegistrar\DTO\EventPayload;
+use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class ReceiptProcessed extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected EventPayload $receipt;
+    protected Receipt $receipt;
 
     /**
      * Create a new notification instance.
      *
+     * @param  Receipt  $receipt
      * @return void
      */
-    public function __construct(EventPayload $receipt)
+    public function __construct(Receipt $receipt)
     {
         $this->receipt = $receipt;
     }

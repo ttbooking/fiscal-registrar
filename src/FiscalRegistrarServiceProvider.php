@@ -50,12 +50,6 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
      */
     protected function registerEvents(): void
     {
-        Event::listen([
-            Events\Registering::class,
-            Events\Registered::class,
-            //Events\Processed::class,
-        ], Listeners\StoreReceipt::class);
-
         if ($this->app['config']['fiscal-registrar.notify_client'] &&
             $this->app->bound(\Illuminate\Contracts\Notifications\Dispatcher::class)) {
             Event::listen(Events\Processed::class, Listeners\SendNotification::class);

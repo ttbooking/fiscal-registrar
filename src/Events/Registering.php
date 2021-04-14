@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Events;
 
-class Registering extends RegistrationEvent
+class Registering extends ReceiptEvent
 {
 }

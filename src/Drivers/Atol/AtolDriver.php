@@ -183,7 +183,6 @@ class AtolDriver extends Driver implements SupportsCallbacks
         }
 
         return Result::new(
-            '',
             $registerResponse->getUuid(),
             $registerResponse->getTimestamp(),
             $registerResponse->getStatus()->getValue(),
@@ -193,7 +192,6 @@ class AtolDriver extends Driver implements SupportsCallbacks
     protected function processReportResponse(AtolReport\ReportResponse $reportResponse): Result
     {
         return Result::new(
-            '',
             $reportResponse->getUuid(),
             $reportResponse->getTimestamp(),
             $reportResponse->getStatus()->getValue(),

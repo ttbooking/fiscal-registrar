@@ -9,8 +9,6 @@ use DateTimeInterface;
 
 final class Result extends DataTransferObject
 {
-    public string $external_id;
-
     public string $internal_id;
 
     public DateTimeInterface $timestamp;
@@ -26,7 +24,6 @@ final class Result extends DataTransferObject
     /**
      * Result constructor.
      *
-     * @param  string  $external_id
      * @param  string  $internal_id
      * @param  DateTimeInterface  $timestamp
      * @param  string  $status
@@ -36,7 +33,6 @@ final class Result extends DataTransferObject
      * @return self
      */
     public static function new(
-        string $external_id,
         string $internal_id,
         DateTimeInterface $timestamp,
         string $status,
@@ -45,7 +41,7 @@ final class Result extends DataTransferObject
         object $extra = null
     ): self {
         return new self(
-            compact('external_id', 'internal_id', 'timestamp', 'status', 'ofd_receipt_url', 'payload', 'extra')
+            compact('internal_id', 'timestamp', 'status', 'ofd_receipt_url', 'payload', 'extra')
         );
     }
 

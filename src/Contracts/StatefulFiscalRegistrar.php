@@ -22,9 +22,10 @@ interface StatefulFiscalRegistrar extends FiscalRegistrar
 
     /**
      * @param  string|null  $id
+     * @param  bool  $force
      * @return DTO\Result
      *
      * @throws DriverException
      */
-    public function report(string $id = null): DTO\Result;
+    public function report(string $id = null, bool $force = false): DTO\Result;
 }

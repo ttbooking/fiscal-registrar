@@ -6,6 +6,7 @@ namespace TTBooking\FiscalRegistrar\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Response;
 use TTBooking\FiscalRegistrar\Contracts\FiscalRegistrarFactory;
 
 class FiscalRegistrarController extends Controller
@@ -24,16 +25,18 @@ class FiscalRegistrarController extends Controller
 
     public function register(string $connection)
     {
-        return $this->factory->connection($connection)->{__FUNCTION__}();
+        return $this->factory->connection($connection)->register();
     }
 
     public function report(string $connection, string $id)
     {
-        return $this->factory->connection($connection)->{__FUNCTION__}($id);
+        return $this->factory->connection($connection)->report($id);
     }
 
-    public function callback(Request $request, string $connection)
+    public function callback(Request $request, string $connection): \Illuminate\Http\Response
     {
-        return $this->factory->connection($connection)->processCallback($request->all());
+        $this->factory->connection($connection)->processCallback($request->all());
+
+        return Response::noContent();
     }
 }

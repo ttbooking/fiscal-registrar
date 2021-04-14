@@ -67,7 +67,7 @@ class Receipt extends Model implements StatefulFiscalRegistrar
         );
     }
 
-    public function report(string $id = null): DTO\Result
+    public function report(string $id = null, bool $force = false): DTO\Result
     {
         $this->checkState(self::STATE_REGISTERED);
 

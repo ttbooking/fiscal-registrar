@@ -43,6 +43,7 @@ return [
         'intellectual_activity' => 'предоставление результатов интеллектуальной деятельности',
         'payment' => 'платеж',
         'agent_commission' => 'агентское вознаграждение',
+        'award' => 'взнос/штраф/вознаграждение/бонус',
         'composite' => 'составной предмет расчета',
         'another' => 'иной предмет расчета',
         'property_right' => 'имущественное право',
@@ -50,6 +51,14 @@ return [
         'insurance_premium' => 'страховые взносы',
         'sales_tax' => 'торговый сбор',
         'resort_fee' => 'курортный сбор',
+        'deposit' => 'залог',
+        'expense' => 'расход',
+        'pension_insurance_ip' => 'взносы на ОПС ИП',
+        'pension_insurance' => 'взносы на ОПС',
+        'medical_insurance_ip' => 'взносы на ОМС ИП',
+        'medical_insurance' => 'взносы на ОМС',
+        'social_insurance' => 'взносы на ОСС',
+        'casino_payment' => 'платеж казино',
     ],
 
     'payment_type' => [

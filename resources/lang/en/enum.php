@@ -43,6 +43,7 @@ return [
         'intellectual_activity' => 'intellectual activity',
         'payment' => 'payment',
         'agent_commission' => 'agent commission',
+        'award' => 'fee/fine/reward/bonus',
         'composite' => 'composite payment object',
         'another' => 'another payment object',
         'property_right' => 'property right',
@@ -50,6 +51,14 @@ return [
         'insurance_premium' => 'insurance premium',
         'sales_tax' => 'sales tax',
         'resort_fee' => 'resort fee',
+        'deposit' => 'deposit',
+        'expense' => 'expense',
+        'pension_insurance_ip' => 'pension insurance fees (entrepreneur)',
+        'pension_insurance' => 'pension insurance fees',
+        'medical_insurance_ip' => 'medical insurance fees (entrepreneur)',
+        'medical_insurance' => 'medical insurance fees',
+        'social_insurance' => 'social insurance fees',
+        'casino_payment' => 'casino payment',
     ],
 
     'payment_type' => [

@@ -84,6 +84,25 @@ class ReceiptController extends Controller
     }
 
     /**
+     * @param  Receipt  $receipt
+     * @return JsonResponse
+     */
+    public function register(Receipt $receipt): JsonResponse
+    {
+        return Response::json($receipt->register());
+    }
+
+    /**
+     * @param  Request  $request
+     * @param  Receipt  $receipt
+     * @return JsonResponse
+     */
+    public function report(Request $request, Receipt $receipt): JsonResponse
+    {
+        return Response::json($receipt->report(null, (bool) $request->query('force')));
+    }
+
+    /**
      * Validate the request.
      *
      * @param  Request  $request

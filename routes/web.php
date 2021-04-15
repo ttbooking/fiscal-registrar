@@ -6,13 +6,12 @@ Route::prefix('api')->group(function () {
 
     Route::prefix('connection/{connection}')->group(function () {
         // Registry Routes...
-        Route::post('/sell', 'FiscalRegistrarController@sell')->name('fiscal-registrar.sell');
-        Route::post('/sell-refund', 'FiscalRegistrarController@sellRefund')->name('fiscal-registrar.sell-refund');
-        Route::post('/buy', 'FiscalRegistrarController@buy')->name('fiscal-registrar.buy');
-        Route::post('/buy-refund', 'FiscalRegistrarController@buyRefund')->name('fiscal-registrar.buy-refund');
+        Route::post('/sell/{externalId}', 'FiscalRegistrarController@sell')->name('fiscal-registrar.sell');
+        Route::post('/sell-refund/{externalId}', 'FiscalRegistrarController@sellRefund')->name('fiscal-registrar.sell-refund');
+        Route::post('/buy/{externalId}', 'FiscalRegistrarController@buy')->name('fiscal-registrar.buy');
+        Route::post('/buy-refund/{externalId}', 'FiscalRegistrarController@buyRefund')->name('fiscal-registrar.buy-refund');
 
         // Report Routes...
-        Route::get('/list', 'FiscalRegistrarController@list')->name('fiscal-registrar.list');
         Route::get('/report/{id}', 'FiscalRegistrarController@report')->name('fiscal-registrar.report');
         Route::post('/callback', 'FiscalRegistrarController@callback')->name('fiscal-registrar.callback');
     });
@@ -24,6 +23,11 @@ Route::prefix('api')->group(function () {
         'update' => 'fiscal-registrar.receipts.update',
         'destroy' => 'fiscal-registrar.receipts.destroy',
     ]);
+
+    Route::prefix('receipts/{receipt}')->group(function () {
+        Route::post('/register', 'ReceiptController@register')->name('fiscal-registrar.receipts.register');
+        Route::get('/report', 'ReceiptController@report')->name('fiscal-registrar.receipts.report');
+    });
 
 });
 

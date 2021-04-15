@@ -38,7 +38,7 @@ class ReceiptBuyCommand extends ReceiptRegisterCommand
             ->resolve($this->argument('id'))
             ->for($this->option('for'))
             ->as($this->option('as'))
-            ->register(Operation::Sell());
+            ->register(Operation::Buy());
 
         $this->info('Buy receipt successfully registered.');
     }

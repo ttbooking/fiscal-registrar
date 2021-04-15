@@ -38,7 +38,7 @@ class ReceiptSellRefundCommand extends ReceiptRegisterCommand
             ->resolve($this->argument('id'))
             ->for($this->option('for'))
             ->as($this->option('as'))
-            ->register(Operation::Sell());
+            ->register(Operation::SellRefund());
 
         $this->info('Sell refund receipt successfully registered.');
     }

@@ -60,11 +60,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Receipt State Synchronization Job Options
+    |--------------------------------------------------------------------------
+    */
+
+    'sync_job' => [
+        'schedule' => env('FR_SYNC_JOB_SCHEDULE', false),
+        'older_than_minutes' => env('FR_SYNC_JOB_THRESHOLD', 5),
+        'batch_size' => env('FR_SYNC_JOB_BATCH', 1),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Default Fiscal Registrar Connection Name
     |--------------------------------------------------------------------------
     */
 
-    'default' => env('FISCAL_REGISTRAR_CONNECTION', 'atol'),
+    'default' => env('FR_CONNECTION', 'atol'),
 
     'connections' => [
 

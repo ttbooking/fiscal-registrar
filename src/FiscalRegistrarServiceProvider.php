@@ -6,6 +6,7 @@ namespace TTBooking\FiscalRegistrar;
 
 use Closure;
 use Faker\Generator;
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
@@ -134,6 +135,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
     {
         $this->configure();
         $this->registerServices();
+        $this->registerSyncJobSchedule();
         $this->registerFakerProviders();
     }
 
@@ -154,6 +156,19 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
             fn () => isset($this->app['config']['fiscal-registrar.id_generator'])
                 ? Closure::fromCallable($this->app['config']['fiscal-registrar.id_generator']) : null
         );
+    }
+
+    protected function registerSyncJobSchedule(): void
+    {
+        $options = $this->app['config']['fiscal-registrar.sync_job'] ?? [];
+        if ($this->app->runningInConsole() && ($options['schedule'] ?? false)) {
+            $this->callAfterResolving(Schedule::class,
+                fn (Schedule $schedule) => $schedule->job(new Jobs\SyncReceipts(
+                    $options['older_than_minutes'] ?? 5,
+                    $options['batch_size'] ?? 1
+                ))->cron($options['schedule'])
+            );
+        }
     }
 
     protected function registerFakerProviders(): void

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace TTBooking\FiscalRegistrar;
+namespace TTBooking\FiscalRegistrar\Support;
 
 use Carbon\Carbon;
 use Closure, RuntimeException;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
-final class FiscalRegistrar
+final class Utils
 {
     /** @var null|Closure(Receipt):string */
     private static ?Closure $idGenerator = null;

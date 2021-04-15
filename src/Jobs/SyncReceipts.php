@@ -46,7 +46,7 @@ class SyncReceipts implements ShouldQueue, ShouldBeUnique
             ->where('state', Receipt::STATE_REGISTERED)
 
             // older than $olderThanMinutes minutes
-            ->where(Receipt::UPDATED_AT, '>', Carbon::now()->subMinutes($this->olderThanMinutes)->toDateTimeString())
+            ->where(Receipt::UPDATED_AT, '<', Carbon::now()->subMinutes($this->olderThanMinutes)->toDateTimeString())
 
             // ordered by oldest first
             ->oldest()->take($this->batchSize)

@@ -5,6 +5,11 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Console;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableCell;
+use Symfony\Component\Console\Helper\TableCellStyle;
+use Symfony\Component\Console\Helper\TableSeparator;
+use Symfony\Component\Console\Helper\TableStyle;
 use TTBooking\FiscalRegistrar\Contracts\ReceiptFactory;
 
 class ReceiptShowCommand extends Command
@@ -33,13 +38,24 @@ class ReceiptShowCommand extends Command
     {
         $receipt = $receipt->resolve($this->argument('id'))->getModel();
 
+        $rightAligned = (new TableStyle)->setPadType(STR_PAD_LEFT);
+        //$separatorStyle = (new TableStyle)->setHorizontalBorderChars('-');
+
         foreach ($receipt->data->items as $item) {
-            $this->table([$item->name, ''], [
-                ['', sprintf('%d x %.2f', $item->quantity, $item->price)],
-                ['стоимость', sprintf('%.2f', $item->sum)],
-                ['предмет расчета', $item->payment_object->getDescription()],
-                ['способ расчета', $item->payment_method->getDescription()],
-            ], 'compact');
+            (new Table($this->output))
+                ->setHeaders([$item->name])
+                ->setRows([
+                    ['', sprintf('%d x %.2f', $item->quantity, $item->price)],
+                    ['стоимость', sprintf('%.2f', $item->sum)],
+                    ['предмет расчета', $item->payment_object->getDescription()],
+                    ['способ расчета', $item->payment_method->getDescription()],
+                    [new TableCell(str_repeat('-', 50), ['colspan' => 2])],
+                    //new TableSeparator(['style' => $separatorStyle]),
+                ])
+                ->setStyle('compact')
+                ->setColumnWidths([30, 20])
+                ->setColumnStyle(1, $rightAligned)
+                ->render();
         }
     }
 }

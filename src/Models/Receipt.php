@@ -62,9 +62,15 @@ class Receipt extends Model implements StatefulFiscalRegistrar
     ): string {
         $this->checkState(self::STATE_CREATED);
 
-        return FiscalRegistrar::connection($this->getAttribute('connection'))->register(
-            $operation ?? $this->operation, $externalId ?? $this->external_id, $data ?? $this->data
-        );
+        $operation ??= $this->operation;
+        $externalId ??= $this->external_id;
+        $data ??= $this->data;
+
+        if (! isset($operation, $externalId, $data)) {
+            throw new StateException('Insufficient parameters for operation.');
+        }
+
+        return FiscalRegistrar::connection($this->getAttribute('connection'))->register($operation, $externalId, $data);
     }
 
     public function report(string $id = null, bool $force = false): ?DTO\Result
@@ -72,7 +78,13 @@ class Receipt extends Model implements StatefulFiscalRegistrar
         $this->checkState(self::STATE_REGISTERED);
 
         if ($force || $this->state < self::STATE_PROCESSED) {
-            return FiscalRegistrar::connection($this->getAttribute('connection'))->report($id ?? $this->internal_id);
+            $id ??= $this->internal_id;
+
+            if (! isset($id)) {
+                throw new StateException('Required parameter missing.');
+            }
+
+            return FiscalRegistrar::connection($this->getAttribute('connection'))->report($id);
         }
 
         return $this->result;

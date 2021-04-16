@@ -40,15 +40,15 @@ class ReceiptFactory extends Factory
             'state' => Receipt::STATE_CREATED,
             'connection' => $this->faker->randomElement($connections),
             'operation' => $this->faker->randomElement(Operation::values()),
-            'external_id' => $this->faker->uuid,
+            'external_id' => $this->faker->uuid(),
             'data' => fn () => DTO\Receipt::new(
 
-                DTO\Receipt\Client::new(config('fiscal-registrar.test_email') ?? $this->faker->safeEmail),
+                DTO\Receipt\Client::new(config('fiscal-registrar.test_email') ?? $this->faker->safeEmail()),
 
                 null, null, null,
 
                 array_map(fn () => [
-                    'name' => $this->faker->unique()->commodity,
+                    'name' => $this->faker->unique()->commodity(),
                     'price' => $price = $this->faker->numberBetween(1, 10000),
                     'quantity' => $quantity = $this->faker->numberBetween(1, 10),
                     'sum' => $price * $quantity,
@@ -69,7 +69,7 @@ class ReceiptFactory extends Factory
     {
         return $this->state(fn () => [
             'state' => Receipt::STATE_REGISTERED,
-            'internal_id' => $this->faker->uuid,
+            'internal_id' => $this->faker->uuid(),
         ]);
     }
 

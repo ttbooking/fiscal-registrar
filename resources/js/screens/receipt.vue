@@ -17,7 +17,7 @@
             loadReceipt(connection, id) {
                 this.ready = false;
 
-                this.$http.get(FiscalRegistrar.basePath + '/api/connection/' + connection + '/report/' + id)
+                this.$http.get(FiscalRegistrar.basePath + '/api/v1/connection/' + connection + '/report/' + id)
                     .then(response => {
                         this.receipt = response.data;
 

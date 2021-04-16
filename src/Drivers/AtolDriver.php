@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TTBooking\FiscalRegistrar\Drivers\Atol;
+namespace TTBooking\FiscalRegistrar\Drivers;
 
 use Closure;
 use Illuminate\Contracts\Cache\Repository;
@@ -31,7 +31,7 @@ class AtolDriver extends Driver implements SupportsCallbacks
     protected Repository $cache;
 
     public function __construct(
-        ApiFactory $factory,
+        AtolApiFactory $factory,
         Repository $cache,
         UrlGenerator $urlGenerator,
         array $config = [],

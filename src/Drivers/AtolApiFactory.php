@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TTBooking\FiscalRegistrar\Drivers\Atol;
+namespace TTBooking\FiscalRegistrar\Drivers;
 
 use GuzzleHttp\Client;
 use JMS\Serializer\Handler\HandlerRegistry;
@@ -15,7 +15,7 @@ use Lamoda\AtolClient\Serializer\Handler\ExtendedDateHandler;
 use Lamoda\AtolClient\V4\AtolApi;
 use Symfony\Component\Validator\Validation;
 
-final class ApiFactory
+final class AtolApiFactory
 {
     /** @var array<string, AtolApi> */
     private array $instances = [];

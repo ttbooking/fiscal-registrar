@@ -6,7 +6,7 @@ namespace TTBooking\FiscalRegistrar;
 
 use Closure;
 use Illuminate\Contracts\Events\Dispatcher;
-use TTBooking\FiscalRegistrar\Drivers\Atol\AtolDriver;
+use TTBooking\FiscalRegistrar\Drivers\AtolDriver;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Enums\Operation;

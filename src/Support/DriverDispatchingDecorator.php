@@ -14,7 +14,10 @@ use TTBooking\FiscalRegistrar\Events;
 use TTBooking\FiscalRegistrar\Exceptions;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
-class DriverDispatchingDecorator implements
+/**
+ * @method Contracts\FiscalRegistrar getDecoratedInstance
+ */
+class DriverDispatchingDecorator extends Decorator implements
     Contracts\ConnectionAware,
     Contracts\FiscalRegistrar,
     Contracts\SupportsCallbacks,
@@ -22,20 +25,18 @@ class DriverDispatchingDecorator implements
 {
     use Concerns\HasEvents;
 
-    protected Contracts\FiscalRegistrar $fiscalRegistrar;
-
     protected Receipt $receipt;
 
     public function __construct(Contracts\FiscalRegistrar $fiscalRegistrar, Receipt $receipt)
     {
-        $this->fiscalRegistrar = $fiscalRegistrar;
+        parent::__construct($fiscalRegistrar);
         $this->receipt = $receipt;
     }
 
     public function getConnectionName(): string
     {
-        return $this->fiscalRegistrar instanceof Contracts\ConnectionAware
-            ? $this->fiscalRegistrar->getConnectionName() : 'unknown';
+        return self::instanceOf($this->getDecoratedInstance(), Contracts\ConnectionAware::class)
+            ? $this->getDecoratedInstance()->getConnectionName() : 'unknown';
     }
 
     /**
@@ -52,7 +53,7 @@ class DriverDispatchingDecorator implements
 
         $this->event(new Events\Registering($receipt));
 
-        $receipt->internal_id = $this->fiscalRegistrar->register($operation, $externalId, $data);
+        $receipt->internal_id = $this->getDecoratedInstance()->register($operation, $externalId, $data);
         $receipt->state = Receipt::STATE_REGISTERED;
         $receipt->save();
 
@@ -63,7 +64,7 @@ class DriverDispatchingDecorator implements
 
     public function report(string $id): ?DTO\Result
     {
-        if ($result = $this->fiscalRegistrar->report($id)) {
+        if ($result = $this->getDecoratedInstance()->report($id)) {
             $this->event(new Events\Processed($this->updateReceipt($result)));
         }
 
@@ -72,11 +73,11 @@ class DriverDispatchingDecorator implements
 
     public function processCallback($payload, Closure $handler = null): void
     {
-        if (! $this->fiscalRegistrar instanceof Contracts\SupportsCallbacks) {
+        if (! self::instanceOf($this->getDecoratedInstance(), Contracts\SupportsCallbacks::class)) {
             return;
         }
 
-        $this->fiscalRegistrar->processCallback($payload, function (DTO\Result $result) use ($handler) {
+        $this->getDecoratedInstance()->processCallback($payload, function (DTO\Result $result) use ($handler) {
             $handler && $handler($result);
             $this->event(new Events\Processed($this->updateReceipt($result)));
         });

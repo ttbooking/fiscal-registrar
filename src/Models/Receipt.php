@@ -60,7 +60,9 @@ class Receipt extends Model implements StatefulFiscalRegistrar
         string $externalId = null,
         DTO\Receipt $data = null
     ): string {
-        $this->checkState(self::STATE_CREATED);
+        if ($this->state !== self::STATE_CREATED) {
+            throw new StateException('Receipt has already been registered.');
+        }
 
         $operation ??= $this->operation;
         $externalId ??= $this->external_id;
@@ -75,7 +77,9 @@ class Receipt extends Model implements StatefulFiscalRegistrar
 
     public function report(string $id = null, bool $force = false): ?DTO\Result
     {
-        $this->checkState(self::STATE_REGISTERED);
+        if ($this->state === self::STATE_CREATED) {
+            throw new StateException('Receipt is unregistered.');
+        }
 
         if ($force || $this->state < self::STATE_PROCESSED) {
             $id ??= $this->internal_id;
@@ -93,18 +97,5 @@ class Receipt extends Model implements StatefulFiscalRegistrar
     protected static function newFactory(): ReceiptFactory
     {
         return ReceiptFactory::new();
-    }
-
-    /**
-     * @param  int  $state
-     * @return void
-     *
-     * @throws StateException
-     */
-    public function checkState(int $state): void
-    {
-        if ($this->state > $state) {
-            throw new StateException('Receipt has invalid state for operation.');
-        }
     }
 }

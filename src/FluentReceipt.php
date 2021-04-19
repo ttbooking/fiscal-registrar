@@ -30,7 +30,9 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
 
     public function for(string $connection = null): self
     {
-        $this->model->checkState(Receipt::STATE_CREATED);
+        if ($this->model->state !== Receipt::STATE_CREATED) {
+            throw new Exceptions\StateException('Receipt has invalid state for operation.');
+        }
 
         if (! is_null($connection)) {
             $this->model->connection = $connection;
@@ -41,7 +43,9 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
 
     public function do(Operation $operation = null): self
     {
-        $this->model->checkState(Receipt::STATE_CREATED);
+        if ($this->model->state !== Receipt::STATE_CREATED) {
+            throw new Exceptions\StateException('Receipt has invalid state for operation.');
+        }
 
         if (! is_null($operation)) {
             $this->model->operation = $operation;
@@ -52,7 +56,9 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
 
     public function as(string $id = null): self
     {
-        $this->model->checkState(Receipt::STATE_CREATED);
+        if ($this->model->state !== Receipt::STATE_CREATED) {
+            throw new Exceptions\StateException('Receipt has invalid state for operation.');
+        }
 
         if (! is_null($id)) {
             $this->model->external_id = $id;
@@ -63,7 +69,9 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
 
     public function with(string $key, $value): self
     {
-        $this->model->checkState(Receipt::STATE_CREATED);
+        if ($this->model->state !== Receipt::STATE_CREATED) {
+            throw new Exceptions\StateException('Receipt has invalid state for operation.');
+        }
 
         $this->model->setAttribute($key, $value);
 

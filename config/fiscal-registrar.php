@@ -89,6 +89,7 @@ return [
             'email' => 'info@atol.ru',
             'payment_address' => 'https://v4.online.atol.ru',
             'group_code' => 'v4-online-atol-ru_4179',
+            'url_generator' => TTBooking\FiscalRegistrar\Support\PlatformaOfdReceiptUrlGenerator::class,
         ],
 
         'proxy' => [

@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Support;
 
 use Illuminate\Contracts\Routing\UrlGenerator;
+use TTBooking\FiscalRegistrar\Concerns\UtilizesReceiptUrlGenerator;
 use TTBooking\FiscalRegistrar\Contracts;
 
-abstract class Driver implements Contracts\ConnectionAware, Contracts\FiscalRegistrar
+abstract class Driver implements Contracts\ConnectionAware, Contracts\FiscalRegistrar, Contracts\GeneratesReceiptUrls
 {
+    use UtilizesReceiptUrlGenerator;
+
     protected UrlGenerator $urlGenerator;
 
     protected array $config;

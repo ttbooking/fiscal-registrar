@@ -199,7 +199,7 @@ class AtolDriver extends Driver implements SupportsCallbacks
             throw new Exceptions\DriverException($error->getText(), $error->getCode());
         }
 
-        return Result::new(
+        $result = Result::new(
             $reportResponse->getUuid(),
             $reportResponse->getTimestamp(),
             $reportResponse->getStatus()->getValue(),
@@ -222,5 +222,9 @@ class AtolDriver extends Driver implements SupportsCallbacks
                 'callback_url' => $reportResponse->getCallbackUrl(),
             ]
         );
+
+        $result->ofd_receipt_url = $this->getReceiptUrl($result);
+
+        return $result;
     }
 }

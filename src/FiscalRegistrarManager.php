@@ -63,7 +63,7 @@ class FiscalRegistrarManager extends Support\Manager implements
     protected function createAtolDriver(array $config, string $connection): Contracts\FiscalRegistrar
     {
         return $this->configureInstance(
-            $this->container->make(Drivers\AtolDriver::class, compact('config', 'connection'))
+            $this->container->make(Drivers\AtolDriver::class, compact('config', 'connection')), $config
         );
     }
 
@@ -77,21 +77,28 @@ class FiscalRegistrarManager extends Support\Manager implements
     protected function createProxyDriver(array $config, string $connection): Contracts\FiscalRegistrar
     {
         return $this->configureInstance(
-            $this->container->make(Drivers\ProxyDriver::class, compact('config', 'connection'))
+            $this->container->make(Drivers\ProxyDriver::class, compact('config', 'connection')), $config
         );
     }
 
     /**
      * @param  Contracts\FiscalRegistrar  $fiscalRegistrar
+     * @param  array  $config
      * @return Contracts\FiscalRegistrar
      */
-    protected function configureInstance(Contracts\FiscalRegistrar $fiscalRegistrar): Contracts\FiscalRegistrar
-    {
+    protected function configureInstance(
+        Contracts\FiscalRegistrar $fiscalRegistrar,
+        array $config
+    ): Contracts\FiscalRegistrar {
         if (! $fiscalRegistrar instanceof Contracts\DispatchesEvents) {
             $fiscalRegistrar = $this->decorateInstance($fiscalRegistrar);
         }
 
         $this->setEventDispatcher($fiscalRegistrar);
+
+        if ($fiscalRegistrar instanceof Contracts\GeneratesReceiptUrls && isset($config['url_generator'])) {
+            $fiscalRegistrar->setUrlGenerator($this->container->make($config['url_generator']));
+        }
 
         return $fiscalRegistrar;
     }

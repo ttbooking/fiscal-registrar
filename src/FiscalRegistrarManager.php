@@ -90,15 +90,15 @@ class FiscalRegistrarManager extends Support\Manager implements
         Contracts\FiscalRegistrar $fiscalRegistrar,
         array $config
     ): Contracts\FiscalRegistrar {
+        if ($fiscalRegistrar instanceof Contracts\GeneratesReceiptUrls && isset($config['url_generator'])) {
+            $fiscalRegistrar->setUrlGenerator($this->container->make($config['url_generator']));
+        }
+
         if (! $fiscalRegistrar instanceof Contracts\DispatchesEvents) {
             $fiscalRegistrar = $this->decorateInstance($fiscalRegistrar);
         }
 
         $this->setEventDispatcher($fiscalRegistrar);
-
-        if ($fiscalRegistrar instanceof Contracts\GeneratesReceiptUrls && isset($config['url_generator'])) {
-            $fiscalRegistrar->setUrlGenerator($this->container->make($config['url_generator']));
-        }
 
         return $fiscalRegistrar;
     }

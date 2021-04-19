@@ -46,23 +46,39 @@ class ReceiptShowCommand extends Command
             ->setVerticalBorderChars('║', ' ')
             ->setCrossingChars('─', '╔', '═', '╗', '╢', '╝', '═', '╚', '╟', '╠', '═', '╣');
 
+        $operation = $receipt->operation ?? null;
+        $sno = $receipt->data->company->sno ?? null;
+        $companyEmail = $receipt->data->company->email ?? '-';
+
+        $table->setRows([
+            [isset($operation) ? $operation->getDescription() : '-', $receipt->result->payload->receipt_datetime->format('d.m.Y H:i')],
+            [static::trans('result.shift_number'), $receipt->result->payload->shift_number],
+            [static::trans('receipt.company.sno'), isset($sno) ? $sno->getDescription('short') : '-'],
+            [static::trans('receipt.client.phone_or_email'), $receipt->data->client->email ?? $receipt->data->client->phone],
+            [static::trans('receipt.company.email'), $companyEmail],
+            [static::trans('result.device_code'), $receipt->result->extra->device_code],
+            [static::trans('result.online_attribute'), static::trans('shared.yes')],
+            new TableSeparator,
+        ]);
+
         foreach ($receipt->data->items as $item) {
             $table->addRows([
-                [new TableCell("<info>$item->name</info>", ['colspan' => 2])],
+                [new TableCell('<info>'.$item->name.'</info>', ['colspan' => 2])],
                 ['', sprintf('%d x %.2f', $item->quantity, $item->price)],
-                [static::trans('items.sum'), sprintf('%.2f', $item->sum)],
-                [static::trans('items.payment_object'), $item->payment_object->getDescription()],
-                [static::trans('items.payment_method'), $item->payment_method->getDescription()],
+                [static::trans('receipt.items.sum'), sprintf('%.2f', $item->sum)],
+                [static::trans('receipt.items.payment_object'), $item->payment_object->getDescription()],
+                [static::trans('receipt.items.payment_method'), $item->payment_method->getDescription()],
                 new TableSeparator,
             ]);
         }
 
         $table
             ->setHeaders([new TableCell(
-                '<comment>'.Str::upper(static::trans('__self')).'</comment>',
+                '<comment>'.Str::upper(static::trans('receipt.title'))
+                .' '.static::trans('shared.#').$receipt->result->payload->fiscal_receipt_number.'</comment>',
                 ['colspan' => 2, 'style' => new TableCellStyle(['align' => 'center'])]
             )])
-            ->addRow([static::trans('total'), sprintf('%.2f', $receipt->data->total)])
+            ->addRow([static::trans('receipt.total'), sprintf('%.2f', $receipt->data->total)])
             ->setStyle($style)
             ->setColumnWidths([30, 20])
             ->setColumnStyle(1, (new TableStyle)->setPadType(STR_PAD_LEFT))
@@ -71,6 +87,6 @@ class ReceiptShowCommand extends Command
 
     protected static function trans(string $key): string
     {
-        return Lang::get('fiscal-registrar::main.receipt.'.$key);
+        return Lang::get('fiscal-registrar::main.'.$key);
     }
 }

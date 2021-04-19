@@ -6,7 +6,7 @@ namespace TTBooking\FiscalRegistrar;
 
 use Closure;
 use Illuminate\Contracts\Events\Dispatcher;
-use TTBooking\FiscalRegistrar\Drivers\AtolDriver;
+use TTBooking\FiscalRegistrar\Drivers;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Enums\Operation;
@@ -58,12 +58,26 @@ class FiscalRegistrarManager extends Support\Manager implements
      *
      * @param  array  $config
      * @param  string  $connection
-     * @return AtolDriver
+     * @return Drivers\AtolDriver
      */
     protected function createAtolDriver(array $config, string $connection): Contracts\FiscalRegistrar
     {
         return $this->configureInstance(
-            $this->container->make(AtolDriver::class, compact('config', 'connection'))
+            $this->container->make(Drivers\AtolDriver::class, compact('config', 'connection'))
+        );
+    }
+
+    /**
+     * Create an instance of the Proxy fiscal registrar Driver.
+     *
+     * @param  array  $config
+     * @param  string  $connection
+     * @return Drivers\ProxyDriver
+     */
+    protected function createProxyDriver(array $config, string $connection): Contracts\FiscalRegistrar
+    {
+        return $this->configureInstance(
+            $this->container->make(Drivers\ProxyDriver::class, compact('config', 'connection'))
         );
     }
 

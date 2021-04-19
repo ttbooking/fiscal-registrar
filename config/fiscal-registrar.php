@@ -91,6 +91,13 @@ return [
             'group_code' => 'v4-online-atol-ru_4179',
         ],
 
+        'proxy' => [
+            'test' => true,
+            'url' => 'http://localhost/fiscal-registrar/api/v1/connection/atol',
+            'login' => '',
+            'password' => '',
+        ],
+
     ],
 
 ];

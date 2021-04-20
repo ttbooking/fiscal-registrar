@@ -15,7 +15,7 @@
         }
     ],
     "require": {
-        "php": "^7.4 || ^8.0",
+        "php": "^8.0",
         "ext-json": "*",
         "illuminate/broadcasting": "^8.23",
         "illuminate/console": "^8.23",
@@ -25,7 +25,7 @@
         "illuminate/support": "^8.23",
         "illuminate/validation": "^8.23",
         "myclabs/php-enum": "^1.8",
-        "spatie/data-transfer-object": "^2.8",
+        "spatie/data-transfer-object": "^3.0",
         "ttbooking/atol-client": "^1.4"
     },
     "require-dev": {

@@ -8,21 +8,15 @@ use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 
 final class AdditionalUserProps extends DataTransferObject
 {
-    // 1085
-    public string $name;
+    public function __construct(
 
-    // 1086
-    public string $value;
+        // 1085
+        public string $name,
 
-    /**
-     * AdditionalUserProps constructor.
-     *
-     * @param  string  $name
-     * @param  string  $value
-     * @return self
-     */
-    public static function new(string $name, string $value): self
-    {
-        return new self(compact('name', 'value'));
+        // 1086
+        public string $value,
+
+    ) {
+        parent::__construct(...func_get_args());
     }
 }

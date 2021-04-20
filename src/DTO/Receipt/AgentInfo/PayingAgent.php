@@ -8,22 +8,16 @@ use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 
 final class PayingAgent extends DataTransferObject
 {
-    // 1044
-    public ?string $operation;
+    public function __construct(
 
-    // 1073
-    /** @var string[]|null */
-    public ?array $phones;
+        // 1044
+        public ?string $operation = null,
 
-    /**
-     * PayingAgent constructor.
-     *
-     * @param  string|null  $operation
-     * @param  string[]|null  $phones
-     * @return self
-     */
-    public static function new(string $operation = null, array $phones = null): self
-    {
-        return new self(compact('operation', 'phones'));
+        // 1073
+        /** @var string[]|null */
+        public ?array $phones = null,
+
+    ) {
+        parent::__construct(...func_get_args());
     }
 }

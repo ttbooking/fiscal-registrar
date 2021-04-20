@@ -4,54 +4,28 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\DTO;
 
-use Carbon\Carbon;
 use DateTimeInterface;
+use Spatie\DataTransferObject\Attributes\CastWith;
+use TTBooking\FiscalRegistrar\DTO\Casters\ResultExtraCaster;
 
 final class Result extends DataTransferObject
 {
-    public string $internal_id;
+    public function __construct(
 
-    public DateTimeInterface $timestamp;
+        public string $internal_id,
 
-    public string $status;
+        public DateTimeInterface $timestamp,
 
-    public ?string $ofd_receipt_url;
+        public string $status,
 
-    public ?Result\Payload $payload;
+        public ?string $ofd_receipt_url = null,
 
-    public ?object $extra;
+        public ?Result\Payload $payload = null,
 
-    /**
-     * Result constructor.
-     *
-     * @param  string  $internal_id
-     * @param  DateTimeInterface  $timestamp
-     * @param  string  $status
-     * @param  string|null  $ofd_receipt_url
-     * @param  Result\Payload|null  $payload
-     * @param  object|null  $extra
-     * @return self
-     */
-    public static function new(
-        string $internal_id,
-        DateTimeInterface $timestamp,
-        string $status,
-        string $ofd_receipt_url = null,
-        Result\Payload $payload = null,
-        object $extra = null
-    ): self {
-        return new self(
-            compact('internal_id', 'timestamp', 'status', 'ofd_receipt_url', 'payload', 'extra')
-        );
-    }
+        #[CastWith(ResultExtraCaster::class)]
+        public ?object $extra = null,
 
-    protected static function transformTimestamp($timestamp): DateTimeInterface
-    {
-        return Carbon::parse($timestamp)->settings(['toJsonFormat' => 'c']);
-    }
-
-    protected static function transformExtra($extra): ?object
-    {
-        return isset($extra) ? (object) $extra : null;
+    ) {
+        parent::__construct(...func_get_args());
     }
 }

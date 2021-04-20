@@ -4,73 +4,41 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\DTO\Result;
 
-use Carbon\Carbon;
 use DateTimeInterface;
 use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 
 final class Payload extends DataTransferObject
 {
-    // 1042
-    public int $fiscal_receipt_number;
+    public function __construct(
 
-    // 1038
-    public int $shift_number;
+        // 1042
+        public int $fiscal_receipt_number,
 
-    // 1012
-    public DateTimeInterface $receipt_datetime;
+        // 1038
+        public int $shift_number,
 
-    // 1020
-    /** @var float|int */
-    public float $total;
+        // 1012
+        public DateTimeInterface $receipt_datetime,
 
-    // 1041
-    public string $fn_number;
+        // 1020
+        public float|int $total,
 
-    // 1037
-    public string $ecr_registration_number;
+        // 1041
+        public string $fn_number,
 
-    // 1040
-    public int $fiscal_document_number;
+        // 1037
+        public string $ecr_registration_number,
 
-    // 1077
-    public int $fiscal_document_attribute;
+        // 1040
+        public int $fiscal_document_number,
 
-    // 1060
-    public string $fns_site;
+        // 1077
+        public int $fiscal_document_attribute,
 
-    /**
-     * Payload constructor.
-     *
-     * @param  int  $fiscal_receipt_number
-     * @param  int  $shift_number
-     * @param  DateTimeInterface  $receipt_datetime
-     * @param  float|int  $total
-     * @param  string  $fn_number
-     * @param  string  $ecr_registration_number
-     * @param  int  $fiscal_document_number
-     * @param  int  $fiscal_document_attribute
-     * @param  string  $fns_site
-     * @return self
-     */
-    public static function new(
-        int $fiscal_receipt_number,
-        int $shift_number,
-        DateTimeInterface $receipt_datetime,
-        float $total,
-        string $fn_number,
-        string $ecr_registration_number,
-        int $fiscal_document_number,
-        int $fiscal_document_attribute,
-        string $fns_site = 'www.nalog.ru'
-    ): self {
-        return new self(compact(
-            'fiscal_receipt_number', 'shift_number', 'receipt_datetime', 'total', 'fn_number',
-            'ecr_registration_number', 'fiscal_document_number', 'fiscal_document_attribute', 'fns_site'
-        ));
-    }
+        // 1060
+        public string $fns_site = 'www.nalog.ru',
 
-    protected static function transformReceiptDatetime($receiptDatetime): DateTimeInterface
-    {
-        return Carbon::parse($receiptDatetime)->settings(['toJsonFormat' => 'c']);
+    ) {
+        parent::__construct(...func_get_args());
     }
 }

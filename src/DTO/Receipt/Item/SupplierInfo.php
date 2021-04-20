@@ -8,26 +8,19 @@ use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 
 final class SupplierInfo extends DataTransferObject
 {
-    // 1171
-    /** @var string[]|null */
-    public ?array $phones;
+    public function __construct(
 
-    // 1225
-    public ?string $name;
+        // 1171
+        /** @var string[]|null */
+        public ?array $phones = null,
 
-    // 1226
-    public ?string $inn;
+        // 1225
+        public ?string $name = null,
 
-    /**
-     * SupplierInfo constructor.
-     *
-     * @param  string[]|null  $phones
-     * @param  string|null  $name
-     * @param  string|null  $inn
-     * @return self
-     */
-    public static function new(array $phones = null, string $name = null, string $inn = null): self
-    {
-        return new self(compact('phones', 'name', 'inn'));
+        // 1226
+        public ?string $inn = null,
+
+    ) {
+        parent::__construct(...func_get_args());
     }
 }

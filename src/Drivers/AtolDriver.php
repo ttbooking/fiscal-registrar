@@ -199,12 +199,12 @@ class AtolDriver extends Driver implements SupportsCallbacks
             throw new Exceptions\DriverException($error->getText(), $error->getCode());
         }
 
-        $result = Result::new(
+        $result = new Result(
             $reportResponse->getUuid(),
             $reportResponse->getTimestamp(),
             $reportResponse->getStatus()->getValue(),
             null, // $reportResponse->getPayload()->getOfdReceiptUrl(),
-            Result\Payload::new(
+            new Result\Payload(
                 $reportResponse->getPayload()->getFiscalReceiptNumber(),
                 $reportResponse->getPayload()->getShiftNumber(),
                 $reportResponse->getPayload()->getReceiptDatetime(),

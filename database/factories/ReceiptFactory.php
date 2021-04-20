@@ -41,13 +41,11 @@ class ReceiptFactory extends Factory
             'connection' => $this->faker->randomElement($connections),
             'operation' => $this->faker->randomElement(Operation::values()),
             'external_id' => $this->faker->uuid(),
-            'data' => fn () => DTO\Receipt::new(
+            'data' => fn () => new DTO\Receipt(
 
-                DTO\Receipt\Client::new(config('fiscal-registrar.test_email') ?? $this->faker->safeEmail()),
+                client: new DTO\Receipt\Client(config('fiscal-registrar.test_email') ?? $this->faker->safeEmail()),
 
-                null, null, null,
-
-                array_map(fn () => [
+                items: array_map(fn () => [
                     'name' => $this->faker->unique()->commodity(),
                     'price' => $price = $this->faker->numberBetween(1, 10000),
                     'quantity' => $quantity = $this->faker->numberBetween(1, 10),
@@ -55,7 +53,7 @@ class ReceiptFactory extends Factory
                     'measurement_unit' => $this->faker->optional()->randomElement(['шт.', 'кг']),
                     'payment_method' => PaymentMethod::FullPrepayment(),
                     'payment_object' => PaymentObject::Commodity(),
-                    'vat' => DTO\Receipt\Item\VAT::new(VATType::VAT20()),
+                    'vat' => new DTO\Receipt\Item\VAT(VATType::VAT20()),
                 ], range(1, $this->faker->numberBetween(1, 10))),
 
             ),

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\DTO;
 
+use Illuminate\Support\Collection;
+
 final class Receipt extends DataTransferObject
 {
     public Receipt\Client $client;
@@ -34,4 +36,16 @@ final class Receipt extends DataTransferObject
 
     // 1084
     public ?Receipt\AdditionalUserProps $additional_user_props = null;
+
+    protected static function transformTotal($total, array $args): float
+    {
+        return $total ?? collect($args['items'] ?? [])->sum('sum');
+    }
+
+    protected static function transformPayments($payments, array $args): array
+    {
+        return collect($payments)->whenEmpty(fn (Collection $payments) =>
+            $payments->add(new Receipt\Payment(sum: self::transformTotal($args['total'] ?? null, $args)))
+        )->all();
+    }
 }

@@ -10,22 +10,16 @@ use TTBooking\FiscalRegistrar\DTO\Casters\ResultExtraCaster;
 
 final class Result extends DataTransferObject
 {
-    public function __construct(
+    public string $internal_id;
 
-        public string $internal_id,
+    public DateTimeInterface $timestamp;
 
-        public DateTimeInterface $timestamp,
+    public string $status;
 
-        public string $status,
+    public ?string $ofd_receipt_url = null;
 
-        public ?string $ofd_receipt_url = null,
+    public ?Result\Payload $payload = null;
 
-        public ?Result\Payload $payload = null,
-
-        #[CastWith(ResultExtraCaster::class)]
-        public ?object $extra = null,
-
-    ) {
-        parent::__construct(...func_get_args());
-    }
+    #[CastWith(ResultExtraCaster::class)]
+    public ?object $extra = null;
 }

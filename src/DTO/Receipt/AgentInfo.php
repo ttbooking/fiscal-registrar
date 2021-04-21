@@ -11,19 +11,13 @@ use TTBooking\FiscalRegistrar\Enums\AgentType;
 
 final class AgentInfo extends DataTransferObject
 {
-    public function __construct(
+    // 1057 / 1222
+    #[CastWith(AgentTypeCaster::class)]
+    public AgentType $type;
 
-        // 1057 / 1222
-        #[CastWith(AgentTypeCaster::class)]
-        public AgentType $type,
+    public ?AgentInfo\PayingAgent $paying_agent = null;
 
-        public ?AgentInfo\PayingAgent $paying_agent = null,
+    public ?AgentInfo\ReceivePaymentsOperator $receive_payments_operator = null;
 
-        public ?AgentInfo\ReceivePaymentsOperator $receive_payments_operator = null,
-
-        public ?AgentInfo\MoneyTransferOperator $money_transfer_operator = null,
-
-    ) {
-        parent::__construct(...func_get_args());
-    }
+    public ?AgentInfo\MoneyTransferOperator $money_transfer_operator = null;
 }

@@ -11,22 +11,16 @@ use TTBooking\FiscalRegistrar\Enums\SNO;
 
 final class Company extends DataTransferObject
 {
-    public function __construct(
+    // 1117
+    public string $email;
 
-        // 1117
-        public string $email,
+    // 1018
+    public string $inn;
 
-        // 1018
-        public string $inn,
+    // 1187
+    public string $payment_address;
 
-        // 1187
-        public string $payment_address,
-
-        // 1055
-        #[CastWith(SNOCaster::class)]
-        public ?SNO $sno = null,
-
-    ) {
-        parent::__construct(...func_get_args());
-    }
+    // 1055
+    #[CastWith(SNOCaster::class)]
+    public ?SNO $sno = null;
 }

@@ -200,27 +200,27 @@ class AtolDriver extends Driver implements SupportsCallbacks
         }
 
         $result = new Result(
-            $reportResponse->getUuid(),
-            $reportResponse->getTimestamp(),
-            $reportResponse->getStatus()->getValue(),
-            null, // $reportResponse->getPayload()->getOfdReceiptUrl(),
-            new Result\Payload(
-                $reportResponse->getPayload()->getFiscalReceiptNumber(),
-                $reportResponse->getPayload()->getShiftNumber(),
-                $reportResponse->getPayload()->getReceiptDatetime(),
-                $reportResponse->getPayload()->getTotal(),
-                $reportResponse->getPayload()->getFnNumber(),
-                $reportResponse->getPayload()->getEcrRegistrationNumber(),
-                $reportResponse->getPayload()->getFiscalDocumentNumber(),
-                $reportResponse->getPayload()->getFiscalDocumentAttribute(),
-                $reportResponse->getPayload()->getFnsSite()
+            internal_id: $reportResponse->getUuid(),
+            timestamp: $reportResponse->getTimestamp(),
+            status: $reportResponse->getStatus()->getValue(),
+            ofd_receipt_url: null, // $reportResponse->getPayload()->getOfdReceiptUrl(),
+            payload: new Result\Payload(
+                fiscal_receipt_number: $reportResponse->getPayload()->getFiscalReceiptNumber(),
+                shift_number: $reportResponse->getPayload()->getShiftNumber(),
+                receipt_datetime: $reportResponse->getPayload()->getReceiptDatetime(),
+                total: $reportResponse->getPayload()->getTotal(),
+                fn_number: $reportResponse->getPayload()->getFnNumber(),
+                ecr_registration_number: $reportResponse->getPayload()->getEcrRegistrationNumber(),
+                fiscal_document_number: $reportResponse->getPayload()->getFiscalDocumentNumber(),
+                fiscal_document_attribute: $reportResponse->getPayload()->getFiscalDocumentAttribute(),
+                fns_site: $reportResponse->getPayload()->getFnsSite(),
             ),
-            (object) [
+            extra: (object) [
                 'group_code' => $reportResponse->getGroupCode(),
                 'daemon_code' => $reportResponse->getDaemonCode(),
                 'device_code' => $reportResponse->getDeviceCode(),
                 'callback_url' => $reportResponse->getCallbackUrl(),
-            ]
+            ],
         );
 
         $result->ofd_receipt_url = $this->getReceiptUrl($result);

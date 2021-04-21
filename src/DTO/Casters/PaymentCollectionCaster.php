@@ -13,7 +13,9 @@ class PaymentCollectionCaster implements Caster
     public function cast(mixed $value): ?PaymentCollection
     {
         return isset($value)
-            ? new PaymentCollection(array_map(fn (array $data) => new Payment(...$data), $value))
+            ? new PaymentCollection(
+                array_map(fn (Payment|array $data) => $data instanceof Payment ? $data : new Payment(...$data), $value)
+            )
             : null;
     }
 }

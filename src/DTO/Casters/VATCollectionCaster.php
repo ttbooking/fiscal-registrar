@@ -13,7 +13,9 @@ class VATCollectionCaster implements Caster
     public function cast(mixed $value): ?VATCollection
     {
         return isset($value)
-            ? new VATCollection(array_map(fn (array $data) => new VAT(...$data), $value))
+            ? new VATCollection(
+                array_map(fn (VAT|array $data) => $data instanceof VAT ? $data : new VAT(...$data), $value)
+            )
             : null;
     }
 }

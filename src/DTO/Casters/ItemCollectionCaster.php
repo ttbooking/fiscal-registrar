@@ -13,7 +13,9 @@ class ItemCollectionCaster implements Caster
     public function cast(mixed $value): ?ItemCollection
     {
         return isset($value)
-            ? new ItemCollection(array_map(fn (array $data) => new Item(...$data), $value))
+            ? new ItemCollection(
+                array_map(fn (Item|array $data) => $data instanceof Item ? $data : new Item(...$data), $value)
+            )
             : null;
     }
 }

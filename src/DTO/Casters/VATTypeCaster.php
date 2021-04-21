@@ -11,6 +11,6 @@ class VATTypeCaster implements Caster
 {
     public function cast(mixed $value): VATType
     {
-        return isset($value) ? new VATType($value) : VATType::None();
+        return new VATType($value);
     }
 }

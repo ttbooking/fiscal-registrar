@@ -11,6 +11,6 @@ class PaymentMethodCaster implements Caster
 {
     public function cast(mixed $value): PaymentMethod
     {
-        return isset($value) ? new PaymentMethod($value) : PaymentMethod::FullPrepayment();
+        return new PaymentMethod($value);
     }
 }

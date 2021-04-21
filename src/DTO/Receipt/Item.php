@@ -23,7 +23,7 @@ final class Item extends DataTransferObject
     public int $quantity = 1;
 
     // 1043
-    public float|int|null $sum = null;
+    public float|int $sum;
 
     // 1197
     public ?string $measurement_unit = null;
@@ -33,11 +33,11 @@ final class Item extends DataTransferObject
 
     // 1214
     #[CastWith(PaymentMethodCaster::class)]
-    public ?PaymentMethod $payment_method = null;
+    public PaymentMethod $payment_method;
 
     // 1212
     #[CastWith(PaymentObjectCaster::class)]
-    public ?PaymentObject $payment_object = null;
+    public PaymentObject $payment_object;
 
     public ?Item\VAT $vat = null;
 
@@ -56,4 +56,19 @@ final class Item extends DataTransferObject
 
     // 1231
     public ?string $declaration_number = null;
+
+    protected static function transformSum($sum, array $args)
+    {
+        return $sum ?? ($args['price'] ?? 0) * ($args['quantity'] ?? 1);
+    }
+
+    protected static function transformPaymentMethod($payment_method): PaymentMethod
+    {
+        return $payment_method ?? PaymentMethod::FullPrepayment();
+    }
+
+    protected static function transformPaymentObject($payment_object): PaymentObject
+    {
+        return $payment_object ?? PaymentObject::Commodity();
+    }
 }

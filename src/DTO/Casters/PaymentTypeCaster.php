@@ -11,6 +11,6 @@ class PaymentTypeCaster implements Caster
 {
     public function cast(mixed $value): PaymentType
     {
-        return isset($value) ? new PaymentType($value) : PaymentType::Electronic();
+        return new PaymentType($value);
     }
 }

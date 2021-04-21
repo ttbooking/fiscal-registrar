@@ -11,6 +11,6 @@ class PaymentObjectCaster implements Caster
 {
     public function cast(mixed $value): PaymentObject
     {
-        return isset($value) ? new PaymentObject($value) : PaymentObject::Commodity();
+        return new PaymentObject($value);
     }
 }

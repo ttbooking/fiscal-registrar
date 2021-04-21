@@ -11,6 +11,6 @@ class AgentTypeCaster implements Caster
 {
     public function cast(mixed $value): ?AgentType
     {
-        return isset($value) ? new AgentType($value) : null;
+        return new AgentType($value);
     }
 }

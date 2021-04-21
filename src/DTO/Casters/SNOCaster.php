@@ -11,6 +11,6 @@ class SNOCaster implements Caster
 {
     public function cast(mixed $value): ?SNO
     {
-        return isset($value) ? new SNO($value) : null;
+        return new SNO($value);
     }
 }

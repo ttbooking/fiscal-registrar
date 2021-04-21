@@ -62,12 +62,12 @@ final class Item extends DataTransferObject
         return $sum ?? ($args['price'] ?? 0) * ($args['quantity'] ?? 1);
     }
 
-    protected static function transformPaymentMethod($payment_method): PaymentMethod
+    protected static function transformPaymentMethod($payment_method)
     {
         return $payment_method ?? PaymentMethod::FullPrepayment();
     }
 
-    protected static function transformPaymentObject($payment_object): PaymentObject
+    protected static function transformPaymentObject($payment_object)
     {
         return $payment_object ?? PaymentObject::Commodity();
     }

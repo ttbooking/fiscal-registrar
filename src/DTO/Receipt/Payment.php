@@ -18,7 +18,7 @@ final class Payment extends DataTransferObject
     #[CastWith(PaymentTypeCaster::class)]
     public PaymentType $type;
 
-    protected static function transformType($type): PaymentType
+    protected static function transformType($type)
     {
         return $type ?? PaymentType::Electronic();
     }

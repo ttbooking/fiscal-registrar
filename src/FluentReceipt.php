@@ -28,7 +28,7 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         $this->idGenerator = $idGenerator;
     }
 
-    public function for(string $connection = null): self
+    public function for(string $connection = null): static
     {
         if ($this->model->state !== Receipt::STATE_CREATED) {
             throw new Exceptions\StateException('Receipt has invalid state for operation.');
@@ -41,7 +41,7 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         return $this;
     }
 
-    public function do(Operation $operation = null): self
+    public function do(Operation $operation = null): static
     {
         if ($this->model->state !== Receipt::STATE_CREATED) {
             throw new Exceptions\StateException('Receipt has invalid state for operation.');
@@ -54,7 +54,7 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         return $this;
     }
 
-    public function as(string $id = null): self
+    public function as(string $id = null): static
     {
         if ($this->model->state !== Receipt::STATE_CREATED) {
             throw new Exceptions\StateException('Receipt has invalid state for operation.');
@@ -67,7 +67,7 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         return $this;
     }
 
-    public function with(string $key, $value): self
+    public function with(string $key, $value): static
     {
         if ($this->model->state !== Receipt::STATE_CREATED) {
             throw new Exceptions\StateException('Receipt has invalid state for operation.');
@@ -83,7 +83,7 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         return $this->model->save();
     }
 
-    public function clone(): self
+    public function clone(): static
     {
         return $this->newInstance($this->model->replicate(['state', 'external_id', 'internal_id', 'result']));
     }
@@ -102,12 +102,12 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         return $this->model;
     }
 
-    public function make(DTO\Receipt $data): self
+    public function make(DTO\Receipt $data): static
     {
         return $this->newInstance($this->model->newInstance(compact('data')));
     }
 
-    public function resolve($id): self
+    public function resolve($id): static
     {
         try {
             return $this->newInstance($this->model->resolveRouteBinding($id, null, true));
@@ -139,7 +139,7 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
      * @param  Receipt  $model
      * @return static
      */
-    protected function newInstance(Receipt $model): self
+    protected function newInstance(Receipt $model): static
     {
         return new static($model, $this->idGenerator);
     }

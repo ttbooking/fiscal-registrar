@@ -19,5 +19,5 @@ interface GeneratesReceiptUrls
      * @param  ReceiptUrlGenerator|null  $urlGenerator
      * @return $this
      */
-    public function setUrlGenerator(?ReceiptUrlGenerator $urlGenerator): self;
+    public function setUrlGenerator(?ReceiptUrlGenerator $urlGenerator): static;
 }

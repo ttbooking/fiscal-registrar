@@ -47,7 +47,7 @@ class Decorator
      * @param  object  $instance
      * @return $this
      */
-    public function setDecoratedInstance(object $instance): self
+    public function setDecoratedInstance(object $instance): static
     {
         $this->instance = $instance;
 

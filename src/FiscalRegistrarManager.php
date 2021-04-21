@@ -46,7 +46,7 @@ class FiscalRegistrarManager extends Support\Manager implements
      *
      * @return $this
      */
-    public function refreshEventDispatcher(): self
+    public function refreshEventDispatcher(): static
     {
         array_map([$this, 'setEventDispatcher'], $this->getConnections());
 
@@ -118,7 +118,7 @@ class FiscalRegistrarManager extends Support\Manager implements
      * @param  Contracts\DispatchesEvents  $instance
      * @return $this
      */
-    protected function setEventDispatcher(Contracts\DispatchesEvents $instance): self
+    protected function setEventDispatcher(Contracts\DispatchesEvents $instance): static
     {
         if ($this->container->bound(Dispatcher::class)) {
             $instance->setEventDispatcher($this->container->make(Dispatcher::class));

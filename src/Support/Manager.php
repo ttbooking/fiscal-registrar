@@ -103,7 +103,7 @@ abstract class Manager implements Factory
      * @param  Closure  $callback
      * @return $this
      */
-    public function extend(string $driver, Closure $callback): self
+    public function extend(string $driver, Closure $callback): static
     {
         $this->customCreators[$driver] = $callback->bindTo($this, $this);
 

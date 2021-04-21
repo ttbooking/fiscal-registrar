@@ -13,26 +13,26 @@ interface Receipt extends StatefulFiscalRegistrar
      * @param  string|null  $connection
      * @return $this
      */
-    public function for(string $connection = null): self;
+    public function for(string $connection = null): static;
 
     /**
      * @param  Operation|null  $operation
      * @return $this
      */
-    public function do(Operation $operation = null): self;
+    public function do(Operation $operation = null): static;
 
     /**
      * @param  string|null  $id
      * @return $this
      */
-    public function as(string $id = null): self;
+    public function as(string $id = null): static;
 
     /**
      * @param  string  $key
      * @param  mixed  $value
      * @return $this
      */
-    public function with(string $key, $value): self;
+    public function with(string $key, $value): static;
 
     /**
      * @return bool
@@ -42,7 +42,7 @@ interface Receipt extends StatefulFiscalRegistrar
     /**
      * @return static
      */
-    public function clone(): self;
+    public function clone(): static;
 
     /**
      * @param  bool  $force

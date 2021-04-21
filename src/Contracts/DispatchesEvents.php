@@ -21,5 +21,5 @@ interface DispatchesEvents
      * @param  Dispatcher|null  $events
      * @return $this
      */
-    public function setEventDispatcher(?Dispatcher $events): self;
+    public function setEventDispatcher(?Dispatcher $events): static;
 }

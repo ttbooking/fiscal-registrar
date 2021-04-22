@@ -20,13 +20,15 @@ trait ReceiptRenderer
     {
         $table = $this->createReceiptTable();
 
-        static::setupReceiptTableTitle($table, $receipt->result->payload->fiscal_receipt_number);
+        static::setupReceiptTableTitle($table, $receipt->result->payload->fiscal_receipt_number ?? null);
         static::setupReceiptTableHeader($table, $receipt);
         foreach ($receipt->data->items as $item) {
             static::addReceiptTableItem($table, $item);
         }
         static::setupReceiptTableTotal($table, $receipt);
-        static::setupReceiptTableFooter($table, $receipt);
+        if (isset($receipt->result->payload)) {
+            static::setupReceiptTableFooter($table, $receipt);
+        }
 
         $table->render();
     }
@@ -47,10 +49,12 @@ trait ReceiptRenderer
             ->setCrossingChars('─', '╔', '═', '╗', '╢', '╝', '═', '╚', '╟', '╠', '═', '╣');
     }
 
-    protected static function setupReceiptTableTitle(Table $table, int $number): Table
+    protected static function setupReceiptTableTitle(Table $table, int $number = null): Table
     {
+        $number = isset($number) ? ' '.static::trans('shared.#').$number : '';
+
         return $table->setHeaders([new TableCell(
-            '<comment>'.Str::upper(static::trans('receipt.title')).' '.static::trans('shared.#').$number.'</comment>',
+            '<comment>'.Str::upper(static::trans('receipt.title')).$number.'</comment>',
             ['colspan' => 2, 'style' => new TableCellStyle(['align' => 'center'])]
         )]);
     }
@@ -58,12 +62,12 @@ trait ReceiptRenderer
     protected static function setupReceiptTableHeader(Table $table, Receipt $receipt): Table
     {
         return $table->setRows([
-            [$receipt->operation?->getDescription() ?? '-', $receipt->result->payload->receipt_datetime->format('d.m.Y H:i')],
-            [static::trans('result.shift_number'), $receipt->result->payload->shift_number],
+            [$receipt->operation?->getDescription() ?? '-', $receipt->result?->payload->receipt_datetime->format('d.m.Y H:i') ?? '-'],
+            [static::trans('result.shift_number'), $receipt->result?->payload->shift_number ?? '-'],
             [static::trans('receipt.company.tax_system'), $receipt->data->company?->tax_system->getDescription('short') ?? '-'],
             [static::trans('receipt.client.phone_or_email'), $receipt->data->client->email ?? $receipt->data->client->phone],
             [static::trans('receipt.company.email'), $receipt->data->company->email ?? '-'],
-            [static::trans('result.device_code'), $receipt->result->extra->device_code],
+            [static::trans('result.device_code'), $receipt->result?->extra->device_code ?? '-'],
             [static::trans('result.online_attribute'), static::trans('shared.yes')],
             new TableSeparator,
         ]);
@@ -85,13 +89,13 @@ trait ReceiptRenderer
     {
         return $table->addRows([
             [static::trans('receipt.total'), sprintf('%.2f', $receipt->data->total)],
-            new TableSeparator,
         ]);
     }
 
     protected static function setupReceiptTableFooter(Table $table, Receipt $receipt): Table
     {
         return $table->addRows([
+            new TableSeparator,
             [static::trans('result.fn_number'), $receipt->result->payload->fn_number],
             [static::trans('result.ecr_registration_number'), $receipt->result->payload->ecr_registration_number],
             [static::trans('result.fiscal_document_number'), $receipt->result->payload->fiscal_document_number],

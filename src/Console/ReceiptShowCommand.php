@@ -72,13 +72,25 @@ class ReceiptShowCommand extends Command
             ]);
         }
 
+        $table->addRows([
+            [static::trans('receipt.total'), sprintf('%.2f', $receipt->data->total)],
+            new TableSeparator,
+        ]);
+
+        $table->addRows([
+            [static::trans('result.fn_number'), $receipt->result->payload->fn_number],
+            [static::trans('result.ecr_registration_number'), $receipt->result->payload->ecr_registration_number],
+            [static::trans('result.fiscal_document_number'), $receipt->result->payload->fiscal_document_number],
+            [static::trans('result.fiscal_document_attribute'), $receipt->result->payload->fiscal_document_attribute],
+            [static::trans('result.ffd_version'), '1.05'],
+        ]);
+
         $table
             ->setHeaders([new TableCell(
                 '<comment>'.Str::upper(static::trans('receipt.title'))
                 .' '.static::trans('shared.#').$receipt->result->payload->fiscal_receipt_number.'</comment>',
                 ['colspan' => 2, 'style' => new TableCellStyle(['align' => 'center'])]
             )])
-            ->addRow([static::trans('receipt.total'), sprintf('%.2f', $receipt->data->total)])
             ->setStyle($style)
             ->setColumnWidths([30, 20])
             ->setColumnStyle(1, (new TableStyle)->setPadType(STR_PAD_LEFT))

@@ -106,6 +106,7 @@ return [
         'fns_site' => 'адрес сайта ФНС',
         'device_code' => 'номер автомата',
         'online_attribute' => 'признак расчетов в сети Интернет',
+        'ffd_version' => 'версия ФФД',
     ],
 
     'shared' => [

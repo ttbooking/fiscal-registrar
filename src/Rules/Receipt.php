@@ -20,7 +20,7 @@ class Receipt extends AggregateRule
 
             'company' => 'sometimes|nullable|array',
             'company.email' => 'required|string|max:64|email',
-            'company.sno' => ['sometimes', 'nullable', 'string', Rule::in(Enums\SNO::toArray())],
+            'company.tax_system' => ['sometimes', 'nullable', 'string', Rule::in(Enums\TaxSystem::toArray())],
             'company.inn' => 'required|string|numeric|size:10,12',
             'company.payment_address' => 'required|string|max:256',
 

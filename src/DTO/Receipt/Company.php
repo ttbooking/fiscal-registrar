@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\DTO\Receipt;
 
 use Spatie\DataTransferObject\Attributes\CastWith;
-use TTBooking\FiscalRegistrar\DTO\Casters\SNOCaster;
+use TTBooking\FiscalRegistrar\DTO\Casters\TaxSystemCaster;
 use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
-use TTBooking\FiscalRegistrar\Enums\SNO;
+use TTBooking\FiscalRegistrar\Enums\TaxSystem;
 
 final class Company extends DataTransferObject
 {
@@ -21,6 +21,6 @@ final class Company extends DataTransferObject
     public string $payment_address;
 
     // 1055
-    #[CastWith(SNOCaster::class)]
-    public ?SNO $sno = null;
+    #[CastWith(TaxSystemCaster::class)]
+    public ?TaxSystem $tax_system = null;
 }

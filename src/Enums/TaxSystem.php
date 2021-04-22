@@ -12,7 +12,7 @@ namespace TTBooking\FiscalRegistrar\Enums;
  * @method static self ESN
  * @method static self Patent
  */
-final class SNO extends Enum
+final class TaxSystem extends Enum
 {
     private const OSN = 'osn';
     private const USNIncome = 'usn_income';

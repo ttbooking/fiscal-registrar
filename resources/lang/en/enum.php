@@ -69,7 +69,7 @@ return [
         'counter submission',
     ],
 
-    'sno' => [
+    'tax_system' => [
         'osn' => 'general tax system',
         'usn_income' => 'simplified tax system (income)',
         'usn_income_outcome' => 'simplified tax system (income with costs deducted)',
@@ -78,7 +78,7 @@ return [
         'patent' => 'patent based simplified tax system',
     ],
 
-    'sno_short' => [
+    'tax_system_short' => [
         'osn' => 'GTS',
         'usn_income' => 'STS (income)',
         'usn_income_outcome' => 'STS (income w/ costs deducted)',

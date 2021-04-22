@@ -60,7 +60,7 @@ trait ReceiptRenderer
         return $table->setRows([
             [$receipt->operation?->getDescription() ?? '-', $receipt->result->payload->receipt_datetime->format('d.m.Y H:i')],
             [static::trans('result.shift_number'), $receipt->result->payload->shift_number],
-            [static::trans('receipt.company.sno'), $receipt->data->company?->sno->getDescription('short') ?? '-'],
+            [static::trans('receipt.company.tax_system'), $receipt->data->company?->tax_system->getDescription('short') ?? '-'],
             [static::trans('receipt.client.phone_or_email'), $receipt->data->client->email ?? $receipt->data->client->phone],
             [static::trans('receipt.company.email'), $receipt->data->company->email ?? '-'],
             [static::trans('result.device_code'), $receipt->result->extra->device_code],

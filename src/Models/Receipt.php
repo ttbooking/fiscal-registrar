@@ -22,6 +22,10 @@ use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
  * @property string|null $internal_id
  * @property DTO\Receipt $data
  * @property DTO\Result|null $result
+ * @property-read string|null $fn_number
+ * @property-read int|null $fiscal_document_number
+ * @property-read int|null $fiscal_document_attribute
+ * @property-read float|null $total
  */
 class Receipt extends Model implements StatefulFiscalRegistrar
 {

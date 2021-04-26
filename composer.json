@@ -26,7 +26,7 @@
         "illuminate/validation": "^8.23",
         "myclabs/php-enum": "^1.8",
         "spatie/data-transfer-object": "^3.0",
-        "ttbooking/atol-client": "^1.4"
+        "ttbooking/atol-client": "^1.5"
     },
     "require-dev": {
         "fakerphp/faker": "^1.14",

@@ -22,10 +22,10 @@ class CreateReceiptsTable extends Migration
             $table->string('internal_id', 128)->nullable()->index();
             $table->json('data');
             $table->json('result')->nullable();
-            $table->string('fn_number')->virtualAs('result->"$.payload.fn_number"')->index();
-            $table->unsignedInteger('fiscal_document_number')->virtualAs('result->"$.payload.fiscal_document_number"');
-            $table->unsignedInteger('fiscal_document_attribute')->virtualAs('result->"$.payload.fiscal_document_attribute"');
-            $table->unsignedFloat('total', 10)->virtualAs('result->"$.payload.total"');
+            $table->string('fn_number')->virtualAs('result->>"$.payload.fn_number"')->index();
+            $table->unsignedInteger('fiscal_document_number')->virtualAs('result->>"$.payload.fiscal_document_number"');
+            $table->unsignedInteger('fiscal_document_attribute')->virtualAs('result->>"$.payload.fiscal_document_attribute"');
+            $table->unsignedFloat('total', 10)->virtualAs('result->>"$.payload.total"');
             $table->timestamps();
             $table->unique(['connection', 'external_id']);
             $table->unique(['connection', 'internal_id']);

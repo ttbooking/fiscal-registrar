@@ -55,9 +55,7 @@ class Receipt extends AggregateRule
             'items.*.declaration_number' => 'sometimes|nullable|string|max:32',
 
             'payments' => 'required|array|between:1,10',
-            'payments.*' => 'required|array',
-            'payments.*.type' => ['required', 'integer', Rule::in(Enums\PaymentType::toArray())],
-            'payments.*.sum' => 'required|numeric|between:0,99999999.99',
+            'payments.*' => 'required|numeric|between:0,99999999.99',
 
             'vats' => 'sometimes|nullable|array|between:1,6',
             'vats.*' => 'required|array',

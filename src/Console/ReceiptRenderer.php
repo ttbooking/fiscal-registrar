@@ -12,6 +12,7 @@ use Symfony\Component\Console\Helper\TableCellStyle;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Helper\TableStyle;
 use TTBooking\FiscalRegistrar\DTO\Receipt\Item;
+use TTBooking\FiscalRegistrar\Enums\PaymentType;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
 trait ReceiptRenderer
@@ -88,6 +89,11 @@ trait ReceiptRenderer
     protected static function setupReceiptTableTotal(Table $table, Receipt $receipt): Table
     {
         return $table->addRows([
+            [PaymentType::Cash()->getDescription(), sprintf('%.2f', $receipt->data->payments[PaymentType::Cash] ?? 0)],
+            [PaymentType::Electronic()->getDescription(), sprintf('%.2f', $receipt->data->payments[PaymentType::Electronic] ?? 0)],
+            [PaymentType::Prepaid()->getDescription(), sprintf('%.2f', $receipt->data->payments[PaymentType::Prepaid] ?? 0)],
+            [PaymentType::Postpaid()->getDescription(), sprintf('%.2f', $receipt->data->payments[PaymentType::Postpaid] ?? 0)],
+            [PaymentType::Other()->getDescription(), sprintf('%.2f', $receipt->data->payments[PaymentType::Other] ?? 0)],
             [static::trans('receipt.total'), sprintf('%.2f', $receipt->data->total)],
         ]);
     }

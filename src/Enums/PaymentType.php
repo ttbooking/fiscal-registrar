@@ -18,14 +18,14 @@ namespace TTBooking\FiscalRegistrar\Enums;
  */
 final class PaymentType extends Enum
 {
-    private const Cash = 0;
-    private const Electronic = 1;
-    private const Prepaid = 2;
-    private const Postpaid = 3;
-    private const Other = 4;
-    private const Extended5 = 5;
-    private const Extended6 = 6;
-    private const Extended7 = 7;
-    private const Extended8 = 8;
-    private const Extended9 = 9;
+    public const Cash = 0;
+    public const Electronic = 1;
+    public const Prepaid = 2;
+    public const Postpaid = 3;
+    public const Other = 4;
+    public const Extended5 = 5;
+    public const Extended6 = 6;
+    public const Extended7 = 7;
+    public const Extended8 = 8;
+    public const Extended9 = 9;
 }

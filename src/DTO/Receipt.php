@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\DTO;
 
 use Illuminate\Support\Collection;
+use TTBooking\FiscalRegistrar\Enums\PaymentType;
 
 final class Receipt extends DataTransferObject
 {
@@ -19,8 +20,9 @@ final class Receipt extends DataTransferObject
     /** @var Receipt\ItemCollection|Receipt\Item[] */
     public Receipt\ItemCollection $items;
 
-    /** @var Receipt\PaymentCollection|Receipt\Payment[]|null */
-    public ?Receipt\PaymentCollection $payments = null;
+    // 1031, 1081, 1215, 1216, 1217
+    /** @var array<int, float|int> */
+    public array $payments = [];
 
     /** @var Receipt\VATCollection|Receipt\VAT[]|null */
     public ?Receipt\VATCollection $vats = null;
@@ -44,8 +46,8 @@ final class Receipt extends DataTransferObject
 
     protected static function transformPayments($payments, array $args): array
     {
-        return collect($payments)->whenEmpty(fn (Collection $payments) =>
-            $payments->add(new Receipt\Payment(sum: self::transformTotal($args['total'] ?? null, $args)))
-        )->all();
+        return empty($payments)
+            ? [PaymentType::Electronic => self::transformTotal($args['total'] ?? null, $args)]
+            : $payments;
     }
 }

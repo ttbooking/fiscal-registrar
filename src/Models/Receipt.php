@@ -51,9 +51,17 @@ class Receipt extends Model implements StatefulFiscalRegistrar
     {
         $method = $sole ? 'sole' : 'first';
 
+        if (Str::startsWith($value, '@')) {
+            return $this->newQuery()->where(array_filter(array_combine(
+                ['fn_number', 'fiscal_document_number', 'fiscal_document_attribute'],
+                explode(':', ltrim($value, '@'), 3) + array_fill(0, 3, '')
+            )))->$method();
+        }
+
         if (Str::contains($value, ':')) {
-            [$connection, $external_id] = explode(':', $value, 2);
-            return $this->newQuery()->where(array_filter(compact('connection', 'external_id')))->$method();
+            return $this->newQuery()->where(array_filter(array_combine(
+                ['connection', 'external_id'], explode(':', $value, 2)
+            )))->$method();
         }
 
         return $this->newQuery()->where($field ?? $this->getRouteKeyName(), $value)->$method();

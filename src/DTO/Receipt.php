@@ -39,8 +39,8 @@ final class Receipt extends DataTransferObject
         return $total ?? collect($args['items'] ?? [])->sum('sum');
     }
 
-    protected static function transformPayments($payments, array $args): Receipt\Payments
+    protected static function transformPayments($payments, array $args)
     {
-        return $payments ?? new Receipt\Payments(electronic: self::transformTotal($args['total'] ?? null, $args));
+        return $payments ?? ['electronic' => self::transformTotal($args['total'] ?? null, $args)];
     }
 }

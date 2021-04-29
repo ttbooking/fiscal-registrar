@@ -27,15 +27,15 @@ final class VATType extends Enum
 
     public function getRate(): ?float
     {
-        switch ($this->getValue()) {
-            case 'null': return null;
-            case 'vat0': return 0;
-            case 'vat10': return .10;
-            case 'vat18': return .18;
-            case 'vat20': return .20;
-            case 'vat110': return 10 / 110;
-            case 'vat118': return 18 / 118;
-            case 'vat120': return 20 / 120;
-        }
+        return match ($this->getValue()) {
+            self::VAT0 => 0,
+            self::VAT10 => .10,
+            self::VAT18 => .18,
+            self::VAT20 => .20,
+            self::VAT110 => 10 / 110,
+            self::VAT118 => 18 / 118,
+            self::VAT120 => 20 / 120,
+            default => null,
+        };
     }
 }

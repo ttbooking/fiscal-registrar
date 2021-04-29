@@ -61,14 +61,6 @@ return [
         'casino_payment' => 'casino payment',
     ],
 
-    'payment_type' => [
-        'cash',
-        'electronic',
-        'prepayment (advance) set off',
-        'credit',
-        'counter submission',
-    ],
-
     'tax_system' => [
         'osn' => 'general tax system',
         'usn_income' => 'simplified tax system (income)',

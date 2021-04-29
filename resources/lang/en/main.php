@@ -8,6 +8,14 @@ return [
 
         'title' => 'receipt',
 
+        'payments' => [
+            'cash' => 'cash',
+            'electronic' => 'electronic',
+            'prepaid' => 'prepayment (advance) set off',
+            'postpaid' => 'credit',
+            'other' => 'counter submission',
+        ],
+
     ],
 
     'shared' => [

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar;
 
 use Closure;
-use Illuminate\Contracts\Container\Container;
 use Illuminate\Contracts\Events\Dispatcher;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
@@ -20,17 +19,6 @@ class FiscalRegistrarManager extends Support\Manager implements
     Contracts\FiscalRegistrar
 {
     protected string $configName = 'fiscal-registrar';
-
-    /**
-     * @var Closure(Models\Receipt):(string|null)
-     */
-    protected Closure $idGenerator;
-
-    public function __construct(Container $container)
-    {
-        parent::__construct($container);
-        $this->idGenerator = fn (): ?string => null;
-    }
 
     public function getConnectionName(): string
     {
@@ -136,35 +124,5 @@ class FiscalRegistrarManager extends Support\Manager implements
         }
 
         return $this;
-    }
-
-    /**
-     * @return Closure(Models\Receipt):(string|null)
-     */
-    public function idGenerator(): Closure
-    {
-        return $this->idGenerator;
-    }
-
-    /**
-     * @param  null|callable(Models\Receipt):(string|null)  $idGenerator
-     * @return $this
-     */
-    public function generateIdsUsing(?callable $idGenerator): static
-    {
-        if (isset($idGenerator)) {
-            $this->idGenerator = Closure::fromCallable($idGenerator);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param  Models\Receipt  $receipt
-     * @return string|null
-     */
-    public function generateId(Models\Receipt $receipt): ?string
-    {
-        return call_user_func($this->idGenerator(), $receipt);
     }
 }

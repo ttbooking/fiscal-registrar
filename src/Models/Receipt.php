@@ -77,7 +77,7 @@ class Receipt extends Model implements StatefulFiscalRegistrar
         }
 
         $operation ??= $this->operation;
-        $externalId ??= $this->external_id ?? FiscalRegistrar::generateId($this);
+        $externalId ??= $this->external_id ?? $this->generateId();
         $data ??= $this->data;
 
         if (! isset($operation, $externalId, $data)) {
@@ -104,6 +104,11 @@ class Receipt extends Model implements StatefulFiscalRegistrar
         }
 
         return $this->result;
+    }
+
+    protected function generateId(): ?string
+    {
+        return (string) Str::uuid();
     }
 
     protected static function newFactory(): ReceiptFactory

@@ -161,7 +161,6 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         $this->callAfterResolving(FiscalRegistrarManager::class,
             fn (FiscalRegistrarManager $fiscalRegistrar) => $fiscalRegistrar
                 ->resolveConnectionsUsing($this->app['config']['fiscal-registrar.connection_resolver'] ?? null)
-                ->generateIdsUsing($this->app['config']['fiscal-registrar.id_generator'] ?? null)
         );
     }
 

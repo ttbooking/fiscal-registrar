@@ -136,6 +136,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
     {
         $this->configure();
         $this->registerServices();
+        $this->registerCallbacks();
         $this->registerSyncJobSchedule();
         $this->registerFakerProviders();
     }
@@ -153,9 +154,14 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         $this->app->alias('fiscal-registrar.receipt', Contracts\ReceiptFactory::class);
         $this->app->alias('fiscal-registrar.receipt', Contracts\Receipt::class);
         $this->app->bind(Receipt::class, $this->app['config']['fiscal-registrar.model'] ?? Receipt::class);
-        $this->app->when(FluentReceipt::class)->needs(Closure::class)->give(
-            fn () => isset($this->app['config']['fiscal-registrar.id_generator'])
-                ? Closure::fromCallable($this->app['config']['fiscal-registrar.id_generator']) : null
+    }
+
+    protected function registerCallbacks(): void
+    {
+        $this->callAfterResolving(FiscalRegistrarManager::class,
+            fn (FiscalRegistrarManager $fiscalRegistrar) => $fiscalRegistrar
+                ->resolveConnectionsUsing($this->app['config']['fiscal-registrar.connection_resolver'] ?? null)
+                ->generateIdsUsing($this->app['config']['fiscal-registrar.id_generator'] ?? null)
         );
     }
 

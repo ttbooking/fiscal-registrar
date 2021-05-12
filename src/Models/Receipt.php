@@ -77,7 +77,7 @@ class Receipt extends Model implements StatefulFiscalRegistrar
         }
 
         $operation ??= $this->operation;
-        $externalId ??= $this->external_id;
+        $externalId ??= $this->external_id ?? FiscalRegistrar::generateId($this);
         $data ??= $this->data;
 
         if (! isset($operation, $externalId, $data)) {

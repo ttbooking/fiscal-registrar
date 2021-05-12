@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar;
 
-use Closure;
 use Faker\Generator;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Support\DeferrableProvider;
@@ -136,7 +135,6 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
     {
         $this->configure();
         $this->registerServices();
-        $this->registerCallbacks();
         $this->registerSyncJobSchedule();
         $this->registerFakerProviders();
     }
@@ -154,14 +152,6 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         $this->app->alias('fiscal-registrar.receipt', Contracts\ReceiptFactory::class);
         $this->app->alias('fiscal-registrar.receipt', Contracts\Receipt::class);
         $this->app->bind(Receipt::class, $this->app['config']['fiscal-registrar.model'] ?? Receipt::class);
-    }
-
-    protected function registerCallbacks(): void
-    {
-        $this->callAfterResolving(FiscalRegistrarManager::class,
-            fn (FiscalRegistrarManager $fiscalRegistrar) => $fiscalRegistrar
-                ->resolveConnectionsUsing($this->app['config']['fiscal-registrar.connection_resolver'] ?? null)
-        );
     }
 
     protected function registerSyncJobSchedule(): void

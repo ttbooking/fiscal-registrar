@@ -18,7 +18,6 @@ use TTBooking\FiscalRegistrar\Enums\Operation;
  * @method static string register(Operation $operation, string $externalId, Receipt $receipt)
  * @method static Result|null report(string $id)
  * @method static void processCallback(mixed $payload, Closure $handler = null)
- * @method static Closure connectionResolver
  */
 class FiscalRegistrar extends Facade
 {

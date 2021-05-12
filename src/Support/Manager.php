@@ -9,13 +9,10 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
-use TTBooking\FiscalRegistrar\Concerns\ResolvesConnections;
 use TTBooking\FiscalRegistrar\Contracts\Factory;
 
 abstract class Manager implements Factory
 {
-    use ResolvesConnections;
-
     /**
      * The container instance.
      *
@@ -61,7 +58,6 @@ abstract class Manager implements Factory
     {
         $this->container = $container;
         $this->config = $container->make('config');
-        $this->resolveConnectionsUsing([$this, 'getDefaultDriver']);
     }
 
     /**
@@ -78,7 +74,7 @@ abstract class Manager implements Factory
 
     public function connection(string $name = null): object
     {
-        $name ??= $this->resolveConnection();
+        $name ??= $this->getDefaultDriver();
 
         return $this->connections[$name] ??= $this->resolve($name);
     }

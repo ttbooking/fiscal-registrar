@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\DTO\Receipt;
 
 use Spatie\DataTransferObject\Attributes\CastWith;
+use TTBooking\FiscalRegistrar\DTO\Casters\RoundingCaster;
 use TTBooking\FiscalRegistrar\DTO\Casters\VATTypeCaster;
 use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 use TTBooking\FiscalRegistrar\Enums\VATType;
@@ -16,5 +17,6 @@ final class VAT extends DataTransferObject
     public VATType $type;
 
     // 1105, 1104, 1103, 1102, 1107, 1106
+    #[CastWith(RoundingCaster::class)]
     public float|int $sum;
 }

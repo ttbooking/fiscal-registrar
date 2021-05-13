@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\DTO\Result;
 
 use DateTimeInterface;
+use Spatie\DataTransferObject\Attributes\CastWith;
+use TTBooking\FiscalRegistrar\DTO\Casters\RoundingCaster;
 use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 
 final class Payload extends DataTransferObject
@@ -19,6 +21,7 @@ final class Payload extends DataTransferObject
     public DateTimeInterface $receipt_datetime;
 
     // 1020
+    #[CastWith(RoundingCaster::class)]
     public float|int $total;
 
     // 1041

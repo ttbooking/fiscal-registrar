@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\DTO;
 
+use Spatie\DataTransferObject\Attributes\CastWith;
+use TTBooking\FiscalRegistrar\DTO\Casters\RoundingCaster;
+
 final class Receipt extends DataTransferObject
 {
     public Receipt\Client $client;
@@ -23,6 +26,7 @@ final class Receipt extends DataTransferObject
     public ?Receipt\VATCollection $vats = null;
 
     // 1020
+    #[CastWith(RoundingCaster::class)]
     public float|int $total;
 
     // 1192

@@ -7,6 +7,7 @@ namespace TTBooking\FiscalRegistrar\DTO\Receipt;
 use Spatie\DataTransferObject\Attributes\CastWith;
 use TTBooking\FiscalRegistrar\DTO\Casters\PaymentMethodCaster;
 use TTBooking\FiscalRegistrar\DTO\Casters\PaymentObjectCaster;
+use TTBooking\FiscalRegistrar\DTO\Casters\RoundingCaster;
 use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 use TTBooking\FiscalRegistrar\Enums\PaymentMethod;
 use TTBooking\FiscalRegistrar\Enums\PaymentObject;
@@ -17,12 +18,14 @@ final class Item extends DataTransferObject
     public string $name;
 
     // 1079
+    #[CastWith(RoundingCaster::class)]
     public float|int $price;
 
     // 1023
     public int $quantity = 1;
 
     // 1043
+    #[CastWith(RoundingCaster::class)]
     public float|int $sum;
 
     // 1197
@@ -49,6 +52,7 @@ final class Item extends DataTransferObject
     public ?string $user_data = null;
 
     // 1229
+    #[CastWith(RoundingCaster::class)]
     public float|int|null $excise = null;
 
     // 1230

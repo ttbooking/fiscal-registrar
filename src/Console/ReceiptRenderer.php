@@ -90,12 +90,18 @@ trait ReceiptRenderer
     protected static function setupReceiptTableTotal(Table $table, Receipt $receipt): Table
     {
         return $table->addRows([
+            [static::trans('receipt.total'), sprintf('%.2f', $receipt->data->total)],
             [static::trans('receipt.payments.cash'), sprintf('%.2f', $receipt->data->payments->cash)],
             [static::trans('receipt.payments.electronic'), sprintf('%.2f', $receipt->data->payments->electronic)],
             [static::trans('receipt.payments.prepaid'), sprintf('%.2f', $receipt->data->payments->prepaid)],
             [static::trans('receipt.payments.postpaid'), sprintf('%.2f', $receipt->data->payments->postpaid)],
             [static::trans('receipt.payments.other'), sprintf('%.2f', $receipt->data->payments->other)],
-            [static::trans('receipt.total'), sprintf('%.2f', $receipt->data->total)],
+            [static::trans('receipt.vats.vat20'), sprintf('%.2f', $receipt->data->vats?->vat20)],
+            [static::trans('receipt.vats.vat10'), sprintf('%.2f', $receipt->data->vats?->vat10)],
+            [static::trans('receipt.vats.with_vat0'), sprintf('%.2f', $receipt->data->vats?->with_vat0)],
+            [static::trans('receipt.vats.without_vat'), sprintf('%.2f', $receipt->data->vats?->without_vat)],
+            [static::trans('receipt.vats.vat120'), sprintf('%.2f', $receipt->data->vats?->vat120)],
+            [static::trans('receipt.vats.vat110'), sprintf('%.2f', $receipt->data->vats?->vat110)],
         ]);
     }
 

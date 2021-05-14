@@ -61,10 +61,13 @@ class Receipt extends AggregateRule
             'payments.postpaid' => 'sometimes|numeric|between:0,99999999.99',
             'payments.other' => 'sometimes|numeric|between:0,99999999.99',
 
-            'vats' => 'sometimes|nullable|array|between:1,6',
-            'vats.*' => 'required|array',
-            'vats.*.type' => ['required', 'string', Rule::in(Enums\VatType::toArray())],
-            'vats.*.sum' => 'required|numeric|between:0,99999999.99',
+            'vats' => 'sometimes|nullable|array',
+            'vats.vat20' => 'sometimes|numeric|between:0,99999999.99',
+            'vats.vat10' => 'sometimes|numeric|between:0,99999999.99',
+            'vats.with_vat0' => 'sometimes|numeric|between:0,99999999.99',
+            'vats.without_vat' => 'sometimes|numeric|between:0,99999999.99',
+            'vats.vat120' => 'sometimes|numeric|between:0,99999999.99',
+            'vats.vat110' => 'sometimes|numeric|between:0,99999999.99',
 
             'total' => 'required|numeric|between:0,99999999.99',
 

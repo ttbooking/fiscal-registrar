@@ -75,12 +75,14 @@ trait ReceiptRenderer
 
     protected static function addReceiptTableItem(Table $table, Item $item): Table
     {
+        $itemVatSum = $item->getVatSum();
+
         return $table->addRows([
             [new TableCell('<info>'.$item->name.'</info>', ['colspan' => 2])],
             ['', sprintf('%d x %.2f', $item->quantity, $item->price)],
             [static::trans('receipt.items.sum'), sprintf('%.2f', $item->sum)],
             [static::trans('receipt.items.vat.type'), $item->vat->type->getDescription('short')],
-            [static::trans('receipt.items.vat.sum'), sprintf('%.2f', $item->getVatSum())],
+            $itemVatSum ? [static::trans('receipt.items.vat.sum'), sprintf('%.2f', $itemVatSum)] : [],
             [static::trans('receipt.items.payment_object'), $item->payment_object->getDescription()],
             [static::trans('receipt.items.payment_method'), $item->payment_method->getDescription()],
             new TableSeparator,
@@ -89,6 +91,8 @@ trait ReceiptRenderer
 
     protected static function setupReceiptTableTotal(Table $table, Receipt $receipt): Table
     {
+        $vats = $receipt->data->getVats();
+
         return $table->addRows([
             [static::trans('receipt.total'), sprintf('%.2f', $receipt->data->total)],
             [static::trans('receipt.payments.cash'), sprintf('%.2f', $receipt->data->payments->cash)],
@@ -96,12 +100,12 @@ trait ReceiptRenderer
             [static::trans('receipt.payments.prepaid'), sprintf('%.2f', $receipt->data->payments->prepaid)],
             [static::trans('receipt.payments.postpaid'), sprintf('%.2f', $receipt->data->payments->postpaid)],
             [static::trans('receipt.payments.other'), sprintf('%.2f', $receipt->data->payments->other)],
-            [static::trans('receipt.vats.vat20'), sprintf('%.2f', $receipt->data->getVats()->vat20)],
-            [static::trans('receipt.vats.vat10'), sprintf('%.2f', $receipt->data->getVats()->vat10)],
-            [static::trans('receipt.vats.with_vat0'), sprintf('%.2f', $receipt->data->getVats()->with_vat0)],
-            [static::trans('receipt.vats.without_vat'), sprintf('%.2f', $receipt->data->getVats()->without_vat)],
-            [static::trans('receipt.vats.vat120'), sprintf('%.2f', $receipt->data->getVats()->vat120)],
-            [static::trans('receipt.vats.vat110'), sprintf('%.2f', $receipt->data->getVats()->vat110)],
+            $vats->vat20 ? [static::trans('receipt.vats.vat20'), sprintf('%.2f', $vats->vat20)] : [],
+            $vats->vat10 ? [static::trans('receipt.vats.vat10'), sprintf('%.2f', $vats->vat10)] : [],
+            $vats->with_vat0 ? [static::trans('receipt.vats.with_vat0'), sprintf('%.2f', $vats->with_vat0)] : [],
+            $vats->without_vat ? [static::trans('receipt.vats.without_vat'), sprintf('%.2f', $vats->without_vat)] : [],
+            $vats->vat120 ? [static::trans('receipt.vats.vat120'), sprintf('%.2f', $vats->vat120)] : [],
+            $vats->vat110 ? [static::trans('receipt.vats.vat110'), sprintf('%.2f', $vats->vat110)] : [],
         ]);
     }
 

@@ -80,7 +80,7 @@ trait ReceiptRenderer
             ['', sprintf('%d x %.2f', $item->quantity, $item->price)],
             [static::trans('receipt.items.sum'), sprintf('%.2f', $item->sum)],
             [static::trans('receipt.items.vat.type'), $item->vat->type->getDescription('short')],
-            [static::trans('receipt.items.vat.sum'), sprintf('%.2f', $item->vat->sum)],
+            [static::trans('receipt.items.vat.sum'), sprintf('%.2f', $item->getVatSum())],
             [static::trans('receipt.items.payment_object'), $item->payment_object->getDescription()],
             [static::trans('receipt.items.payment_method'), $item->payment_method->getDescription()],
             new TableSeparator,
@@ -96,12 +96,12 @@ trait ReceiptRenderer
             [static::trans('receipt.payments.prepaid'), sprintf('%.2f', $receipt->data->payments->prepaid)],
             [static::trans('receipt.payments.postpaid'), sprintf('%.2f', $receipt->data->payments->postpaid)],
             [static::trans('receipt.payments.other'), sprintf('%.2f', $receipt->data->payments->other)],
-            [static::trans('receipt.vats.vat20'), sprintf('%.2f', $receipt->data->vats?->vat20)],
-            [static::trans('receipt.vats.vat10'), sprintf('%.2f', $receipt->data->vats?->vat10)],
-            [static::trans('receipt.vats.with_vat0'), sprintf('%.2f', $receipt->data->vats?->with_vat0)],
-            [static::trans('receipt.vats.without_vat'), sprintf('%.2f', $receipt->data->vats?->without_vat)],
-            [static::trans('receipt.vats.vat120'), sprintf('%.2f', $receipt->data->vats?->vat120)],
-            [static::trans('receipt.vats.vat110'), sprintf('%.2f', $receipt->data->vats?->vat110)],
+            [static::trans('receipt.vats.vat20'), sprintf('%.2f', $receipt->data->getVats()->vat20)],
+            [static::trans('receipt.vats.vat10'), sprintf('%.2f', $receipt->data->getVats()->vat10)],
+            [static::trans('receipt.vats.with_vat0'), sprintf('%.2f', $receipt->data->getVats()->with_vat0)],
+            [static::trans('receipt.vats.without_vat'), sprintf('%.2f', $receipt->data->getVats()->without_vat)],
+            [static::trans('receipt.vats.vat120'), sprintf('%.2f', $receipt->data->getVats()->vat120)],
+            [static::trans('receipt.vats.vat110'), sprintf('%.2f', $receipt->data->getVats()->vat110)],
         ]);
     }
 

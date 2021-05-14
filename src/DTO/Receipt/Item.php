@@ -61,6 +61,14 @@ final class Item extends DataTransferObject
     // 1231
     public ?string $declaration_number = null;
 
+    public function getVatSum(): float
+    {
+        return $this->vat?->sum ?? round(
+            $this->sum - $this->sum / (1 + (float) $this->vat?->type->getRate()),
+            2, PHP_ROUND_HALF_EVEN
+        );
+    }
+
     protected static function transformSum($sum, array $args)
     {
         return $sum ?? ($args['price'] ?? 0) * ($args['quantity'] ?? 1);

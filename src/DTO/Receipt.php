@@ -22,8 +22,8 @@ final class Receipt extends DataTransferObject
 
     public Receipt\Payments $payments;
 
-    /** @var Receipt\VATCollection|Receipt\VAT[]|null */
-    public ?Receipt\VATCollection $vats = null;
+    /** @var Receipt\VatCollection|Receipt\Vat[]|null */
+    public ?Receipt\VatCollection $vats = null;
 
     // 1020
     #[CastWith(RoundingCaster::class)]

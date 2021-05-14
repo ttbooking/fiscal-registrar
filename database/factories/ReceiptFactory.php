@@ -10,7 +10,7 @@ use TTBooking\FiscalRegistrar\DTO;
 use TTBooking\FiscalRegistrar\Enums\Operation;
 use TTBooking\FiscalRegistrar\Enums\PaymentMethod;
 use TTBooking\FiscalRegistrar\Enums\PaymentObject;
-use TTBooking\FiscalRegistrar\Enums\VATType;
+use TTBooking\FiscalRegistrar\Enums\VatType;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class ReceiptFactory extends Factory
@@ -55,7 +55,7 @@ class ReceiptFactory extends Factory
                     'measurement_unit' => $this->faker->optional()->randomElement(['шт.', 'кг']),
                     'payment_method' => PaymentMethod::FullPrepayment(),
                     'payment_object' => PaymentObject::Commodity(),
-                    'vat' => new DTO\Receipt\Item\VAT(type: VATType::VAT20()),
+                    'vat' => new DTO\Receipt\Item\Vat(type: VatType::VAT20()),
                 ], range(1, $this->faker->numberBetween(1, 10))),
 
             ),

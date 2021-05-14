@@ -41,7 +41,7 @@ class Receipt extends AggregateRule
             'items.*.payment_method' => ['sometimes', 'nullable', 'string', Rule::in(Enums\PaymentMethod::toArray())],
             'items.*.payment_object' => ['sometimes', 'nullable', 'string', Rule::in(Enums\PaymentObject::toArray())],
             'items.*.vat' => 'sometimes|nullable|array',
-            'items.*.vat.type' => ['required', 'string', Rule::in(Enums\VATType::toArray())],
+            'items.*.vat.type' => ['required', 'string', Rule::in(Enums\VatType::toArray())],
             'items.*.vat.sum' => 'required|numeric|between:0,99999999.99',
             'items.*.agent_info' => ['sometimes', 'nullable', 'array', new AgentInfo],
             'items.*.supplier_info' => 'required_with:items.*.agent_info|nullable|array',
@@ -63,7 +63,7 @@ class Receipt extends AggregateRule
 
             'vats' => 'sometimes|nullable|array|between:1,6',
             'vats.*' => 'required|array',
-            'vats.*.type' => ['required', 'string', Rule::in(Enums\VATType::toArray())],
+            'vats.*.type' => ['required', 'string', Rule::in(Enums\VatType::toArray())],
             'vats.*.sum' => 'required|numeric|between:0,99999999.99',
 
             'total' => 'required|numeric|between:0,99999999.99',

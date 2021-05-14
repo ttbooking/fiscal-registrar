@@ -42,7 +42,7 @@ final class Item extends DataTransferObject
     #[CastWith(PaymentObjectCaster::class)]
     public PaymentObject $payment_object;
 
-    public ?Item\VAT $vat = null;
+    public ?Item\Vat $vat = null;
 
     public ?AgentInfo $agent_info = null;
 

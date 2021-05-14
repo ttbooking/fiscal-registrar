@@ -14,7 +14,7 @@ namespace TTBooking\FiscalRegistrar\Enums;
  * @method static self VAT118
  * @method static self VAT120
  */
-final class VATType extends Enum
+final class VatType extends Enum
 {
     private const None = 'none';
     private const VAT0 = 'vat0';

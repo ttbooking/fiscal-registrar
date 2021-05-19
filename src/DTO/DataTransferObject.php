@@ -12,7 +12,7 @@ use JsonSerializable;
 use Spatie\DataTransferObject\Attributes\DefaultCast;
 use Spatie\DataTransferObject\DataTransferObject as SpatieDTO;
 use Spatie\DataTransferObject\Reflection\DataTransferObjectClass;
-use TTBooking\FiscalRegistrar\Casts\DataTransferObject as DTOCast;
+use TTBooking\FiscalRegistrar\Casts\DTOCast;
 use TTBooking\FiscalRegistrar\DTO\Casters\TimestampCaster;
 
 #[DefaultCast(DateTimeInterface::class, TimestampCaster::class)]

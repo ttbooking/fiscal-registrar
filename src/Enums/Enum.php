@@ -8,7 +8,7 @@ use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 use MyCLabs\Enum\Enum as BaseEnum;
-use TTBooking\FiscalRegistrar\Casts\Enum as EnumCast;
+use TTBooking\FiscalRegistrar\Casts\EnumCast;
 
 abstract class Enum extends BaseEnum implements Castable
 {

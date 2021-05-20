@@ -4,6 +4,7 @@ import axios from 'axios';
 import Routes from './routes';
 import VueRouter from 'vue-router';
 import VueI18n from 'vue-i18n';
+import 'bootstrap';
 
 window.Pusher = require('pusher-js');
 

@@ -100,12 +100,72 @@
                         </button>
                     </h2>
                     <div id="itemDataCollapse" class="accordion-collapse collapse show" aria-labelledby="itemDataHeading">
-                        <div class="accordion-body row">
+                        <div class="accordion-body">
 
-                            <div v-for="item in receipt.data.items">
+                            <div v-for="(item, id) in receipt.data.items" class="row">
+                                <div class="col-sm-4 mb-3">
+                                    <label :for="'item' + (id+1) + 'Name'" class="form-label">Наименование</label>
+                                    <input type="text" class="form-control form-control-sm" :id="'item' + (id+1) + 'Name'" v-model="item.name" />
+                                </div>
+                                <div class="col-sm-2 mb-3">
+                                    <label :for="'item' + (id+1) + 'Price'" class="form-label">Цена</label>
+                                    <input type="number" class="form-control form-control-sm" :id="'item' + (id+1) + 'Price'" v-model="item.price" />
+                                </div>
+                                <div class="col-sm-2 mb-3">
+                                    <label :for="'item' + (id+1) + 'Quantity'" class="form-label">Кол-во</label>
+                                    <input type="number" class="form-control form-control-sm" :id="'item' + (id+1) + 'Quantity'" v-model="item.quantity" />
+                                </div>
+                                <div class="col-sm-2 mb-3">
+                                    <label :for="'item' + (id+1) + 'Sum'" class="form-label">Сумма</label>
+                                    <input type="number" class="form-control form-control-sm" :id="'item' + (id+1) + 'Sum'" v-model="item.price" />
+                                </div>
+                                <div class="col-sm-2 mb-3">
+                                    <label :for="'item' + (id+1) + 'MeasurementUnit'" class="form-label">Ед. изм.</label>
+                                    <input type="text" class="form-control form-control-sm" :id="'item' + (id+1) + 'MeasurementUnit'" v-model="item.measurement_unit" />
+                                </div>
                                 <div class="col-sm-auto mb-3">
-                                    <label for="itemName" class="form-label">Наименование</label>
-                                    <input type="text" class="form-control form-control-sm" id="itemName" v-model="item.name" />
+                                    <label :for="'item' + (id+1) + 'PaymentMethod'" class="form-label">Способ расчета</label>
+                                    <select class="form-select form-select-sm" :id="'item' + (id+1) + 'PaymentMethod'" v-model="item.payment_method">
+                                        <option value="full_prepayment">предоплата 100%</option>
+                                        <option value="prepayment">предоплата</option>
+                                        <option value="advance">аванс</option>
+                                        <option value="full_payment">полный расчет</option>
+                                        <option value="partial_payment">частичный расчет и кредит</option>
+                                        <option value="credit">передача в кредит</option>
+                                        <option value="credit_payment">оплата кредита</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-auto mb-3">
+                                    <label :for="'item' + (id+1) + 'PaymentObject'" class="form-label">Предмет расчета</label>
+                                    <select class="form-select form-select-sm" :id="'item' + (id+1) + 'PaymentObject'" v-model="item.payment_object">
+                                        <option value="commodity">товар</option>
+                                        <option value="excise">подакцизный товар</option>
+                                        <option value="job">работа</option>
+                                        <option value="service">услуга</option>
+                                        <option value="gambling_bet">ставка азартной игры</option>
+                                        <option value="gambling_prize">выигрыш азартной игры</option>
+                                        <option value="lottery">лотерейный билет</option>
+                                        <option value="lottery_prize">выигрыш лотереи</option>
+                                        <option value="intellectual_activity">предоставление результатов интеллектуальной деятельности</option>
+                                        <option value="payment">платеж</option>
+                                        <option value="agent_commission">агентское вознаграждение</option>
+                                        <option value="award">взнос/штраф/вознаграждение/бонус</option>
+                                        <option value="composite">составной предмет расчета</option>
+                                        <option value="another">иной предмет расчета</option>
+                                        <option value="property_right">имущественное право</option>
+                                        <option value="non-operating_gain">внереализационный доход</option>
+                                        <option value="insurance_premium">страховые взносы</option>
+                                        <option value="sales_tax">торговый сбор</option>
+                                        <option value="resort_fee">курортный сбор</option>
+                                        <option value="deposit">залог</option>
+                                        <option value="expense">расход</option>
+                                        <option value="pension_insurance_ip">взносы на ОПС ИП</option>
+                                        <option value="pension_insurance">взносы на ОПС</option>
+                                        <option value="medical_insurance_ip">взносы на ОМС ИП</option>
+                                        <option value="medical_insurance">взносы на ОМС</option>
+                                        <option value="social_insurance">взносы на ОСС</option>
+                                        <option value="casino_payment">платеж казино</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -152,8 +212,24 @@
                         </button>
                     </h2>
                     <div id="agentDataCollapse" class="accordion-collapse collapse show" aria-labelledby="agentDataHeading">
-                        <div class="accordion-body row">
-                            Agent Data
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col-sm-auto mb-3">
+                                    <label for="agentType" class="form-label">Тип агента</label>
+                                    <select class="form-select form-select-sm" id="agentType" v-model="receipt.data.agent_info.type">
+                                        <option value="bank_paying_agent">банковский платежный агент</option>
+                                        <option value="bank_paying_subagent">банковский платежный субагент</option>
+                                        <option value="paying_agent">платежный агент</option>
+                                        <option value="paying_subagent">платежный субагент</option>
+                                        <option value="attorney">поверенный</option>
+                                        <option value="commission_agent">комиссионер</option>
+                                        <option value="another">другой</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                            </div>
                         </div>
                     </div>
                 </div>

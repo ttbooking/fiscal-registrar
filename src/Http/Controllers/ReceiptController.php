@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\View;
 use Illuminate\Validation\Rule;
 use TTBooking\FiscalRegistrar\Enums\Operation;
 use TTBooking\FiscalRegistrar\Models\Receipt;
@@ -81,6 +82,15 @@ class ReceiptController extends Controller
         $receipt->delete();
 
         return Response::noContent();
+    }
+
+    /**
+     * @param  Receipt  $receipt
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function print(Receipt $receipt): \Illuminate\Contracts\View\View
+    {
+        return View::make('fiscal-registrar::receipt', compact('receipt'));
     }
 
     /**

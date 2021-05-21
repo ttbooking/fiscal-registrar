@@ -25,6 +25,7 @@ Route::prefix('api/v1')->group(function () {
     ]);
 
     Route::prefix('receipts/{receipt}')->group(function () {
+        Route::get('/print', 'ReceiptController@print')->name('fiscal-registrar.receipts.print');
         Route::post('/register', 'ReceiptController@register')->name('fiscal-registrar.receipts.register');
         Route::get('/report', 'ReceiptController@report')->name('fiscal-registrar.receipts.report');
     });

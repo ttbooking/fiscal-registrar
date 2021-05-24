@@ -20,7 +20,7 @@ trait ReceiptRenderer
     {
         $table = $this->createReceiptTable();
 
-        static::setupReceiptTableTitle($table, $receipt->result->payload->fiscal_receipt_number ?? null);
+        static::setupReceiptTableTitle($table, $receipt);
         static::setupReceiptTableHeader($table, $receipt);
         foreach ($receipt->data->items as $item) {
             static::addReceiptTableItem($table, $item);
@@ -49,14 +49,20 @@ trait ReceiptRenderer
             ->setCrossingChars('─', '╔', '═', '╗', '╢', '╝', '═', '╚', '╟', '╠', '═', '╣');
     }
 
-    protected static function setupReceiptTableTitle(Table $table, int $number = null): Table
+    protected static function setupReceiptTableTitle(Table $table, Receipt $receipt): Table
     {
+        $options = ['colspan' => 2, 'style' => new TableCellStyle(['align' => 'center'])];
+        $number = $receipt->result->payload->fiscal_receipt_number ?? null;
         $number = isset($number) ? ' '.static::trans('shared.#').$number : '';
 
-        return $table->setHeaders([new TableCell(
-            '<comment>'.Str::upper(static::trans('receipt.title')).$number.'</comment>',
-            ['colspan' => 2, 'style' => new TableCellStyle(['align' => 'center'])]
-        )]);
+        return $table->setHeaders([
+            new TableCell($receipt->data->company->name ?? '-', $options),
+            new TableCell($receipt->data->company->payment_address ?? '-', $options),
+            new TableCell(static::trans('receipt.company.inn').' '.$receipt->data->company->inn ?? '-', $options),
+            new TableCell(static::trans('receipt.company.payment_site').': '
+                .$receipt->data->company->payment_site ?? '-', $options),
+            new TableCell('<comment>'.Str::upper(static::trans('receipt.title')).$number.'</comment>', $options),
+        ]);
     }
 
     protected static function setupReceiptTableHeader(Table $table, Receipt $receipt): Table

@@ -19,10 +19,12 @@ class Receipt extends AggregateRule
             'client.inn' => 'sometimes|nullable|string|numeric|size:10,12',
 
             'company' => 'required|array',
+            'company.name' => 'sometimes|nullable|string|max:64',
             'company.email' => 'sometimes|nullable|string|max:64|email',
             'company.tax_system' => ['sometimes', 'nullable', 'string', Rule::in(Enums\TaxSystem::toArray())],
             'company.inn' => 'sometimes|nullable|string|numeric',
             'company.payment_address' => 'sometimes|nullable|string|max:256',
+            'company.payment_site' => 'sometimes|nullable|string|max:256',
 
             'agent_info' => ['sometimes', 'nullable', 'array', new AgentInfo],
 

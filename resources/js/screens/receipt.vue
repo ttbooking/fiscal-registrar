@@ -86,8 +86,8 @@
                                 <input type="text" class="form-control form-control-sm" id="companyInn" placeholder="1234567890" pattern="\d{10}|\d{12}" maxlength="12" v-model="receipt.data.company.inn" />
                             </div>
                             <div class="col-sm-auto mb-3">
-                                <label for="companyPaymentAddress" class="form-label">Место расчетов</label>
-                                <input type="text" class="form-control form-control-sm" id="companyPaymentAddress" v-model="receipt.data.company.payment_address" />
+                                <label for="companyPaymentSite" class="form-label">Место расчетов</label>
+                                <input type="text" class="form-control form-control-sm" id="companyPaymentSite" v-model="receipt.data.company.payment_site" />
                             </div>
                         </div>-->
                     </div>

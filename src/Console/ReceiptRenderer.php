@@ -46,7 +46,7 @@ trait ReceiptRenderer
         return (new TableStyle)
             ->setHorizontalBorderChars('═', '─')
             ->setVerticalBorderChars('║', ' ')
-            ->setCrossingChars('─', '╔', '═', '╗', '╢', '╝', '═', '╚', '╟', '╠', '═', '╣');
+            ->setCrossingChars('─', '╔', '═', '╗', '╢', '╝', '═', '╚', '╟', '╔', '═', '╗');
     }
 
     protected static function setupReceiptTableTitle(Table $table, Receipt $receipt): Table
@@ -55,19 +55,20 @@ trait ReceiptRenderer
         $number = $receipt->result->payload->fiscal_receipt_number ?? null;
         $number = isset($number) ? ' '.static::trans('shared.#').$number : '';
 
-        return $table->setHeaders([
-            new TableCell($receipt->data->company->name ?? '-', $options),
-            new TableCell($receipt->data->company->payment_address ?? '-', $options),
-            new TableCell(static::trans('receipt.company.inn').' '.$receipt->data->company->inn ?? '-', $options),
-            new TableCell(static::trans('receipt.company.payment_site').': '
-                .$receipt->data->company->payment_site ?? '-', $options),
-            new TableCell('<comment>'.Str::upper(static::trans('receipt.title')).$number.'</comment>', $options),
+        return $table->setRows([
+            [new TableCell($receipt->data->company->name ?? '-', $options)],
+            [new TableCell($receipt->data->company->payment_address ?? '-', $options)],
+            [new TableCell(static::trans('receipt.company.inn').' '.($receipt->data->company->inn ?? '-'), $options)],
+            [new TableCell(static::trans('receipt.company.payment_site').': '
+                .($receipt->data->company->payment_site ?? '-'), $options)],
+            [new TableCell('<comment>'.Str::upper(static::trans('receipt.title')).$number.'</comment>', $options)],
+            new TableSeparator,
         ]);
     }
 
     protected static function setupReceiptTableHeader(Table $table, Receipt $receipt): Table
     {
-        return $table->setRows([
+        return $table->addRows([
             [$receipt->operation?->getDescription() ?? '-', $receipt->result?->payload->receipt_datetime->format('d.m.Y H:i') ?? '-'],
             [static::trans('result.shift_number'), $receipt->result?->payload->shift_number ?? '-'],
             [static::trans('receipt.company.tax_system'), $receipt->data->company->tax_system?->getDescription('short') ?? '-'],

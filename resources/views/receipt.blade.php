@@ -3,6 +3,9 @@
     border-collapse: collapse;
     font-family: Arial, Helvetica, sans-serif;
 }
+.receipt thead {
+    text-align: center;
+}
 .receipt th, .receipt td {
     padding: 5px 10px;
 }
@@ -33,6 +36,10 @@
             $number = $receipt->result->payload->fiscal_receipt_number ?? null;
             $number = isset($number) ? ' '.__('fiscal-registrar::main.shared.#').$number : '';
         @endphp
+        <tr><td colspan="2">{{ $receipt->data->company->name ?? '-' }}</td></tr>
+        <tr><td colspan="2">{{ $receipt->data->company->payment_address ?? '-' }}</td></tr>
+        <tr><td colspan="2">{{ __('fiscal-registrar::main.receipt.company.inn').' '.($receipt->data->company->inn ?? '-') }}</td></tr>
+        <tr><td colspan="2">{{ __('fiscal-registrar::main.receipt.company.payment_site').': '.($receipt->data->company->payment_site ?? '-') }}</td></tr>
         <tr><th colspan="2">{{ Str::upper(__('fiscal-registrar::main.receipt.title')).$number }}</th></tr>
     </thead>
     <tbody>
@@ -46,7 +53,7 @@
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.company.tax_system') }}</td>
-            <td>{{ $receipt->data->company?->tax_system->getDescription('short') ?? '-' }}</td>
+            <td>{{ $receipt->data->company->tax_system?->getDescription('short') ?? '-' }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.client.phone_or_email') }}</td>

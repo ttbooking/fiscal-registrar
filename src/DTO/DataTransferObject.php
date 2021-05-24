@@ -7,16 +7,19 @@ namespace TTBooking\FiscalRegistrar\DTO;
 use DateTimeInterface;
 use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Support\Str;
 use JsonSerializable;
 use Spatie\DataTransferObject\Attributes\DefaultCast;
 use Spatie\DataTransferObject\DataTransferObject as SpatieDTO;
 use Spatie\DataTransferObject\Reflection\DataTransferObjectClass;
+use Stringable;
 use TTBooking\FiscalRegistrar\Casts\DTOCast;
 use TTBooking\FiscalRegistrar\DTO\Casters\TimestampCaster;
 
 #[DefaultCast(DateTimeInterface::class, TimestampCaster::class)]
-abstract class DataTransferObject extends SpatieDTO implements Arrayable, Castable, JsonSerializable
+abstract class DataTransferObject extends SpatieDTO implements
+    JsonSerializable, Arrayable, Jsonable, Stringable, Castable
 {
     public function __construct(...$args)
     {
@@ -32,9 +35,14 @@ abstract class DataTransferObject extends SpatieDTO implements Arrayable, Castab
         return $this->toArray();
     }
 
-    public function __toString()
+    public function toJson($options = 0): string
     {
-        return json_encode($this);
+        return json_encode($this->jsonSerialize(), $options);
+    }
+
+    public function __toString(): string
+    {
+        return $this->toJson();
     }
 
     public static function castUsing(array $arguments)

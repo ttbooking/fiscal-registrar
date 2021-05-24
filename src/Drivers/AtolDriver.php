@@ -141,9 +141,9 @@ class AtolDriver extends Driver implements SupportsCallbacks
                 ),
 
                 new AtolRegister\Company(
-                    $receipt->company->email ?? $this->config['email'],
-                    $receipt->company->inn ?? $this->config['inn'],
-                    $receipt->company->payment_address ?? $this->config['payment_address']
+                    $receipt->company->email ??= $this->config['email'],
+                    $receipt->company->inn ??= $this->config['inn'],
+                    $receipt->company->payment_address ??= $this->config['payment_address']
                 ),
 
                 collect($receipt->items)->map(function (Receipt\Item $item) {

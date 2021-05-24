@@ -54,6 +54,7 @@ class DriverDispatchingDecorator extends Decorator implements
         $this->event(new Events\Registering($receipt));
 
         $receipt->internal_id = $this->getDecoratedInstance()->register($operation, $externalId, $data);
+        $receipt->data = $data;
         $receipt->state = Receipt::STATE_REGISTERED;
         $receipt->save();
 

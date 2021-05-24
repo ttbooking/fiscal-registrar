@@ -12,13 +12,13 @@ use TTBooking\FiscalRegistrar\Enums\TaxSystem;
 final class Company extends DataTransferObject
 {
     // 1117
-    public string $email;
+    public ?string $email = null;
 
     // 1018
-    public string $inn;
+    public ?string $inn = null;
 
     // 1187
-    public string $payment_address;
+    public ?string $payment_address = null;
 
     // 1055
     #[CastWith(TaxSystemCaster::class)]

@@ -13,7 +13,7 @@ final class Receipt extends DataTransferObject
 {
     public Receipt\Client $client;
 
-    public ?Receipt\Company $company = null;
+    public Receipt\Company $company;
 
     public ?Receipt\AgentInfo $agent_info = null;
 
@@ -71,6 +71,11 @@ final class Receipt extends DataTransferObject
         }
 
         return $vats;
+    }
+
+    protected static function transformCompany(?array $company): array
+    {
+        return $company ?? [];
     }
 
     protected static function transformTotal($total, array $args): float

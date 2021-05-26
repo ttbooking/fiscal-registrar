@@ -1,8 +1,14 @@
 export default [
-    { path: '/', redirect: '/receipt' },
+    { path: '/', redirect: '/receipts' },
 
     {
-        path: '/receipt/:id',
+        path: '/receipts',
+        name: 'receipts',
+        component: require('./screens/receipts').default,
+    },
+
+    {
+        path: '/receipts/:id',
         name: 'receipt',
         component: require('./screens/receipt').default,
     }

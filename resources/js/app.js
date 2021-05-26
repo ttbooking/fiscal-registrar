@@ -40,6 +40,8 @@ if (token) {
 Vue.use(VueRouter);
 Vue.use(VueI18n);
 
+Vue.component('pagination', require('laravel-vue-pagination'));
+
 Vue.prototype.$http = axios.create();
 
 window.FiscalRegistrar.basePath = '/' + window.FiscalRegistrar.path;

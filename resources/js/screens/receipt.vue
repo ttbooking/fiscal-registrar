@@ -215,7 +215,7 @@
                         <div class="accordion-body">
                             <div class="row">
                                 <div class="col-sm-auto mb-3">
-                                    <label for="agentType" class="form-label">Тип агента</label>
+                                    <!--<label for="agentType" class="form-label">Тип агента</label>
                                     <select class="form-select form-select-sm" id="agentType" v-model="receipt.data.agent_info.type">
                                         <option value="bank_paying_agent">банковский платежный агент</option>
                                         <option value="bank_paying_subagent">банковский платежный субагент</option>
@@ -224,7 +224,7 @@
                                         <option value="attorney">поверенный</option>
                                         <option value="commission_agent">комиссионер</option>
                                         <option value="another">другой</option>
-                                    </select>
+                                    </select>-->
                                 </div>
                             </div>
                             <div class="row">

@@ -29,7 +29,7 @@ class AggregateRule implements Rule
      */
     public function __construct($rules = [], array $customMessages = [], array $customAttributes = [])
     {
-        $this->rules += $rules instanceof Closure ? $rules() : $rules;
+        $this->rules += value($rules);
         $this->customMessages = $customMessages;
         $this->customAttributes = $customAttributes;
     }

@@ -165,7 +165,9 @@ class AtolDriver extends Driver implements SupportsCallbacks
                     ->map(function (float|int $sum, int $type) {
                         return new AtolRegister\Payment(AtolRegister\PaymentType::from($type), $sum);
                     })
-                    ->all(),
+                    ->all()
+
+                    ?: [new AtolRegister\Payment(AtolRegister\PaymentType::ELECTRONIC(), 0)],
 
                 $receipt->total
 

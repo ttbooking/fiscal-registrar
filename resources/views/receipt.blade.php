@@ -33,7 +33,7 @@
 <table class="receipt">
     <thead>
         @php
-            $number = $receipt->result->payload->fiscal_receipt_number ?? null;
+            $number = $receipt->result?->payload->fiscal_receipt_number ?? null;
             $number = isset($number) ? ' '.__('fiscal-registrar::main.shared.#').$number : '';
         @endphp
         <tr><td colspan="2">{{ $receipt->data->company->name ?? '-' }}</td></tr>
@@ -165,19 +165,19 @@
     <tbody>
         <tr>
             <td>{{ __('fiscal-registrar::main.result.fn_number') }}</td>
-            <td>{{ $receipt->result->payload->fn_number }}</td>
+            <td>{{ $receipt->result?->payload->fn_number ?? '-' }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.result.ecr_registration_number') }}</td>
-            <td>{{ $receipt->result->payload->ecr_registration_number }}</td>
+            <td>{{ $receipt->result?->payload->ecr_registration_number ?? '-' }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.result.fiscal_document_number') }}</td>
-            <td>{{ $receipt->result->payload->fiscal_document_number }}</td>
+            <td>{{ $receipt->result?->payload->fiscal_document_number ?? '-' }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.result.fiscal_document_attribute') }}</td>
-            <td>{{ $receipt->result->payload->fiscal_document_attribute }}</td>
+            <td>{{ $receipt->result?->payload->fiscal_document_attribute ?? '-' }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.result.ffd_version') }}</td>

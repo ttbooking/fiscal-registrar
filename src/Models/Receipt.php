@@ -76,16 +76,19 @@ class Receipt extends Model implements StatefulFiscalRegistrar
             throw new StateException('Receipt has already been registered.');
         }
 
-        $connection = $this->getAttribute('connection') ?? $this->resolveConnectionName();
-        $operation ??= $this->operation;
-        $externalId ??= $this->external_id ?? $this->generateId();
-        $data ??= $this->data;
+        $this->setAttribute('connection', $this->getAttribute('connection') ?? $this->resolveConnectionName());
+        $this->operation = $operation ?? $this->operation;
+        $this->external_id = $externalId ?? $this->external_id ?? $this->generateId();
+        $this->data = $data ?? $this->data;
 
-        if (! isset($operation, $externalId, $data)) {
+        if (! isset($this->operation, $this->external_id, $this->data)) {
             throw new StateException('Insufficient parameters for operation.');
         }
 
-        return FiscalRegistrar::connection($connection)->register($operation, $externalId, $data);
+        $this->save();
+
+        return FiscalRegistrar::connection($this->getAttribute('connection'))
+            ->register($this->operation, $this->external_id, $this->data);
     }
 
     public function report(string $id = null, bool $force = false): ?DTO\Result

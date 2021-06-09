@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Listeners;
 
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\AnonymousNotifiable;
 use TTBooking\FiscalRegistrar\Events\Processed;
 use TTBooking\FiscalRegistrar\Notifications\ReceiptProcessed;
 
-class SendNotification
+class SendNotification implements ShouldQueue
 {
     protected AnonymousNotifiable $notifiable;
 
@@ -35,5 +36,15 @@ class SendNotification
             ->route('mail', $event->receipt->data->client->email)
             ->route('nexmo', $event->receipt->data->client->phone)
             ->notify(new ReceiptProcessed($event->receipt));
+    }
+
+    /**
+     * Get the tags that should be assigned to the queued listener.
+     *
+     * @return array
+     */
+    public function tags(): array
+    {
+        return ['fiscal-registrar'];
     }
 }

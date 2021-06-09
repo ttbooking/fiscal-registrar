@@ -7,12 +7,11 @@ namespace TTBooking\FiscalRegistrar\Events;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
-abstract class ReceiptEvent implements ShouldBroadcast, ShouldQueue
+abstract class ReceiptEvent implements ShouldBroadcast
 {
     use InteractsWithSockets, SerializesModels;
 

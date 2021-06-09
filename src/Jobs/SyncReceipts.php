@@ -54,4 +54,14 @@ class SyncReceipts implements ShouldQueue, ShouldBeUnique
             // and sync their status with remote service
             ->each(fn (Receipt $receipt) => $receipt->report());
     }
+
+    /**
+     * Get the tags that should be assigned to the job.
+     *
+     * @return array
+     */
+    public function tags(): array
+    {
+        return ['fiscal-registrar'];
+    }
 }

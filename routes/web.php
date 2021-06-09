@@ -13,7 +13,7 @@ Route::prefix('api/v1')->group(function () {
 
         // Report Routes...
         Route::get('/report/{id}', 'FiscalRegistrarController@report')->name('fiscal-registrar.report');
-        Route::post('/callback', 'FiscalRegistrarController@callback')->name('fiscal-registrar.callback');
+        Route::post('/callback', 'FiscalRegistrarController@callback')->withoutMiddleware('auth')->name('fiscal-registrar.callback');
     });
 
     Route::apiResource('receipts', 'ReceiptController')->names([

@@ -8,8 +8,11 @@ use Illuminate\Contracts\Database\Eloquent\Castable;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
 use MyCLabs\Enum\Enum as BaseEnum;
+use Spatie\DataTransferObject\Attributes\CastWith;
 use TTBooking\FiscalRegistrar\Casts\EnumCast;
+use TTBooking\FiscalRegistrar\DTO\Casters\EnumCaster;
 
+#[CastWith(EnumCaster::class)]
 abstract class Enum extends BaseEnum implements Castable
 {
     public function getDescription(string $variant = ''): string

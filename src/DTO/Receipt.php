@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\DTO;
 
+use Illuminate\Support\Collection;
 use Spatie\DataTransferObject\Attributes\CastWith;
+use Spatie\DataTransferObject\Casters\ArrayCaster;
 use TTBooking\FiscalRegistrar\DTO\Casters\RoundingCaster;
 use TTBooking\FiscalRegistrar\DTO\Receipt\Vats;
 use TTBooking\FiscalRegistrar\Enums\VatType;
@@ -19,8 +21,9 @@ final class Receipt extends DataTransferObject
 
     public ?Receipt\SupplierInfo $supplier_info = null;
 
-    /** @var Receipt\ItemCollection|Receipt\Item[] */
-    public Receipt\ItemCollection $items;
+    /** @var Receipt\Item[] */
+    #[CastWith(ArrayCaster::class, itemType: Receipt\Item::class)]
+    public Collection $items;
 
     public Receipt\Payments $payments;
 

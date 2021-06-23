@@ -47,16 +47,16 @@ class ReceiptFactory extends Factory
                     email: config('fiscal-registrar.test_email') ?? $this->faker->safeEmail(),
                 ),
 
-                items: array_map(fn () => [
-                    'name' => $this->faker->unique()->commodity(),
-                    'price' => $price = $this->faker->numberBetween(1, 10000),
-                    'quantity' => $quantity = $this->faker->numberBetween(1, 10),
-                    'sum' => $price * $quantity,
-                    'measurement_unit' => $this->faker->optional()->randomElement(['шт.', 'кг']),
-                    'payment_method' => PaymentMethod::FullPrepayment(),
-                    'payment_object' => PaymentObject::Commodity(),
-                    'vat' => new DTO\Receipt\Item\Vat(type: VatType::VAT20()),
-                ], range(1, $this->faker->numberBetween(1, 10))),
+                items: array_map(fn () => new DTO\Receipt\Item(
+                    name: $this->faker->unique()->commodity(),
+                    price: $price = $this->faker->numberBetween(1, 10000),
+                    quantity: $quantity = $this->faker->numberBetween(1, 10),
+                    sum: $price * $quantity,
+                    measurement_unit: $this->faker->optional()->randomElement(['шт.', 'кг']),
+                    payment_method: PaymentMethod::FullPrepayment(),
+                    payment_object: PaymentObject::Commodity(),
+                    vat: new DTO\Receipt\Item\Vat(type: VatType::VAT20()),
+                ), range(1, $this->faker->numberBetween(1, 10))),
 
             ),
         ];

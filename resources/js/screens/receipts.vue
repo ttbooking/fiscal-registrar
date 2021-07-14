@@ -46,6 +46,6 @@
             </tbody>
         </table>
 
-        <pagination :data="receipts" @pagination-change-page="getReceipts"></pagination>
+        <pagination :data="receipts" :limit="2" :show-disabled="true" align="center" @pagination-change-page="getReceipts"></pagination>
     </div>
 </template>

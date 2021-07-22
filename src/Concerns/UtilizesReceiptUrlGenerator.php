@@ -48,7 +48,7 @@ trait UtilizesReceiptUrlGenerator
      */
     protected function getReceiptUrl(Result $result) : ?string
     {
-        return $result->ofd_receipt_url
+        return $result->payload->ofd_receipt_url
             ?? (isset($this->receiptUrlGenerator) ? $this->receiptUrlGenerator->fromResult($result) : null);
     }
 }

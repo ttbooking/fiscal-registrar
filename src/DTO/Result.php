@@ -16,8 +16,6 @@ final class Result extends DataTransferObject
 
     public string $status;
 
-    public ?string $ofd_receipt_url = null;
-
     public ?Result\Payload $payload = null;
 
     #[CastWith(ResultExtraCaster::class)]

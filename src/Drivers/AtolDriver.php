@@ -206,7 +206,6 @@ class AtolDriver extends Driver implements SupportsCallbacks
             internal_id: $reportResponse->getUuid(),
             timestamp: $reportResponse->getTimestamp(),
             status: $reportResponse->getStatus()->getValue(),
-            ofd_receipt_url: $reportResponse->getOfdReceiptUrl(),
             payload: new Result\Payload(
                 fiscal_receipt_number: $reportResponse->getPayload()->getFiscalReceiptNumber(),
                 shift_number: $reportResponse->getPayload()->getShiftNumber(),
@@ -217,6 +216,8 @@ class AtolDriver extends Driver implements SupportsCallbacks
                 fiscal_document_number: $reportResponse->getPayload()->getFiscalDocumentNumber(),
                 fiscal_document_attribute: $reportResponse->getPayload()->getFiscalDocumentAttribute(),
                 fns_site: $reportResponse->getPayload()->getFnsSite(),
+                ofd_inn: $reportResponse->getPayload()->getOfdInn(),
+                ofd_receipt_url: $reportResponse->getPayload()->getOfdReceiptUrl(),
             ),
             extra: (object) [
                 'group_code' => $reportResponse->getGroupCode(),
@@ -226,7 +227,7 @@ class AtolDriver extends Driver implements SupportsCallbacks
             ],
         );
 
-        $result->ofd_receipt_url = $this->getReceiptUrl($result);
+        $result->payload->ofd_receipt_url = $this->getReceiptUrl($result);
 
         return $result;
     }

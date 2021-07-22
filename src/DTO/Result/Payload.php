@@ -38,4 +38,8 @@ final class Payload extends DataTransferObject
 
     // 1060
     public string $fns_site = 'www.nalog.ru';
+
+    public ?string $ofd_inn = null;
+
+    public ?string $ofd_receipt_url = null;
 }

@@ -42,7 +42,10 @@ final class AtolApiFactory
                     $handlerRegistry->registerSubscribingHandler(new ExtendedDateHandler);
                 })->build(),
 
-            Validation::createValidatorBuilder()->enableAnnotationMapping()->getValidator()
+            Validation::createValidatorBuilder()
+                ->enableAnnotationMapping(true)
+                ->addDefaultDoctrineAnnotationReader()
+                ->getValidator()
 
         );
     }

@@ -79,7 +79,10 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
 
     public function clone(): static
     {
-        return new static($this->model->replicate(['state', 'external_id', 'internal_id', 'result']));
+        return new static($this->model->replicate([
+            'state', 'external_id', 'internal_id', 'result',
+            'fn_number', 'fiscal_document_number', 'fiscal_document_attribute', 'total',
+        ]));
     }
 
     public function delete(bool $force = false): bool

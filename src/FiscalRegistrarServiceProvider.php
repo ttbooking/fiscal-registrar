@@ -35,11 +35,11 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         $this->registerEvents();
         $this->registerRoutes();
         $this->registerResources();
+        $this->registerCommands();
 
         if ($this->app->runningInConsole()) {
             $this->offerPublishing();
             $this->registerMigrations();
-            $this->registerCommands();
         }
     }
 

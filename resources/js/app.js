@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import BootstrapVue from 'bootstrap-vue';
 import axios from 'axios';
 import Routes from './routes';
 import VueRouter from 'vue-router';
@@ -12,6 +13,7 @@ if (token) {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 }
 
+Vue.use(BootstrapVue);
 Vue.use(VueRouter);
 
 Vue.component('pagination', require('laravel-vue-pagination'));

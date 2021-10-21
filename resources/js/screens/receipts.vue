@@ -2,6 +2,14 @@
     export default {
         data() {
             return {
+                fields: [
+                    { key: 'id', label: '#' },
+                    { key: 'created_at', label: 'Время' },
+                    { key: 'connection', label: 'Соединение' },
+                    { key: 'operation', label: 'Тип' },
+                    { key: 'data.total', label: 'Сумма' },
+                    { key: 'state', label: 'Статус' },
+                ],
                 receipts: {}
             }
         },
@@ -23,28 +31,11 @@
 
 <template>
     <div>
-        <table class="table table-sm table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Время</th>
-                    <th>Соединение</th>
-                    <th>Тип</th>
-                    <th>Сумма</th>
-                    <th>Статус</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="receipt in receipts.data" :key="receipt.id">
-                    <td><a :href="'receipts/' + receipt.id">{{ receipt.id }}</a></td>
-                    <td>{{ receipt.created_at }}</td>
-                    <td>{{ receipt.connection }}</td>
-                    <td>{{ receipt.operation }}</td>
-                    <td>{{ receipt.data.total }}</td>
-                    <td>{{ receipt.state }}</td>
-                </tr>
-            </tbody>
-        </table>
+        <b-table small striped hover :items="receipts.data" :fields="fields">
+            <template #cell(id)="data">
+                <a :href="'receipts/' + data.value">{{ data.value }}</a>
+            </template>
+        </b-table>
 
         <pagination :data="receipts" :limit="2" :show-disabled="true" align="center" @pagination-change-page="getReceipts"></pagination>
     </div>

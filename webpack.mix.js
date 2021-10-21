@@ -25,8 +25,13 @@ mix.options({
     .setPublicPath('public')
     .js('resources/js/app.js', 'public')
     .vue()
-    .sass('resources/sass/app.scss', 'public')
+    .sass('resources/sass/app.scss', 'public', {
+        sassOptions: {
+            quietDeps: true,
+        },
+    })
     .version()
+    .extract()
     .copy('resources/img', 'public/img')
     .webpackConfig({
         resolve: {
@@ -35,5 +40,5 @@ mix.options({
                 '@': path.resolve(__dirname, 'resources/js/'),
             },
         },
-        plugins: [new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)],
+        plugins: [new webpack.IgnorePlugin({ resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/ })],
     });

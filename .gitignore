@@ -1,6 +1,6 @@
 /vendor
 /node_modules
-/public/app.js.LICENSE.txt
+/public/vendor.js.LICENSE.txt
 /phpunit.xml
 /.idea
 composer.phar

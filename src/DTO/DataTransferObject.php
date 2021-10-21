@@ -30,7 +30,7 @@ abstract class DataTransferObject extends SpatieDTO implements
         parent::__construct(...$this->transformParameters($args));
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }

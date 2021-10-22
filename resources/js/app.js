@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue';
 import axios from 'axios';
+import moment from 'moment';
 import Routes from './routes';
 import VueRouter from 'vue-router';
 import 'bootstrap';
@@ -19,6 +20,7 @@ Vue.use(VueRouter);
 Vue.component('pagination', require('laravel-vue-pagination'));
 
 Vue.prototype.$http = axios.create();
+Vue.prototype.$moment = moment;
 
 window.FiscalRegistrar.basePath = '/' + window.FiscalRegistrar.path;
 

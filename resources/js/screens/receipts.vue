@@ -35,6 +35,9 @@
             <template #cell(id)="data">
                 <a :href="'receipts/' + data.value">{{ data.value }}</a>
             </template>
+            <template #cell(created_at)="data">
+                {{ $moment(data.value).format('DD.MM.YYYY hh:mm:ss') }}
+            </template>
         </b-table>
 
         <pagination :data="receipts" :limit="2" :show-disabled="true" align="center" @pagination-change-page="getReceipts"></pagination>

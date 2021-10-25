@@ -151,7 +151,7 @@ fieldset { margin: 0 }
                             </b-card-text>
                             <b-form-group :disabled="receipt.state !== 0">
                                 <b-container fluid>
-                                    <receipt-item v-for="(item, id) in receipt.data.items" :key="id" :id="id" :item="item"></receipt-item>
+                                    <receipt-item v-for="(item, id) in receipt.data.items" :key="id" :item="item"></receipt-item>
                                 </b-container>
                             </b-form-group>
                         </b-card-body>

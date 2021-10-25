@@ -2,7 +2,7 @@
     export default {
         name: 'ReceiptItem',
 
-        props: ['id', 'item'],
+        props: ['item'],
 
         data() {
             return {
@@ -51,6 +51,12 @@
             updateSum() {
                 this.item.sum = this.item.price * this.item.quantity;
             }
+        },
+
+        computed: {
+            id() {
+                return this.$vnode.key + 1;
+            }
         }
     }
 </script>
@@ -58,38 +64,38 @@
 <template>
     <b-form-row class="my-1">
         <b-col lg="3" md="2">
-            <b-form-group label="Наименование" :label-for="'item' + (id+1) + 'Name'" class="required">
-                <b-form-input :id="'item' + (id+1) + 'Name'" type="text" size="sm" required v-model="item.name"></b-form-input>
+            <b-form-group label="Наименование" :label-for="'item' + id + 'Name'" class="required">
+                <b-form-input :id="'item' + id + 'Name'" type="text" size="sm" required v-model="item.name"></b-form-input>
             </b-form-group>
         </b-col>
         <b-col lg="1" md="2">
-            <b-form-group label="Цена" :label-for="'item' + (id+1) + 'Price'" class="required">
-                <b-form-input :id="'item' + (id+1) + 'Price'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="item.price" @input="updateSum"></b-form-input>
+            <b-form-group label="Цена" :label-for="'item' + id + 'Price'" class="required">
+                <b-form-input :id="'item' + id + 'Price'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="item.price" @input="updateSum"></b-form-input>
             </b-form-group>
         </b-col>
         <b-col lg="1" md="2">
-            <b-form-group label="Кол-во" :label-for="'item' + (id+1) + 'Quantity'" class="required">
-                <b-form-input :id="'item' + (id+1) + 'Quantity'" type="number" min=".001" max="99999.999" step="any" size="sm" placeholder="1" required v-model="item.quantity" @input="updateSum"></b-form-input>
+            <b-form-group label="Кол-во" :label-for="'item' + id + 'Quantity'" class="required">
+                <b-form-input :id="'item' + id + 'Quantity'" type="number" min=".001" max="99999.999" step="any" size="sm" placeholder="1" required v-model="item.quantity" @input="updateSum"></b-form-input>
             </b-form-group>
         </b-col>
         <b-col lg="1" md="2">
-            <b-form-group label="Сумма" :label-for="'item' + (id+1) + 'Sum'" class="required">
-                <b-form-input :id="'item' + (id+1) + 'Sum'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="item.sum"></b-form-input>
+            <b-form-group label="Сумма" :label-for="'item' + id + 'Sum'" class="required">
+                <b-form-input :id="'item' + id + 'Sum'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="item.sum"></b-form-input>
             </b-form-group>
         </b-col>
         <b-col lg="1" md="2">
-            <b-form-group label="Ед. изм." :label-for="'item' + (id+1) + 'MeasurementUnit'">
-                <b-form-input :id="'item' + (id+1) + 'MeasurementUnit'" type="text" size="sm" placeholder="шт." maxlength="16" v-model="item.measurement_unit"></b-form-input>
+            <b-form-group label="Ед. изм." :label-for="'item' + id + 'MeasurementUnit'">
+                <b-form-input :id="'item' + id + 'MeasurementUnit'" type="text" size="sm" placeholder="шт." maxlength="16" v-model="item.measurement_unit"></b-form-input>
             </b-form-group>
         </b-col>
         <b-col lg="2" md="2">
-            <b-form-group label="Способ расчета" :label-for="'item' + (id+1) + 'PaymentMethod'" class="required">
-                <b-form-select :id="'item' + (id+1) + 'PaymentMethod'" size="sm" v-model="item.payment_method" :options="paymentMethods"></b-form-select>
+            <b-form-group label="Способ расчета" :label-for="'item' + id + 'PaymentMethod'" class="required">
+                <b-form-select :id="'item' + id + 'PaymentMethod'" size="sm" v-model="item.payment_method" :options="paymentMethods"></b-form-select>
             </b-form-group>
         </b-col>
         <b-col lg="2" md="2">
-            <b-form-group label="Предмет расчета" :label-for="'item' + (id+1) + 'PaymentObject'" class="required">
-                <b-form-select :id="'item' + (id+1) + 'PaymentObject'" size="sm" v-model="item.payment_object" :options="paymentObjects"></b-form-select>
+            <b-form-group label="Предмет расчета" :label-for="'item' + id + 'PaymentObject'" class="required">
+                <b-form-select :id="'item' + id + 'PaymentObject'" size="sm" v-model="item.payment_object" :options="paymentObjects"></b-form-select>
             </b-form-group>
         </b-col>
     </b-form-row>

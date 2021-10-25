@@ -79,22 +79,22 @@ fieldset { margin: 0 }
                             <b-form-group :disabled="receipt.state !== 0">
                                 <b-container fluid>
                                     <b-form-row class="my-1">
-                                        <b-col sm="2">
+                                        <b-col align-self="end" sm="2">
                                             <b-form-group label="Электронный адрес" label-for="clientEmail" :class="isClientEmailRequired && 'required'">
                                                 <b-form-input id="clientEmail" type="email" size="sm" placeholder="user@domain.com" :required="isClientEmailRequired" v-model="receipt.data.client.email"></b-form-input>
                                             </b-form-group>
                                         </b-col>
-                                        <b-col sm="2">
+                                        <b-col align-self="end" sm="2">
                                             <b-form-group label="Телефон" label-for="clientPhone" :class="isClientPhoneRequired && 'required'">
                                                 <b-form-input id="clientPhone" type="tel" size="sm" placeholder="+79001234567" :required="isClientPhoneRequired" v-model="receipt.data.client.phone"></b-form-input>
                                             </b-form-group>
                                         </b-col>
-                                        <b-col sm="2">
+                                        <b-col align-self="end" sm="2">
                                             <b-form-group label="Наименование" label-for="clientName">
                                                 <b-form-input id="clientName" type="text" size="sm" placeholder="Иван Иванович Иванов" v-model="receipt.data.client.name"></b-form-input>
                                             </b-form-group>
                                         </b-col>
-                                        <b-col sm="2">
+                                        <b-col align-self="end" sm="2">
                                             <b-form-group label="ИНН" label-for="clientInn">
                                                 <b-form-input id="clientInn" type="text" size="sm" placeholder="1234567890" pattern="\d{10}|\d{12}" maxlength="12" v-model="receipt.data.client.inn"></b-form-input>
                                             </b-form-group>
@@ -118,17 +118,17 @@ fieldset { margin: 0 }
                             <b-form-group :disabled="receipt.state !== 0">
                                 <b-container fluid>
                                     <b-form-row class="my-1">
-                                        <b-col sm="2">
+                                        <b-col align-self="end" sm="2">
                                             <b-form-group label="Электронный адрес" label-for="companyEmail">
                                                 <b-form-input id="companyEmail" type="email" size="sm" placeholder="user@domain.com" v-model="receipt.data.company.email"></b-form-input>
                                             </b-form-group>
                                         </b-col>
-                                        <b-col sm="2">
+                                        <b-col align-self="end" sm="2">
                                             <b-form-group label="ИНН" label-for="companyInn">
                                                 <b-form-input id="companyInn" type="text" size="sm" placeholder="1234567890" pattern="\d{10}|\d{12}" maxlength="12" v-model="receipt.data.company.inn"></b-form-input>
                                             </b-form-group>
                                         </b-col>
-                                        <b-col sm="2">
+                                        <b-col align-self="end" sm="2">
                                             <b-form-group label="Место расчетов" label-for="companyPaymentSite">
                                                 <b-form-input id="companyPaymentSite" type="text" size="sm" v-model="receipt.data.company.payment_site"></b-form-input>
                                             </b-form-group>
@@ -170,27 +170,27 @@ fieldset { margin: 0 }
                             <b-form-group :disabled="receipt.state !== 0">
                                 <b-container fluid>
                                     <b-form-row class="my-1">
-                                        <b-col sm="1">
+                                        <b-col align-self="end" sm="1">
                                             <b-form-group label="Наличными" label-for="paymentCash">
                                                 <b-form-input id="paymentCash" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.data.payments.cash"></b-form-input>
                                             </b-form-group>
                                         </b-col>
-                                        <b-col sm="1">
+                                        <b-col align-self="end" sm="1">
                                             <b-form-group label="Безналичными" label-for="paymentElectronic">
                                                 <b-form-input id="paymentElectronic" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.data.payments.electronic"></b-form-input>
                                             </b-form-group>
                                         </b-col>
-                                        <b-col sm="1">
+                                        <b-col align-self="end" sm="1">
                                             <b-form-group label="Предоплатой" label-for="paymentPrepaid">
                                                 <b-form-input id="paymentPrepaid" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.data.payments.prepaid"></b-form-input>
                                             </b-form-group>
                                         </b-col>
-                                        <b-col sm="1">
+                                        <b-col align-self="end" sm="1">
                                             <b-form-group label="Постоплатой" label-for="paymentPostpaid">
                                                 <b-form-input id="paymentPostpaid" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.data.payments.postpaid"></b-form-input>
                                             </b-form-group>
                                         </b-col>
-                                        <b-col sm="1">
+                                        <b-col align-self="end" sm="1">
                                             <b-form-group label="Встр. предст." label-for="paymentOther">
                                                 <b-form-input id="paymentOther" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.data.payments.other"></b-form-input>
                                             </b-form-group>
@@ -214,7 +214,7 @@ fieldset { margin: 0 }
                             <b-form-group :disabled="receipt.state !== 0">
                                 <b-container fluid>
                                     <b-form-row class="my-1">
-                                        <b-col sm="2">
+                                        <b-col align-self="end" sm="2">
                                             <!--<b-form-group label="Тип агента" label-for="agentType">
                                                 <b-form-select id="agentType" size="sm" v-model="receipt.data.agent_info.type" :options="agentTypes"></b-form-select>
                                             </b-form-group>-->

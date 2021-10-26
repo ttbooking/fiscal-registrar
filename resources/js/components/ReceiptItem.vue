@@ -52,18 +52,46 @@
                     { value: 'vat118', text: '18/118' },
                     { value: 'vat120', text: '20/120' }
                 ],
+                vatRates: {
+                    none: 0,
+                    vat0: 0,
+                    vat10: .1,
+                    vat18: .18,
+                    vat20: .2,
+                    vat110: 10 / 110,
+                    vat118: 18 / 118,
+                    vat120: 20 / 120
+                }
             }
         },
 
         methods: {
-            updateSum() {
-                this.item.sum = this.item.price * this.item.quantity;
+            extractVat(sum, vatType) {
+                return parseFloat((sum - sum / (1 + this.vatRates[vatType])).toFixed(2));
             }
         },
 
         computed: {
             id() {
                 return this.$vnode.key + 1;
+            }
+        },
+
+        watch: {
+            'item.price': function (price) {
+                this.item.sum = price * this.item.quantity;
+            },
+
+            'item.quantity': function (quantity) {
+                this.item.sum = this.item.price * quantity;
+            },
+
+            'item.sum': function (sum) {
+                this.item.vat.sum = this.extractVat(sum, this.item.vat.type);
+            },
+
+            'item.vat.type': function (vatType) {
+                this.item.vat.sum = this.extractVat(this.item.sum, vatType);
             }
         }
     }
@@ -78,12 +106,12 @@
         </b-col>
         <b-col align-self="end" lg="1" md="2">
             <b-form-group label="Цена" :label-for="'item' + id + 'Price'" class="required">
-                <b-form-input :id="'item' + id + 'Price'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="item.price" @input="updateSum"></b-form-input>
+                <b-form-input :id="'item' + id + 'Price'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="item.price"></b-form-input>
             </b-form-group>
         </b-col>
         <b-col align-self="end" lg="1" md="2">
             <b-form-group label="Кол-во" :label-for="'item' + id + 'Quantity'" class="required">
-                <b-form-input :id="'item' + id + 'Quantity'" type="number" min=".001" max="99999.999" step="any" size="sm" placeholder="1" required v-model="item.quantity" @input="updateSum"></b-form-input>
+                <b-form-input :id="'item' + id + 'Quantity'" type="number" min=".001" max="99999.999" step="any" size="sm" placeholder="1" required v-model="item.quantity"></b-form-input>
             </b-form-group>
         </b-col>
         <b-col align-self="end" lg="1" md="2">

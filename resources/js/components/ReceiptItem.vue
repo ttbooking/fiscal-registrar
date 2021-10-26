@@ -116,5 +116,10 @@
                 <b-form-input :id="'item' + id + 'VatSum'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="item.vat.sum"></b-form-input>
             </b-form-group>
         </b-col>
+        <b-col align-self="end" lg="1" md="1" sm="1" class="ml-auto mr-0">
+            <b-form-group class="text-right">
+                <b-button variant="danger" size="sm" title="Удалить" @click="$emit('remove')"><b>&times;</b></b-button>
+            </b-form-group>
+        </b-col>
     </b-form-row>
 </template>

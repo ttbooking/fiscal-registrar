@@ -42,6 +42,33 @@
 
             saveReceipt() {
                 this.$http.put(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id, this.receipt)
+            },
+
+            addItem() {
+                this.receipt.data.items.push({
+                    agent_info: null,
+                    country_code: null,
+                    declaration_nulber: null,
+                    excise: null,
+                    measurement_unit: null,
+                    name: '',
+                    nomenclature_code: null,
+                    payment_method: 'full_prepayment',
+                    payment_object: 'commodity',
+                    price: null,
+                    quantity: 1,
+                    sum: null,
+                    supplier_info: null,
+                    user_data: null,
+                    vat: {
+                        sum: null,
+                        type: 'vat20'
+                    }
+                });
+            },
+
+            removeItem(id) {
+                this.receipt.data.items.splice(id, 1);
             }
         },
 
@@ -147,14 +174,15 @@ fieldset { margin: 0 }
                     <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
                         <b-card-body>
                             <b-card-text>
-                                TODO
+                                В документе должна быть как минимум одна позиция.
                             </b-card-text>
                             <b-form-group :disabled="receipt.state !== 0">
                                 <b-container fluid>
                                     <template v-for="(item, id) in receipt.data.items">
-                                        <hr v-if="id" />
-                                        <receipt-item :key="id" :item="item"></receipt-item>
+                                        <receipt-item :key="id" :item="item" @remove="removeItem(id)"></receipt-item>
+                                        <hr />
                                     </template>
+                                    <b-button variant="primary" size="sm" @click="addItem">Добавить</b-button>
                                 </b-container>
                             </b-form-group>
                         </b-card-body>

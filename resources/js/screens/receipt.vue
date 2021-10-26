@@ -26,7 +26,7 @@
         mounted() {
             this.loadReceipt(this.$route.params.id);
 
-            document.title = "Fiscal Registrar - Receipt";
+            document.title = 'Fiscal Registrar - Receipt';
         },
 
         methods: {
@@ -48,7 +48,7 @@
                 this.receipt.data.items.push({
                     agent_info: null,
                     country_code: null,
-                    declaration_nulber: null,
+                    declaration_number: null,
                     excise: null,
                     measurement_unit: null,
                     name: '',

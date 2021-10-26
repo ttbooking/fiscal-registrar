@@ -66,7 +66,7 @@
         },
 
         methods: {
-            extractVat(sum, vatType) {
+            extractVat(sum = this.item.sum, vatType = this.item.vat.type) {
                 return parseFloat((sum - sum / (1 + this.vatRates[vatType])).toFixed(2));
             }
         },
@@ -74,6 +74,10 @@
         computed: {
             id() {
                 return this.$vnode.key + 1;
+            },
+
+            vatSum() {
+                return String(this.extractVat());
             }
         },
 
@@ -141,7 +145,7 @@
         </b-col>
         <b-col align-self="end" lg="1" md="2">
             <b-form-group label="Сумма НДС" :label-for="'item' + id + 'VatSum'">
-                <b-form-input :id="'item' + id + 'VatSum'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="item.vat.sum"></b-form-input>
+                <b-form-input :id="'item' + id + 'VatSum'" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatSum" v-model="item.vat.sum"></b-form-input>
             </b-form-group>
         </b-col>
         <b-col align-self="end" lg="1" md="1" sm="1" class="ml-auto mr-0">

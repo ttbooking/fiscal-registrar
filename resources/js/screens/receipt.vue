@@ -19,17 +19,32 @@
                     { value: 'attorney', text: 'поверенный' },
                     { value: 'commission_agent', text: 'комиссионер' },
                     { value: 'another', text: 'другой' }
+                ],
+                connections: [],
+                operations: [
+                    { value: 'sell', text: 'приход' },
+                    { value: 'sell_refund', text: 'возврат прихода' },
+                    { value: 'buy', text: 'расход' },
+                    { value: 'buy_refund', text: 'возврат расхода' },
                 ]
             }
         },
 
         mounted() {
             this.loadReceipt(this.$route.params.id);
+            this.enumConnections();
 
             document.title = 'Fiscal Registrar - Receipt';
         },
 
         methods: {
+            enumConnections() {
+                this.$http.get(FiscalRegistrar.basePath + '/api/v1/connection/')
+                    .then(response => {
+                        this.connections = response.data;
+                    });
+            },
+
             loadReceipt(id) {
                 this.ready = false;
 
@@ -95,9 +110,38 @@ fieldset { margin: 0 }
             <b-form validated v-if="ready" @submit.prevent="saveReceipt">
                 <b-card no-body class="mb-1">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                        <b-button block v-b-toggle.accordion-1 variant="info">Данные клиента</b-button>
+                        <b-button block v-b-toggle.accordion-1 variant="info">Атрибуты документа</b-button>
                     </b-card-header>
                     <b-collapse id="accordion-1" visible accordion="my-accordion" role="tabpanel">
+                        <b-card-body>
+                            <b-card-text>
+                                TODO
+                            </b-card-text>
+                            <b-form-group :disabled="receipt.state !== 0">
+                                <b-container fluid>
+                                    <b-form-row class="my-1">
+                                        <b-col align-self="end" lg="3" md="4" sm="6">
+                                            <b-form-group label="Подключение" label-for="receiptConnection" class="required">
+                                                <b-form-select id="receiptConnection" size="sm" v-model="receipt.connection" :options="connections"></b-form-select>
+                                            </b-form-group>
+                                        </b-col>
+                                        <b-col align-self="end" lg="3" md="4" sm="6">
+                                            <b-form-group label="Операция" label-for="receiptOperation" class="required">
+                                                <b-form-select id="receiptOperation" size="sm"  v-model="receipt.operation" :options="operations"></b-form-select>
+                                            </b-form-group>
+                                        </b-col>
+                                    </b-form-row>
+                                </b-container>
+                            </b-form-group>
+                        </b-card-body>
+                    </b-collapse>
+                </b-card>
+
+                <b-card no-body class="mb-1">
+                    <b-card-header header-tag="header" class="p-1" role="tab">
+                        <b-button block v-b-toggle.accordion-2 variant="info">Данные клиента</b-button>
+                    </b-card-header>
+                    <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
                         <b-card-body>
                             <b-card-text>
                                 В запросе обязательно должно быть заполнено хотя бы одно из полей: <code>email</code> или <code>phone</code>.<br />
@@ -135,9 +179,9 @@ fieldset { margin: 0 }
 
                 <b-card no-body class="mb-1">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                        <b-button block v-b-toggle.accordion-2 variant="info">Данные организации</b-button>
+                        <b-button block v-b-toggle.accordion-3 variant="info">Данные организации</b-button>
                     </b-card-header>
-                    <b-collapse id="accordion-2" accordion="my-accordion" role="tabpanel">
+                    <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
                         <b-card-body>
                             <b-card-text>
                                 Оставьте поля пустыми для автоматической подстановки параметров из конфигурации подключения при проводке чека.
@@ -169,9 +213,9 @@ fieldset { margin: 0 }
 
                 <b-card no-body class="mb-1">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                        <b-button block v-b-toggle.accordion-3 variant="info">Позиции документа</b-button>
+                        <b-button block v-b-toggle.accordion-4 variant="info">Позиции документа</b-button>
                     </b-card-header>
-                    <b-collapse id="accordion-3" accordion="my-accordion" role="tabpanel">
+                    <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
                         <b-card-body>
                             <b-card-text>
                                 В документе должна быть как минимум одна позиция.
@@ -191,9 +235,9 @@ fieldset { margin: 0 }
 
                 <b-card no-body class="mb-1">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                        <b-button block v-b-toggle.accordion-4 variant="info">Данные по оплате</b-button>
+                        <b-button block v-b-toggle.accordion-5 variant="info">Данные по оплате</b-button>
                     </b-card-header>
-                    <b-collapse id="accordion-4" accordion="my-accordion" role="tabpanel">
+                    <b-collapse id="accordion-5" accordion="my-accordion" role="tabpanel">
                         <b-card-body>
                             <b-card-text>
                                 TODO
@@ -235,9 +279,9 @@ fieldset { margin: 0 }
 
                 <b-card no-body class="mb-1">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                        <b-button block v-b-toggle.accordion-5 variant="info">Данные агента</b-button>
+                        <b-button block v-b-toggle.accordion-6 variant="info">Данные агента</b-button>
                     </b-card-header>
-                    <b-collapse id="accordion-5" accordion="my-accordion" role="tabpanel">
+                    <b-collapse id="accordion-6" accordion="my-accordion" role="tabpanel">
                         <b-card-body>
                             <b-card-text>
                                 TODO

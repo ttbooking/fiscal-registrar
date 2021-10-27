@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('api/v1')->group(function () {
 
+    Route::get('connection', 'FiscalRegistrarController@connections')->name('fiscal-registrar.connections');
+
     Route::prefix('connection/{connection}')->group(function () {
         // Registry Routes...
         Route::post('/sell/{externalId}', 'FiscalRegistrarController@sell')->name('fiscal-registrar.sell');

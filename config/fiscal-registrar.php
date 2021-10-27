@@ -73,6 +73,7 @@ return [
     'connections' => [
 
         'atol' => [
+            'display_name' => 'Тестовое подключение АТОЛ',
             'test' => true,
             'url' => 'https://testonline.atol.ru/possystem',
             'login' => 'v4-online-atol-ru',

@@ -94,6 +94,22 @@
 
             isClientPhoneRequired() {
                 return !this.receipt.data.client.email;
+            },
+
+            selectConnections() {
+                return Object.entries(this.connections).map(([name, data]) => ({ value: name, text: data.display_name }));
+            },
+
+            companyEmailPlaceholder() {
+                return this.connections[this.receipt.connection].email ?? 'user@domain.com';
+            },
+
+            companyInnPlaceholder() {
+                return this.connections[this.receipt.connection].inn ?? '1234567890';
+            },
+
+            companyPaymentSitePlaceholder() {
+                return this.connections[this.receipt.connection].payment_site ?? '';
             }
         }
     }
@@ -122,7 +138,7 @@ fieldset { margin: 0 }
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="3" md="4" sm="6">
                                             <b-form-group label="Подключение" label-for="receiptConnection" class="required">
-                                                <b-form-select id="receiptConnection" size="sm" v-model="receipt.connection" :options="connections"></b-form-select>
+                                                <b-form-select id="receiptConnection" size="sm" v-model="receipt.connection" :options="selectConnections"></b-form-select>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="3" md="4" sm="6">
@@ -191,17 +207,17 @@ fieldset { margin: 0 }
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Электронный адрес" label-for="companyEmail">
-                                                <b-form-input id="companyEmail" type="email" size="sm" placeholder="user@domain.com" v-model="receipt.data.company.email"></b-form-input>
+                                                <b-form-input id="companyEmail" type="email" size="sm" :placeholder="companyEmailPlaceholder" v-model="receipt.data.company.email"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="ИНН" label-for="companyInn">
-                                                <b-form-input id="companyInn" type="text" size="sm" placeholder="1234567890" pattern="\d{10}|\d{12}" maxlength="12" v-model="receipt.data.company.inn"></b-form-input>
+                                                <b-form-input id="companyInn" type="text" size="sm" :placeholder="companyInnPlaceholder" pattern="\d{10}|\d{12}" maxlength="12" v-model="receipt.data.company.inn"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Место расчетов" label-for="companyPaymentSite">
-                                                <b-form-input id="companyPaymentSite" type="text" size="sm" v-model="receipt.data.company.payment_site"></b-form-input>
+                                                <b-form-input id="companyPaymentSite" type="text" size="sm" :placeholder="companyPaymentSitePlaceholder" v-model="receipt.data.company.payment_site"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                     </b-form-row>

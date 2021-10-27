@@ -35,13 +35,15 @@ class FiscalRegistrarController extends Controller
         /** @var array<string, array> $connections */
         $connections = $this->config->get('fiscal-registrar.connections');
 
-        return array_map(
-            static fn (string $name, array $data) => [
-                'value' => $name,
-                'text' => $data['display_name'] ?? $name,
+        return array_combine(
+            $names = array_keys($connections),
+            array_map(static fn (string $name, array $data) => [
+                'display_name' => $data['display_name'] ?? $name,
                 'test' => $data['test'] ?? false,
-            ],
-            array_keys($connections), $connections
+                'inn' => $data['inn'] ?? null,
+                'email' => $data['email'] ?? null,
+                'payment_site' => $data['payment_site'] ?? null,
+            ], $names, $connections)
         );
     }
 

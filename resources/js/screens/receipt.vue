@@ -34,6 +34,16 @@
                     vat20: null,
                     vat110: null,
                     vat120: null
+                },
+                vatRates: {
+                    none: 0,
+                    vat0: 0,
+                    vat10: .1,
+                    vat18: .18,
+                    vat20: .2,
+                    vat110: 10 / 110,
+                    vat118: 18 / 118,
+                    vat120: 20 / 120
                 }
             }
         },
@@ -92,6 +102,49 @@
 
             removeItem(id) {
                 this.receipt.data.items.splice(id, 1);
+            },
+
+            extractVat(sum, vatType) {
+                return parseFloat((sum - sum / (1 + this.vatRates[vatType])).toFixed(2));
+            },
+
+            getVats(calc = false) {
+                const vats = {
+                    without_vat: 0,
+                    with_vat0: 0,
+                    vat10: 0,
+                    vat20: 0,
+                    vat110: 0,
+                    vat120: 0
+                };
+
+                if (calc) {
+                    for (const item of this.receipt.data.items) {
+                        switch (item?.vat.type ?? 'none') {
+                            case 'vat20':
+                            case 'vat18':
+                                vats.vat20 += this.extractVat(item.sum, item.vat.type);
+                                break;
+                            case 'vat10':
+                                vats.vat10 += this.extractVat(item.sum, item.vat.type);
+                                break;
+                            case 'vat0':
+                                vats.with_vat0 += item.sum;
+                                break;
+                            case 'none':
+                                vats.without_vat += item.sum;
+                                break;
+                            case 'vat120':
+                            case 'vat118':
+                                vats.vat120 += this.extractVat(item.sum, item.vat.type);
+                                break;
+                            case 'vat110':
+                                vats.vat110 += this.extractVat(item.sum, item.vat.type);
+                        }
+                    }
+                }
+
+                return vats;
             }
         },
 
@@ -118,6 +171,12 @@
 
             companyPaymentSitePlaceholder() {
                 return this.connections[this.receipt.connection].payment_site ?? '';
+            },
+
+            vatsPlaceholder() {
+                return Object.fromEntries(
+                    Object.entries(this.getVats(!this.receipt.data.vats)).map(([key, val]) => [key, String(val)])
+                );
             },
 
             vatsWithoutVat: {
@@ -184,7 +243,8 @@
         watch: {
             'receipt.data.vats': {
                 handler: function (vats) {
-                    Object.values(vats).every(vat => vat === null) && delete this.receipt.data.vats;
+                    if (vats === null) return;
+                    Object.values(vats).every(vat => vat === null) && (this.receipt.data.vats = null);
                 },
                 deep: true
             }
@@ -382,39 +442,41 @@ fieldset { margin: 0 }
                     <b-collapse id="accordion-6" accordion="my-accordion" role="tabpanel">
                         <b-card-body>
                             <b-card-text>
-                                TODO
+                                Необходимо передать либо сумму налога на позицию, либо сумму налога на чек. Если будет переданы и сумма налога на позицию и сумма налога на чек, сервис учтет только сумму налога на чек.
+                                <span v-if="receipt.data.vats">В данный момент используются суммы налога на чек. Для возврата к использованию сумм налога на позицию, очистите все поля в этом разделе.</span>
+                                <span v-else>В данный момент используются суммы налога на позицию. В полях ниже можно увидеть их расчетные величины.</span>
                             </b-card-text>
                             <b-form-group :disabled="receipt.state !== 0">
                                 <b-container fluid>
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Сумма расчета по чеку без НДС" label-for="withoutVat">
-                                                <b-form-input id="withoutVat" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="vatsWithoutVat"></b-form-input>
+                                                <b-form-input id="withoutVat" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatsPlaceholder.without_vat" v-model.number="vatsWithoutVat"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Сумма расчета по чеку с НДС 0%" label-for="withVat0">
-                                                <b-form-input id="withVat0" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="vatsWithVat0"></b-form-input>
+                                                <b-form-input id="withVat0" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatsPlaceholder.with_vat0" v-model.number="vatsWithVat0"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Сумма НДС чека по ставке 10%" label-for="vat10">
-                                                <b-form-input id="vat10" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="vatsVat10"></b-form-input>
+                                                <b-form-input id="vat10" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatsPlaceholder.vat10" v-model.number="vatsVat10"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Сумма НДС чека по ставке 20%" label-for="vat20">
-                                                <b-form-input id="vat20" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="vatsVat20"></b-form-input>
+                                                <b-form-input id="vat20" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatsPlaceholder.vat20" v-model.number="vatsVat20"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Сумма НДС чека по расч. ставке 10/110" label-for="vat110">
-                                                <b-form-input id="vat110" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="vatsVat110"></b-form-input>
+                                                <b-form-input id="vat110" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatsPlaceholder.vat110" v-model.number="vatsVat110"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Сумма НДС чека по расч. ставке 20/120" label-for="vat120">
-                                                <b-form-input id="vat120" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="vatsVat120"></b-form-input>
+                                                <b-form-input id="vat120" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatsPlaceholder.vat120" v-model.number="vatsVat120"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                     </b-form-row>

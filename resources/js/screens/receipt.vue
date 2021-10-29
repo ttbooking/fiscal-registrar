@@ -26,7 +26,15 @@
                     { value: 'sell_refund', text: 'возврат прихода' },
                     { value: 'buy', text: 'расход' },
                     { value: 'buy_refund', text: 'возврат расхода' },
-                ]
+                ],
+                vats: {
+                    without_vat: null,
+                    with_vat0: null,
+                    vat10: null,
+                    vat20: null,
+                    vat110: null,
+                    vat120: null
+                }
             }
         },
 
@@ -110,6 +118,75 @@
 
             companyPaymentSitePlaceholder() {
                 return this.connections[this.receipt.connection].payment_site ?? '';
+            },
+
+            vatsWithoutVat: {
+                get: function () {
+                    return this.receipt.data.vats?.without_vat ?? null;
+                },
+                set: function (val) {
+                    this.receipt.data.vats ??= this.vats;
+                    this.receipt.data.vats.without_vat = val || null;
+                }
+            },
+
+            vatsWithVat0: {
+                get: function () {
+                    return this.receipt.data.vats?.with_vat0 ?? null;
+                },
+                set: function (val) {
+                    this.receipt.data.vats ??= this.vats;
+                    this.receipt.data.vats.with_vat0 = val || null;
+                }
+            },
+
+            vatsVat10: {
+                get: function () {
+                    return this.receipt.data.vats?.vat10 ?? null;
+                },
+                set: function (val) {
+                    this.receipt.data.vats ??= this.vats;
+                    this.receipt.data.vats.vat10 = val || null;
+                }
+            },
+
+            vatsVat20: {
+                get: function () {
+                    return this.receipt.data.vats?.vat20 ?? null;
+                },
+                set: function (val) {
+                    this.receipt.data.vats ??= this.vats;
+                    this.receipt.data.vats.vat20 = val || null;
+                }
+            },
+
+            vatsVat110: {
+                get: function () {
+                    return this.receipt.data.vats?.vat110 ?? null;
+                },
+                set: function (val) {
+                    this.receipt.data.vats ??= this.vats;
+                    this.receipt.data.vats.vat110 = val || null;
+                }
+            },
+
+            vatsVat120: {
+                get: function () {
+                    return this.receipt.data.vats?.vat120 ?? null;
+                },
+                set: function (val) {
+                    this.receipt.data.vats ??= this.vats;
+                    this.receipt.data.vats.vat120 = val || null;
+                }
+            }
+        },
+
+        watch: {
+            'receipt.data.vats': {
+                handler: function (vats) {
+                    Object.values(vats).every(vat => vat === null) && delete this.receipt.data.vats;
+                },
+                deep: true
             }
         }
     }
@@ -144,6 +221,11 @@ fieldset { margin: 0 }
                                         <b-col align-self="end" lg="3" md="4" sm="6">
                                             <b-form-group label="Операция" label-for="receiptOperation" class="required">
                                                 <b-form-select id="receiptOperation" size="sm"  v-model="receipt.operation" :options="operations"></b-form-select>
+                                            </b-form-group>
+                                        </b-col>
+                                        <b-col align-self="end" lg="3" md="4" sm="6">
+                                            <b-form-group label="Уникальный идентификатор" label-for="receiptExternalId">
+                                                <b-form-input id="receiptExternalId" type="text" size="sm" v-model="receipt.external_id"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                     </b-form-row>
@@ -295,9 +377,58 @@ fieldset { margin: 0 }
 
                 <b-card no-body class="mb-1">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                        <b-button block v-b-toggle.accordion-6 variant="info">Данные агента</b-button>
+                        <b-button block v-b-toggle.accordion-6 variant="info">НДС на чек</b-button>
                     </b-card-header>
                     <b-collapse id="accordion-6" accordion="my-accordion" role="tabpanel">
+                        <b-card-body>
+                            <b-card-text>
+                                TODO
+                            </b-card-text>
+                            <b-form-group :disabled="receipt.state !== 0">
+                                <b-container fluid>
+                                    <b-form-row class="my-1">
+                                        <b-col align-self="end" lg="2" md="3" sm="4">
+                                            <b-form-group label="Сумма расчета по чеку без НДС" label-for="withoutVat">
+                                                <b-form-input id="withoutVat" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="vatsWithoutVat"></b-form-input>
+                                            </b-form-group>
+                                        </b-col>
+                                        <b-col align-self="end" lg="2" md="3" sm="4">
+                                            <b-form-group label="Сумма расчета по чеку с НДС 0%" label-for="withVat0">
+                                                <b-form-input id="withVat0" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="vatsWithVat0"></b-form-input>
+                                            </b-form-group>
+                                        </b-col>
+                                        <b-col align-self="end" lg="2" md="3" sm="4">
+                                            <b-form-group label="Сумма НДС чека по ставке 10%" label-for="vat10">
+                                                <b-form-input id="vat10" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="vatsVat10"></b-form-input>
+                                            </b-form-group>
+                                        </b-col>
+                                        <b-col align-self="end" lg="2" md="3" sm="4">
+                                            <b-form-group label="Сумма НДС чека по ставке 20%" label-for="vat20">
+                                                <b-form-input id="vat20" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="vatsVat20"></b-form-input>
+                                            </b-form-group>
+                                        </b-col>
+                                        <b-col align-self="end" lg="2" md="3" sm="4">
+                                            <b-form-group label="Сумма НДС чека по расч. ставке 10/110" label-for="vat110">
+                                                <b-form-input id="vat110" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="vatsVat110"></b-form-input>
+                                            </b-form-group>
+                                        </b-col>
+                                        <b-col align-self="end" lg="2" md="3" sm="4">
+                                            <b-form-group label="Сумма НДС чека по расч. ставке 20/120" label-for="vat120">
+                                                <b-form-input id="vat120" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="vatsVat120"></b-form-input>
+                                            </b-form-group>
+                                        </b-col>
+                                    </b-form-row>
+                                </b-container>
+                            </b-form-group>
+                        </b-card-body>
+                    </b-collapse>
+                </b-card>
+
+                <b-card no-body class="mb-1">
+                    <b-card-header header-tag="header" class="p-1" role="tab">
+                        <b-button block v-b-toggle.accordion-7 variant="info">Данные агента</b-button>
+                    </b-card-header>
+                    <b-collapse id="accordion-7" accordion="my-accordion" role="tabpanel">
                         <b-card-body>
                             <b-card-text>
                                 TODO

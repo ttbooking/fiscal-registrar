@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue';
+import * as VueDeepSet from 'vue-deepset';
 import axios from 'axios';
 import moment from 'moment';
 import Routes from './routes';
@@ -15,6 +16,7 @@ if (token) {
 }
 
 Vue.use(BootstrapVue);
+Vue.use(VueDeepSet);
 Vue.use(VueRouter);
 
 Vue.component('pagination', require('laravel-vue-pagination'));

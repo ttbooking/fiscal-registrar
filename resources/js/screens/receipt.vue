@@ -1,8 +1,10 @@
 <script type="text/ecmascript-6">
+    import PhoneList from '../components/PhoneList.vue';
     import ReceiptItem from '../components/ReceiptItem.vue';
 
     export default {
         components: {
+            PhoneList,
             ReceiptItem
         },
 
@@ -27,6 +29,15 @@
                     { value: 'buy', text: 'расход' },
                     { value: 'buy_refund', text: 'возврат расхода' },
                 ],
+                taxSystems: [
+                    { value: null, text: 'не выбрано' },
+                    { value: 'osn', text: 'общая система налогообложения' },
+                    { value: 'usn_income', text: 'упрощенная система налогообложения (доходы)' },
+                    { value: 'usn_income_outcome', text: 'упрощенная система налогообложения (доходы минус расходы)' },
+                    { value: 'envd', text: 'единый налог на вмененный доход' },
+                    { value: 'esn', text: 'единый сельскохозяйственный налог' },
+                    { value: 'patent', text: 'патентная система налогообложения' },
+                ],
                 vats: {
                     without_vat: null,
                     with_vat0: null,
@@ -44,6 +55,22 @@
                     vat110: 10 / 110,
                     vat118: 18 / 118,
                     vat120: 20 / 120
+                },
+                agentInfo: {
+                    type: null,
+                    paying_agent: {
+                        operation: null,
+                        phones: null
+                    },
+                    receive_payments_operator: {
+                        phones: null
+                    },
+                    money_transfer_operator: {
+                        phones: null,
+                        name: null,
+                        address: null,
+                        inn: null
+                    }
                 }
             }
         },
@@ -149,6 +176,10 @@
         },
 
         computed: {
+            model() {
+                return this.$deepModel(this.receipt.data);
+            },
+
             isClientEmailRequired() {
                 return !this.receipt.data.client.phone;
             },
@@ -237,6 +268,16 @@
                     this.receipt.data.vats ??= this.vats;
                     this.receipt.data.vats.vat120 = val || null;
                 }
+            },
+
+            agentType: {
+                get: function () {
+                    return this.receipt.data.agent_info?.type ?? null;
+                },
+                set: function (val) {
+                    this.receipt.data.agent_info ??= this.agentInfo;
+                    this.receipt.data.agent_info.type = val || null;
+                }
             }
         },
 
@@ -247,7 +288,15 @@
                     Object.values(vats).every(vat => vat === null) && (this.receipt.data.vats = null);
                 },
                 deep: true
-            }
+            },
+
+            'receipt.data.agent_info': {
+                handler: function (agent_info) {
+                    if (agent_info === null) return;
+                    Object.values(agent_info).every(val => val === null) && (this.receipt.data.agent_info = null);
+                },
+                deep: true
+            },
         }
     }
 </script>
@@ -350,6 +399,11 @@ fieldset { margin: 0 }
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Электронный адрес" label-for="companyEmail">
                                                 <b-form-input id="companyEmail" type="email" size="sm" :placeholder="companyEmailPlaceholder" v-model="receipt.data.company.email"></b-form-input>
+                                            </b-form-group>
+                                        </b-col>
+                                        <b-col align-self="end" lg="2" md="3" sm="4">
+                                            <b-form-group label="Система налогообложения" label-for="taxSystem">
+                                                <b-form-select id="taxSystem" size="sm" v-model="receipt.data.company.tax_system" :options="taxSystems"></b-form-select>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
@@ -498,13 +552,80 @@ fieldset { margin: 0 }
                             <b-form-group :disabled="receipt.state !== 0">
                                 <b-container fluid>
                                     <b-form-row class="my-1">
-                                        <b-col align-self="end" sm="2">
-                                            <!--<b-form-group label="Тип агента" label-for="agentType">
-                                                <b-form-select id="agentType" size="sm" v-model="receipt.data.agent_info.type" :options="agentTypes"></b-form-select>
-                                            </b-form-group>-->
+                                        <b-col align-self="end" sm="3">
+                                            <b-form-group label="Тип агента" label-for="agentType">
+                                                <b-form-select id="agentType" size="sm" v-model="agentType" :options="agentTypes"></b-form-select>
+                                            </b-form-group>
                                         </b-col>
                                     </b-form-row>
                                 </b-container>
+
+                                <div class="accordion" role="tablist">
+                                    <b-card no-body class="mb-1">
+                                        <b-card-header header-tag="header" class="p-1" role="tab">
+                                            <b-button block v-b-toggle.accordion-7-1 variant="info">Атрибуты платежного агента</b-button>
+                                        </b-card-header>
+                                        <b-collapse id="accordion-7-1" accordion="my-accordion2" role="tabpanel">
+                                            <b-card-body>
+                                                <b-container fluid>
+                                                    <b-form-row class="my-1">
+                                                        <b-col align-self="end" sm="3">
+                                                            <b-form-group label="Наименование операции" label-for="payingAgentOperation">
+                                                                <b-form-input id="payingAgentOperation" type="text" size="sm" v-model="model['agent_info.paying_agent.operation']"></b-form-input>
+                                                            </b-form-group>
+                                                        </b-col>
+                                                    </b-form-row>
+                                                    <b-form-row class="my-1">
+                                                        <!--<phone-list v-for="(phone, id) in receipt.data.agent_info.paying_agent.phones" :key="id"></phone-list>-->
+                                                    </b-form-row>
+                                                </b-container>
+                                            </b-card-body>
+                                        </b-collapse>
+                                    </b-card>
+
+                                    <b-card no-body class="mb-1">
+                                        <b-card-header header-tag="header" class="p-1" role="tab">
+                                            <b-button block v-b-toggle.accordion-7-2 variant="info">Атрибуты оператора по приему платежей</b-button>
+                                        </b-card-header>
+                                        <b-collapse id="accordion-7-2" accordion="my-accordion2" role="tabpanel">
+                                            <b-card-body>
+                                                <b-card-text>
+                                                    TODO
+                                                </b-card-text>
+                                            </b-card-body>
+                                        </b-collapse>
+                                    </b-card>
+
+                                    <b-card no-body class="mb-1">
+                                        <b-card-header header-tag="header" class="p-1" role="tab">
+                                            <b-button block v-b-toggle.accordion-7-3 variant="info">Атрибуты оператора перевода</b-button>
+                                        </b-card-header>
+                                        <b-collapse id="accordion-7-3" accordion="my-accordion2" role="tabpanel">
+                                            <b-card-body>
+                                                <b-container fluid>
+                                                    <b-form-row class="my-1">
+                                                        <b-col align-self="end" sm="2">
+                                                            <b-form-group label="Наименование" label-for="moneyTransferOperatorName">
+                                                                <b-form-input id="moneyTransferOperatorName" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.name']"></b-form-input>
+                                                            </b-form-group>
+                                                        </b-col>
+                                                        <b-col align-self="end" sm="2">
+                                                            <b-form-group label="Адрес" label-for="moneyTransferOperatorAddress">
+                                                                <b-form-input id="moneyTransferOperatorAddress" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.address']"></b-form-input>
+                                                            </b-form-group>
+                                                        </b-col>
+                                                        <b-col align-self="end" sm="2">
+                                                            <b-form-group label="ИНН" label-for="moneyTransferOperatorInn">
+                                                                <b-form-input id="moneyTransferOperatorInn" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.inn']"></b-form-input>
+                                                            </b-form-group>
+                                                        </b-col>
+                                                    </b-form-row>
+                                                </b-container>
+                                            </b-card-body>
+                                        </b-collapse>
+                                    </b-card>
+                                </div>
+
                             </b-form-group>
                         </b-card-body>
                     </b-collapse>

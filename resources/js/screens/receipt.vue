@@ -1,10 +1,8 @@
 <script type="text/ecmascript-6">
-    import PhoneList from '../components/PhoneList.vue';
     import ReceiptItem from '../components/ReceiptItem.vue';
 
     export default {
         components: {
-            PhoneList,
             ReceiptItem
         },
 
@@ -172,6 +170,18 @@
                 }
 
                 return vats;
+            },
+
+            emptify(obj) {
+                if (!obj || typeof obj !== 'object') {
+                    return obj;
+                }
+                for (const key in obj) {
+                    obj[key] = this.emptify(obj[key]);
+                    obj[key] || (obj[key] = null);
+                }
+                Object.values(obj).every(prop => prop === null) && (obj = null);
+                return obj;
             }
         },
 
@@ -278,6 +288,42 @@
                     this.receipt.data.agent_info ??= this.agentInfo;
                     this.receipt.data.agent_info.type = val || null;
                 }
+            },
+
+            payingAgentPhones: {
+                get: function () {
+                    return this.model['agent_info.paying_agent.phones']?.join('\n');
+                },
+                set: function (phones) {
+                    phones = phones.split('\n')
+                        .map(phone => phone.trim())
+                        .filter(phone => phone != null && phone !== '');
+                    this.model['agent_info.paying_agent.phones'] = phones.length ? phones : null;
+                }
+            },
+
+            receivePaymentsOperatorPhones: {
+                get: function () {
+                    return this.model['agent_info.receive_payments_operator.phones']?.join('\n');
+                },
+                set: function (phones) {
+                    phones = phones.split('\n')
+                        .map(phone => phone.trim())
+                        .filter(phone => phone != null && phone !== '');
+                    this.model['agent_info.receive_payments_operator.phones'] = phones.length ? phones : null;
+                }
+            },
+
+            moneyTransferOperatorPhones: {
+                get: function () {
+                    return this.model['agent_info.money_transfer_operator.phones']?.join('\n');
+                },
+                set: function (phones) {
+                    phones = phones.split('\n')
+                        .map(phone => phone.trim())
+                        .filter(phone => phone != null && phone !== '');
+                    this.model['agent_info.money_transfer_operator.phones'] = phones.length ? phones : null;
+                }
             }
         },
 
@@ -292,11 +338,10 @@
 
             'receipt.data.agent_info': {
                 handler: function (agent_info) {
-                    if (agent_info === null) return;
-                    Object.values(agent_info).every(val => val === null) && (this.receipt.data.agent_info = null);
+                    this.receipt.data.agent_info = this.emptify(agent_info);
                 },
                 deep: true
-            },
+            }
         }
     }
 </script>
@@ -574,9 +619,11 @@ fieldset { margin: 0 }
                                                                 <b-form-input id="payingAgentOperation" type="text" size="sm" v-model="model['agent_info.paying_agent.operation']"></b-form-input>
                                                             </b-form-group>
                                                         </b-col>
-                                                    </b-form-row>
-                                                    <b-form-row class="my-1">
-                                                        <!--<phone-list v-for="(phone, id) in receipt.data.agent_info.paying_agent.phones" :key="id"></phone-list>-->
+                                                        <b-col align-self="end" sm="3">
+                                                            <b-form-group label="Телефон(ы)" label-for="payingAgentPhones">
+                                                                <b-form-textarea id="payingAgentPhones" size="sm" v-model="payingAgentPhones"></b-form-textarea>
+                                                            </b-form-group>
+                                                        </b-col>
                                                     </b-form-row>
                                                 </b-container>
                                             </b-card-body>
@@ -589,9 +636,15 @@ fieldset { margin: 0 }
                                         </b-card-header>
                                         <b-collapse id="accordion-7-2" accordion="my-accordion2" role="tabpanel">
                                             <b-card-body>
-                                                <b-card-text>
-                                                    TODO
-                                                </b-card-text>
+                                                <b-container fluid>
+                                                    <b-form-row class="my-1">
+                                                        <b-col align-self="end" sm="3">
+                                                            <b-form-group label="Телефон(ы)" label-for="receivePaymentsOperatorPhones">
+                                                                <b-form-textarea id="receivePaymentsOperatorPhones" size="sm" v-model="receivePaymentsOperatorPhones"></b-form-textarea>
+                                                            </b-form-group>
+                                                        </b-col>
+                                                    </b-form-row>
+                                                </b-container>
                                             </b-card-body>
                                         </b-collapse>
                                     </b-card>
@@ -604,6 +657,11 @@ fieldset { margin: 0 }
                                             <b-card-body>
                                                 <b-container fluid>
                                                     <b-form-row class="my-1">
+                                                        <b-col align-self="end" sm="3">
+                                                            <b-form-group label="Телефон(ы)" label-for="moneyTransferOperatorPhones">
+                                                                <b-form-textarea id="moneyTransferOperatorPhones" size="sm" v-model="moneyTransferOperatorPhones"></b-form-textarea>
+                                                            </b-form-group>
+                                                        </b-col>
                                                         <b-col align-self="end" sm="2">
                                                             <b-form-group label="Наименование" label-for="moneyTransferOperatorName">
                                                                 <b-form-input id="moneyTransferOperatorName" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.name']"></b-form-input>

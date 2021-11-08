@@ -186,6 +186,13 @@
                     this.item.agent_info = agent_info?.type === null ? null : this.emptify(agent_info);
                 },
                 deep: true
+            },
+
+            'item.supplier_info': {
+                handler: function (supplier_info) {
+                    this.item.supplier_info = supplier_info?.type === null ? null : this.emptify(supplier_info);
+                },
+                deep: true
             }
         }
     }
@@ -343,12 +350,12 @@
                                 </b-col>
                                 <b-col align-self="end" lg="3" md="4" sm="6">
                                     <b-form-group label="Наименование" :label-for="'item' + id + 'supplierName'">
-                                        <b-form-input :id="'item' + id + 'supplierName'" type="text" size="sm" v-model="model['agent_info.supplier_info.name']" :disabled="disabled"></b-form-input>
+                                        <b-form-input :id="'item' + id + 'supplierName'" type="text" size="sm" v-model="model['supplier_info.name']" :disabled="disabled"></b-form-input>
                                     </b-form-group>
                                 </b-col>
                                 <b-col align-self="end" lg="3" md="4" sm="6">
                                     <b-form-group label="ИНН" :label-for="'item' + id + 'supplierInn'">
-                                        <b-form-input :id="'item' + id + 'supplierInn'" type="text" size="sm" v-model="model['agent_info.supplier_info.inn']" :disabled="disabled"></b-form-input>
+                                        <b-form-input :id="'item' + id + 'supplierInn'" type="text" size="sm" v-model="model['supplier_info.inn']" :disabled="disabled"></b-form-input>
                                     </b-form-group>
                                 </b-col>
                             </b-form-row>

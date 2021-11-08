@@ -489,13 +489,11 @@ fieldset { margin: 0 }
                             <b-card-text>
                                 В документе должна быть как минимум одна позиция.
                             </b-card-text>
-                            <b-form-group :disabled="receipt.state !== 0">
-                                <template v-for="(item, id) in receipt.data.items">
-                                    <receipt-item :key="id" :item="item" @remove="removeItem(id)"></receipt-item>
-                                    <hr />
-                                </template>
-                                <b-button variant="primary" size="sm" @click="addItem">Добавить</b-button>
-                            </b-form-group>
+                            <template v-for="(item, id) in receipt.data.items">
+                                <receipt-item :key="id" :item="item" :disabled="receipt.state !== 0" @remove="removeItem(id)"></receipt-item>
+                                <hr />
+                            </template>
+                            <b-button variant="primary" size="sm" @click="addItem" :disabled="receipt.state !== 0">Добавить</b-button>
                         </b-card-body>
                     </b-collapse>
                 </b-card>

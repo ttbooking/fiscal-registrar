@@ -324,6 +324,18 @@
                         .filter(phone => phone != null && phone !== '');
                     this.model['agent_info.money_transfer_operator.phones'] = phones.length ? phones : null;
                 }
+            },
+
+            supplierPhones: {
+                get: function () {
+                    return this.model['supplier_info.phones']?.join('\n');
+                },
+                set: function (phones) {
+                    phones = phones.split('\n')
+                        .map(phone => phone.trim())
+                        .filter(phone => phone != null && phone !== '');
+                    this.model['supplier_info.phones'] = phones.length ? phones : null;
+                }
             }
         },
 
@@ -478,13 +490,11 @@ fieldset { margin: 0 }
                                 В документе должна быть как минимум одна позиция.
                             </b-card-text>
                             <b-form-group :disabled="receipt.state !== 0">
-                                <b-container fluid>
-                                    <template v-for="(item, id) in receipt.data.items">
-                                        <receipt-item :key="id" :item="item" @remove="removeItem(id)"></receipt-item>
-                                        <hr />
-                                    </template>
-                                    <b-button variant="primary" size="sm" @click="addItem">Добавить</b-button>
-                                </b-container>
+                                <template v-for="(item, id) in receipt.data.items">
+                                    <receipt-item :key="id" :item="item" @remove="removeItem(id)"></receipt-item>
+                                    <hr />
+                                </template>
+                                <b-button variant="primary" size="sm" @click="addItem">Добавить</b-button>
                             </b-form-group>
                         </b-card-body>
                     </b-collapse>
@@ -587,7 +597,7 @@ fieldset { margin: 0 }
 
                 <b-card no-body class="mb-1">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                        <b-button block v-b-toggle.accordion-7 variant="info">Данные агента</b-button>
+                        <b-button block v-b-toggle.accordion-7 variant="info">Данные агента и поставщика</b-button>
                     </b-card-header>
                     <b-collapse id="accordion-7" accordion="my-accordion" role="tabpanel">
                         <b-card-body>
@@ -605,29 +615,27 @@ fieldset { margin: 0 }
                                     </b-form-row>
                                 </b-container>
 
-                                <div class="accordion" role="tablist">
+                                <div class="accordion" role="tablist" v-if="agentType !== null">
                                     <b-card no-body class="mb-1">
                                         <b-card-header header-tag="header" class="p-1" role="tab">
                                             <b-button block v-b-toggle.accordion-7-1 variant="info">Атрибуты платежного агента</b-button>
                                         </b-card-header>
                                         <b-collapse id="accordion-7-1" accordion="my-accordion2" role="tabpanel">
                                             <b-card-body>
-                                                <b-form-group :disabled="agentType === null">
-                                                    <b-container fluid>
-                                                        <b-form-row class="my-1">
-                                                            <b-col align-self="end" lg="3" md="4" sm="6">
-                                                                <b-form-group label="Наименование операции" label-for="payingAgentOperation">
-                                                                    <b-form-input id="payingAgentOperation" type="text" size="sm" v-model="model['agent_info.paying_agent.operation']"></b-form-input>
-                                                                </b-form-group>
-                                                            </b-col>
-                                                            <b-col align-self="end" lg="3" md="4" sm="6">
-                                                                <b-form-group label="Телефон(ы)" label-for="payingAgentPhones">
-                                                                    <b-form-textarea id="payingAgentPhones" size="sm" max-rows="4" v-model="payingAgentPhones"></b-form-textarea>
-                                                                </b-form-group>
-                                                            </b-col>
-                                                        </b-form-row>
-                                                    </b-container>
-                                                </b-form-group>
+                                                <b-container fluid>
+                                                    <b-form-row class="my-1">
+                                                        <b-col align-self="end" lg="3" md="4" sm="6">
+                                                            <b-form-group label="Наименование операции" label-for="payingAgentOperation">
+                                                                <b-form-input id="payingAgentOperation" type="text" size="sm" v-model="model['agent_info.paying_agent.operation']"></b-form-input>
+                                                            </b-form-group>
+                                                        </b-col>
+                                                        <b-col align-self="end" lg="3" md="4" sm="6">
+                                                            <b-form-group label="Телефон(ы)" label-for="payingAgentPhones">
+                                                                <b-form-textarea id="payingAgentPhones" size="sm" max-rows="4" v-model="payingAgentPhones"></b-form-textarea>
+                                                            </b-form-group>
+                                                        </b-col>
+                                                    </b-form-row>
+                                                </b-container>
                                             </b-card-body>
                                         </b-collapse>
                                     </b-card>
@@ -638,17 +646,15 @@ fieldset { margin: 0 }
                                         </b-card-header>
                                         <b-collapse id="accordion-7-2" accordion="my-accordion2" role="tabpanel">
                                             <b-card-body>
-                                                <b-form-group :disabled="agentType === null">
-                                                    <b-container fluid>
-                                                        <b-form-row class="my-1">
-                                                            <b-col align-self="end" lg="3" md="4" sm="6">
-                                                                <b-form-group label="Телефон(ы)" label-for="receivePaymentsOperatorPhones">
-                                                                    <b-form-textarea id="receivePaymentsOperatorPhones" size="sm" max-rows="4" v-model="receivePaymentsOperatorPhones"></b-form-textarea>
-                                                                </b-form-group>
-                                                            </b-col>
-                                                        </b-form-row>
-                                                    </b-container>
-                                                </b-form-group>
+                                                <b-container fluid>
+                                                    <b-form-row class="my-1">
+                                                        <b-col align-self="end" lg="3" md="4" sm="6">
+                                                            <b-form-group label="Телефон(ы)" label-for="receivePaymentsOperatorPhones">
+                                                                <b-form-textarea id="receivePaymentsOperatorPhones" size="sm" max-rows="4" v-model="receivePaymentsOperatorPhones"></b-form-textarea>
+                                                            </b-form-group>
+                                                        </b-col>
+                                                    </b-form-row>
+                                                </b-container>
                                             </b-card-body>
                                         </b-collapse>
                                     </b-card>
@@ -659,37 +665,53 @@ fieldset { margin: 0 }
                                         </b-card-header>
                                         <b-collapse id="accordion-7-3" accordion="my-accordion2" role="tabpanel">
                                             <b-card-body>
-                                                <b-form-group :disabled="agentType === null">
-                                                    <b-container fluid>
-                                                        <b-form-row class="my-1">
-                                                            <b-col align-self="end" lg="3" md="4" sm="6">
-                                                                <b-form-group label="Телефон(ы)" label-for="moneyTransferOperatorPhones">
-                                                                    <b-form-textarea id="moneyTransferOperatorPhones" size="sm" max-rows="4" v-model="moneyTransferOperatorPhones"></b-form-textarea>
-                                                                </b-form-group>
-                                                            </b-col>
-                                                            <b-col align-self="end" lg="3" md="4" sm="6">
-                                                                <b-form-group label="Наименование" label-for="moneyTransferOperatorName">
-                                                                    <b-form-input id="moneyTransferOperatorName" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.name']"></b-form-input>
-                                                                </b-form-group>
-                                                            </b-col>
-                                                            <b-col align-self="end" lg="3" md="4" sm="6">
-                                                                <b-form-group label="Адрес" label-for="moneyTransferOperatorAddress">
-                                                                    <b-form-input id="moneyTransferOperatorAddress" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.address']"></b-form-input>
-                                                                </b-form-group>
-                                                            </b-col>
-                                                            <b-col align-self="end" lg="3" md="4" sm="6">
-                                                                <b-form-group label="ИНН" label-for="moneyTransferOperatorInn">
-                                                                    <b-form-input id="moneyTransferOperatorInn" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.inn']"></b-form-input>
-                                                                </b-form-group>
-                                                            </b-col>
-                                                        </b-form-row>
-                                                    </b-container>
-                                                </b-form-group>
+                                                <b-container fluid>
+                                                    <b-form-row class="my-1">
+                                                        <b-col align-self="end" lg="3" md="4" sm="6">
+                                                            <b-form-group label="Телефон(ы)" label-for="moneyTransferOperatorPhones">
+                                                                <b-form-textarea id="moneyTransferOperatorPhones" size="sm" max-rows="4" v-model="moneyTransferOperatorPhones"></b-form-textarea>
+                                                            </b-form-group>
+                                                        </b-col>
+                                                        <b-col align-self="end" lg="3" md="4" sm="6">
+                                                            <b-form-group label="Наименование" label-for="moneyTransferOperatorName">
+                                                                <b-form-input id="moneyTransferOperatorName" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.name']"></b-form-input>
+                                                            </b-form-group>
+                                                        </b-col>
+                                                        <b-col align-self="end" lg="3" md="4" sm="6">
+                                                            <b-form-group label="Адрес" label-for="moneyTransferOperatorAddress">
+                                                                <b-form-input id="moneyTransferOperatorAddress" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.address']"></b-form-input>
+                                                            </b-form-group>
+                                                        </b-col>
+                                                        <b-col align-self="end" lg="3" md="4" sm="6">
+                                                            <b-form-group label="ИНН" label-for="moneyTransferOperatorInn">
+                                                                <b-form-input id="moneyTransferOperatorInn" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.inn']"></b-form-input>
+                                                            </b-form-group>
+                                                        </b-col>
+                                                    </b-form-row>
+                                                </b-container>
+                                            </b-card-body>
+                                        </b-collapse>
+                                    </b-card>
+
+                                    <b-card no-body class="mb-1">
+                                        <b-card-header header-tag="header" class="p-1" role="tab">
+                                            <b-button block v-b-toggle.accordion-7-4 variant="info">Атрибуты поставщика</b-button>
+                                        </b-card-header>
+                                        <b-collapse id="accordion-7-4" accordion="my-accordion2" role="tabpanel">
+                                            <b-card-body>
+                                                <b-container fluid>
+                                                    <b-form-row class="my-1">
+                                                        <b-col align-self="end" lg="3" md="4" sm="6">
+                                                            <b-form-group label="Телефон(ы)" label-for="supplierPhones" class="required">
+                                                                <b-form-textarea id="supplierPhones" size="sm" max-rows="4" required v-model="supplierPhones"></b-form-textarea>
+                                                            </b-form-group>
+                                                        </b-col>
+                                                    </b-form-row>
+                                                </b-container>
                                             </b-card-body>
                                         </b-collapse>
                                     </b-card>
                                 </div>
-
                             </b-form-group>
                         </b-card-body>
                     </b-collapse>

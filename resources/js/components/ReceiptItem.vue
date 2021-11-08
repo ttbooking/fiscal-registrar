@@ -61,13 +61,35 @@
                     vat110: 10 / 110,
                     vat118: 18 / 118,
                     vat120: 20 / 120
-                }
+                },
+                agentTypes: [
+                    { value: null, text: 'нет' },
+                    { value: 'bank_paying_agent', text: 'банковский платежный агент' },
+                    { value: 'bank_paying_subagent', text: 'банковский платежный субагент' },
+                    { value: 'paying_agent', text: 'платежный агент' },
+                    { value: 'paying_subagent', text: 'платежный субагент' },
+                    { value: 'attorney', text: 'поверенный' },
+                    { value: 'commission_agent', text: 'комиссионер' },
+                    { value: 'another', text: 'другой' }
+                ]
             }
         },
 
         methods: {
             extractVat(sum = this.item.sum, vatType = this.item.vat.type) {
                 return parseFloat((sum - sum / (1 + this.vatRates[vatType])).toFixed(2));
+            },
+
+            emptify(obj) {
+                if (!obj || typeof obj !== 'object') {
+                    return obj;
+                }
+                for (const key in obj) {
+                    obj[key] = this.emptify(obj[key]);
+                    obj[key] || (obj[key] = null);
+                }
+                Object.values(obj).every(prop => prop === null) && (obj = null);
+                return obj;
             }
         },
 
@@ -76,8 +98,69 @@
                 return this.$vnode.key + 1;
             },
 
+            model() {
+                return this.$deepModel(this.item);
+            },
+
             vatSum() {
                 return String(this.extractVat());
+            },
+
+            agentType: {
+                get: function () {
+                    return this.model['agent_info.type'] ?? null;
+                },
+                set: function (val) {
+                    this.model['agent_info.type'] = val;
+                }
+            },
+
+            payingAgentPhones: {
+                get: function () {
+                    return this.model['agent_info.paying_agent.phones']?.join('\n');
+                },
+                set: function (phones) {
+                    phones = phones.split('\n')
+                        .map(phone => phone.trim())
+                        .filter(phone => phone != null && phone !== '');
+                    this.model['agent_info.paying_agent.phones'] = phones.length ? phones : null;
+                }
+            },
+
+            receivePaymentsOperatorPhones: {
+                get: function () {
+                    return this.model['agent_info.receive_payments_operator.phones']?.join('\n');
+                },
+                set: function (phones) {
+                    phones = phones.split('\n')
+                        .map(phone => phone.trim())
+                        .filter(phone => phone != null && phone !== '');
+                    this.model['agent_info.receive_payments_operator.phones'] = phones.length ? phones : null;
+                }
+            },
+
+            moneyTransferOperatorPhones: {
+                get: function () {
+                    return this.model['agent_info.money_transfer_operator.phones']?.join('\n');
+                },
+                set: function (phones) {
+                    phones = phones.split('\n')
+                        .map(phone => phone.trim())
+                        .filter(phone => phone != null && phone !== '');
+                    this.model['agent_info.money_transfer_operator.phones'] = phones.length ? phones : null;
+                }
+            },
+
+            supplierPhones: {
+                get: function () {
+                    return this.model['supplier_info.phones']?.join('\n');
+                },
+                set: function (phones) {
+                    phones = phones.split('\n')
+                        .map(phone => phone.trim())
+                        .filter(phone => phone != null && phone !== '');
+                    this.model['supplier_info.phones'] = phones.length ? phones : null;
+                }
             }
         },
 
@@ -96,62 +179,183 @@
 
             'item.vat.type': function (vatType) {
                 this.item.vat.sum = this.extractVat(this.item.sum, vatType);
+            },
+
+            'item.agent_info': {
+                handler: function (agent_info) {
+                    this.item.agent_info = agent_info?.type === null ? null : this.emptify(agent_info);
+                },
+                deep: true
             }
         }
     }
 </script>
 
 <template>
-    <b-form-row class="my-1">
-        <b-col align-self="end" lg="3" md="2">
-            <b-form-group label="Наименование" :label-for="'item' + id + 'Name'" class="required">
-                <b-form-input :id="'item' + id + 'Name'" type="text" size="sm" required v-model="item.name"></b-form-input>
-            </b-form-group>
-        </b-col>
-        <b-col align-self="end" lg="1" md="2">
-            <b-form-group label="Цена" :label-for="'item' + id + 'Price'" class="required">
-                <b-form-input :id="'item' + id + 'Price'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="item.price"></b-form-input>
-            </b-form-group>
-        </b-col>
-        <b-col align-self="end" lg="1" md="2">
-            <b-form-group label="Кол-во" :label-for="'item' + id + 'Quantity'" class="required">
-                <b-form-input :id="'item' + id + 'Quantity'" type="number" min=".001" max="99999.999" step="any" size="sm" placeholder="1" required v-model="item.quantity"></b-form-input>
-            </b-form-group>
-        </b-col>
-        <b-col align-self="end" lg="1" md="2">
-            <b-form-group label="Сумма" :label-for="'item' + id + 'Sum'" class="required">
-                <b-form-input :id="'item' + id + 'Sum'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="item.sum"></b-form-input>
-            </b-form-group>
-        </b-col>
-        <b-col align-self="end" lg="1" md="2">
-            <b-form-group label="Ед. изм." :label-for="'item' + id + 'MeasurementUnit'">
-                <b-form-input :id="'item' + id + 'MeasurementUnit'" type="text" size="sm" placeholder="шт." maxlength="16" v-model="item.measurement_unit"></b-form-input>
-            </b-form-group>
-        </b-col>
-        <b-col align-self="end" lg="2" md="2">
-            <b-form-group label="Способ расчета" :label-for="'item' + id + 'PaymentMethod'" class="required">
-                <b-form-select :id="'item' + id + 'PaymentMethod'" size="sm" v-model="item.payment_method" :options="paymentMethods"></b-form-select>
-            </b-form-group>
-        </b-col>
-        <b-col align-self="end" lg="2" md="2">
-            <b-form-group label="Предмет расчета" :label-for="'item' + id + 'PaymentObject'" class="required">
-                <b-form-select :id="'item' + id + 'PaymentObject'" size="sm" v-model="item.payment_object" :options="paymentObjects"></b-form-select>
-            </b-form-group>
-        </b-col>
-        <b-col align-self="end" lg="1" md="2">
-            <b-form-group label="НДС" :label-for="'item' + id + 'VatType'" class="required">
-                <b-form-select :id="'item' + id + 'VatType'" size="sm" v-model="item.vat.type" :options="vatTypes"></b-form-select>
-            </b-form-group>
-        </b-col>
-        <b-col align-self="end" lg="1" md="2">
-            <b-form-group label="Сумма НДС" :label-for="'item' + id + 'VatSum'">
-                <b-form-input :id="'item' + id + 'VatSum'" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatSum" v-model="item.vat.sum"></b-form-input>
-            </b-form-group>
-        </b-col>
-        <b-col align-self="end" lg="1" md="1" sm="1" class="ml-auto mr-0">
-            <b-form-group class="text-right">
-                <b-button variant="danger" size="sm" title="Удалить" @click="$emit('remove')"><b>&times;</b></b-button>
-            </b-form-group>
-        </b-col>
-    </b-form-row>
+    <b-container fluid>
+        <b-form-row class="my-1">
+            <b-col align-self="end" lg="4" md="6" sm="12">
+                <b-form-group label="Наименование" :label-for="'item' + id + 'Name'" class="required">
+                    <b-form-input :id="'item' + id + 'Name'" type="text" size="sm" required v-model="item.name"></b-form-input>
+                </b-form-group>
+            </b-col>
+            <b-col align-self="end" lg="1" md="2" sm="4">
+                <b-form-group label="Цена" :label-for="'item' + id + 'Price'" class="required">
+                    <b-form-input :id="'item' + id + 'Price'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="item.price"></b-form-input>
+                </b-form-group>
+            </b-col>
+            <b-col align-self="end" lg="1" md="2" sm="4">
+                <b-form-group label="Кол-во" :label-for="'item' + id + 'Quantity'" class="required">
+                    <b-form-input :id="'item' + id + 'Quantity'" type="number" min=".001" max="99999.999" step="any" size="sm" placeholder="1" required v-model="item.quantity"></b-form-input>
+                </b-form-group>
+            </b-col>
+            <b-col align-self="end" lg="1" md="2" sm="4">
+                <b-form-group label="Сумма" :label-for="'item' + id + 'Sum'" class="required">
+                    <b-form-input :id="'item' + id + 'Sum'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="item.sum"></b-form-input>
+                </b-form-group>
+            </b-col>
+            <b-col align-self="end" lg="1" md="2" sm="4">
+                <b-form-group label="Ед. изм." :label-for="'item' + id + 'MeasurementUnit'">
+                    <b-form-input :id="'item' + id + 'MeasurementUnit'" type="text" size="sm" placeholder="шт." maxlength="16" v-model="item.measurement_unit"></b-form-input>
+                </b-form-group>
+            </b-col>
+            <b-col align-self="end" lg="2" md="2" sm="4">
+                <b-form-group label="Способ расчета" :label-for="'item' + id + 'PaymentMethod'" class="required">
+                    <b-form-select :id="'item' + id + 'PaymentMethod'" size="sm" v-model="item.payment_method" :options="paymentMethods"></b-form-select>
+                </b-form-group>
+            </b-col>
+            <b-col align-self="end" lg="2" md="2" sm="4">
+                <b-form-group label="Предмет расчета" :label-for="'item' + id + 'PaymentObject'" class="required">
+                    <b-form-select :id="'item' + id + 'PaymentObject'" size="sm" v-model="item.payment_object" :options="paymentObjects"></b-form-select>
+                </b-form-group>
+            </b-col>
+            <b-col align-self="end" lg="1" md="2" sm="4">
+                <b-form-group label="НДС" :label-for="'item' + id + 'VatType'" class="required">
+                    <b-form-select :id="'item' + id + 'VatType'" size="sm" v-model="item.vat.type" :options="vatTypes"></b-form-select>
+                </b-form-group>
+            </b-col>
+            <b-col align-self="end" lg="1" md="2" sm="4">
+                <b-form-group label="Сумма НДС" :label-for="'item' + id + 'VatSum'">
+                    <b-form-input :id="'item' + id + 'VatSum'" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatSum" v-model="item.vat.sum"></b-form-input>
+                </b-form-group>
+            </b-col>
+            <b-col align-self="end" lg="3" md="4" sm="6">
+                <b-form-group label="Тип агента" :label-for="'item' + id + 'agentType'">
+                    <b-form-select :id="'item' + id + 'agentType'" size="sm" v-model="agentType" :options="agentTypes"></b-form-select>
+                </b-form-group>
+            </b-col>
+            <b-col align-self="end" lg="1" md="1" sm="1" class="ml-auto mr-0">
+                <b-form-group class="text-right">
+                    <b-button variant="danger" size="sm" title="Удалить" @click="$emit('remove')"><b>&times;</b></b-button>
+                </b-form-group>
+            </b-col>
+        </b-form-row>
+        <div class="accordion" role="tablist" v-if="agentType !== null">
+            <b-card no-body class="mb-1">
+                <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button block v-b-toggle="'item' + id + 'payingAgent'" variant="info">Атрибуты платежного агента</b-button>
+                </b-card-header>
+                <b-collapse :id="'item' + id + 'payingAgent'" :accordion="'item' + id + 'agentInfo'" role="tabpanel">
+                    <b-card-body>
+                        <b-container fluid>
+                            <b-form-row class="my-1">
+                                <b-col align-self="end" lg="3" md="4" sm="6">
+                                    <b-form-group label="Наименование операции" :label-for="'item' + id + 'payingAgentOperation'">
+                                        <b-form-input :id="'item' + id + 'payingAgentOperation'" type="text" size="sm" v-model="model['agent_info.paying_agent.operation']"></b-form-input>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col align-self="end" lg="3" md="4" sm="6">
+                                    <b-form-group label="Телефон(ы)" :label-for="'item' + id + 'payingAgentPhones'">
+                                        <b-form-textarea :id="'item' + id + 'payingAgentPhones'" size="sm" max-rows="4" v-model="payingAgentPhones"></b-form-textarea>
+                                    </b-form-group>
+                                </b-col>
+                            </b-form-row>
+                        </b-container>
+                    </b-card-body>
+                </b-collapse>
+            </b-card>
+
+            <b-card no-body class="mb-1">
+                <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button block v-b-toggle="'item' + id + 'receivePaymentsOperator'" variant="info">Атрибуты оператора по приему платежей</b-button>
+                </b-card-header>
+                <b-collapse :id="'item' + id + 'receivePaymentsOperator'" :accordion="'item' + id + 'agentInfo'" role="tabpanel">
+                    <b-card-body>
+                        <b-container fluid>
+                            <b-form-row class="my-1">
+                                <b-col align-self="end" lg="3" md="4" sm="6">
+                                    <b-form-group label="Телефон(ы)" :label-for="'item' + id + 'receivePaymentsOperatorPhones'">
+                                        <b-form-textarea :id="'item' + id + 'receivePaymentsOperatorPhones'" size="sm" max-rows="4" v-model="receivePaymentsOperatorPhones"></b-form-textarea>
+                                    </b-form-group>
+                                </b-col>
+                            </b-form-row>
+                        </b-container>
+                    </b-card-body>
+                </b-collapse>
+            </b-card>
+
+            <b-card no-body class="mb-1">
+                <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button block v-b-toggle="'item' + id + 'moneyTransferOperator'" variant="info">Атрибуты оператора перевода</b-button>
+                </b-card-header>
+                <b-collapse :id="'item' + id + 'moneyTransferOperator'" :accordion="'item' + id + 'agentInfo'" role="tabpanel">
+                    <b-card-body>
+                        <b-container fluid>
+                            <b-form-row class="my-1">
+                                <b-col align-self="end" lg="3" md="4" sm="6">
+                                    <b-form-group label="Телефон(ы)" :label-for="'item' + id + 'moneyTransferOperatorPhones'">
+                                        <b-form-textarea :id="'item' + id + 'moneyTransferOperatorPhones'" size="sm" max-rows="4" v-model="moneyTransferOperatorPhones"></b-form-textarea>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col align-self="end" lg="3" md="4" sm="6">
+                                    <b-form-group label="Наименование" :label-for="'item' + id + 'moneyTransferOperatorName'">
+                                        <b-form-input :id="'item' + id + 'moneyTransferOperatorName'" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.name']"></b-form-input>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col align-self="end" lg="3" md="4" sm="6">
+                                    <b-form-group label="Адрес" :label-for="'item' + id + 'moneyTransferOperatorAddress'">
+                                        <b-form-input :id="'item' + id + 'moneyTransferOperatorAddress'" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.address']"></b-form-input>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col align-self="end" lg="3" md="4" sm="6">
+                                    <b-form-group label="ИНН" :label-for="'item' + id + 'moneyTransferOperatorInn'">
+                                        <b-form-input :id="'item' + id + 'moneyTransferOperatorInn'" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.inn']"></b-form-input>
+                                    </b-form-group>
+                                </b-col>
+                            </b-form-row>
+                        </b-container>
+                    </b-card-body>
+                </b-collapse>
+            </b-card>
+
+            <b-card no-body class="mb-1">
+                <b-card-header header-tag="header" class="p-1" role="tab">
+                    <b-button block v-b-toggle="'item' + id + 'supplier'" variant="info">Атрибуты поставщика</b-button>
+                </b-card-header>
+                <b-collapse :id="'item' + id + 'supplier'" :accordion="'item' + id + 'agentInfo'" role="tabpanel">
+                    <b-card-body>
+                        <b-container fluid>
+                            <b-form-row class="my-1">
+                                <b-col align-self="end" lg="3" md="4" sm="6">
+                                    <b-form-group label="Телефон(ы)" :label-for="'item' + id + 'supplierPhones'" class="required">
+                                        <b-form-textarea :id="'item' + id + 'supplierPhones'" size="sm" max-rows="4" required v-model="supplierPhones"></b-form-textarea>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col align-self="end" lg="3" md="4" sm="6">
+                                    <b-form-group label="Наименование" :label-for="'item' + id + 'supplierName'">
+                                        <b-form-input :id="'item' + id + 'supplierName'" type="text" size="sm" v-model="model['agent_info.supplier_info.name']"></b-form-input>
+                                    </b-form-group>
+                                </b-col>
+                                <b-col align-self="end" lg="3" md="4" sm="6">
+                                    <b-form-group label="ИНН" :label-for="'item' + id + 'supplierInn'">
+                                        <b-form-input :id="'item' + id + 'supplierInn'" type="text" size="sm" v-model="model['agent_info.supplier_info.inn']"></b-form-input>
+                                    </b-form-group>
+                                </b-col>
+                            </b-form-row>
+                        </b-container>
+                    </b-card-body>
+                </b-collapse>
+            </b-card>
+        </div>
+    </b-container>
 </template>

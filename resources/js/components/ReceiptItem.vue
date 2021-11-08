@@ -260,7 +260,7 @@
         <div class="accordion" role="tablist" v-if="agentType !== null">
             <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
-                    <b-button block v-b-toggle="'item' + id + 'payingAgent'" variant="info">Атрибуты платежного агента</b-button>
+                    <b-button block v-b-toggle="'item' + id + 'payingAgent'">Атрибуты платежного агента</b-button>
                 </b-card-header>
                 <b-collapse :id="'item' + id + 'payingAgent'" :accordion="'item' + id + 'agentInfo'" role="tabpanel">
                     <b-card-body>
@@ -284,7 +284,7 @@
 
             <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
-                    <b-button block v-b-toggle="'item' + id + 'receivePaymentsOperator'" variant="info">Атрибуты оператора по приему платежей</b-button>
+                    <b-button block v-b-toggle="'item' + id + 'receivePaymentsOperator'">Атрибуты оператора по приему платежей</b-button>
                 </b-card-header>
                 <b-collapse :id="'item' + id + 'receivePaymentsOperator'" :accordion="'item' + id + 'agentInfo'" role="tabpanel">
                     <b-card-body>
@@ -303,7 +303,7 @@
 
             <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
-                    <b-button block v-b-toggle="'item' + id + 'moneyTransferOperator'" variant="info">Атрибуты оператора перевода</b-button>
+                    <b-button block v-b-toggle="'item' + id + 'moneyTransferOperator'">Атрибуты оператора перевода</b-button>
                 </b-card-header>
                 <b-collapse :id="'item' + id + 'moneyTransferOperator'" :accordion="'item' + id + 'agentInfo'" role="tabpanel">
                     <b-card-body>
@@ -337,7 +337,7 @@
 
             <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
-                    <b-button block v-b-toggle="'item' + id + 'supplier'" variant="info">Атрибуты поставщика</b-button>
+                    <b-button block v-b-toggle="'item' + id + 'supplier'">Атрибуты поставщика</b-button>
                 </b-card-header>
                 <b-collapse :id="'item' + id + 'supplier'" :accordion="'item' + id + 'agentInfo'" role="tabpanel">
                     <b-card-body>

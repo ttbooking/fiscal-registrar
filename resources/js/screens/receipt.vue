@@ -182,6 +182,10 @@
                 }
                 Object.values(obj).every(prop => prop === null) && (obj = null);
                 return obj;
+            },
+
+            fitContent(event) {
+                event.target.style.height = (event.target.contentDocument.body.scrollHeight + 20) + 'px';
             }
         },
 
@@ -364,7 +368,7 @@ fieldset { margin: 0 }
 
 <template>
     <div>
-        <h2 class="text-center">Редактирование кассового чека</h2>
+        <h2 class="text-center">{{ receipt.state !== 0 ? 'Просмотр кассового чека' : 'Редактирование кассового чека' }}</h2>
         <b-form validated v-if="ready" @submit.prevent="saveReceipt">
             <div class="accordion" role="tablist">
                 <b-card no-body class="mb-1">
@@ -747,6 +751,17 @@ fieldset { margin: 0 }
                                     </b-form-row>
                                 </b-container>
                             </b-form-group>
+                        </b-card-body>
+                    </b-collapse>
+                </b-card>
+
+                <b-card no-body class="mb-1">
+                    <b-card-header header-tag="header" class="p-1" role="tab">
+                        <b-button block v-b-toggle.accordion-9 variant="info">Просмотр чека</b-button>
+                    </b-card-header>
+                    <b-collapse id="accordion-9" accordion="my-accordion" role="tabpanel">
+                        <b-card-body>
+                            <iframe :src="FiscalRegistrar.basePath + '/api/v1/receipts/' + receipt.id + '/print'" width="100%" @load="fitContent"></iframe>
                         </b-card-body>
                     </b-collapse>
                 </b-card>

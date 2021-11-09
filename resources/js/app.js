@@ -21,10 +21,11 @@ Vue.use(VueRouter);
 
 Vue.component('pagination', require('laravel-vue-pagination'));
 
+window.FiscalRegistrar.basePath = '/' + window.FiscalRegistrar.path;
+
 Vue.prototype.$http = axios.create();
 Vue.prototype.$moment = moment;
-
-window.FiscalRegistrar.basePath = '/' + window.FiscalRegistrar.path;
+Vue.prototype.FiscalRegistrar = window.FiscalRegistrar;
 
 let routerBasePath = window.FiscalRegistrar.basePath + '/';
 

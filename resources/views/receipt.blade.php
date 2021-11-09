@@ -7,11 +7,22 @@
     <title>{{ __('fiscal-registrar::main.title') }}{{ config('app.name') ? ' - ' . config('app.name') : '' }}</title>
 
     <style>
+    @media print {
+        html {
+            height: 100%;
+        }
+        body {
+            transform: scale(.5);
+            transform-origin: top left;
+        }
+    }
+
     .receipt {
         border-collapse: collapse;
         font-family: Arial, Helvetica, sans-serif;
     }
     .receipt thead {
+        display: table-row-group;
         text-align: center;
     }
     .receipt th, .receipt td {
@@ -38,7 +49,7 @@
     }
     </style>
 </head>
-<body>
+<body{!! $print ? ' onload="window.print(); setTimeout(window.close, 0)"' : '' !!}>
     <table class="receipt">
         <thead>
             @php

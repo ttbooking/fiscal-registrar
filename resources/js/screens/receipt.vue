@@ -9,6 +9,7 @@
         data() {
             return {
                 ready: false,
+                showPreview: false,
                 receipt: {},
                 agentTypes: [
                     { value: null, text: 'нет' },
@@ -759,9 +760,9 @@ fieldset { margin: 0 }
                     <b-card-header header-tag="header" class="p-1" role="tab">
                         <b-button block v-b-toggle.accordion-9 variant="info">Просмотр чека</b-button>
                     </b-card-header>
-                    <b-collapse id="accordion-9" accordion="my-accordion" role="tabpanel">
+                    <b-collapse id="accordion-9" @show="showPreview = true" accordion="my-accordion" role="tabpanel">
                         <b-card-body>
-                            <iframe :src="FiscalRegistrar.basePath + '/api/v1/receipts/' + receipt.id + '/print'" width="100%" @load="fitContent"></iframe>
+                            <iframe v-if="showPreview" :src="FiscalRegistrar.basePath + '/api/v1/receipts/' + receipt.id + '/print'" width="100%" @load="fitContent"></iframe>
                         </b-card-body>
                     </b-collapse>
                 </b-card>
@@ -770,6 +771,7 @@ fieldset { margin: 0 }
                 <b-form-row class="my-3">
                     <b-col lg="12">
                         <b-button type="submit" variant="primary" size="sm" :disabled="receipt.state !== 0">Сохранить</b-button>
+                        <b-button size="sm" :href="FiscalRegistrar.basePath + '/api/v1/receipts/' + receipt.id + '/print?print'" target="_blank">Распечатать</b-button>
                     </b-col>
                 </b-form-row>
             </b-container>

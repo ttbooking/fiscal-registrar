@@ -88,9 +88,9 @@ class ReceiptController extends Controller
      * @param  Receipt  $receipt
      * @return \Illuminate\Contracts\View\View
      */
-    public function print(Receipt $receipt): \Illuminate\Contracts\View\View
+    public function print(Request $request, Receipt $receipt): \Illuminate\Contracts\View\View
     {
-        return View::make('fiscal-registrar::receipt', compact('receipt'));
+        return View::make('fiscal-registrar::receipt', compact('receipt') + ['print' => $request->has('print')]);
     }
 
     /**

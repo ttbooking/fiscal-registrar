@@ -56,7 +56,7 @@
     }
     </style>
 </head>
-<body{!! $print ? ' onload="window.print(); setTimeout(window.close, 0)"' : '' !!}>
+<body{!! $print ? ' onload="window.print(); setTimeout(window.close, 100)"' : '' !!}>
     <div class="receipt">
         <table>
             <thead>

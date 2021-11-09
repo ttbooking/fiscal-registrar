@@ -18,7 +18,7 @@
                     { value: 'paying_subagent', text: 'платежный субагент' },
                     { value: 'attorney', text: 'поверенный' },
                     { value: 'commission_agent', text: 'комиссионер' },
-                    { value: 'another', text: 'другой' }
+                    { value: 'another', text: 'агент' }
                 ],
                 connections: [],
                 operations: [
@@ -493,7 +493,7 @@ fieldset { margin: 0 }
                                 <b-container fluid>
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="3" md="4" sm="6">
-                                            <b-form-group label="Тип агента" label-for="agentType">
+                                            <b-form-group label="Признак агента" label-for="agentType">
                                                 <b-form-select id="agentType" size="sm" v-model="agentType" :options="agentTypes"></b-form-select>
                                             </b-form-group>
                                         </b-col>

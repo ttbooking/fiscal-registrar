@@ -70,7 +70,7 @@
                     { value: 'paying_subagent', text: 'платежный субагент' },
                     { value: 'attorney', text: 'поверенный' },
                     { value: 'commission_agent', text: 'комиссионер' },
-                    { value: 'another', text: 'другой' }
+                    { value: 'another', text: 'агент' }
                 ]
             }
         },
@@ -247,7 +247,7 @@
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="3" md="4" sm="6">
-                <b-form-group label="Тип агента" :label-for="'item' + id + 'agentType'">
+                <b-form-group label="Признак агента" :label-for="'item' + id + 'agentType'">
                     <b-form-select :id="'item' + id + 'agentType'" size="sm" v-model="agentType" :options="agentTypes" :disabled="disabled"></b-form-select>
                 </b-form-group>
             </b-col>

@@ -15,12 +15,14 @@
             transform: scale(.5);
             transform-origin: top left;
         }
+        .receipt {
+            border: 1px solid black;
+            padding: 5px;
+        }
     }
 
     .receipt {
         display: inline-block;
-        border: 1px solid black;
-        padding: 5px;
     }
     .receipt table {
         border-collapse: collapse;

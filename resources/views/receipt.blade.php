@@ -15,49 +15,49 @@
             transform: scale(.5);
             transform-origin: top left;
         }
-        .receipt {
+        #receipt {
             border: 1px solid black;
             padding: 5px;
         }
     }
 
-    .receipt {
+    #receipt {
         display: inline-block;
     }
-    .receipt table {
+    #receipt table {
         border-collapse: collapse;
         font-family: Arial, Helvetica, sans-serif;
     }
-    .receipt thead {
+    #receipt thead {
         display: table-row-group;
         text-align: center;
     }
-    .receipt th, .receipt td {
+    #receipt th, #receipt td {
         padding: 5px 10px;
     }
-    .receipt tr:first-child th,
-    .receipt tr:first-child td {
+    #receipt tr:first-child th,
+    #receipt tr:first-child td {
         padding-top: 10px;
     }
-    .receipt tr:last-child th,
-    .receipt tr:last-child td {
+    #receipt tr:last-child th,
+    #receipt tr:last-child td {
         padding-bottom: 10px;
     }
-    .receipt table > tbody {
+    #receipt table > tbody {
         border-top: 1px solid lightgrey;
     }
-    .receipt table > tbody th {
+    #receipt table > tbody th {
         text-align: left;
         font-weight: normal;
         color: darkblue;
     }
-    .receipt table > tbody td:last-child {
+    #receipt table > tbody td:last-child {
         text-align: right;
     }
     </style>
 </head>
-<body{!! $print ? ' onload="window.print(); setTimeout(window.close, 100)"' : '' !!}>
-    <div class="receipt">
+<body{!! $print ? ' onload="window.print(); setTimeout(window.close, 500)"' : '' !!}>
+    <div id="receipt">
         <table>
             <thead>
                 @php

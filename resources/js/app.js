@@ -25,6 +25,7 @@ window.FiscalRegistrar.basePath = '/' + window.FiscalRegistrar.path;
 
 Vue.prototype.$http = axios.create();
 Vue.prototype.$moment = moment;
+Vue.prototype.FiscalRegistrar = window.FiscalRegistrar;
 
 let routerBasePath = window.FiscalRegistrar.basePath + '/';
 

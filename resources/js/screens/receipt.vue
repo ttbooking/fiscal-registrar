@@ -187,6 +187,17 @@
 
             fitContent(event) {
                 event.target.style.height = (event.target.contentDocument.body.scrollHeight + 20) + 'px';
+            },
+
+            printReceipt() {
+                let printWindow = window.open(
+                    window.FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id + '/preview',
+                    'ReceiptPreview', 'popup,width=500,height=1000'
+                );
+                printWindow.onafterprint = printWindow.close;
+                printWindow.onload = function() {
+                    printWindow.setTimeout(printWindow.print);
+                }
             }
         },
 
@@ -771,7 +782,7 @@ fieldset { margin: 0 }
                 <b-form-row class="my-3">
                     <b-col lg="12">
                         <b-button type="submit" variant="primary" size="sm" :disabled="receipt.state !== 0">Сохранить</b-button>
-                        <b-button size="sm" :href="FiscalRegistrar.basePath + '/api/v1/receipts/' + receipt.id + '/preview?print'" target="_blank">Распечатать</b-button>
+                        <b-button size="sm" @click="printReceipt">Распечатать</b-button>
                     </b-col>
                 </b-form-row>
             </b-container>

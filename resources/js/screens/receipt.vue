@@ -219,15 +219,15 @@
             },
 
             companyEmailPlaceholder() {
-                return this.connections[this.receipt.connection].email ?? 'user@domain.com';
+                return this.connections[this.receipt.connection]?.email ?? 'user@domain.com';
             },
 
             companyInnPlaceholder() {
-                return this.connections[this.receipt.connection].inn ?? '1234567890';
+                return this.connections[this.receipt.connection]?.inn ?? '1234567890';
             },
 
             companyPaymentSitePlaceholder() {
-                return this.connections[this.receipt.connection].payment_site ?? '';
+                return this.connections[this.receipt.connection]?.payment_site ?? '';
             },
 
             vatsPlaceholder() {
@@ -767,11 +767,97 @@ fieldset { margin: 0 }
                     </b-collapse>
                 </b-card>
 
+                <b-card no-body class="mb-1" v-if="receipt.result">
+                    <b-card-header header-tag="header" class="p-1" role="tab">
+                        <b-button block v-b-toggle.accordion-9 variant="info">Результат обработки</b-button>
+                    </b-card-header>
+                    <b-collapse id="accordion-9" accordion="my-accordion" role="tabpanel">
+                        <b-card-body>
+                            <b-card-sub-title class="mb-3">Информация поставщика</b-card-sub-title>
+                            <b-container fluid>
+                                <b-form-row>
+                                    <b-col class="mb-3" lg="1" md="2" sm="3">
+                                        <b-form-group description="Дата и время">
+                                            <!--<b-form-input type="text" size="sm" plaintext :value="$moment(receipt.result.timestamp).format('DD.MM.YYYY HH:mm:ss')"></b-form-input>-->
+                                            {{ $moment(receipt.result.timestamp).format('DD.MM.YYYY HH:mm:ss') }}
+                                        </b-form-group>
+                                    </b-col>
+                                    <b-col class="mb-3" lg="2" md="3" sm="4">
+                                        <b-form-group description="Внутренний идентификатор">
+                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.internal_id"></b-form-input>-->
+                                            {{ receipt.result.internal_id }}
+                                        </b-form-group>
+                                    </b-col>
+                                </b-form-row>
+                            </b-container>
+                            <b-card-sub-title class="mb-3">Информация ОФД</b-card-sub-title>
+                            <b-container fluid>
+                                <b-form-row>
+                                    <b-col class="mb-3" lg="1" md="2" sm="3">
+                                        <b-form-group description="Дата и время">
+                                            <!--<b-form-input type="text" size="sm" plaintext :value="$moment(receipt.result.payload.receipt_datetime).format('DD.MM.YYYY HH:mm')"></b-form-input>-->
+                                            {{ $moment(receipt.result.payload.receipt_datetime).format('DD.MM.YYYY HH:mm') }}
+                                        </b-form-group>
+                                    </b-col>
+                                    <b-col class="mb-3" lg="1" md="2" sm="3">
+                                        <b-form-group description="Номер смены">
+                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.shift_number"></b-form-input>-->
+                                            {{ receipt.result.payload.shift_number }}
+                                        </b-form-group>
+                                    </b-col>
+                                    <b-col class="mb-3" lg="1" md="2" sm="3">
+                                        <b-form-group description="Номер чека в смене">
+                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.fiscal_receipt_number"></b-form-input>-->
+                                            {{ receipt.result.payload.fiscal_receipt_number }}
+                                        </b-form-group>
+                                    </b-col>
+                                    <b-col class="mb-3" lg="1" md="2" sm="3">
+                                        <b-form-group description="Сумма расчета">
+                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.total"></b-form-input>-->
+                                            {{ receipt.result.payload.total }}
+                                        </b-form-group>
+                                    </b-col>
+                                    <b-col class="mb-3" lg="1" md="2" sm="3">
+                                        <b-form-group description="Рег. номер ККТ">
+                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.ecr_registration_number"></b-form-input>-->
+                                            {{ receipt.result.payload.ecr_registration_number }}
+                                        </b-form-group>
+                                    </b-col>
+                                    <b-col class="mb-3" lg="1" md="2" sm="3">
+                                        <b-form-group description="Номер ФН">
+                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.fn_number"></b-form-input>-->
+                                            {{ receipt.result.payload.fn_number }}
+                                        </b-form-group>
+                                    </b-col>
+                                    <b-col class="mb-3" lg="1" md="2" sm="3">
+                                        <b-form-group description="Фискальный номер документа">
+                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.fiscal_document_number"></b-form-input>-->
+                                            {{ receipt.result.payload.fiscal_document_number }}
+                                        </b-form-group>
+                                    </b-col>
+                                    <b-col class="mb-3" lg="1" md="2" sm="3">
+                                        <b-form-group description="Фискальный признак документа">
+                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.fiscal_document_attribute"></b-form-input>-->
+                                            {{ receipt.result.payload.fiscal_document_attribute }}
+                                        </b-form-group>
+                                    </b-col>
+                                    <b-col class="mb-3" lg="2" md="3" sm="4">
+                                        <b-form-group description="Адрес сайта ФНС">
+                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.fns_site"></b-form-input>-->
+                                            <b-link :href="receipt.result.payload.fns_site" target="_blank">{{ receipt.result.payload.fns_site }}</b-link>
+                                        </b-form-group>
+                                    </b-col>
+                                </b-form-row>
+                            </b-container>
+                        </b-card-body>
+                    </b-collapse>
+                </b-card>
+
                 <b-card no-body class="mb-1">
                     <b-card-header header-tag="header" class="p-1" role="tab">
-                        <b-button block v-b-toggle.accordion-9 variant="info">Просмотр чека</b-button>
+                        <b-button block v-b-toggle.accordion-10 variant="info">Просмотр чека</b-button>
                     </b-card-header>
-                    <b-collapse id="accordion-9" @show="showPreview = true" accordion="my-accordion" role="tabpanel">
+                    <b-collapse id="accordion-10" @show="showPreview = true" accordion="my-accordion" role="tabpanel">
                         <b-card-body>
                             <iframe v-if="showPreview" :src="FiscalRegistrar.basePath + '/api/v1/receipts/' + receipt.id + '/preview'" width="100%" @load="fitContent"></iframe>
                         </b-card-body>
@@ -783,6 +869,7 @@ fieldset { margin: 0 }
                     <b-col lg="12">
                         <b-button type="submit" variant="primary" size="sm" :disabled="receipt.state !== 0">Сохранить</b-button>
                         <b-button size="sm" @click="printReceipt">Распечатать</b-button>
+                        <b-button v-if="receipt.result" size="sm" :href="receipt.result.payload.ofd_receipt_url" target="_blank">Просмотреть в ОФД</b-button>
                     </b-col>
                 </b-form-row>
             </b-container>

@@ -36,7 +36,7 @@
                 <a :href="'receipts/' + data.value">{{ data.value }}</a>
             </template>
             <template #cell(created_at)="data">
-                {{ $moment(data.value).format('DD.MM.YYYY hh:mm:ss') }}
+                {{ $moment(data.value).format('DD.MM.YYYY HH:mm:ss') }}
             </template>
         </b-table>
 

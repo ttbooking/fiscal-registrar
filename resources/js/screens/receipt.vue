@@ -144,8 +144,9 @@
                 this.receipt.id
                     ? this.$http.put(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id, this.receipt)
                     : this.$http.post(FiscalRegistrar.basePath + '/api/v1/receipts/', this.receipt)
-                        .then(response => response.data.id && this.$router.push(
-                            { name: 'receipt', params: { id: response.data.id } }
+                        .then(response => response.data.id && this.$router.replace(
+                            { name: 'receipt', params: { id: response.data.id } },
+                            () => this.receipt = response.data
                         ));
             },
 

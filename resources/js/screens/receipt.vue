@@ -100,7 +100,16 @@
             },
 
             saveReceipt() {
-                this.$http.put(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id, this.receipt)
+                this.$http.put(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id, this.receipt);
+            },
+
+            deleteReceipt() {
+                confirm('Удалить чек?') &&
+
+                this.$http.delete(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id)
+                    .then(response => {
+                        this.$router.replace({ name: 'receipts' });
+                    });
             },
 
             addItem() {
@@ -867,9 +876,10 @@ fieldset { margin: 0 }
             <b-container fluid>
                 <b-form-row class="my-3">
                     <b-col lg="12">
-                        <b-button class="mb-1" type="submit" variant="primary" size="sm" :disabled="receipt.state !== 0">Сохранить</b-button>
+                        <b-button v-if="receipt.state === 0" class="mb-1" type="submit" variant="primary" size="sm">Сохранить</b-button>
                         <b-button class="mb-1" size="sm" @click="printReceipt">Распечатать</b-button>
                         <b-button v-if="receipt.result" class="mb-1" size="sm" :href="receipt.result.payload.ofd_receipt_url" target="_blank">Просмотреть в ОФД</b-button>
+                        <b-button v-if="receipt.state === 0" class="mb-1" variant="danger" size="sm" @click="deleteReceipt">Удалить</b-button>
                     </b-col>
                 </b-form-row>
             </b-container>

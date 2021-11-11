@@ -10,7 +10,46 @@
             return {
                 ready: false,
                 showPreview: false,
-                receipt: {},
+                receipt: {
+                    id: null,
+                    state: 0,
+                    connection: null,
+                    operation: null,
+                    external_id: null,
+                    internal_id: null,
+                    data: {
+                        client: {
+                            email: null,
+                            phone: null,
+                            name: null,
+                            inn: null
+                        },
+                        company: {
+                            name: null,
+                            email: null,
+                            inn: null,
+                            payment_address: null,
+                            payment_site: null,
+                            tax_system: null
+                        },
+                        agent_info: null,
+                        supplier_info: null,
+                        items: [],
+                        payments: {
+                            cash: 0,
+                            electronic: 0,
+                            prepaid: 0,
+                            postpaid: 0,
+                            other: 0
+                        },
+                        vats: null,
+                        total: 0,
+                        additional_check_props: null,
+                        cashier: null,
+                        additional_user_props: null
+                    },
+                    result: null
+                },
                 agentTypes: [
                     { value: null, text: 'нет' },
                     { value: 'bank_paying_agent', text: 'банковский платежный агент' },
@@ -75,7 +114,9 @@
         },
 
         mounted() {
-            this.loadReceipt(this.$route.params.id);
+            this.$route.params.id === 'new'
+                ? (this.ready = true)
+                : this.loadReceipt(this.$route.params.id);
             this.enumConnections();
 
             document.title = 'Fiscal Registrar - Receipt';
@@ -100,16 +141,19 @@
             },
 
             saveReceipt() {
-                this.$http.put(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id, this.receipt);
+                this.receipt.id
+                    ? this.$http.put(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id, this.receipt)
+                    : this.$http.post(FiscalRegistrar.basePath + '/api/v1/receipts/', this.receipt)
+                        .then(response => response.data.id && this.$router.push(
+                            { name: 'receipt', params: { id: response.data.id } }
+                        ));
             },
 
             deleteReceipt() {
                 confirm('Удалить чек?') &&
 
                 this.$http.delete(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id)
-                    .then(response => {
-                        this.$router.replace({ name: 'receipts' });
-                    });
+                    .then(response => this.$router.replace({ name: 'receipts' }));
             },
 
             addItem() {
@@ -211,6 +255,11 @@
         },
 
         computed: {
+            title() {
+                const action = !this.receipt.id ? 'Создание' : this.receipt.state === 0 ? 'Редактирование' : 'Просмотр';
+                return action + ' кассового чека';
+            },
+
             model() {
                 return this.$deepModel(this.receipt.data);
             },
@@ -389,7 +438,7 @@ fieldset { margin: 0 }
 
 <template>
     <div>
-        <h2 class="text-center">{{ receipt.state !== 0 ? 'Просмотр кассового чека' : 'Редактирование кассового чека' }}</h2>
+        <h2 class="text-center" v-if="ready">{{ title }}</h2>
         <b-form validated v-if="ready" @submit.prevent="saveReceipt">
             <div class="accordion" role="tablist">
                 <b-card no-body class="mb-1">
@@ -406,12 +455,12 @@ fieldset { margin: 0 }
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="3" md="4" sm="6">
                                             <b-form-group label="Подключение" label-for="receiptConnection" class="required">
-                                                <b-form-select id="receiptConnection" size="sm" v-model="receipt.connection" :options="selectConnections"></b-form-select>
+                                                <b-form-select id="receiptConnection" size="sm" required v-model="receipt.connection" :options="selectConnections"></b-form-select>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="3" md="4" sm="6">
                                             <b-form-group label="Операция" label-for="receiptOperation" class="required">
-                                                <b-form-select id="receiptOperation" size="sm"  v-model="receipt.operation" :options="operations"></b-form-select>
+                                                <b-form-select id="receiptOperation" size="sm" required v-model="receipt.operation" :options="operations"></b-form-select>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="3" md="4" sm="6">
@@ -862,7 +911,7 @@ fieldset { margin: 0 }
                     </b-collapse>
                 </b-card>
 
-                <b-card no-body class="mb-1">
+                <b-card no-body class="mb-1" v-if="receipt.id">
                     <b-card-header header-tag="header" class="p-1" role="tab">
                         <b-button block v-b-toggle.accordion-10 variant="info">Просмотр чека</b-button>
                     </b-card-header>
@@ -877,9 +926,9 @@ fieldset { margin: 0 }
                 <b-form-row class="my-3">
                     <b-col lg="12">
                         <b-button v-if="receipt.state === 0" class="mb-1" type="submit" variant="primary" size="sm">Сохранить</b-button>
-                        <b-button class="mb-1" size="sm" @click="printReceipt">Распечатать</b-button>
+                        <b-button v-if="receipt.id" class="mb-1" size="sm" @click="printReceipt">Распечатать</b-button>
                         <b-button v-if="receipt.result" class="mb-1" size="sm" :href="receipt.result.payload.ofd_receipt_url" target="_blank">Просмотреть в ОФД</b-button>
-                        <b-button v-if="receipt.state === 0" class="mb-1" variant="danger" size="sm" @click="deleteReceipt">Удалить</b-button>
+                        <b-button v-if="receipt.id && receipt.state === 0" class="mb-1" variant="danger" size="sm" @click="deleteReceipt">Удалить</b-button>
                     </b-col>
                 </b-form-row>
             </b-container>

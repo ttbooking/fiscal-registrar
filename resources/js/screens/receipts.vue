@@ -41,5 +41,7 @@
         </b-table>
 
         <pagination :data="receipts" :limit="2" :show-disabled="true" align="center" @pagination-change-page="getReceipts"></pagination>
+
+        <b-button :to="{ name: 'receipt', params: { id: 'new' } }" variant="primary" size="sm">Создать</b-button>
     </div>
 </template>

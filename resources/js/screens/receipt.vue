@@ -867,9 +867,9 @@ fieldset { margin: 0 }
             <b-container fluid>
                 <b-form-row class="my-3">
                     <b-col lg="12">
-                        <b-button type="submit" variant="primary" size="sm" :disabled="receipt.state !== 0">Сохранить</b-button>
-                        <b-button size="sm" @click="printReceipt">Распечатать</b-button>
-                        <b-button v-if="receipt.result" size="sm" :href="receipt.result.payload.ofd_receipt_url" target="_blank">Просмотреть в ОФД</b-button>
+                        <b-button class="mb-1" type="submit" variant="primary" size="sm" :disabled="receipt.state !== 0">Сохранить</b-button>
+                        <b-button class="mb-1" size="sm" @click="printReceipt">Распечатать</b-button>
+                        <b-button v-if="receipt.result" class="mb-1" size="sm" :href="receipt.result.payload.ofd_receipt_url" target="_blank">Просмотреть в ОФД</b-button>
                     </b-col>
                 </b-form-row>
             </b-container>

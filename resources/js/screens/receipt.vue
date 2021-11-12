@@ -168,13 +168,31 @@
             },
 
             saveReceipt() {
-                this.receipt.id
+                return this.receipt.id
                     ? this.$http.put(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id, this.receipt)
                     : this.$http.post(FiscalRegistrar.basePath + '/api/v1/receipts/', this.receipt)
                         .then(response => response.data.id && this.$router.replace(
                             { name: 'receipt', params: { id: response.data.id } },
                             () => this.receipt = response.data
                         ));
+            },
+
+            registerReceipt() {
+                this.saveReceipt().then(response => {
+                    this.$http.post(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id + '/register')
+                        .then(() => {
+                            this.receipt.state = 1;
+                            setTimeout(() => this.syncReceipt(this.receipt.id), 1000);
+                        });
+                });
+            },
+
+            syncReceipt() {
+                this.$http.get(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id + '/report')
+                    .then(response => {
+                        this.receipt.result = response.data;
+                        this.receipt.state = 2;
+                    });
             },
 
             deleteReceipt() {
@@ -959,6 +977,8 @@ fieldset { margin: 0 }
                     <b-col lg="12">
                         <b-button v-if="receipt.state === 0" class="mb-1" type="submit" variant="primary" size="sm">Сохранить</b-button>
                         <b-button v-if="receipt.id" class="mb-1" variant="primary" size="sm" :to="{ name: 'new-receipt-from-existing', params: { id: receipt.id } }">Дублировать</b-button>
+                        <b-button v-if="receipt.state === 0" class="mb-1" variant="success" size="sm" @click="registerReceipt">Зарегистрировать</b-button>
+                        <b-button v-if="receipt.state === 1" class="mb-1" variant="warning" size="sm" @click="syncReceipt">Синхронизировать</b-button>
                         <b-button v-if="receipt.id" class="mb-1" size="sm" @click="printReceipt">Распечатать</b-button>
                         <b-button v-if="receipt.result" class="mb-1" size="sm" :href="receipt.result.payload.ofd_receipt_url" target="_blank">Просмотреть в ОФД</b-button>
                         <b-button v-if="receipt.id && receipt.state === 0" class="mb-1" variant="danger" size="sm" @click="deleteReceipt">Удалить</b-button>

@@ -8,7 +8,19 @@ export default [
     },
 
     {
-        path: '/receipts/:id',
+        path: '/receipt/new',
+        name: 'new-receipt',
+        component: require('./screens/receipt').default,
+    },
+
+    {
+        path: '/receipt/from/:id',
+        name: 'new-receipt-from-existing',
+        component: require('./screens/receipt').default,
+    },
+
+    {
+        path: '/receipt/:id',
         name: 'receipt',
         component: require('./screens/receipt').default,
     }

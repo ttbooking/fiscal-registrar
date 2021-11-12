@@ -33,7 +33,7 @@
     <div>
         <b-table small striped hover :items="receipts.data" :fields="fields">
             <template #cell(id)="data">
-                <a :href="'receipts/' + data.value">{{ data.value }}</a>
+                <b-link :to="{ name: 'receipt', params: { id: data.value } }">{{ data.value }}</b-link>
             </template>
             <template #cell(created_at)="data">
                 {{ $moment(data.value).format('DD.MM.YYYY HH:mm:ss') }}
@@ -42,6 +42,6 @@
 
         <pagination :data="receipts" :limit="2" :show-disabled="true" align="center" @pagination-change-page="getReceipts"></pagination>
 
-        <b-button :to="{ name: 'receipt', params: { id: 'new' } }" variant="primary" size="sm">Создать</b-button>
+        <b-button :to="{ name: 'new-receipt' }" variant="primary" size="sm">Создать</b-button>
     </div>
 </template>

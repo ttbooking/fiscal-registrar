@@ -10,46 +10,7 @@
             return {
                 ready: false,
                 showPreview: false,
-                receipt: {
-                    id: null,
-                    state: 0,
-                    connection: null,
-                    operation: null,
-                    external_id: null,
-                    internal_id: null,
-                    data: {
-                        client: {
-                            email: null,
-                            phone: null,
-                            name: null,
-                            inn: null
-                        },
-                        company: {
-                            name: null,
-                            email: null,
-                            inn: null,
-                            payment_address: null,
-                            payment_site: null,
-                            tax_system: null
-                        },
-                        agent_info: null,
-                        supplier_info: null,
-                        items: [],
-                        payments: {
-                            cash: 0,
-                            electronic: 0,
-                            prepaid: 0,
-                            postpaid: 0,
-                            other: 0
-                        },
-                        vats: null,
-                        total: 0,
-                        additional_check_props: null,
-                        cashier: null,
-                        additional_user_props: null
-                    },
-                    result: null
-                },
+                receipt: null,
                 agentTypes: [
                     { value: null, text: 'нет' },
                     { value: 'bank_paying_agent', text: 'банковский платежный агент' },
@@ -114,15 +75,28 @@
         },
 
         mounted() {
-            this.$route.params.id === 'new'
-                ? (this.ready = true)
-                : this.loadReceipt(this.$route.params.id);
+            this.handleRoute(this.$route);
             this.enumConnections();
 
             document.title = 'Fiscal Registrar - Receipt';
         },
 
         methods: {
+            handleRoute(to, from = null) {
+                switch (to.name) {
+                    case 'receipt':
+                        this.loadReceipt(to.params.id);
+                        break;
+                    case 'new-receipt':
+                        this.resetReceipt();
+                        break;
+                    case 'new-receipt-from-existing':
+                        from !== null && from.name === 'receipt' && +to.params.id === +from.params.id
+                            ? this.shrinkReceipt()
+                            : this.loadReceipt(to.params.id, true);
+                }
+            },
+
             enumConnections() {
                 this.$http.get(FiscalRegistrar.basePath + '/api/v1/connection/')
                     .then(response => {
@@ -130,12 +104,65 @@
                     });
             },
 
-            loadReceipt(id) {
+            resetReceipt() {
+                this.receipt = {
+                    id: null,
+                    state: 0,
+                    connection: null,
+                    operation: null,
+                    external_id: null,
+                    internal_id: null,
+                    data: {
+                        client: {
+                            email: null,
+                            phone: null,
+                            name: null,
+                            inn: null
+                        },
+                        company: {
+                            name: null,
+                            email: null,
+                            inn: null,
+                            payment_address: null,
+                            payment_site: null,
+                            tax_system: null
+                        },
+                        agent_info: null,
+                        supplier_info: null,
+                        items: [],
+                        payments: {
+                            cash: 0,
+                            electronic: 0,
+                            prepaid: 0,
+                            postpaid: 0,
+                            other: 0
+                        },
+                        vats: null,
+                        total: 0,
+                        additional_check_props: null,
+                        cashier: null,
+                        additional_user_props: null
+                    },
+                    result: null
+                };
+                this.ready = true;
+            },
+
+            shrinkReceipt() {
+                this.receipt.id = null;
+                this.receipt.state = 0;
+                this.receipt.external_id = null;
+                this.receipt.internal_id = null;
+                this.receipt.result = null;
+            },
+
+            loadReceipt(id, asTemplate = false) {
                 this.ready = false;
 
                 this.$http.get(FiscalRegistrar.basePath + '/api/v1/receipts/' + id)
                     .then(response => {
                         this.receipt = response.data;
+                        asTemplate && this.shrinkReceipt();
                         this.ready = true;
                     });
             },
@@ -415,6 +442,10 @@
         },
 
         watch: {
+            $route(to, from) {
+               this.handleRoute(to, from);
+            },
+
             'receipt.data.vats': {
                 handler: function (vats) {
                     if (vats === null) return;
@@ -927,6 +958,7 @@ fieldset { margin: 0 }
                 <b-form-row class="my-3">
                     <b-col lg="12">
                         <b-button v-if="receipt.state === 0" class="mb-1" type="submit" variant="primary" size="sm">Сохранить</b-button>
+                        <b-button v-if="receipt.id" class="mb-1" variant="primary" size="sm" :to="{ name: 'new-receipt-from-existing', params: { id: receipt.id } }">Дублировать</b-button>
                         <b-button v-if="receipt.id" class="mb-1" size="sm" @click="printReceipt">Распечатать</b-button>
                         <b-button v-if="receipt.result" class="mb-1" size="sm" :href="receipt.result.payload.ofd_receipt_url" target="_blank">Просмотреть в ОФД</b-button>
                         <b-button v-if="receipt.id && receipt.state === 0" class="mb-1" variant="danger" size="sm" @click="deleteReceipt">Удалить</b-button>

@@ -464,6 +464,13 @@
                this.handleRoute(to, from);
             },
 
+            'receipt.data.items': {
+                handler: function (items) {
+                    this.receipt.data.total = items.reduce((total, item) => total + item.sum, 0);
+                },
+                deep: true
+            },
+
             'receipt.data.vats': {
                 handler: function (vats) {
                     if (vats === null) return;
@@ -739,7 +746,18 @@ fieldset { margin: 0 }
                                 <receipt-item :key="id" :item="item" :disabled="receipt.state !== 0" @remove="removeItem(id)"></receipt-item>
                                 <hr />
                             </template>
-                            <b-button variant="primary" size="sm" @click="addItem" :disabled="receipt.state !== 0">Добавить</b-button>
+                            <b-container fluid>
+                                <b-form-row class="my-1">
+                                    <b-col align-self="end" lg="1" md="2" sm="3">
+                                        <b-form-group label="Всего на сумму" label-for="total" class="required">
+                                            <b-form-input id="total" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="receipt.data.total" :disabled="receipt.state !== 0"></b-form-input>
+                                        </b-form-group>
+                                    </b-col>
+                                    <b-col align-self="end" lg="1" md="2" sm="3">
+                                        <b-button class="mb-3" variant="primary" size="sm" @click="addItem" :disabled="receipt.state !== 0">Добавить</b-button>
+                                    </b-col>
+                                </b-form-row>
+                            </b-container>
                         </b-card-body>
                     </b-collapse>
                 </b-card>

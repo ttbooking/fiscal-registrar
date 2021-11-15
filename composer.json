@@ -17,6 +17,7 @@
     "require": {
         "php": "^8.0",
         "ext-json": "*",
+        "endroid/qr-code": "^4.4",
         "illuminate/broadcasting": "^8.23",
         "illuminate/console": "^8.23",
         "illuminate/contracts": "^8.23",
@@ -64,7 +65,8 @@
             ],
             "aliases": {
                 "FiscalRegistrar": "TTBooking\\FiscalRegistrar\\Facades\\FiscalRegistrar",
-                "Receipt": "TTBooking\\FiscalRegistrar\\Facades\\Receipt"
+                "Receipt": "TTBooking\\FiscalRegistrar\\Facades\\Receipt",
+                "ReceiptQRCode": "TTBooking\\FiscalRegistrar\\Facades\\ReceiptQRCode"
             }
         }
     },

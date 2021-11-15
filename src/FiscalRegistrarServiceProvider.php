@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use TTBooking\FiscalRegistrar\Faker\Extension;
 use TTBooking\FiscalRegistrar\Models\Receipt;
+use TTBooking\FiscalRegistrar\Support\QRCodeData;
+use TTBooking\FiscalRegistrar\Support\QRCodePng;
 
 class FiscalRegistrarServiceProvider extends ServiceProvider //implements DeferrableProvider
 {
@@ -23,6 +25,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
     public array $singletons = [
         'fiscal-registrar' => FiscalRegistrarManager::class,
         'fiscal-registrar.receipt' => FluentReceipt::class,
+        'fiscal-registrar.qr-code' => QRCodeData::class,
     ];
 
     /**
@@ -152,6 +155,11 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         $this->app->alias('fiscal-registrar.receipt', Contracts\ReceiptFactory::class);
         $this->app->alias('fiscal-registrar.receipt', Contracts\Receipt::class);
         $this->app->bind(Receipt::class, $this->app['config']['fiscal-registrar.model'] ?? Receipt::class);
+        $this->app->alias('fiscal-registrar.qr-code', Contracts\QRCodeBuilder::class);
+        $this->app->extend(
+            'fiscal-registrar.qr-code',
+            fn (Contracts\QRCodeBuilder $dataProvider) => new QRCodePng($dataProvider)
+        );
     }
 
     protected function registerSyncJobSchedule(): void

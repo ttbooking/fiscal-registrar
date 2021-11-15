@@ -28,7 +28,7 @@
         border-collapse: collapse;
         font-family: Arial, Helvetica, sans-serif;
     }
-    #receipt thead {
+    #receipt thead, #receipt tfoot {
         display: table-row-group;
         text-align: center;
     }
@@ -212,6 +212,13 @@
                     <td>1.05</td>
                 </tr>
             </tbody>
+            @if ($receipt->result)
+            <tfoot>
+                <tr>
+                    <td colspan="2"><img src="{{ ReceiptQRCode::make($receipt->result->payload, $receipt->operation) }}" /></td>
+                </tr>
+            </tfoot>
+            @endif
         </table>
     </div>
 </body>

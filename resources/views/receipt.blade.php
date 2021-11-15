@@ -19,10 +19,14 @@
             border: 1px solid black;
             padding: 5px;
         }
+        #receipt tfoot {
+            break-inside: avoid;
+        }
     }
 
     #receipt {
-        display: inline-block;
+        width: -moz-fit-content;
+        width: fit-content;
     }
     #receipt table {
         border-collapse: collapse;

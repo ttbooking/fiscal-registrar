@@ -456,6 +456,12 @@
                         .filter(phone => phone != null && phone !== '');
                     this.model['supplier_info.phones'] = phones.length ? phones : null;
                 }
+            },
+
+            resultPayloadFnsSite() {
+                return /^https?:\/\//i.test(this.receipt.result.payload.fns_site)
+                    ? this.receipt.result.payload.fns_site
+                    : 'https://' + this.receipt.result.payload.fns_site;
             }
         },
 
@@ -904,13 +910,11 @@ fieldset { margin: 0 }
                                 <b-form-row>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
                                         <b-form-group description="Дата и время">
-                                            <!--<b-form-input type="text" size="sm" plaintext :value="$moment(receipt.result.timestamp).format('DD.MM.YYYY HH:mm:ss')"></b-form-input>-->
                                             {{ $moment(receipt.result.timestamp).format('DD.MM.YYYY HH:mm:ss') }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="2" md="3" sm="4">
                                         <b-form-group description="Внутренний идентификатор">
-                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.internal_id"></b-form-input>-->
                                             {{ receipt.result.internal_id }}
                                         </b-form-group>
                                     </b-col>
@@ -921,56 +925,47 @@ fieldset { margin: 0 }
                                 <b-form-row>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
                                         <b-form-group description="Дата и время">
-                                            <!--<b-form-input type="text" size="sm" plaintext :value="$moment(receipt.result.payload.receipt_datetime).format('DD.MM.YYYY HH:mm')"></b-form-input>-->
                                             {{ $moment(receipt.result.payload.receipt_datetime).format('DD.MM.YYYY HH:mm') }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
                                         <b-form-group description="Номер смены">
-                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.shift_number"></b-form-input>-->
                                             {{ receipt.result.payload.shift_number }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
                                         <b-form-group description="Номер чека в смене">
-                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.fiscal_receipt_number"></b-form-input>-->
                                             {{ receipt.result.payload.fiscal_receipt_number }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
                                         <b-form-group description="Сумма расчета">
-                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.total"></b-form-input>-->
                                             {{ receipt.result.payload.total }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
                                         <b-form-group description="Рег. номер ККТ">
-                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.ecr_registration_number"></b-form-input>-->
                                             {{ receipt.result.payload.ecr_registration_number }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
                                         <b-form-group description="Номер ФН">
-                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.fn_number"></b-form-input>-->
                                             {{ receipt.result.payload.fn_number }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
                                         <b-form-group description="Фискальный номер документа">
-                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.fiscal_document_number"></b-form-input>-->
                                             {{ receipt.result.payload.fiscal_document_number }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
                                         <b-form-group description="Фискальный признак документа">
-                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.fiscal_document_attribute"></b-form-input>-->
                                             {{ receipt.result.payload.fiscal_document_attribute }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="2" md="3" sm="4">
                                         <b-form-group description="Адрес сайта ФНС">
-                                            <!--<b-form-input type="text" size="sm" plaintext v-model="receipt.result.payload.fns_site"></b-form-input>-->
-                                            <b-link :href="receipt.result.payload.fns_site" target="_blank">{{ receipt.result.payload.fns_site }}</b-link>
+                                            <b-link :href="resultPayloadFnsSite" target="_blank">{{ resultPayloadFnsSite }}</b-link>
                                         </b-form-group>
                                     </b-col>
                                 </b-form-row>

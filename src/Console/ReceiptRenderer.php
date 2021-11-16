@@ -12,6 +12,7 @@ use Symfony\Component\Console\Helper\TableCellStyle;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Helper\TableStyle;
 use TTBooking\FiscalRegistrar\DTO\Receipt\Item;
+use TTBooking\FiscalRegistrar\Facades\ReceiptQRCode;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
 trait ReceiptRenderer
@@ -28,6 +29,7 @@ trait ReceiptRenderer
         static::setupReceiptTableTotal($table, $receipt);
         if (isset($receipt->result->payload)) {
             static::setupReceiptTableFooter($table, $receipt);
+            static::setupReceiptTableQRCode($table, $receipt);
         }
 
         $table->render();
@@ -126,6 +128,18 @@ trait ReceiptRenderer
             [static::trans('result.fiscal_document_attribute'), $receipt->result->payload->fiscal_document_attribute],
             [static::trans('result.ffd_version'), '1.05'],
         ]);
+    }
+
+    protected static function setupReceiptTableQRCode(Table $table, Receipt $receipt): Table
+    {
+        $table->addRow(new TableSeparator);
+
+        $qrCode = ReceiptQRCode::make($receipt->result->payload, $receipt->operation);
+        foreach (explode("\n", $qrCode->getString()) as $qrCodeLine) {
+            $table->addRow([new TableCell($qrCodeLine, ['colspan' => 2])]);
+        }
+
+        return $table;
     }
 
     protected static function trans(string $key): string

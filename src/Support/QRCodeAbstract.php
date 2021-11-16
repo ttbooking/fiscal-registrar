@@ -8,9 +8,9 @@ use TTBooking\FiscalRegistrar\Contracts\QRCodeBuilder;
 use TTBooking\FiscalRegistrar\DTO\Result\Payload;
 use TTBooking\FiscalRegistrar\Enums\Operation;
 
-class QRCodeData implements QRCodeBuilder
+abstract class QRCodeAbstract implements QRCodeBuilder
 {
-    public function make(Payload $payload, Operation $operation): string
+    protected function getData(Payload $payload, Operation $operation): string
     {
         return sprintf('t=%s&s=%.2f&fn=%s&i=%d&fp=%d&n=%d',
             $payload->receipt_datetime->format('Ymd\THi'),

@@ -12,8 +12,8 @@ use Symfony\Component\Console\Helper\TableCellStyle;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Helper\TableStyle;
 use TTBooking\FiscalRegistrar\DTO\Receipt\Item;
-use TTBooking\FiscalRegistrar\Facades\ReceiptQRCode;
 use TTBooking\FiscalRegistrar\Models\Receipt;
+use TTBooking\FiscalRegistrar\Support\ReceiptQRCode;
 
 trait ReceiptRenderer
 {
@@ -134,7 +134,7 @@ trait ReceiptRenderer
     {
         $table->addRow(new TableSeparator);
 
-        $qrCode = ReceiptQRCode::make($receipt->result->payload, $receipt->operation);
+        $qrCode = ReceiptQRCode::for($receipt->result->payload, $receipt->operation)->block();
         foreach (explode("\n", $qrCode->getString()) as $qrCodeLine) {
             $qrCodeLine && $table->addRow([new TableCell($qrCodeLine, [
                 'colspan' => 2,

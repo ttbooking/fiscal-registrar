@@ -66,7 +66,7 @@
             "aliases": {
                 "FiscalRegistrar": "TTBooking\\FiscalRegistrar\\Facades\\FiscalRegistrar",
                 "Receipt": "TTBooking\\FiscalRegistrar\\Facades\\Receipt",
-                "ReceiptQRCode": "TTBooking\\FiscalRegistrar\\Facades\\ReceiptQRCode"
+                "ReceiptQRCode": "TTBooking\\FiscalRegistrar\\Support\\ReceiptQRCode"
             }
         }
     },

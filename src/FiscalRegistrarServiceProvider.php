@@ -6,15 +6,12 @@ namespace TTBooking\FiscalRegistrar;
 
 use Faker\Generator;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use TTBooking\FiscalRegistrar\Faker\Extension;
 use TTBooking\FiscalRegistrar\Models\Receipt;
-use TTBooking\FiscalRegistrar\Support\QRCodeBlock;
-use TTBooking\FiscalRegistrar\Support\QRCodePng;
 
 class FiscalRegistrarServiceProvider extends ServiceProvider //implements DeferrableProvider
 {
@@ -155,10 +152,6 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         $this->app->alias('fiscal-registrar.receipt', Contracts\ReceiptFactory::class);
         $this->app->alias('fiscal-registrar.receipt', Contracts\Receipt::class);
         $this->app->bind(Receipt::class, $this->app['config']['fiscal-registrar.model'] ?? Receipt::class);
-        $this->app->singleton('fiscal-registrar.qr-code', function (Application $app) {
-            return $app->make($app->runningInConsole() ? QRCodeBlock::class : QRCodePng::class);
-        });
-        $this->app->alias('fiscal-registrar.qr-code', Contracts\QRCodeBuilder::class);
     }
 
     protected function registerSyncJobSchedule(): void

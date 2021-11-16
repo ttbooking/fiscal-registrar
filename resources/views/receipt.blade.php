@@ -219,7 +219,7 @@
             @if ($receipt->result)
             <tfoot>
                 <tr>
-                    <td colspan="2"><img src="{{ ReceiptQRCode::make($receipt->result->payload, $receipt->operation)->getDataUri() }}" /></td>
+                    <td colspan="2"><img src="{{ ReceiptQRCode::for($receipt->result->payload, $receipt->operation)->png()->getDataUri() }}" /></td>
                 </tr>
             </tfoot>
             @endif

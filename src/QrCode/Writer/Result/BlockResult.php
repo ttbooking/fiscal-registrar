@@ -11,18 +11,19 @@ final class BlockResult extends AbstractResult
 {
     public function __construct(
         protected MatrixInterface $matrix,
-        protected string $charset
+        protected array|string $charset
     ) {
+        if (is_string($this->charset)) {
+            $this->charset = preg_split('//u', $this->charset, -1, PREG_SPLIT_NO_EMPTY);
+        }
     }
 
     public function getString(): string
     {
         $binaryString = '';
         for ($rowIndex = 0; $rowIndex < $this->matrix->getBlockCount(); $rowIndex += 2) {
-            for ($columnIndex = 0; $columnIndex < $this->matrix->getBlockCount(); $columnIndex += 2) {
+            for ($columnIndex = 0; $columnIndex < $this->matrix->getBlockCount(); $columnIndex++) {
                 $binaryString .= $this->charset[bindec(
-                    $this->getBlockValue($rowIndex + 1, $columnIndex + 1).
-                    $this->getBlockValue($rowIndex, $columnIndex + 1).
                     $this->getBlockValue($rowIndex + 1, $columnIndex).
                     $this->getBlockValue($rowIndex, $columnIndex)
                 )];

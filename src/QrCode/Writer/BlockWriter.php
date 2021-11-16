@@ -16,8 +16,8 @@ final class BlockWriter implements WriterInterface
 {
     public const WRITER_OPTION_CHARSET = 'charset';
 
-    public const BLOCK_CHARSET_DEFAULT  = ' ▘▝▀▖▌▞▛▗▚▐▜▄▙▟█';
-    public const BLOCK_CHARSET_INVERTED = '█▟▙▄▜▐▚▗▛▞▌▖▀▝▘ ';
+    public const BLOCK_CHARSET_DEFAULT  = ' ▀▄█';
+    public const BLOCK_CHARSET_INVERTED = '█▄▀ ';
 
     public function write(
         QrCodeInterface $qrCode,

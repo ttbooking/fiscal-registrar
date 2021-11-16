@@ -136,7 +136,10 @@ trait ReceiptRenderer
 
         $qrCode = ReceiptQRCode::make($receipt->result->payload, $receipt->operation);
         foreach (explode("\n", $qrCode->getString()) as $qrCodeLine) {
-            $table->addRow([new TableCell($qrCodeLine, ['colspan' => 2])]);
+            $qrCodeLine && $table->addRow([new TableCell($qrCodeLine, [
+                'colspan' => 2,
+                'style' => new TableCellStyle(['align' => 'center'])
+            ])]);
         }
 
         return $table;

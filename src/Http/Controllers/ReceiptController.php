@@ -91,7 +91,10 @@ class ReceiptController extends Controller
      */
     public function preview(Repository $config, Receipt $receipt): \Illuminate\Contracts\View\View
     {
-        $template = $config->get("fiscal-registrar.connections.{$receipt->connection}.receipt_template", 'default');
+        $template = $config->get(
+            "fiscal-registrar.connections.{$receipt->connection}.receipt_template",
+            fn () => View::exists("fiscal-registrar::receipt.{$receipt->connection}") ? $receipt->connection : 'default'
+        );
 
         return View::make("fiscal-registrar::receipt.$template", compact('receipt'));
     }

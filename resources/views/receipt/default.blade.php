@@ -18,6 +18,8 @@
             #receipt {
                 border: 1px solid black;
                 padding: 5px;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
             }
             #receipt tfoot {
                 break-inside: avoid;
@@ -25,6 +27,9 @@
         }
 
         #receipt {
+            @if ($connectionConfig['test'] ?? false)
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='120px' width='120px'><text transform='translate(30, 100) rotate(-45)' fill='lightgray' font-size='32'>{{ __('fiscal-registrar::main.shared.sample') }}</text></svg>");
+            @endif
             width: -moz-fit-content;
             width: fit-content;
         }

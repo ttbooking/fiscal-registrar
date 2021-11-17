@@ -22,6 +22,7 @@ return [
         'yes' => 'yes',
         'no' => 'no',
         '#' => '#',
+        'sample' => 'sample',
     ],
 
 ];

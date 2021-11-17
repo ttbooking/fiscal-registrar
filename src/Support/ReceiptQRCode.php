@@ -55,7 +55,7 @@ class ReceiptQRCode
             ->setMargin(10)
             ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin)
             ->setForegroundColor(new Color(0, 0, 0))
-            ->setBackgroundColor(new Color(255, 255, 255));
+            ->setBackgroundColor(new Color(255, 255, 255, 127));
 
         return (new PngWriter)->write($qrCode);
     }

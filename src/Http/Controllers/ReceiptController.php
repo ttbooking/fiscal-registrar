@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Http\Controllers;
 
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -88,9 +89,11 @@ class ReceiptController extends Controller
      * @param  Receipt  $receipt
      * @return \Illuminate\Contracts\View\View
      */
-    public function preview(Receipt $receipt): \Illuminate\Contracts\View\View
+    public function preview(Repository $config, Receipt $receipt): \Illuminate\Contracts\View\View
     {
-        return View::make('fiscal-registrar::receipt', compact('receipt'));
+        $template = $config->get("fiscal-registrar.connections.{$receipt->connection}.receipt_template", 'default');
+
+        return View::make("fiscal-registrar::receipt.$template", compact('receipt'));
     }
 
     /**

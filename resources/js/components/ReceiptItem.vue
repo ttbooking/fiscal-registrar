@@ -169,9 +169,9 @@
         <div class="accordion" role="tablist" v-if="agentType !== null">
             <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
-                    <b-button block v-b-toggle="'item' + id + 'payingAgent'">Атрибуты платежного агента</b-button>
+                    <b-button block v-b-toggle="'receipt-item-' + id + '-paying-agent'">Атрибуты платежного агента</b-button>
                 </b-card-header>
-                <b-collapse :id="'item' + id + 'payingAgent'" :accordion="'item' + id + 'agentInfo'" role="tabpanel">
+                <b-collapse :id="'receipt-item-' + id + '-paying-agent'" :accordion="'receipt-item-' + id + '-agent-supplier-accordion'" role="tabpanel">
                     <b-card-body>
                         <b-container fluid>
                             <b-form-row class="my-1">
@@ -193,9 +193,9 @@
 
             <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
-                    <b-button block v-b-toggle="'item' + id + 'receivePaymentsOperator'">Атрибуты оператора по приему платежей</b-button>
+                    <b-button block v-b-toggle="'receipt-item-' + id + '-receive-payments-operator'">Атрибуты оператора по приему платежей</b-button>
                 </b-card-header>
-                <b-collapse :id="'item' + id + 'receivePaymentsOperator'" :accordion="'item' + id + 'agentInfo'" role="tabpanel">
+                <b-collapse :id="'receipt-item-' + id + '-receive-payments-operator'" :accordion="'receipt-item-' + id + '-agent-supplier-accordion'" role="tabpanel">
                     <b-card-body>
                         <b-container fluid>
                             <b-form-row class="my-1">
@@ -212,9 +212,9 @@
 
             <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
-                    <b-button block v-b-toggle="'item' + id + 'moneyTransferOperator'">Атрибуты оператора перевода</b-button>
+                    <b-button block v-b-toggle="'receipt-item-' + id + '-money-transfer-operator'">Атрибуты оператора перевода</b-button>
                 </b-card-header>
-                <b-collapse :id="'item' + id + 'moneyTransferOperator'" :accordion="'item' + id + 'agentInfo'" role="tabpanel">
+                <b-collapse :id="'receipt-item-' + id + '-money-transfer-operator'" :accordion="'receipt-item-' + id + '-agent-supplier-accordion'" role="tabpanel">
                     <b-card-body>
                         <b-container fluid>
                             <b-form-row class="my-1">
@@ -246,9 +246,9 @@
 
             <b-card no-body class="mb-1">
                 <b-card-header header-tag="header" class="p-1" role="tab">
-                    <b-button block v-b-toggle="'item' + id + 'supplier'">Атрибуты поставщика</b-button>
+                    <b-button block v-b-toggle="'receipt-item-' + id + '-supplier'">Атрибуты поставщика</b-button>
                 </b-card-header>
-                <b-collapse :id="'item' + id + 'supplier'" :accordion="'item' + id + 'agentInfo'" role="tabpanel">
+                <b-collapse :id="'receipt-item-' + id + '-supplier'" :accordion="'receipt-item-' + id + '-agent-supplier-accordion'" role="tabpanel">
                     <b-card-body>
                         <b-container fluid>
                             <b-form-row class="my-1">

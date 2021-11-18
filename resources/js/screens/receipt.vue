@@ -19,9 +19,9 @@
                     { value: 'paying_subagent', text: 'платежный субагент' },
                     { value: 'attorney', text: 'поверенный' },
                     { value: 'commission_agent', text: 'комиссионер' },
-                    { value: 'another', text: 'агент' }
+                    { value: 'another', text: 'агент' },
                 ],
-                connections: [],
+                connections: {},
                 operations: [
                     { value: 'sell', text: 'приход' },
                     { value: 'sell_refund', text: 'возврат прихода' },
@@ -43,7 +43,7 @@
                     vat10: null,
                     vat20: null,
                     vat110: null,
-                    vat120: null
+                    vat120: null,
                 },
                 vatRates: {
                     none: 0,
@@ -53,25 +53,25 @@
                     vat20: .2,
                     vat110: 10 / 110,
                     vat118: 18 / 118,
-                    vat120: 20 / 120
+                    vat120: 20 / 120,
                 },
                 agentInfo: {
                     type: null,
                     paying_agent: {
                         operation: null,
-                        phones: null
+                        phones: null,
                     },
                     receive_payments_operator: {
-                        phones: null
+                        phones: null,
                     },
                     money_transfer_operator: {
                         phones: null,
                         name: null,
                         address: null,
-                        inn: null
-                    }
-                }
-            }
+                        inn: null,
+                    },
+                },
+            };
         },
 
         mounted() {
@@ -98,7 +98,7 @@
             },
 
             enumConnections() {
-                this.$http.get(FiscalRegistrar.basePath + '/api/v1/connection/')
+                this.$http.get(FiscalRegistrar.basePath + '/api/v1/connection')
                     .then(response => {
                         this.connections = response.data;
                     });
@@ -296,8 +296,8 @@
                 printWindow.onafterprint = printWindow.close;
                 printWindow.onload = function() {
                     printWindow.setTimeout(printWindow.print);
-                }
-            }
+                };
+            },
         },
 
         computed: {

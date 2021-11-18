@@ -1,50 +1,58 @@
-import moment from 'moment';
+import moment from 'moment'
 
 export default {
     computed: {
         FiscalRegistrar() {
-            return FiscalRegistrar;
+            return FiscalRegistrar
         },
 
         agentTypeOptions() {
-            return [{ value: null, text: 'нет' }, ...this.buildOptions(this.dictionary.agentTypes)];
+            return [{ value: null, text: 'нет' }, ...this.buildOptions(this.dictionary.agentTypes)]
         },
 
         taxSystemOptions() {
-            return [{ value: null, text: 'не выбрано' }, ...this.buildOptions(this.dictionary.taxSystems)];
+            return [{ value: null, text: 'не выбрано' }, ...this.buildOptions(this.dictionary.taxSystems)]
         },
     },
 
     methods: {
         formatTime(timestamp, format = 'DD.MM.YYYY HH:mm:ss') {
-            return moment(timestamp).format(format);
+            return moment(timestamp).format(format)
         },
 
         buildOptions(object, callback = null) {
-            callback ??= ([key, value]) => ({ value: key, text: value });
+            callback ??= ([key, value]) => ({ value: key, text: value })
 
-            return Object.entries(object).map(callback);
+            return Object.entries(object).map(callback)
         },
 
         extractVat(sum, vatType) {
-            return parseFloat((sum - sum / (1 + this.dictionary.vatRates[vatType])).toFixed(2));
+            return parseFloat((sum - sum / (1 + this.dictionary.vatRates[vatType])).toFixed(2))
         },
 
         emptify(obj) {
             if (!obj || typeof obj !== 'object') {
-                return obj;
+                return obj
             }
             for (const key in obj) {
-                obj[key] = this.emptify(obj[key]);
-                obj[key] || (obj[key] = null);
+                obj[key] = this.emptify(obj[key])
+                obj[key] || (obj[key] = null)
             }
-            Object.values(obj).every(prop => prop === null) && (obj = null);
-            return obj;
+            Object.values(obj).every(prop => prop === null) && (obj = null)
+            return obj
+        },
+
+        enumConnections() {
+            this.$http.get(FiscalRegistrar.basePath + '/api/v1/connection')
+                .then(response => {
+                    this.connections = response.data
+                })
         },
     },
 
     data() {
         return {
+            connections: {},
             dictionary: {
                 operations: {
                     sell: 'приход',
@@ -140,6 +148,6 @@ export default {
                     vat120: 20 / 120,
                 },
             },
-        };
+        }
     },
-};
+}

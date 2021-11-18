@@ -23,5 +23,5 @@ export default [
         path: '/receipt/:id',
         name: 'receipt',
         component: require('./screens/receipt').default,
-    }
-];
+    },
+]

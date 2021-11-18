@@ -10,32 +10,24 @@
                     { key: 'data.total', label: 'Сумма' },
                     { key: 'state', label: 'Статус' },
                 ],
-                connections: {},
                 receipts: {},
-            };
+            }
         },
 
         mounted() {
-            this.enumConnections();
-            this.getReceipts();
+            this.enumConnections()
+            this.getReceipts()
         },
 
         methods: {
-            enumConnections() {
-                this.$http.get(FiscalRegistrar.basePath + '/api/v1/connection')
-                    .then(response => {
-                        this.connections = response.data;
-                    });
-            },
-
             getReceipts(page = 1) {
                 this.$http.get(FiscalRegistrar.basePath + '/api/v1/receipts/?page=' + page)
                     .then(response => {
-                        this.receipts = response.data;
-                    });
+                        this.receipts = response.data
+                    })
             },
         },
-    };
+    }
 </script>
 
 <template>

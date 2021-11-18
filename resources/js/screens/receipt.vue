@@ -1,5 +1,5 @@
 <script type="text/ecmascript-6">
-    import ReceiptItem from '../components/ReceiptItem.vue';
+    import ReceiptItem from '../components/ReceiptItem.vue'
 
     export default {
         components: {
@@ -11,7 +11,6 @@
                 ready: false,
                 showPreview: false,
                 receipt: null,
-                connections: {},
                 vats: {
                     without_vat: null,
                     with_vat0: null,
@@ -36,37 +35,28 @@
                         inn: null,
                     },
                 },
-            };
+            }
         },
 
         mounted() {
-            this.handleRoute(this.$route);
-            this.enumConnections();
-
-            document.title = 'Fiscal Registrar - Receipt';
+            this.handleRoute(this.$route)
+            this.enumConnections()
         },
 
         methods: {
             handleRoute(to, from = null) {
                 switch (to.name) {
                     case 'receipt':
-                        this.loadReceipt(to.params.id);
-                        break;
+                        this.loadReceipt(to.params.id)
+                        break
                     case 'new-receipt':
-                        this.resetReceipt();
-                        break;
+                        this.resetReceipt()
+                        break
                     case 'new-receipt-from-existing':
                         from !== null && from.name === 'receipt' && +to.params.id === +from.params.id
                             ? this.shrinkReceipt()
-                            : this.loadReceipt(to.params.id, true);
+                            : this.loadReceipt(to.params.id, true)
                 }
-            },
-
-            enumConnections() {
-                this.$http.get(FiscalRegistrar.basePath + '/api/v1/connection')
-                    .then(response => {
-                        this.connections = response.data;
-                    });
             },
 
             resetReceipt() {
@@ -82,7 +72,7 @@
                             email: null,
                             phone: null,
                             name: null,
-                            inn: null
+                            inn: null,
                         },
                         company: {
                             name: null,
@@ -90,7 +80,7 @@
                             inn: null,
                             payment_address: null,
                             payment_site: null,
-                            tax_system: null
+                            tax_system: null,
                         },
                         agent_info: null,
                         supplier_info: null,
@@ -100,36 +90,36 @@
                             electronic: 0,
                             prepaid: 0,
                             postpaid: 0,
-                            other: 0
+                            other: 0,
                         },
                         vats: null,
                         total: 0,
                         additional_check_props: null,
                         cashier: null,
-                        additional_user_props: null
+                        additional_user_props: null,
                     },
-                    result: null
-                };
-                this.ready = true;
+                    result: null,
+                }
+                this.ready = true
             },
 
             shrinkReceipt() {
-                this.receipt.id = null;
-                this.receipt.state = 0;
-                this.receipt.external_id = null;
-                this.receipt.internal_id = null;
-                this.receipt.result = null;
+                this.receipt.id = null
+                this.receipt.state = 0
+                this.receipt.external_id = null
+                this.receipt.internal_id = null
+                this.receipt.result = null
             },
 
             loadReceipt(id, asTemplate = false) {
-                this.ready = false;
+                this.ready = false
 
                 this.$http.get(FiscalRegistrar.basePath + '/api/v1/receipts/' + id)
                     .then(response => {
-                        this.receipt = response.data;
-                        asTemplate && this.shrinkReceipt();
-                        this.ready = true;
-                    });
+                        this.receipt = response.data
+                        asTemplate && this.shrinkReceipt()
+                        this.ready = true
+                    })
             },
 
             saveReceipt() {
@@ -139,32 +129,32 @@
                         .then(response => response.data.id && this.$router.replace(
                             { name: 'receipt', params: { id: response.data.id } },
                             () => this.receipt = response.data
-                        ));
+                        ))
             },
 
             registerReceipt() {
                 this.saveReceipt().then(response => {
                     this.$http.post(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id + '/register')
                         .then(() => {
-                            this.receipt.state = 1;
-                            setTimeout(() => this.syncReceipt(this.receipt.id), 1000);
-                        });
-                });
+                            this.receipt.state = 1
+                            setTimeout(() => this.syncReceipt(this.receipt.id), 1000)
+                        })
+                })
             },
 
             syncReceipt() {
                 this.$http.get(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id + '/report')
                     .then(response => {
-                        this.receipt.result = response.data;
-                        this.receipt.state = 2;
-                    });
+                        this.receipt.result = response.data
+                        this.receipt.state = 2
+                    })
             },
 
             deleteReceipt() {
                 confirm('Удалить чек?') &&
 
                 this.$http.delete(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id)
-                    .then(response => this.$router.replace({ name: 'receipts' }));
+                    .then(response => this.$router.replace({ name: 'receipts' }))
             },
 
             addItem() {
@@ -185,13 +175,13 @@
                     user_data: null,
                     vat: {
                         sum: null,
-                        type: 'vat20'
-                    }
-                });
+                        type: 'vat20',
+                    },
+                })
             },
 
             removeItem(id) {
-                this.receipt.data.items.splice(id, 1);
+                this.receipt.data.items.splice(id, 1)
             },
 
             getVats(calc = false) {
@@ -201,246 +191,246 @@
                     vat10: 0,
                     vat20: 0,
                     vat110: 0,
-                    vat120: 0
-                };
+                    vat120: 0,
+                }
 
                 if (calc) {
                     for (const item of this.receipt.data.items) {
                         switch (item?.vat.type ?? 'none') {
                             case 'vat20':
                             case 'vat18':
-                                vats.vat20 += this.extractVat(item.sum, item.vat.type);
-                                break;
+                                vats.vat20 += this.extractVat(item.sum, item.vat.type)
+                                break
                             case 'vat10':
-                                vats.vat10 += this.extractVat(item.sum, item.vat.type);
-                                break;
+                                vats.vat10 += this.extractVat(item.sum, item.vat.type)
+                                break
                             case 'vat0':
-                                vats.with_vat0 += item.sum;
-                                break;
+                                vats.with_vat0 += item.sum
+                                break
                             case 'none':
-                                vats.without_vat += item.sum;
-                                break;
+                                vats.without_vat += item.sum
+                                break
                             case 'vat120':
                             case 'vat118':
-                                vats.vat120 += this.extractVat(item.sum, item.vat.type);
-                                break;
+                                vats.vat120 += this.extractVat(item.sum, item.vat.type)
+                                break
                             case 'vat110':
-                                vats.vat110 += this.extractVat(item.sum, item.vat.type);
+                                vats.vat110 += this.extractVat(item.sum, item.vat.type)
                         }
                     }
                 }
 
-                return vats;
+                return vats
             },
 
             fitContent(event) {
-                event.target.style.height = (event.target.contentDocument.body.scrollHeight + 20) + 'px';
+                event.target.style.height = (event.target.contentDocument.body.scrollHeight + 20) + 'px'
             },
 
             printReceipt() {
                 let printWindow = window.open(
                     window.FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id + '/preview',
                     'ReceiptPreview', 'popup,width=500,height=1000'
-                );
-                printWindow.onafterprint = printWindow.close;
+                )
+                printWindow.onafterprint = printWindow.close
                 printWindow.onload = function() {
-                    printWindow.setTimeout(printWindow.print);
-                };
+                    printWindow.setTimeout(printWindow.print)
+                }
             },
         },
 
         computed: {
             title() {
-                const action = !this.receipt.id ? 'Создание' : this.receipt.state === 0 ? 'Редактирование' : 'Просмотр';
-                return action + ' кассового чека';
+                const action = !this.receipt.id ? 'Создание' : this.receipt.state === 0 ? 'Редактирование' : 'Просмотр'
+                return action + ' кассового чека'
             },
 
             model() {
-                return this.$deepModel(this.receipt.data);
+                return this.$deepModel(this.receipt.data)
             },
 
             isClientEmailRequired() {
-                return !this.receipt.data.client.phone;
+                return !this.receipt.data.client.phone
             },
 
             isClientPhoneRequired() {
-                return !this.receipt.data.client.email;
+                return !this.receipt.data.client.email
             },
 
             selectConnections() {
-                return this.buildOptions(this.connections, ([name, data]) => ({ value: name, text: data.display_name }));
+                return this.buildOptions(this.connections, ([name, data]) => ({ value: name, text: data.display_name }))
             },
 
             companyEmailPlaceholder() {
-                return this.connections[this.receipt.connection]?.email ?? 'user@domain.com';
+                return this.connections[this.receipt.connection]?.email ?? 'user@domain.com'
             },
 
             companyInnPlaceholder() {
-                return this.connections[this.receipt.connection]?.inn ?? '1234567890';
+                return this.connections[this.receipt.connection]?.inn ?? '1234567890'
             },
 
             companyPaymentSitePlaceholder() {
-                return this.connections[this.receipt.connection]?.payment_site ?? '';
+                return this.connections[this.receipt.connection]?.payment_site ?? ''
             },
 
             vatsPlaceholder() {
                 return Object.fromEntries(
                     Object.entries(this.getVats(!this.receipt.data.vats)).map(([key, val]) => [key, String(val)])
-                );
+                )
             },
 
             vatsWithoutVat: {
                 get: function () {
-                    return this.receipt.data.vats?.without_vat ?? null;
+                    return this.receipt.data.vats?.without_vat ?? null
                 },
                 set: function (val) {
-                    this.receipt.data.vats ??= this.vats;
-                    this.receipt.data.vats.without_vat = val || null;
+                    this.receipt.data.vats ??= this.vats
+                    this.receipt.data.vats.without_vat = val || null
                 }
             },
 
             vatsWithVat0: {
                 get: function () {
-                    return this.receipt.data.vats?.with_vat0 ?? null;
+                    return this.receipt.data.vats?.with_vat0 ?? null
                 },
                 set: function (val) {
-                    this.receipt.data.vats ??= this.vats;
-                    this.receipt.data.vats.with_vat0 = val || null;
+                    this.receipt.data.vats ??= this.vats
+                    this.receipt.data.vats.with_vat0 = val || null
                 }
             },
 
             vatsVat10: {
                 get: function () {
-                    return this.receipt.data.vats?.vat10 ?? null;
+                    return this.receipt.data.vats?.vat10 ?? null
                 },
                 set: function (val) {
-                    this.receipt.data.vats ??= this.vats;
-                    this.receipt.data.vats.vat10 = val || null;
+                    this.receipt.data.vats ??= this.vats
+                    this.receipt.data.vats.vat10 = val || null
                 }
             },
 
             vatsVat20: {
                 get: function () {
-                    return this.receipt.data.vats?.vat20 ?? null;
+                    return this.receipt.data.vats?.vat20 ?? null
                 },
                 set: function (val) {
-                    this.receipt.data.vats ??= this.vats;
-                    this.receipt.data.vats.vat20 = val || null;
+                    this.receipt.data.vats ??= this.vats
+                    this.receipt.data.vats.vat20 = val || null
                 }
             },
 
             vatsVat110: {
                 get: function () {
-                    return this.receipt.data.vats?.vat110 ?? null;
+                    return this.receipt.data.vats?.vat110 ?? null
                 },
                 set: function (val) {
-                    this.receipt.data.vats ??= this.vats;
-                    this.receipt.data.vats.vat110 = val || null;
+                    this.receipt.data.vats ??= this.vats
+                    this.receipt.data.vats.vat110 = val || null
                 }
             },
 
             vatsVat120: {
                 get: function () {
-                    return this.receipt.data.vats?.vat120 ?? null;
+                    return this.receipt.data.vats?.vat120 ?? null
                 },
                 set: function (val) {
-                    this.receipt.data.vats ??= this.vats;
-                    this.receipt.data.vats.vat120 = val || null;
+                    this.receipt.data.vats ??= this.vats
+                    this.receipt.data.vats.vat120 = val || null
                 }
             },
 
             agentType: {
                 get: function () {
-                    return this.receipt.data.agent_info?.type ?? null;
+                    return this.receipt.data.agent_info?.type ?? null
                 },
                 set: function (val) {
-                    this.receipt.data.agent_info ??= this.agentInfo;
-                    this.receipt.data.agent_info.type = val || null;
+                    this.receipt.data.agent_info ??= this.agentInfo
+                    this.receipt.data.agent_info.type = val || null
                 }
             },
 
             payingAgentPhones: {
                 get: function () {
-                    return this.model['agent_info.paying_agent.phones']?.join('\n');
+                    return this.model['agent_info.paying_agent.phones']?.join('\n')
                 },
                 set: function (phones) {
                     phones = phones.split('\n')
                         .map(phone => phone.trim())
-                        .filter(phone => phone != null && phone !== '');
-                    this.model['agent_info.paying_agent.phones'] = phones.length ? phones : null;
+                        .filter(phone => phone != null && phone !== '')
+                    this.model['agent_info.paying_agent.phones'] = phones.length ? phones : null
                 }
             },
 
             receivePaymentsOperatorPhones: {
                 get: function () {
-                    return this.model['agent_info.receive_payments_operator.phones']?.join('\n');
+                    return this.model['agent_info.receive_payments_operator.phones']?.join('\n')
                 },
                 set: function (phones) {
                     phones = phones.split('\n')
                         .map(phone => phone.trim())
-                        .filter(phone => phone != null && phone !== '');
-                    this.model['agent_info.receive_payments_operator.phones'] = phones.length ? phones : null;
+                        .filter(phone => phone != null && phone !== '')
+                    this.model['agent_info.receive_payments_operator.phones'] = phones.length ? phones : null
                 }
             },
 
             moneyTransferOperatorPhones: {
                 get: function () {
-                    return this.model['agent_info.money_transfer_operator.phones']?.join('\n');
+                    return this.model['agent_info.money_transfer_operator.phones']?.join('\n')
                 },
                 set: function (phones) {
                     phones = phones.split('\n')
                         .map(phone => phone.trim())
-                        .filter(phone => phone != null && phone !== '');
-                    this.model['agent_info.money_transfer_operator.phones'] = phones.length ? phones : null;
+                        .filter(phone => phone != null && phone !== '')
+                    this.model['agent_info.money_transfer_operator.phones'] = phones.length ? phones : null
                 }
             },
 
             supplierPhones: {
                 get: function () {
-                    return this.model['supplier_info.phones']?.join('\n');
+                    return this.model['supplier_info.phones']?.join('\n')
                 },
                 set: function (phones) {
                     phones = phones.split('\n')
                         .map(phone => phone.trim())
-                        .filter(phone => phone != null && phone !== '');
-                    this.model['supplier_info.phones'] = phones.length ? phones : null;
+                        .filter(phone => phone != null && phone !== '')
+                    this.model['supplier_info.phones'] = phones.length ? phones : null
                 }
             },
 
             resultPayloadFnsSite() {
                 return /^https?:\/\//i.test(this.receipt.result.payload.fns_site)
                     ? this.receipt.result.payload.fns_site
-                    : 'https://' + this.receipt.result.payload.fns_site;
-            }
+                    : 'https://' + this.receipt.result.payload.fns_site
+            },
         },
 
         watch: {
             $route(to, from) {
-               this.handleRoute(to, from);
+               this.handleRoute(to, from)
             },
 
             'receipt.data.items': {
                 handler: function (items) {
-                    this.receipt.data.total = items.reduce((total, item) => total + item.sum, 0);
+                    this.receipt.data.total = items.reduce((total, item) => total + item.sum, 0)
                 },
                 deep: true
             },
 
             'receipt.data.vats': {
                 handler: function (vats) {
-                    if (vats === null) return;
-                    Object.values(vats).every(vat => vat === null) && (this.receipt.data.vats = null);
+                    if (vats === null) return
+                    Object.values(vats).every(vat => vat === null) && (this.receipt.data.vats = null)
                 },
                 deep: true
             },
 
             'receipt.data.agent_info': {
                 handler: function (agent_info) {
-                    this.receipt.data.agent_info = agent_info?.type === null ? null : this.emptify(agent_info);
+                    this.receipt.data.agent_info = agent_info?.type === null ? null : this.emptify(agent_info)
                 },
                 deep: true
-            }
-        }
+            },
+        },
     }
 </script>
 

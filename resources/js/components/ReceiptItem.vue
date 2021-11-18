@@ -4,106 +4,106 @@
 
         computed: {
             id() {
-                return this.$vnode.key + 1;
+                return this.$vnode.key + 1
             },
 
             model() {
-                return this.$deepModel(this.item);
+                return this.$deepModel(this.item)
             },
 
             vatSum() {
-                return String(this.extractVat(this.item.sum, this.item.vat.type));
+                return String(this.extractVat(this.item.sum, this.item.vat.type))
             },
 
             agentType: {
                 get: function () {
-                    return this.model['agent_info.type'] ?? null;
+                    return this.model['agent_info.type'] ?? null
                 },
                 set: function (val) {
-                    this.model['agent_info.type'] = val;
+                    this.model['agent_info.type'] = val
                 }
             },
 
             payingAgentPhones: {
                 get: function () {
-                    return this.model['agent_info.paying_agent.phones']?.join('\n');
+                    return this.model['agent_info.paying_agent.phones']?.join('\n')
                 },
                 set: function (phones) {
                     phones = phones.split('\n')
                         .map(phone => phone.trim())
-                        .filter(phone => phone != null && phone !== '');
-                    this.model['agent_info.paying_agent.phones'] = phones.length ? phones : null;
+                        .filter(phone => phone != null && phone !== '')
+                    this.model['agent_info.paying_agent.phones'] = phones.length ? phones : null
                 }
             },
 
             receivePaymentsOperatorPhones: {
                 get: function () {
-                    return this.model['agent_info.receive_payments_operator.phones']?.join('\n');
+                    return this.model['agent_info.receive_payments_operator.phones']?.join('\n')
                 },
                 set: function (phones) {
                     phones = phones.split('\n')
                         .map(phone => phone.trim())
-                        .filter(phone => phone != null && phone !== '');
-                    this.model['agent_info.receive_payments_operator.phones'] = phones.length ? phones : null;
+                        .filter(phone => phone != null && phone !== '')
+                    this.model['agent_info.receive_payments_operator.phones'] = phones.length ? phones : null
                 }
             },
 
             moneyTransferOperatorPhones: {
                 get: function () {
-                    return this.model['agent_info.money_transfer_operator.phones']?.join('\n');
+                    return this.model['agent_info.money_transfer_operator.phones']?.join('\n')
                 },
                 set: function (phones) {
                     phones = phones.split('\n')
                         .map(phone => phone.trim())
-                        .filter(phone => phone != null && phone !== '');
-                    this.model['agent_info.money_transfer_operator.phones'] = phones.length ? phones : null;
+                        .filter(phone => phone != null && phone !== '')
+                    this.model['agent_info.money_transfer_operator.phones'] = phones.length ? phones : null
                 }
             },
 
             supplierPhones: {
                 get: function () {
-                    return this.model['supplier_info.phones']?.join('\n');
+                    return this.model['supplier_info.phones']?.join('\n')
                 },
                 set: function (phones) {
                     phones = phones.split('\n')
                         .map(phone => phone.trim())
-                        .filter(phone => phone != null && phone !== '');
-                    this.model['supplier_info.phones'] = phones.length ? phones : null;
+                        .filter(phone => phone != null && phone !== '')
+                    this.model['supplier_info.phones'] = phones.length ? phones : null
                 }
-            }
+            },
         },
 
         watch: {
             'item.price': function (price) {
-                this.item.sum = price * this.item.quantity;
+                this.item.sum = price * this.item.quantity
             },
 
             'item.quantity': function (quantity) {
-                this.item.sum = this.item.price * quantity;
+                this.item.sum = this.item.price * quantity
             },
 
             'item.sum': function (sum) {
-                this.item.vat.sum = this.extractVat(sum, this.item.vat.type);
+                this.item.vat.sum = this.extractVat(sum, this.item.vat.type)
             },
 
             'item.vat.type': function (vatType) {
-                this.item.vat.sum = this.extractVat(this.item.sum, vatType);
+                this.item.vat.sum = this.extractVat(this.item.sum, vatType)
             },
 
             'item.agent_info': {
                 handler: function (agent_info) {
-                    this.item.agent_info = agent_info?.type === null ? null : this.emptify(agent_info);
+                    this.item.agent_info = agent_info?.type === null ? null : this.emptify(agent_info)
                 },
                 deep: true
             },
 
             'item.supplier_info': {
                 handler: function (supplier_info) {
-                    this.item.supplier_info = supplier_info?.type === null ? null : this.emptify(supplier_info);
+                    this.item.supplier_info = supplier_info?.type === null ? null : this.emptify(supplier_info)
                 },
                 deep: true
-            }
-        }
+            },
+        },
     }
 </script>
 

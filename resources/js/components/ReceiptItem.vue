@@ -2,97 +2,6 @@
     export default {
         props: ['item', 'disabled'],
 
-        data() {
-            return {
-                paymentMethods: [
-                    { value: 'full_prepayment', text: 'предоплата 100%' },
-                    { value: 'prepayment', text: 'предоплата' },
-                    { value: 'advance', text: 'аванс' },
-                    { value: 'full_payment', text: 'полный расчет' },
-                    { value: 'partial_payment', text: 'частичный расчет и кредит' },
-                    { value: 'credit', text: 'передача в кредит' },
-                    { value: 'credit_payment', text: 'оплата кредита' }
-                ],
-                paymentObjects: [
-                    { value: 'commodity', text: 'товар' },
-                    { value: 'excise', text: 'подакцизный товар' },
-                    { value: 'job', text: 'работа' },
-                    { value: 'service', text: 'услуга' },
-                    { value: 'gambling_bet', text: 'ставка азартной игры' },
-                    { value: 'gambling_prize', text: 'выигрыш азартной игры' },
-                    { value: 'lottery', text: 'лотерейный билет' },
-                    { value: 'lottery_prize', text: 'выигрыш лотереи' },
-                    { value: 'intellectual_activity', text: 'предоставление результатов интеллектуальной деятельности' },
-                    { value: 'payment', text: 'платеж' },
-                    { value: 'agent_commission', text: 'агентское вознаграждение' },
-                    { value: 'award', text: 'взнос/штраф/вознаграждение/бонус' },
-                    { value: 'composite', text: 'составной предмет расчета' },
-                    { value: 'another', text: 'иной предмет расчета' },
-                    { value: 'property_right', text: 'имущественное право' },
-                    { value: 'non-operating_gain', text: 'внереализационный доход' },
-                    { value: 'insurance_premium', text: 'страховые взносы' },
-                    { value: 'sales_tax', text: 'торговый сбор' },
-                    { value: 'resort_fee', text: 'курортный сбор' },
-                    { value: 'deposit', text: 'залог' },
-                    { value: 'expense', text: 'расход' },
-                    { value: 'pension_insurance_ip', text: 'взносы на ОПС ИП' },
-                    { value: 'pension_insurance', text: 'взносы на ОПС' },
-                    { value: 'medical_insurance_ip', text: 'взносы на ОМС ИП' },
-                    { value: 'medical_insurance', text: 'взносы на ОМС' },
-                    { value: 'social_insurance', text: 'взносы на ОСС' },
-                    { value: 'casino_payment', text: 'платеж казино' }
-                ],
-                vatTypes: [
-                    { value: 'none', text: 'нет' },
-                    { value: 'vat0', text: '0%' },
-                    { value: 'vat10', text: '10%' },
-                    { value: 'vat18', text: '18%' },
-                    { value: 'vat20', text: '20%' },
-                    { value: 'vat110', text: '10/110' },
-                    { value: 'vat118', text: '18/118' },
-                    { value: 'vat120', text: '20/120' }
-                ],
-                vatRates: {
-                    none: 0,
-                    vat0: 0,
-                    vat10: .1,
-                    vat18: .18,
-                    vat20: .2,
-                    vat110: 10 / 110,
-                    vat118: 18 / 118,
-                    vat120: 20 / 120
-                },
-                agentTypes: [
-                    { value: null, text: 'нет' },
-                    { value: 'bank_paying_agent', text: 'банковский платежный агент' },
-                    { value: 'bank_paying_subagent', text: 'банковский платежный субагент' },
-                    { value: 'paying_agent', text: 'платежный агент' },
-                    { value: 'paying_subagent', text: 'платежный субагент' },
-                    { value: 'attorney', text: 'поверенный' },
-                    { value: 'commission_agent', text: 'комиссионер' },
-                    { value: 'another', text: 'агент' }
-                ]
-            }
-        },
-
-        methods: {
-            extractVat(sum = this.item.sum, vatType = this.item.vat.type) {
-                return parseFloat((sum - sum / (1 + this.vatRates[vatType])).toFixed(2));
-            },
-
-            emptify(obj) {
-                if (!obj || typeof obj !== 'object') {
-                    return obj;
-                }
-                for (const key in obj) {
-                    obj[key] = this.emptify(obj[key]);
-                    obj[key] || (obj[key] = null);
-                }
-                Object.values(obj).every(prop => prop === null) && (obj = null);
-                return obj;
-            }
-        },
-
         computed: {
             id() {
                 return this.$vnode.key + 1;
@@ -103,7 +12,7 @@
             },
 
             vatSum() {
-                return String(this.extractVat());
+                return String(this.extractVat(this.item.sum, this.item.vat.type));
             },
 
             agentType: {
@@ -228,17 +137,17 @@
             </b-col>
             <b-col align-self="end" lg="2" md="2" sm="4">
                 <b-form-group label="Способ расчета" :label-for="'item' + id + 'PaymentMethod'" class="required">
-                    <b-form-select :id="'item' + id + 'PaymentMethod'" size="sm" v-model="item.payment_method" :options="paymentMethods" :disabled="disabled"></b-form-select>
+                    <b-form-select :id="'item' + id + 'PaymentMethod'" size="sm" v-model="item.payment_method" :options="buildOptions(dictionary.paymentMethods)" :disabled="disabled"></b-form-select>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="2" md="2" sm="4">
                 <b-form-group label="Предмет расчета" :label-for="'item' + id + 'PaymentObject'" class="required">
-                    <b-form-select :id="'item' + id + 'PaymentObject'" size="sm" v-model="item.payment_object" :options="paymentObjects" :disabled="disabled"></b-form-select>
+                    <b-form-select :id="'item' + id + 'PaymentObject'" size="sm" v-model="item.payment_object" :options="buildOptions(dictionary.paymentObjects)" :disabled="disabled"></b-form-select>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="1" md="2" sm="4">
                 <b-form-group label="НДС" :label-for="'item' + id + 'VatType'" class="required">
-                    <b-form-select :id="'item' + id + 'VatType'" size="sm" v-model="item.vat.type" :options="vatTypes" :disabled="disabled"></b-form-select>
+                    <b-form-select :id="'item' + id + 'VatType'" size="sm" v-model="item.vat.type" :options="buildOptions(dictionary.vatTypes)" :disabled="disabled"></b-form-select>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="1" md="2" sm="4">
@@ -248,7 +157,7 @@
             </b-col>
             <b-col align-self="end" lg="3" md="4" sm="6">
                 <b-form-group label="Признак агента" :label-for="'item' + id + 'agentType'">
-                    <b-form-select :id="'item' + id + 'agentType'" size="sm" v-model="agentType" :options="agentTypes" :disabled="disabled"></b-form-select>
+                    <b-form-select :id="'item' + id + 'agentType'" size="sm" v-model="agentType" :options="agentTypeOptions" :disabled="disabled"></b-form-select>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="1" md="1" sm="1" class="ml-auto mr-0">

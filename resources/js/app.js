@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import BootstrapVue from 'bootstrap-vue';
 import * as VueDeepSet from 'vue-deepset';
+import Base from './base';
 import axios from 'axios';
-import moment from 'moment';
 import Routes from './routes';
 import VueRouter from 'vue-router';
 import 'bootstrap';
@@ -19,13 +19,9 @@ Vue.use(BootstrapVue);
 Vue.use(VueDeepSet);
 Vue.use(VueRouter);
 
-Vue.component('pagination', require('laravel-vue-pagination'));
+Vue.prototype.$http = axios.create();
 
 window.FiscalRegistrar.basePath = '/' + window.FiscalRegistrar.path;
-
-Vue.prototype.$http = axios.create();
-Vue.prototype.$moment = moment;
-Vue.prototype.FiscalRegistrar = window.FiscalRegistrar;
 
 let routerBasePath = window.FiscalRegistrar.basePath + '/';
 
@@ -40,12 +36,8 @@ const router = new VueRouter({
     base: routerBasePath,
 });
 
-new Vue({
-    el: '#fiscal-registrar',
+Vue.component('pagination', require('laravel-vue-pagination'));
 
-    router,
+Vue.mixin(Base);
 
-    data: {
-        message: 'Welcome to Fiscal Registrar home page!'
-    }
-});
+new Vue({ el: '#fiscal-registrar', router });

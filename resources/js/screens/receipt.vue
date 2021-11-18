@@ -3,7 +3,7 @@
 
     export default {
         components: {
-            ReceiptItem
+            ReceiptItem,
         },
 
         data() {
@@ -11,32 +11,7 @@
                 ready: false,
                 showPreview: false,
                 receipt: null,
-                agentTypes: [
-                    { value: null, text: 'нет' },
-                    { value: 'bank_paying_agent', text: 'банковский платежный агент' },
-                    { value: 'bank_paying_subagent', text: 'банковский платежный субагент' },
-                    { value: 'paying_agent', text: 'платежный агент' },
-                    { value: 'paying_subagent', text: 'платежный субагент' },
-                    { value: 'attorney', text: 'поверенный' },
-                    { value: 'commission_agent', text: 'комиссионер' },
-                    { value: 'another', text: 'агент' },
-                ],
                 connections: {},
-                operations: [
-                    { value: 'sell', text: 'приход' },
-                    { value: 'sell_refund', text: 'возврат прихода' },
-                    { value: 'buy', text: 'расход' },
-                    { value: 'buy_refund', text: 'возврат расхода' },
-                ],
-                taxSystems: [
-                    { value: null, text: 'не выбрано' },
-                    { value: 'osn', text: 'общая система налогообложения' },
-                    { value: 'usn_income', text: 'упрощенная система налогообложения (доходы)' },
-                    { value: 'usn_income_outcome', text: 'упрощенная система налогообложения (доходы минус расходы)' },
-                    { value: 'envd', text: 'единый налог на вмененный доход' },
-                    { value: 'esn', text: 'единый сельскохозяйственный налог' },
-                    { value: 'patent', text: 'патентная система налогообложения' },
-                ],
                 vats: {
                     without_vat: null,
                     with_vat0: null,
@@ -44,16 +19,6 @@
                     vat20: null,
                     vat110: null,
                     vat120: null,
-                },
-                vatRates: {
-                    none: 0,
-                    vat0: 0,
-                    vat10: .1,
-                    vat18: .18,
-                    vat20: .2,
-                    vat110: 10 / 110,
-                    vat118: 18 / 118,
-                    vat120: 20 / 120,
                 },
                 agentInfo: {
                     type: null,
@@ -229,10 +194,6 @@
                 this.receipt.data.items.splice(id, 1);
             },
 
-            extractVat(sum, vatType) {
-                return parseFloat((sum - sum / (1 + this.vatRates[vatType])).toFixed(2));
-            },
-
             getVats(calc = false) {
                 const vats = {
                     without_vat: 0,
@@ -270,18 +231,6 @@
                 }
 
                 return vats;
-            },
-
-            emptify(obj) {
-                if (!obj || typeof obj !== 'object') {
-                    return obj;
-                }
-                for (const key in obj) {
-                    obj[key] = this.emptify(obj[key]);
-                    obj[key] || (obj[key] = null);
-                }
-                Object.values(obj).every(prop => prop === null) && (obj = null);
-                return obj;
             },
 
             fitContent(event) {
@@ -523,7 +472,7 @@ fieldset { margin: 0 }
                                         </b-col>
                                         <b-col align-self="end" lg="3" md="4" sm="6">
                                             <b-form-group label="Операция" label-for="receiptOperation" class="required">
-                                                <b-form-select id="receiptOperation" size="sm" required v-model="receipt.operation" :options="operations"></b-form-select>
+                                                <b-form-select id="receiptOperation" size="sm" required v-model="receipt.operation" :options="buildOptions(dictionary.operations)"></b-form-select>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="3" md="4" sm="6">
@@ -597,7 +546,7 @@ fieldset { margin: 0 }
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Система налогообложения" label-for="taxSystem">
-                                                <b-form-select id="taxSystem" size="sm" v-model="receipt.data.company.tax_system" :options="taxSystems"></b-form-select>
+                                                <b-form-select id="taxSystem" size="sm" v-model="receipt.data.company.tax_system" :options="taxSystemOptions"></b-form-select>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
@@ -631,7 +580,7 @@ fieldset { margin: 0 }
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="3" md="4" sm="6">
                                             <b-form-group label="Признак агента" label-for="agentType">
-                                                <b-form-select id="agentType" size="sm" v-model="agentType" :options="agentTypes"></b-form-select>
+                                                <b-form-select id="agentType" size="sm" v-model="agentType" :options="agentTypeOptions"></b-form-select>
                                             </b-form-group>
                                         </b-col>
                                     </b-form-row>
@@ -910,7 +859,7 @@ fieldset { margin: 0 }
                                 <b-form-row>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
                                         <b-form-group description="Дата и время">
-                                            {{ $moment(receipt.result.timestamp).format('DD.MM.YYYY HH:mm:ss') }}
+                                            {{ formatTime(receipt.result.timestamp) }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="2" md="3" sm="4">
@@ -925,7 +874,7 @@ fieldset { margin: 0 }
                                 <b-form-row>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
                                         <b-form-group description="Дата и время">
-                                            {{ $moment(receipt.result.payload.receipt_datetime).format('DD.MM.YYYY HH:mm') }}
+                                            {{ formatTime(receipt.result.payload.receipt_datetime, 'DD.MM.YYYY HH:mm') }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">

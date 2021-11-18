@@ -10,17 +10,6 @@
                     { key: 'data.total', label: 'Сумма' },
                     { key: 'state', label: 'Статус' },
                 ],
-                operations: {
-                    sell: 'приход',
-                    sell_refund: 'возврат прихода',
-                    buy: 'расход',
-                    buy_refund: 'возврат расхода',
-                },
-                states: [
-                    'не зарегистрирован',
-                    'зарегистрирован',
-                    'проведен',
-                ],
                 connections: {},
                 receipts: {},
             };
@@ -58,19 +47,19 @@
                 <b-link :to="{ name: 'receipt', params: { id: data.value } }">{{ data.value }}</b-link>
             </template>
             <template #cell(created_at)="data">
-                {{ $moment(data.value).format('DD.MM.YYYY HH:mm:ss') }}
+                {{ formatTime(data.value) }}
             </template>
             <template #cell(connection)="data">
                 {{ data.value ? connections[data.value].display_name : '-' }}
             </template>
             <template #cell(operation)="data">
-                {{ data.value ? operations[data.value] : '-' }}
+                {{ data.value ? dictionary.operations[data.value] : '-' }}
             </template>
             <template #cell(data.total)="data">
                 <div class="text-right">{{ data.value }}</div>
             </template>
             <template #cell(state)="data">
-                {{ states[data.value] }}
+                {{ dictionary.states[data.value] }}
             </template>
         </b-table>
 

@@ -268,7 +268,7 @@
             },
 
             selectConnections() {
-                return Object.entries(this.connections).map(([name, data]) => ({ value: name, text: data.display_name }));
+                return this.buildOptions(this.connections, ([name, data]) => ({ value: name, text: data.display_name }));
             },
 
             companyEmailPlaceholder() {

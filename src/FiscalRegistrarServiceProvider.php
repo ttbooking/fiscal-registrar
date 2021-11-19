@@ -71,6 +71,15 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         ], function () {
             $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         });
+
+        Route::group([
+            'domain' => $this->app['config']['fiscal-registrar.domain'] ?? null,
+            'prefix' => $this->app['config']['fiscal-registrar.path'] ?? null,
+            'namespace' => 'TTBooking\\FiscalRegistrar\\Http\\Controllers',
+            'middleware' => $this->app['config']['fiscal-registrar.callback_middleware'] ?? null,
+        ], function () {
+            $this->loadRoutesFrom(__DIR__.'/../routes/callback.php');
+        });
     }
 
     /**

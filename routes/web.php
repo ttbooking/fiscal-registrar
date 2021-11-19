@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('api/v1')->group(function () {
 
-    Route::get('connection', 'FiscalRegistrarController@connections')->name('fiscal-registrar.connections');
+    Route::get('/connection', 'FiscalRegistrarController@connections')->name('fiscal-registrar.connections');
 
     Route::prefix('connection/{connection}')->group(function () {
         // Registry Routes...
@@ -15,7 +15,6 @@ Route::prefix('api/v1')->group(function () {
 
         // Report Routes...
         Route::get('/report/{id}', 'FiscalRegistrarController@report')->name('fiscal-registrar.report');
-        Route::post('/callback', 'FiscalRegistrarController@callback')->withoutMiddleware('auth')->name('fiscal-registrar.callback');
     });
 
     Route::apiResource('receipts', 'ReceiptController')->names([

@@ -14,10 +14,10 @@ namespace TTBooking\FiscalRegistrar\Enums;
  */
 final class TaxSystem extends Enum
 {
-    private const OSN = 'osn';
-    private const USNIncome = 'usn_income';
-    private const USNIncomeOutcome = 'usn_income_outcome';
-    private const ENVD = 'envd';
-    private const ESN = 'esn';
-    private const Patent = 'patent';
+    public const OSN = 'osn';
+    public const USNIncome = 'usn_income';
+    public const USNIncomeOutcome = 'usn_income_outcome';
+    public const ENVD = 'envd';
+    public const ESN = 'esn';
+    public const Patent = 'patent';
 }

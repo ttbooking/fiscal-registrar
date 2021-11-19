@@ -19,6 +19,7 @@ use TTBooking\FiscalRegistrar\Contracts\SupportsCallbacks;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Enums\Operation;
+use TTBooking\FiscalRegistrar\Enums\TaxSystem;
 use TTBooking\FiscalRegistrar\Exceptions;
 use TTBooking\FiscalRegistrar\Support\Driver;
 
@@ -129,8 +130,11 @@ class AtolDriver extends Driver implements SupportsCallbacks
 
     protected function makeRequest(string $externalId, Receipt $receipt): AtolRegister\RegisterRequest
     {
-        $receipt->company->name ??= $this->config['name'];
-        $receipt->company->payment_address ??= '109316, Регион 77, Москва, Волгоградский проспект, дом 42, корпус 9';
+        $receipt->company->name ??= $this->config['company']['name'] ?? null;
+        $receipt->company->tax_system ??= isset($this->config['company']['tax_system'])
+            ? new TaxSystem($this->config['company']['tax_system']) : null;
+        $receipt->company->payment_address ??= $this->config['company']['payment_address']
+            ?? '109316, Регион 77, Москва, Волгоградский проспект, дом 42, корпус 9';
 
         $registerRequest = new AtolRegister\RegisterRequest(
 
@@ -143,10 +147,13 @@ class AtolDriver extends Driver implements SupportsCallbacks
                     $receipt->client->phone
                 ),
 
-                new AtolRegister\Company(
-                    $receipt->company->email ??= $this->config['email'],
-                    $receipt->company->inn ??= $this->config['inn'],
-                    $receipt->company->payment_site ??= $this->config['payment_site']
+                (new AtolRegister\Company(
+                    $receipt->company->email ??= $this->config['company']['email'] ?? null,
+                    $receipt->company->inn ??= $this->config['company']['inn'] ?? null,
+                    $receipt->company->payment_site ??= $this->config['company']['payment_site'] ?? null
+                ))->setSno(
+                    $receipt->company->tax_system
+                        ? AtolRegister\Sno::from($receipt->company->tax_system->getValue()) : null
                 ),
 
                 collect($receipt->items)->map(function (Receipt\Item $item) {

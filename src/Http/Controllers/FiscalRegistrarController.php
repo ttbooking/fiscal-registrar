@@ -40,9 +40,7 @@ class FiscalRegistrarController extends Controller
             array_map(static fn (string $name, array $data) => [
                 'display_name' => $data['display_name'] ?? $name,
                 'test' => $data['test'] ?? false,
-                'inn' => $data['inn'] ?? null,
-                'email' => $data['email'] ?? null,
-                'payment_site' => $data['payment_site'] ?? null,
+                'company' => $data['company'] ?? [],
             ], $names, $connections)
         );
     }

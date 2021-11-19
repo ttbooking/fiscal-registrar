@@ -78,12 +78,16 @@ return [
             'url' => 'https://testonline.atol.ru/possystem',
             'login' => 'v4-online-atol-ru',
             'password' => 'iGFFuihss',
-            'name' => 'ООО "АТОЛ Онлайн Тест"',
-            'inn' => '5544332219',
-            'email' => 'info@atol.ru',
-            'payment_site' => 'https://v4.online.atol.ru',
             'group_code' => 'v4-online-atol-ru_4179',
             'url_generator' => TTBooking\FiscalRegistrar\Support\PlatformaOfdReceiptUrlGenerator::class,
+            'company' => [
+                'name' => 'ООО "АТОЛ Онлайн Тест"',
+                'inn' => '5544332219',
+                'tax_system' => TTBooking\FiscalRegistrar\Enums\TaxSystem::OSN,
+                'payment_address' => '109316, Регион 77, Москва, Волгоградский проспект, дом 42, корпус 9',
+                'payment_site' => 'https://v4.online.atol.ru',
+                'email' => 'info@atol.ru',
+            ],
         ],
 
         'proxy' => [

@@ -77,10 +77,10 @@
             $number = $receipt->result?->payload->fiscal_receipt_number ?? null;
             $number = isset($number) ? ' '.__('fiscal-registrar::main.shared.#').$number : '';
         @endphp
-        <tr><td colspan="2">{{ $receipt->data->company->name ?? '-' }}</td></tr>
-        <tr><td colspan="2">{{ $receipt->data->company->payment_address ?? '-' }}</td></tr>
-        <tr><td colspan="2">{{ __('fiscal-registrar::main.receipt.company.inn').' '.($receipt->data->company->inn ?? '-') }}</td></tr>
-        <tr><td colspan="2">{{ __('fiscal-registrar::main.receipt.company.payment_site').': '.($receipt->data->company->payment_site ?? '-') }}</td></tr>
+        <tr><td colspan="2">{{ $receipt->data->company->name ?? $connectionConfig['company']['name'] ?? '-' }}</td></tr>
+        <tr><td colspan="2">{{ $receipt->data->company->payment_address ?? $connectionConfig['company']['payment_address'] ?? '-' }}</td></tr>
+        <tr><td colspan="2">{{ __('fiscal-registrar::main.receipt.company.inn').' '.($receipt->data->company->inn ?? $connectionConfig['company']['inn'] ?? '-') }}</td></tr>
+        <tr><td colspan="2">{{ __('fiscal-registrar::main.receipt.company.payment_site').': '.($receipt->data->company->payment_site ?? $connectionConfig['company']['payment_site'] ?? '-') }}</td></tr>
         <tr><th colspan="2">{{ Str::upper(__('fiscal-registrar::main.receipt.title')).$number }}</th></tr>
         </thead>
         <tbody>
@@ -94,7 +94,7 @@
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.company.tax_system') }}</td>
-            <td>{{ $receipt->data->company->tax_system?->getDescription('short') ?? '-' }}</td>
+            <td>{{ $receipt->data->company->tax_system?->getDescription('short') ?? isset($connectionConfig['company']['tax_system']) ? __('fiscal-registrar::enum.tax_system_short.'.$connectionConfig['company']['tax_system']) : '-' }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.client.phone_or_email') }}</td>
@@ -102,7 +102,7 @@
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.company.email') }}</td>
-            <td>{{ $receipt->data->company->email ?? '-' }}</td>
+            <td>{{ $receipt->data->company->email ?? $connectionConfig['company']['email'] ?? '-' }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.result.device_code') }}</td>

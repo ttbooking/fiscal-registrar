@@ -262,15 +262,15 @@
             },
 
             companyEmailPlaceholder() {
-                return this.connections[this.receipt.connection]?.email ?? 'user@domain.com'
+                return this.connections[this.receipt.connection]?.company?.email ?? 'user@domain.com'
             },
 
             companyInnPlaceholder() {
-                return this.connections[this.receipt.connection]?.inn ?? '1234567890'
+                return this.connections[this.receipt.connection]?.company?.inn ?? '1234567890'
             },
 
             companyPaymentSitePlaceholder() {
-                return this.connections[this.receipt.connection]?.payment_site ?? ''
+                return this.connections[this.receipt.connection]?.company?.payment_site ?? ''
             },
 
             vatsPlaceholder() {

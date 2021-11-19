@@ -41,4 +41,4 @@ mix.options({
             },
         },
         plugins: [new webpack.IgnorePlugin({ resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/ })],
-    });
+    })

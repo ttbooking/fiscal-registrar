@@ -262,7 +262,11 @@
             },
 
             companyEmailPlaceholder() {
-                return this.connections[this.receipt.connection]?.company?.email ?? 'user@domain.com'
+                return this.connections[this.receipt.connection]?.company?.email ?? 'contact@myshop.com'
+            },
+
+            companyNamePlaceholder() {
+                return this.connections[this.receipt.connection]?.company?.name ?? 'ООО "Рога и Копыта"'
             },
 
             companyInnPlaceholder() {
@@ -270,7 +274,11 @@
             },
 
             companyPaymentSitePlaceholder() {
-                return this.connections[this.receipt.connection]?.company?.payment_site ?? ''
+                return this.connections[this.receipt.connection]?.company?.payment_site ?? 'https://www.myshop.com'
+            },
+
+            companyPaymentAddressPlaceholder() {
+                return this.connections[this.receipt.connection]?.company?.payment_address ?? ''
             },
 
             vatsPlaceholder() {
@@ -491,22 +499,22 @@ fieldset { margin: 0 }
                                 <b-container fluid>
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Электронный адрес" label-for="clientEmail" :class="isClientEmailRequired && 'required'">
+                                            <b-form-group label="Электронный адрес" label-for="clientEmail" description="тег 1008" :class="isClientEmailRequired && 'required'">
                                                 <b-form-input id="clientEmail" type="email" size="sm" placeholder="user@domain.com" :required="isClientEmailRequired" v-model="receipt.data.client.email"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Телефон" label-for="clientPhone" :class="isClientPhoneRequired && 'required'">
+                                            <b-form-group label="Телефон" label-for="clientPhone" description="тег 1008" :class="isClientPhoneRequired && 'required'">
                                                 <b-form-input id="clientPhone" type="tel" size="sm" placeholder="+79001234567" :required="isClientPhoneRequired" v-model="receipt.data.client.phone"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Наименование" label-for="clientName">
+                                            <b-form-group label="Наименование" label-for="clientName" description="тег 1227">
                                                 <b-form-input id="clientName" type="text" size="sm" placeholder="Иван Иванович Иванов" v-model="receipt.data.client.name"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="ИНН" label-for="clientInn">
+                                            <b-form-group label="ИНН" label-for="clientInn" description="тег 1228">
                                                 <b-form-input id="clientInn" type="text" size="sm" placeholder="1234567890" pattern="\d{10}|\d{12}" maxlength="12" v-model="receipt.data.client.inn"></b-form-input>
                                             </b-form-group>
                                         </b-col>
@@ -530,23 +538,33 @@ fieldset { margin: 0 }
                                 <b-container fluid>
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Электронный адрес" label-for="companyEmail">
+                                            <b-form-group label="Электронный адрес" label-for="companyEmail" description="тег 1117">
                                                 <b-form-input id="companyEmail" type="email" size="sm" :placeholder="companyEmailPlaceholder" v-model="receipt.data.company.email"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Система налогообложения" label-for="taxSystem">
-                                                <b-form-select id="taxSystem" size="sm" v-model="receipt.data.company.tax_system" :options="taxSystemOptions"></b-form-select>
+                                            <b-form-group label="Наименование" label-for="companyName" description="тег 1048">
+                                                <b-form-input id="companyName" type="text" size="sm" :placeholder="companyNamePlaceholder" v-model="receipt.data.company.name"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="ИНН" label-for="companyInn">
+                                            <b-form-group label="ИНН" label-for="companyInn" description="тег 1018">
                                                 <b-form-input id="companyInn" type="text" size="sm" :placeholder="companyInnPlaceholder" pattern="\d{10}|\d{12}" maxlength="12" v-model="receipt.data.company.inn"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Место расчетов" label-for="companyPaymentSite">
+                                            <b-form-group label="Система налогообложения" label-for="taxSystem" description="тег 1055">
+                                                <b-form-select id="taxSystem" size="sm" v-model="receipt.data.company.tax_system" :options="taxSystemOptions"></b-form-select>
+                                            </b-form-group>
+                                        </b-col>
+                                        <b-col align-self="end" lg="2" md="3" sm="4">
+                                            <b-form-group label="Место расчетов" label-for="companyPaymentSite" description="тег 1187">
                                                 <b-form-input id="companyPaymentSite" type="text" size="sm" :placeholder="companyPaymentSitePlaceholder" v-model="receipt.data.company.payment_site"></b-form-input>
+                                            </b-form-group>
+                                        </b-col>
+                                        <b-col align-self="end" lg="2" md="3" sm="4">
+                                            <b-form-group label="Адрес расчетов" label-for="companyPaymentAddress" description="тег 1009">
+                                                <b-form-input id="companyPaymentAddress" type="text" size="sm" :placeholder="companyPaymentAddressPlaceholder" v-model="receipt.data.company.payment_address"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                     </b-form-row>
@@ -569,7 +587,7 @@ fieldset { margin: 0 }
                                 <b-container fluid>
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="3" md="4" sm="6">
-                                            <b-form-group label="Признак агента" label-for="agentType">
+                                            <b-form-group label="Признак агента" label-for="agentType" description="тег 1057">
                                                 <b-form-select id="agentType" size="sm" v-model="agentType" :options="agentTypeOptions"></b-form-select>
                                             </b-form-group>
                                         </b-col>
@@ -586,12 +604,12 @@ fieldset { margin: 0 }
                                                 <b-container fluid>
                                                     <b-form-row class="my-1">
                                                         <b-col align-self="end" lg="3" md="4" sm="6">
-                                                            <b-form-group label="Наименование операции" label-for="payingAgentOperation">
+                                                            <b-form-group label="Наименование операции" label-for="payingAgentOperation" description="тег 1044">
                                                                 <b-form-input id="payingAgentOperation" type="text" size="sm" v-model="model['agent_info.paying_agent.operation']"></b-form-input>
                                                             </b-form-group>
                                                         </b-col>
                                                         <b-col align-self="end" lg="3" md="4" sm="6">
-                                                            <b-form-group label="Телефон(ы)" label-for="payingAgentPhones">
+                                                            <b-form-group label="Телефон(ы)" label-for="payingAgentPhones" description="тег 1073">
                                                                 <b-form-textarea id="payingAgentPhones" size="sm" max-rows="4" v-model="payingAgentPhones"></b-form-textarea>
                                                             </b-form-group>
                                                         </b-col>
@@ -610,7 +628,7 @@ fieldset { margin: 0 }
                                                 <b-container fluid>
                                                     <b-form-row class="my-1">
                                                         <b-col align-self="end" lg="3" md="4" sm="6">
-                                                            <b-form-group label="Телефон(ы)" label-for="receivePaymentsOperatorPhones">
+                                                            <b-form-group label="Телефон(ы)" label-for="receivePaymentsOperatorPhones" description="тег 1074">
                                                                 <b-form-textarea id="receivePaymentsOperatorPhones" size="sm" max-rows="4" v-model="receivePaymentsOperatorPhones"></b-form-textarea>
                                                             </b-form-group>
                                                         </b-col>
@@ -629,22 +647,22 @@ fieldset { margin: 0 }
                                                 <b-container fluid>
                                                     <b-form-row class="my-1">
                                                         <b-col align-self="end" lg="3" md="4" sm="6">
-                                                            <b-form-group label="Телефон(ы)" label-for="moneyTransferOperatorPhones">
+                                                            <b-form-group label="Телефон(ы)" label-for="moneyTransferOperatorPhones" description="тег 1075">
                                                                 <b-form-textarea id="moneyTransferOperatorPhones" size="sm" max-rows="4" v-model="moneyTransferOperatorPhones"></b-form-textarea>
                                                             </b-form-group>
                                                         </b-col>
                                                         <b-col align-self="end" lg="3" md="4" sm="6">
-                                                            <b-form-group label="Наименование" label-for="moneyTransferOperatorName">
+                                                            <b-form-group label="Наименование" label-for="moneyTransferOperatorName" description="тег 1026">
                                                                 <b-form-input id="moneyTransferOperatorName" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.name']"></b-form-input>
                                                             </b-form-group>
                                                         </b-col>
                                                         <b-col align-self="end" lg="3" md="4" sm="6">
-                                                            <b-form-group label="Адрес" label-for="moneyTransferOperatorAddress">
+                                                            <b-form-group label="Адрес" label-for="moneyTransferOperatorAddress" description="тег 1005">
                                                                 <b-form-input id="moneyTransferOperatorAddress" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.address']"></b-form-input>
                                                             </b-form-group>
                                                         </b-col>
                                                         <b-col align-self="end" lg="3" md="4" sm="6">
-                                                            <b-form-group label="ИНН" label-for="moneyTransferOperatorInn">
+                                                            <b-form-group label="ИНН" label-for="moneyTransferOperatorInn" description="тег 1016">
                                                                 <b-form-input id="moneyTransferOperatorInn" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.inn']"></b-form-input>
                                                             </b-form-group>
                                                         </b-col>
@@ -663,7 +681,7 @@ fieldset { margin: 0 }
                                                 <b-container fluid>
                                                     <b-form-row class="my-1">
                                                         <b-col align-self="end" lg="3" md="4" sm="6">
-                                                            <b-form-group label="Телефон(ы)" label-for="supplierPhones" class="required">
+                                                            <b-form-group label="Телефон(ы)" label-for="supplierPhones" description="тег 1171" class="required">
                                                                 <b-form-textarea id="supplierPhones" size="sm" max-rows="4" required v-model="supplierPhones"></b-form-textarea>
                                                             </b-form-group>
                                                         </b-col>
@@ -694,12 +712,12 @@ fieldset { margin: 0 }
                             <b-container fluid>
                                 <b-form-row class="my-1">
                                     <b-col align-self="end" lg="1" md="2" sm="3">
-                                        <b-form-group label="Всего на сумму" label-for="total" class="required">
+                                        <b-form-group label="Всего на сумму" label-for="total" description="тег 1020" class="required">
                                             <b-form-input id="total" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="receipt.data.total" :disabled="receipt.state !== 0"></b-form-input>
                                         </b-form-group>
                                     </b-col>
-                                    <b-col align-self="end" lg="1" md="2" sm="3">
-                                        <b-button class="mb-3" variant="primary" size="sm" @click="addItem" :disabled="receipt.state !== 0">Добавить</b-button>
+                                    <b-col class="mb-sm-3" align-self="end" lg="1" md="2" sm="3">
+                                        <b-button class="mb-sm-4" variant="primary" size="sm" @click="addItem" :disabled="receipt.state !== 0">Добавить</b-button>
                                     </b-col>
                                 </b-form-row>
                             </b-container>
@@ -720,27 +738,27 @@ fieldset { margin: 0 }
                                 <b-container fluid>
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Наличными" label-for="paymentCash">
+                                            <b-form-group label="Наличными" label-for="paymentCash" description="тег 1031">
                                                 <b-form-input id="paymentCash" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.data.payments.cash"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Безналичными" label-for="paymentElectronic">
+                                            <b-form-group label="Безналичными" label-for="paymentElectronic" description="тег 1081">
                                                 <b-form-input id="paymentElectronic" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.data.payments.electronic"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Предоплатой" label-for="paymentPrepaid">
+                                            <b-form-group label="Предоплатой" label-for="paymentPrepaid" description="тег 1215">
                                                 <b-form-input id="paymentPrepaid" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.data.payments.prepaid"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Постоплатой" label-for="paymentPostpaid">
+                                            <b-form-group label="Постоплатой" label-for="paymentPostpaid" description="тег 1216">
                                                 <b-form-input id="paymentPostpaid" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.data.payments.postpaid"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Встр. предст." label-for="paymentOther">
+                                            <b-form-group label="Встр. предст." label-for="paymentOther" description="тег 1217">
                                                 <b-form-input id="paymentOther" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.data.payments.other"></b-form-input>
                                             </b-form-group>
                                         </b-col>
@@ -766,32 +784,32 @@ fieldset { margin: 0 }
                                 <b-container fluid>
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Сумма расчета по чеку без НДС" label-for="withoutVat">
+                                            <b-form-group label="Сумма расчета по чеку без НДС" label-for="withoutVat" description="тег 1105">
                                                 <b-form-input id="withoutVat" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatsPlaceholder.without_vat" v-model.number="vatsWithoutVat"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Сумма расчета по чеку с НДС 0%" label-for="withVat0">
+                                            <b-form-group label="Сумма расчета по чеку с НДС 0%" label-for="withVat0" description="тег 1104">
                                                 <b-form-input id="withVat0" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatsPlaceholder.with_vat0" v-model.number="vatsWithVat0"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Сумма НДС чека по ставке 10%" label-for="vat10">
+                                            <b-form-group label="Сумма НДС чека по ставке 10%" label-for="vat10" description="тег 1103">
                                                 <b-form-input id="vat10" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatsPlaceholder.vat10" v-model.number="vatsVat10"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Сумма НДС чека по ставке 20%" label-for="vat20">
+                                            <b-form-group label="Сумма НДС чека по ставке 20%" label-for="vat20" description="тег 1102">
                                                 <b-form-input id="vat20" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatsPlaceholder.vat20" v-model.number="vatsVat20"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Сумма НДС чека по расч. ставке 10/110" label-for="vat110">
+                                            <b-form-group label="Сумма НДС чека по расч. ставке 10/110" label-for="vat110" description="тег 1107">
                                                 <b-form-input id="vat110" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatsPlaceholder.vat110" v-model.number="vatsVat110"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Сумма НДС чека по расч. ставке 20/120" label-for="vat120">
+                                            <b-form-group label="Сумма НДС чека по расч. ставке 20/120" label-for="vat120" description="тег 1106">
                                                 <b-form-input id="vat120" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatsPlaceholder.vat120" v-model.number="vatsVat120"></b-form-input>
                                             </b-form-group>
                                         </b-col>
@@ -812,22 +830,22 @@ fieldset { margin: 0 }
                                 <b-container fluid>
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="2" md="3" sm="4">
-                                            <b-form-group label="Доп. реквизит чека" label-for="additionalCheckProps">
+                                            <b-form-group label="Доп. реквизит чека" label-for="additionalCheckProps" description="тег 1192">
                                                 <b-form-input id="additionalCheckProps" type="text" size="sm" maxlength="16" v-model="receipt.data.additional_check_props"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="3" md="5" sm="8">
-                                            <b-form-group label="ФИО кассира" label-for="cashier">
+                                            <b-form-group label="ФИО кассира" label-for="cashier" description="тег 1021">
                                                 <b-form-input id="cashier" type="text" size="sm" maxlength="64" v-model="receipt.data.cashier"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="3" md="4" sm="6">
-                                            <b-form-group label="Наим. доп. рекв. пользователя" label-for="additionalUserPropsName">
+                                            <b-form-group label="Наим. доп. рекв. пользователя" label-for="additionalUserPropsName" description="тег 1085">
                                                 <b-form-input id="additionalUserPropsName" type="text" size="sm" maxlength="64" v-model="model['additional_user_props.name']"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="4" md="8" sm="12">
-                                            <b-form-group label="Знач. доп. рекв. пользователя" label-for="additionalUserPropsValue">
+                                            <b-form-group label="Знач. доп. рекв. пользователя" label-for="additionalUserPropsValue" description="тег 1086">
                                                 <b-form-input id="additionalUserPropsValue" type="text" size="sm" maxlength="256" v-model="model['additional_user_props.value']"></b-form-input>
                                             </b-form-group>
                                         </b-col>
@@ -863,47 +881,47 @@ fieldset { margin: 0 }
                             <b-container fluid>
                                 <b-form-row>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
-                                        <b-form-group description="Дата и время">
+                                        <b-form-group description="Дата и время (тег 1012)">
                                             {{ formatTime(receipt.result.payload.receipt_datetime, 'DD.MM.YYYY HH:mm') }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
-                                        <b-form-group description="Номер смены">
+                                        <b-form-group description="Номер смены (тег 1038)">
                                             {{ receipt.result.payload.shift_number }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
-                                        <b-form-group description="Номер чека в смене">
+                                        <b-form-group description="Номер чека в смене (тег 1042)">
                                             {{ receipt.result.payload.fiscal_receipt_number }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
-                                        <b-form-group description="Сумма расчета">
+                                        <b-form-group description="Сумма расчета (тег 1020)">
                                             {{ receipt.result.payload.total }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
-                                        <b-form-group description="Рег. номер ККТ">
+                                        <b-form-group description="Рег. номер ККТ (тег 1037)">
                                             {{ receipt.result.payload.ecr_registration_number }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
-                                        <b-form-group description="Номер ФН">
+                                        <b-form-group description="Номер ФН (тег 1041)">
                                             {{ receipt.result.payload.fn_number }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
-                                        <b-form-group description="Фискальный номер документа">
+                                        <b-form-group description="Фискальный номер документа (тег 1040)">
                                             {{ receipt.result.payload.fiscal_document_number }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
-                                        <b-form-group description="Фискальный признак документа">
+                                        <b-form-group description="Фискальный признак документа (тег 1077)">
                                             {{ receipt.result.payload.fiscal_document_attribute }}
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-3" lg="2" md="3" sm="4">
-                                        <b-form-group description="Адрес сайта ФНС">
+                                        <b-form-group description="Адрес сайта ФНС (тег 1060)">
                                             <b-link :href="resultPayloadFnsSite" target="_blank">{{ resultPayloadFnsSite }}</b-link>
                                         </b-form-group>
                                     </b-col>

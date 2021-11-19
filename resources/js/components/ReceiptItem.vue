@@ -111,52 +111,52 @@
     <b-container fluid>
         <b-form-row class="my-1">
             <b-col align-self="end" lg="4" md="6" sm="12">
-                <b-form-group label="Наименование" :label-for="'item' + id + 'Name'" class="required">
+                <b-form-group label="Наименование" :label-for="'item' + id + 'Name'" description="тег 1030" class="required">
                     <b-form-input :id="'item' + id + 'Name'" type="text" size="sm" required v-model="item.name" :disabled="disabled"></b-form-input>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="1" md="2" sm="4">
-                <b-form-group label="Цена" :label-for="'item' + id + 'Price'" class="required">
+                <b-form-group label="Цена" :label-for="'item' + id + 'Price'" description="тег 1079" class="required">
                     <b-form-input :id="'item' + id + 'Price'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="item.price" :disabled="disabled"></b-form-input>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="1" md="2" sm="4">
-                <b-form-group label="Кол-во" :label-for="'item' + id + 'Quantity'" class="required">
+                <b-form-group label="Кол-во" :label-for="'item' + id + 'Quantity'" description="тег 1023" class="required">
                     <b-form-input :id="'item' + id + 'Quantity'" type="number" min=".001" max="99999.999" step="any" size="sm" placeholder="1" required v-model="item.quantity" :disabled="disabled"></b-form-input>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="1" md="2" sm="4">
-                <b-form-group label="Сумма" :label-for="'item' + id + 'Sum'" class="required">
+                <b-form-group label="Сумма" :label-for="'item' + id + 'Sum'" description="тег 1043" class="required">
                     <b-form-input :id="'item' + id + 'Sum'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="item.sum" :disabled="disabled"></b-form-input>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="1" md="2" sm="4">
-                <b-form-group label="Ед. изм." :label-for="'item' + id + 'MeasurementUnit'">
+                <b-form-group label="Ед. изм." :label-for="'item' + id + 'MeasurementUnit'" description="тег 1197">
                     <b-form-input :id="'item' + id + 'MeasurementUnit'" type="text" size="sm" placeholder="шт." maxlength="16" v-model="item.measurement_unit" :disabled="disabled"></b-form-input>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="2" md="2" sm="4">
-                <b-form-group label="Способ расчета" :label-for="'item' + id + 'PaymentMethod'" class="required">
+                <b-form-group label="Способ расчета" :label-for="'item' + id + 'PaymentMethod'" description="тег 1214" class="required">
                     <b-form-select :id="'item' + id + 'PaymentMethod'" size="sm" v-model="item.payment_method" :options="buildOptions(dictionary.paymentMethods)" :disabled="disabled"></b-form-select>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="2" md="2" sm="4">
-                <b-form-group label="Предмет расчета" :label-for="'item' + id + 'PaymentObject'" class="required">
+                <b-form-group label="Предмет расчета" :label-for="'item' + id + 'PaymentObject'" description="тег 1212" class="required">
                     <b-form-select :id="'item' + id + 'PaymentObject'" size="sm" v-model="item.payment_object" :options="buildOptions(dictionary.paymentObjects)" :disabled="disabled"></b-form-select>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="1" md="2" sm="4">
-                <b-form-group label="НДС" :label-for="'item' + id + 'VatType'" class="required">
+                <b-form-group label="НДС" :label-for="'item' + id + 'VatType'" description="тег 1199" class="required">
                     <b-form-select :id="'item' + id + 'VatType'" size="sm" v-model="item.vat.type" :options="buildOptions(dictionary.vatTypes)" :disabled="disabled"></b-form-select>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="1" md="2" sm="4">
-                <b-form-group label="Сумма НДС" :label-for="'item' + id + 'VatSum'">
+                <b-form-group label="Сумма НДС" :label-for="'item' + id + 'VatSum'" description="тег 1200">
                     <b-form-input :id="'item' + id + 'VatSum'" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatSum" v-model="item.vat.sum" :disabled="disabled"></b-form-input>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="3" md="4" sm="6">
-                <b-form-group label="Признак агента" :label-for="'item' + id + 'agentType'">
+                <b-form-group label="Признак агента" :label-for="'item' + id + 'agentType'" description="тег 1222">
                     <b-form-select :id="'item' + id + 'agentType'" size="sm" v-model="agentType" :options="agentTypeOptions" :disabled="disabled"></b-form-select>
                 </b-form-group>
             </b-col>
@@ -176,12 +176,12 @@
                         <b-container fluid>
                             <b-form-row class="my-1">
                                 <b-col align-self="end" lg="3" md="4" sm="6">
-                                    <b-form-group label="Наименование операции" :label-for="'item' + id + 'payingAgentOperation'">
+                                    <b-form-group label="Наименование операции" :label-for="'item' + id + 'payingAgentOperation'" description="тег 1044">
                                         <b-form-input :id="'item' + id + 'payingAgentOperation'" type="text" size="sm" v-model="model['agent_info.paying_agent.operation']" :disabled="disabled"></b-form-input>
                                     </b-form-group>
                                 </b-col>
                                 <b-col align-self="end" lg="3" md="4" sm="6">
-                                    <b-form-group label="Телефон(ы)" :label-for="'item' + id + 'payingAgentPhones'">
+                                    <b-form-group label="Телефон(ы)" :label-for="'item' + id + 'payingAgentPhones'" description="тег 1073">
                                         <b-form-textarea :id="'item' + id + 'payingAgentPhones'" size="sm" max-rows="4" v-model="payingAgentPhones" :disabled="disabled"></b-form-textarea>
                                     </b-form-group>
                                 </b-col>
@@ -200,7 +200,7 @@
                         <b-container fluid>
                             <b-form-row class="my-1">
                                 <b-col align-self="end" lg="3" md="4" sm="6">
-                                    <b-form-group label="Телефон(ы)" :label-for="'item' + id + 'receivePaymentsOperatorPhones'">
+                                    <b-form-group label="Телефон(ы)" :label-for="'item' + id + 'receivePaymentsOperatorPhones'" description="тег 1074">
                                         <b-form-textarea :id="'item' + id + 'receivePaymentsOperatorPhones'" size="sm" max-rows="4" v-model="receivePaymentsOperatorPhones" :disabled="disabled"></b-form-textarea>
                                     </b-form-group>
                                 </b-col>
@@ -219,22 +219,22 @@
                         <b-container fluid>
                             <b-form-row class="my-1">
                                 <b-col align-self="end" lg="3" md="4" sm="6">
-                                    <b-form-group label="Телефон(ы)" :label-for="'item' + id + 'moneyTransferOperatorPhones'">
+                                    <b-form-group label="Телефон(ы)" :label-for="'item' + id + 'moneyTransferOperatorPhones'" description="тег 1075">
                                         <b-form-textarea :id="'item' + id + 'moneyTransferOperatorPhones'" size="sm" max-rows="4" v-model="moneyTransferOperatorPhones" :disabled="disabled"></b-form-textarea>
                                     </b-form-group>
                                 </b-col>
                                 <b-col align-self="end" lg="3" md="4" sm="6">
-                                    <b-form-group label="Наименование" :label-for="'item' + id + 'moneyTransferOperatorName'">
+                                    <b-form-group label="Наименование" :label-for="'item' + id + 'moneyTransferOperatorName'" description="тег 1026">
                                         <b-form-input :id="'item' + id + 'moneyTransferOperatorName'" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.name']" :disabled="disabled"></b-form-input>
                                     </b-form-group>
                                 </b-col>
                                 <b-col align-self="end" lg="3" md="4" sm="6">
-                                    <b-form-group label="Адрес" :label-for="'item' + id + 'moneyTransferOperatorAddress'">
+                                    <b-form-group label="Адрес" :label-for="'item' + id + 'moneyTransferOperatorAddress'" description="тег 1005">
                                         <b-form-input :id="'item' + id + 'moneyTransferOperatorAddress'" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.address']" :disabled="disabled"></b-form-input>
                                     </b-form-group>
                                 </b-col>
                                 <b-col align-self="end" lg="3" md="4" sm="6">
-                                    <b-form-group label="ИНН" :label-for="'item' + id + 'moneyTransferOperatorInn'">
+                                    <b-form-group label="ИНН" :label-for="'item' + id + 'moneyTransferOperatorInn'" description="тег 1016">
                                         <b-form-input :id="'item' + id + 'moneyTransferOperatorInn'" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.inn']" :disabled="disabled"></b-form-input>
                                     </b-form-group>
                                 </b-col>
@@ -253,17 +253,17 @@
                         <b-container fluid>
                             <b-form-row class="my-1">
                                 <b-col align-self="end" lg="3" md="4" sm="6">
-                                    <b-form-group label="Телефон(ы)" :label-for="'item' + id + 'supplierPhones'" class="required">
+                                    <b-form-group label="Телефон(ы)" :label-for="'item' + id + 'supplierPhones'" description="тег 1171" class="required">
                                         <b-form-textarea :id="'item' + id + 'supplierPhones'" size="sm" max-rows="4" required v-model="supplierPhones" :disabled="disabled"></b-form-textarea>
                                     </b-form-group>
                                 </b-col>
                                 <b-col align-self="end" lg="3" md="4" sm="6">
-                                    <b-form-group label="Наименование" :label-for="'item' + id + 'supplierName'">
+                                    <b-form-group label="Наименование" :label-for="'item' + id + 'supplierName'" description="тег 1225">
                                         <b-form-input :id="'item' + id + 'supplierName'" type="text" size="sm" v-model="model['supplier_info.name']" :disabled="disabled"></b-form-input>
                                     </b-form-group>
                                 </b-col>
                                 <b-col align-self="end" lg="3" md="4" sm="6">
-                                    <b-form-group label="ИНН" :label-for="'item' + id + 'supplierInn'">
+                                    <b-form-group label="ИНН" :label-for="'item' + id + 'supplierInn'" description="тег 1226">
                                         <b-form-input :id="'item' + id + 'supplierInn'" type="text" size="sm" v-model="model['supplier_info.inn']" :disabled="disabled"></b-form-input>
                                     </b-form-group>
                                 </b-col>

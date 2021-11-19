@@ -98,7 +98,7 @@
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.client.phone_or_email') }}</td>
-            <td>{{ $receipt->data->client->email ?? $receipt->data->client->phone }}</td>
+            <td>{{ $receipt->data->client->email ?? $receipt->data->client->phone ?? '-' }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.company.email') }}</td>

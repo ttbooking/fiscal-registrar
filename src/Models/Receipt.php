@@ -35,7 +35,11 @@ class Receipt extends Model implements StatefulFiscalRegistrar
     const STATE_REGISTERED = 1;
     const STATE_PROCESSED = 2;
 
-    protected $fillable = ['state', 'connection', 'operation', 'external_id', 'internal_id', 'data', 'result'];
+    protected const VIRTUAL_FIELDS = ['fn_number', 'fiscal_document_number', 'fiscal_document_attribute', 'total'];
+
+    protected $hidden = self::VIRTUAL_FIELDS;
+
+    protected $guarded = ['id', ...self::VIRTUAL_FIELDS, self::CREATED_AT, self::UPDATED_AT];
 
     protected $attributes = [
         'state' => self::STATE_CREATED,

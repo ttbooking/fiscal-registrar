@@ -49,7 +49,7 @@ class ReceiptStoreRequest extends FormRequest
             'data.company.payment_site' => 'sometimes|nullable|string|max:256',
 
             'data.agent_info' => 'sometimes|nullable|array',
-            'data.agent_info.type' => ['required', 'string', Rule::in(Enums\AgentType::toArray())],
+            'data.agent_info.type' => ['required_with:data.agent_info', 'string', Rule::in(Enums\AgentType::toArray())],
             'data.agent_info.paying_agent' => 'sometimes|nullable|array',
             'data.agent_info.paying_agent.operation' => 'sometimes|nullable|string|max:24',
             'data.agent_info.paying_agent.phones' => 'sometimes|nullable|array',
@@ -80,7 +80,7 @@ class ReceiptStoreRequest extends FormRequest
             'data.items.*.vat.type' => ['required', 'string', Rule::in(Enums\VatType::toArray())],
             'data.items.*.vat.sum' => 'sometimes|nullable|numeric|between:0,99999999.99',
             'data.items.*.agent_info' => 'sometimes|nullable|array',
-            'data.items.*.agent_info.type' => ['required', 'string', Rule::in(Enums\AgentType::toArray())],
+            'data.items.*.agent_info.type' => ['required_with:data.items.*.agent_info', 'string', Rule::in(Enums\AgentType::toArray())],
             'data.items.*.agent_info.paying_agent' => 'sometimes|nullable|array',
             'data.items.*.agent_info.paying_agent.operation' => 'sometimes|nullable|string|max:24',
             'data.items.*.agent_info.paying_agent.phones' => 'sometimes|nullable|array',

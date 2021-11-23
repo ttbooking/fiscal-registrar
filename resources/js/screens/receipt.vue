@@ -663,7 +663,7 @@ fieldset { margin: 0 }
                                                         </b-col>
                                                         <b-col align-self="end" lg="3" md="4" sm="6">
                                                             <b-form-group label="ИНН" label-for="moneyTransferOperatorInn" description="тег 1016">
-                                                                <b-form-input id="moneyTransferOperatorInn" type="text" size="sm" v-model="model['agent_info.money_transfer_operator.inn']"></b-form-input>
+                                                                <b-form-input id="moneyTransferOperatorInn" type="text" size="sm" pattern="\d{10}|\d{12}" maxlength="12" v-model="model['agent_info.money_transfer_operator.inn']"></b-form-input>
                                                             </b-form-group>
                                                         </b-col>
                                                     </b-form-row>

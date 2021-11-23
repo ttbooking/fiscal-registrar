@@ -4,6 +4,10 @@ return [
 
     'title' => 'Fiscal Registrar',
 
+    'connection' => 'connection',
+    'operation' => 'operation',
+    'external_id' => 'unique identifier',
+
     'receipt' => [
 
         'title' => 'receipt',

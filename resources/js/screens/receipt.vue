@@ -130,6 +130,16 @@
                             { name: 'receipt', params: { id: response.data.id } },
                             () => this.receipt = response.data
                         ))
+                        .catch(error => Object.values(error.response.data.errors).forEach(
+                            msgBag => this.$bvToast.toast(
+                                msgBag.map(msg => this.$createElement('div', msg)), {
+                                    toaster: 'b-toaster-bottom-right',
+                                    variant: 'danger',
+                                    solid: true,
+                                    noCloseButton: true,
+                                }
+                            )
+                        ))
             },
 
             registerReceipt() {

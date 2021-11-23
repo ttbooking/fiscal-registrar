@@ -10,10 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
-use Illuminate\Validation\Rule;
-use TTBooking\FiscalRegistrar\Enums\Operation;
+use TTBooking\FiscalRegistrar\Http\Requests\ReceiptStoreRequest;
 use TTBooking\FiscalRegistrar\Models\Receipt;
-use TTBooking\FiscalRegistrar\Rules;
 
 class ReceiptController extends Controller
 {
@@ -37,12 +35,12 @@ class ReceiptController extends Controller
     /**
      * Store a newly created receipt in storage.
      *
-     * @param  Request  $request
+     * @param  ReceiptStoreRequest  $request
      * @return JsonResponse
      */
-    public function store(Request $request): JsonResponse
+    public function store(ReceiptStoreRequest $request): JsonResponse
     {
-        $receipt = $this->receipt->newQuery()->create(static::validateRequest($request));
+        $receipt = $this->receipt->newQuery()->create($request->validated());
 
         return Response::json($receipt, JsonResponse::HTTP_CREATED);
     }
@@ -61,13 +59,13 @@ class ReceiptController extends Controller
     /**
      * Update the specified receipt in storage.
      *
-     * @param  Request  $request
+     * @param  ReceiptStoreRequest  $request
      * @param  Receipt  $receipt
      * @return JsonResponse
      */
-    public function update(Request $request, Receipt $receipt): JsonResponse
+    public function update(ReceiptStoreRequest $request, Receipt $receipt): JsonResponse
     {
-        $receipt->update(static::validateRequest($request));
+        $receipt->update($request->validated());
 
         return Response::json($receipt);
     }
@@ -117,23 +115,5 @@ class ReceiptController extends Controller
     public function report(Request $request, Receipt $receipt): JsonResponse
     {
         return Response::json($receipt->report(null, (bool) $request->query('force')));
-    }
-
-    /**
-     * Validate the request.
-     *
-     * @param  Request  $request
-     * @return array
-     */
-    protected static function validateRequest(Request $request): array
-    {
-        return $request->validate([
-            'connection' => 'sometimes|nullable|string|max:32',
-            'operation' => ['sometimes', 'nullable', 'string', Rule::in(Operation::toArray())],
-            'external_id' => 'sometimes|nullable|string|max:128',
-            //'internal_id' => 'sometimes|nullable|string|max:128',
-            'data' => ['array', new Rules\Receipt],
-            //'result' => ['array', new Rules\Result],
-        ]);
     }
 }

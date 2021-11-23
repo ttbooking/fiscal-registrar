@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use TTBooking\FiscalRegistrar\Faker\Extension;
+use TTBooking\FiscalRegistrar\Http\Requests\ReceiptStoreRequest;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class FiscalRegistrarServiceProvider extends ServiceProvider //implements DeferrableProvider
@@ -108,6 +109,10 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         ], 'model');
 
         $this->publishes([
+            __DIR__.'/../stubs/ReceiptStoreRequest.stub' => $this->app->path('Http/Requests/ReceiptStoreRequest.php'),
+        ], 'request');
+
+        $this->publishes([
             __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/fiscal-registrar'),
         ], 'views');
 
@@ -161,6 +166,10 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         $this->app->alias('fiscal-registrar.receipt', Contracts\ReceiptFactory::class);
         $this->app->alias('fiscal-registrar.receipt', Contracts\Receipt::class);
         $this->app->bind(Receipt::class, $this->app['config']['fiscal-registrar.model'] ?? Receipt::class);
+        $this->app->bind(
+            ReceiptStoreRequest::class,
+            $this->app['config']['fiscal-registrar.request'] ?? ReceiptStoreRequest::class
+        );
     }
 
     protected function registerSyncJobSchedule(): void
@@ -198,6 +207,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
                 Contracts\ReceiptFactory::class,
                 Contracts\Receipt::class,
                 Receipt::class,
+                ReceiptStoreRequest::class,
             ]
         );
     }

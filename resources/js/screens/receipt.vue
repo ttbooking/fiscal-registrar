@@ -268,7 +268,12 @@
             },
 
             selectConnections() {
-                return this.buildOptions(this.connections, ([name, data]) => ({ value: name, text: data.display_name }))
+                return [
+                    { value: null, text: 'автоопределение' },
+                    ...this.buildOptions(
+                        this.connections,
+                        ([name, data]) => ({ value: name, text: data.display_name })
+                    )]
             },
 
             companyEmailPlaceholder() {
@@ -475,7 +480,7 @@ fieldset { margin: 0 }
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="3" md="4" sm="6">
                                             <b-form-group label="Подключение" label-for="receiptConnection" class="required">
-                                                <b-form-select id="receiptConnection" size="sm" required v-model="receipt.connection" :options="selectConnections"></b-form-select>
+                                                <b-form-select id="receiptConnection" size="sm" v-model="receipt.connection" :options="selectConnections"></b-form-select>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="3" md="4" sm="6">

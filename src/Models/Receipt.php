@@ -51,6 +51,20 @@ class Receipt extends Model implements StatefulFiscalRegistrar
         'result' => DTO\Result::class,
     ];
 
+    /**
+     * Perform any actions required after the model boots.
+     *
+     * @return void
+     */
+    public static function booted(): void
+    {
+        static::saving(function (self $receipt) {
+            $receipt->setAttribute('connection',
+                $receipt->getAttribute('connection') ?? $receipt->resolveConnectionName()
+            );
+        });
+    }
+
     public function resolveRouteBinding($value, $field = null, $sole = false): ?self
     {
         $method = $sole ? 'sole' : 'first';
@@ -80,7 +94,6 @@ class Receipt extends Model implements StatefulFiscalRegistrar
             throw new StateException('Receipt has already been registered.');
         }
 
-        $this->setAttribute('connection', $this->getAttribute('connection') ?? $this->resolveConnectionName());
         $this->operation = $operation ?? $this->operation;
         $this->external_id = $externalId ?? $this->external_id ?? $this->generateId();
         $this->data = $data ?? $this->data;

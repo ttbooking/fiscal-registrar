@@ -16,21 +16,19 @@ if (token) {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content
 }
 
-window.Pusher = require('pusher-js')
-
-const echo = new Echo({
-    broadcaster: 'pusher',
-    key: window.FiscalRegistrar.pusher.key,
-    cluster: window.FiscalRegistrar.pusher.cluster ?? 'eu',
-    forceTLS: window.FiscalRegistrar.pusher.useTLS ?? true,
-})
-
 Vue.use(BootstrapVue)
 Vue.use(VueDeepSet)
 Vue.use(VueRouter)
 
 Vue.prototype.$http = axios.create()
-Vue.prototype.$echo = echo.channel('fiscal-registrar')
+
+window.Pusher = require('pusher-js')
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: window.FiscalRegistrar.pusher.key,
+    cluster: window.FiscalRegistrar.pusher.cluster ?? 'eu',
+    forceTLS: window.FiscalRegistrar.pusher.useTLS ?? true,
+})
 
 window.FiscalRegistrar.basePath = '/' + window.FiscalRegistrar.path
 

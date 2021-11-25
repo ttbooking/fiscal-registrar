@@ -6,6 +6,10 @@ export default {
             return FiscalRegistrar
         },
 
+        $echo() {
+            return Echo.channel('fiscal-registrar')
+        },
+
         agentTypeOptions() {
             return [{ value: null, text: 'нет' }, ...this.buildOptions(this.dictionary.agentTypes)]
         },

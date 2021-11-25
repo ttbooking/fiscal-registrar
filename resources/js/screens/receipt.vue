@@ -41,6 +41,7 @@
         mounted() {
             this.handleRoute(this.$route)
             this.enumConnections()
+            this.listenEvents()
         },
 
         methods: {
@@ -57,6 +58,18 @@
                             ? this.shrinkReceipt()
                             : this.loadReceipt(to.params.id, true)
                 }
+            },
+
+            listenEvents() {
+                this.$echo
+                    .listen('.receipt.registering', e => {
+                        console.log('Receipt registering:')
+                        console.log(e)
+                    })
+                    .listen('.receipt.registered', e => {
+                        console.log('Receipt registered:')
+                        console.log(e)
+                    })
             },
 
             resetReceipt() {

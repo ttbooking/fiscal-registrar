@@ -2,6 +2,7 @@ import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import * as VueDeepSet from 'vue-deepset'
 import Base from './base'
+import Echo from 'laravel-echo'
 import axios from 'axios'
 import Routes from './routes'
 import VueRouter from 'vue-router'
@@ -15,11 +16,21 @@ if (token) {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content
 }
 
+window.Pusher = require('pusher-js')
+
+const echo = new Echo({
+    broadcaster: 'pusher',
+    key: window.FiscalRegistrar.pusher.key,
+    cluster: window.FiscalRegistrar.pusher.cluster ?? 'eu',
+    forceTLS: window.FiscalRegistrar.pusher.useTLS ?? true,
+})
+
 Vue.use(BootstrapVue)
 Vue.use(VueDeepSet)
 Vue.use(VueRouter)
 
 Vue.prototype.$http = axios.create()
+Vue.prototype.$echo = echo.channel('fiscal-registrar')
 
 window.FiscalRegistrar.basePath = '/' + window.FiscalRegistrar.path
 

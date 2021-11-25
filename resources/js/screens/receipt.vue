@@ -61,15 +61,11 @@
             },
 
             listenEvents() {
-                this.$echo
-                    .listen('.receipt.registering', e => {
-                        console.log('Receipt registering:')
-                        console.log(e)
-                    })
-                    .listen('.receipt.registered', e => {
-                        console.log('Receipt registered:')
-                        console.log(e)
-                    })
+                this.$echo.listen('.receipt.processed', receipt => {
+                    if (receipt.id === this.receipt.id) {
+                        this.receipt = receipt
+                    }
+                })
             },
 
             resetReceipt() {
@@ -160,7 +156,7 @@
                     this.$http.post(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id + '/register')
                         .then(() => {
                             this.receipt.state = 1
-                            setTimeout(() => this.syncReceipt(this.receipt.id), 1000)
+                            //setTimeout(() => this.syncReceipt(this.receipt.id), 1000)
                         })
                 })
             },
@@ -905,8 +901,8 @@ fieldset { margin: 0 }
                                     </b-col>
                                 </b-form-row>
                             </b-container>
-                            <b-card-sub-title class="mb-3">Информация ОФД</b-card-sub-title>
-                            <b-container fluid>
+                            <b-card-sub-title class="mb-3" v-if="receipt.result.payload">Информация ОФД</b-card-sub-title>
+                            <b-container fluid v-if="receipt.result.payload">
                                 <b-form-row>
                                     <b-col class="mb-3" lg="1" md="2" sm="3">
                                         <b-form-group description="Дата и время (тег 1012)">

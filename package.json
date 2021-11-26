@@ -14,17 +14,17 @@
         "bootstrap-vue": "^2.21.2",
         "jquery": "^3.6.0",
         "laravel-echo": "^1.11.3",
-        "laravel-mix": "^6.0.34",
+        "laravel-mix": "^6.0.39",
         "laravel-vue-pagination": "^2.3.1",
         "moment": "^2.29.1",
         "pusher-js": "^7.0.3",
         "resolve-url-loader": "^4.0.0",
-        "sass": "^1.43.2",
-        "sass-loader": "^12.1.0",
+        "sass": "^1.43.5",
+        "sass-loader": "^12.3.0",
         "vue": "^2.6.14",
         "vue-deepset": "^0.6.3",
         "vue-loader": "^15.9.8",
-        "vue-router": "^3.5.2",
+        "vue-router": "^3.5.3",
         "vue-template-compiler": "^2.6.14"
     }
 }

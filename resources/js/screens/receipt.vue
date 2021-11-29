@@ -276,15 +276,6 @@
                 return !this.receipt.data.client.email
             },
 
-            selectConnections() {
-                return [
-                    { value: null, text: 'автоопределение' },
-                    ...this.buildOptions(
-                        this.connections,
-                        ([name, data]) => ({ value: name, text: data.display_name })
-                    )]
-            },
-
             companyEmailPlaceholder() {
                 return this.connections[this.receipt.connection]?.company?.email ?? 'contact@myshop.com'
             },

@@ -22,6 +22,8 @@ Vue.use(VueRouter)
 
 Vue.prototype.$http = axios.create()
 
+window.qs = require('qs')
+
 window.Pusher = require('pusher-js')
 window.Echo = new Echo({
     broadcaster: 'pusher',

@@ -17,6 +17,15 @@ export default {
         taxSystemOptions() {
             return [{ value: null, text: 'не выбрано' }, ...this.buildOptions(this.dictionary.taxSystems)]
         },
+
+        selectConnections() {
+            return [
+                { value: null, text: 'автоопределение' },
+                ...this.buildOptions(
+                    this.connections,
+                    ([name, data]) => ({ value: name, text: data.display_name })
+                )]
+        },
     },
 
     methods: {

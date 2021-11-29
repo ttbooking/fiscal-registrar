@@ -11,20 +11,41 @@
                     { key: 'state', label: 'Статус' },
                 ],
                 receipts: {},
+                query: {
+                    page: 1,
+                    filter: {
+                        connection: null,
+                    },
+                },
             }
         },
 
         mounted() {
             this.enumConnections()
+            this.populateQuery()
             this.getReceipts()
         },
 
         methods: {
-            getReceipts(page = 1) {
-                this.$http.get(FiscalRegistrar.basePath + '/api/v1/receipts/?page=' + page)
+            populateQuery() {
+                localStorage.query && (this.query = JSON.parse(localStorage.query))
+            },
+
+            getReceipts(page = null) {
+                page && (this.query.page = page)
+                this.$http.get(FiscalRegistrar.basePath + '/api/v1/receipts/?' + qs.stringify(this.query))
                     .then(response => {
                         this.receipts = response.data
                     })
+            },
+        },
+
+        watch: {
+            query: {
+                handler: function (query) {
+                    localStorage.query = JSON.stringify(query)
+                },
+                deep: true
             },
         },
     }
@@ -33,6 +54,18 @@
 <template>
     <div>
         <h2 class="text-center">Кассовые чеки</h2>
+
+        <b-form-group>
+            <b-container fluid>
+                <b-form-row class="my-1">
+                    <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group label="Соединение" label-for="receiptConnection">
+                            <b-form-select id="receiptConnection" size="sm" v-model="query.filter.connection" :options="selectConnections" @change="getReceipts()"></b-form-select>
+                        </b-form-group>
+                    </b-col>
+                </b-form-row>
+            </b-container>
+        </b-form-group>
 
         <b-table small striped hover :items="receipts.data" :fields="fields">
             <template #cell(id)="data">

@@ -10,16 +10,14 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
+use Spatie\QueryBuilder\QueryBuilder;
 use TTBooking\FiscalRegistrar\Http\Requests\ReceiptStoreRequest;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class ReceiptController extends Controller
 {
-    protected Receipt $receipt;
-
-    public function __construct(Receipt $receipt)
+    public function __construct(protected Receipt $receipt)
     {
-        $this->receipt = $receipt;
     }
 
     /**
@@ -29,7 +27,11 @@ class ReceiptController extends Controller
      */
     public function index(): JsonResponse
     {
-        return Response::json($this->receipt->newQuery()->paginate());
+        $receipts = QueryBuilder::for($this->receipt->newQuery())
+            ->allowedFilters('connection')
+            ->paginate();
+
+        return Response::json($receipts);
     }
 
     /**

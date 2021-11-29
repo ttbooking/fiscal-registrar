@@ -968,7 +968,7 @@ fieldset { margin: 0 }
             </div>
             <b-container fluid>
                 <b-form-row class="my-3">
-                    <b-col lg="12">
+                    <b-col sm="8">
                         <b-button v-if="receipt.state === 0" class="mb-1" type="submit" variant="primary" size="sm">Сохранить</b-button>
                         <b-button v-if="receipt.id" class="mb-1" variant="primary" size="sm" :to="{ name: 'new-receipt-from-existing', params: { id: receipt.id } }">Дублировать</b-button>
                         <b-button v-if="receipt.state === 0" class="mb-1" variant="success" size="sm" @click="registerReceipt">Зарегистрировать</b-button>
@@ -976,6 +976,9 @@ fieldset { margin: 0 }
                         <b-button v-if="receipt.id" class="mb-1" size="sm" @click="printReceipt">Распечатать</b-button>
                         <b-button v-if="receipt.result" class="mb-1" size="sm" :href="receipt.result.payload.ofd_receipt_url" target="_blank">Просмотреть в ОФД</b-button>
                         <b-button v-if="receipt.id && receipt.state === 0" class="mb-1" variant="danger" size="sm" @click="deleteReceipt">Удалить</b-button>
+                    </b-col>
+                    <b-col class="text-right" sm="4">
+                        <b-button class="mb-1" size="sm" :to="{ name: 'receipts' }">К списку</b-button>
                     </b-col>
                 </b-form-row>
             </b-container>

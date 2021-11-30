@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
+use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 use TTBooking\FiscalRegistrar\Http\Requests\ReceiptStoreRequest;
 use TTBooking\FiscalRegistrar\Models\Receipt;
@@ -28,7 +29,11 @@ class ReceiptController extends Controller
     public function index(): JsonResponse
     {
         $receipts = QueryBuilder::for($this->receipt->newQuery())
-            ->allowedFilters('connection')
+            ->allowedFilters(
+                AllowedFilter::exact('connection'),
+                AllowedFilter::exact('operation'),
+                AllowedFilter::exact('state'),
+            )
             ->paginate();
 
         return Response::json($receipts);

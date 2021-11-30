@@ -15,6 +15,8 @@
                     page: 1,
                     filter: {
                         connection: null,
+                        operation: null,
+                        state: null,
                     },
                 },
             }
@@ -60,7 +62,17 @@
                 <b-form-row class="my-1">
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="Соединение" label-for="receiptConnection">
-                            <b-form-select id="receiptConnection" size="sm" v-model="query.filter.connection" :options="selectConnections" @change="getReceipts()"></b-form-select>
+                            <b-form-select id="receiptConnection" size="sm" v-model="query.filter.connection" :options="selectConnections" @change="getReceipts(1)"></b-form-select>
+                        </b-form-group>
+                    </b-col>
+                    <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group label="Операция" label-for="receiptOperation">
+                            <b-form-select id="receiptOperation" size="sm" v-model="query.filter.operation" :options="buildOptions(dictionary.operations)" @change="getReceipts(1)"></b-form-select>
+                        </b-form-group>
+                    </b-col>
+                    <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group label="Статус" label-for="receiptState">
+                            <b-form-select id="receiptState" size="sm" v-model="query.filter.state" :options="buildOptions(dictionary.states)" @change="getReceipts(1)"></b-form-select>
                         </b-form-group>
                     </b-col>
                 </b-form-row>

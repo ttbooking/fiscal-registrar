@@ -1,4 +1,5 @@
-<script type="text/ecmascript-6">
+<script>
+    import Receipt from "../models/Receipt"
     import ReceiptItem from '../components/ReceiptItem.vue'
 
     export default {
@@ -10,7 +11,7 @@
             return {
                 ready: false,
                 showPreview: false,
-                receipt: null,
+                receipt: new Receipt,
                 vats: {
                     without_vat: null,
                     with_vat0: null,
@@ -45,10 +46,10 @@
         },
 
         methods: {
-            handleRoute(to, from = null) {
+            async handleRoute(to, from = null) {
                 switch (to.name) {
                     case 'receipt':
-                        this.loadReceipt(to.params.id)
+                        await this.loadReceipt(to.params.id)
                         break
                     case 'new-receipt':
                         this.resetReceipt()
@@ -56,7 +57,7 @@
                     case 'new-receipt-from-existing':
                         from !== null && from.name === 'receipt' && +to.params.id === +from.params.id
                             ? this.shrinkReceipt()
-                            : this.loadReceipt(to.params.id, true)
+                            : await this.loadReceipt(to.params.id, true)
                 }
             },
 
@@ -69,7 +70,7 @@
             },
 
             resetReceipt() {
-                this.receipt = {
+                this.receipt = new Receipt({
                     id: null,
                     state: 0,
                     connection: null,
@@ -108,7 +109,7 @@
                         additional_user_props: null,
                     },
                     result: null,
-                }
+                })
                 this.ready = true
             },
 
@@ -120,60 +121,47 @@
                 this.receipt.result = null
             },
 
-            loadReceipt(id, asTemplate = false) {
+            async loadReceipt(id, asTemplate = false) {
                 this.ready = false
-
-                this.$http.get(FiscalRegistrar.basePath + '/api/v1/receipts/' + id)
-                    .then(response => {
-                        this.receipt = response.data
-                        asTemplate && this.shrinkReceipt()
-                        this.ready = true
-                    })
+                this.receipt = await Receipt.find(id)
+                asTemplate && this.shrinkReceipt()
+                this.ready = true
             },
 
-            saveReceipt() {
-                return this.receipt.id
-                    ? this.$http.put(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id, this.receipt)
-                    : this.$http.post(FiscalRegistrar.basePath + '/api/v1/receipts/', this.receipt)
-                        .then(response => response.data.id && this.$router.replace(
-                            { name: 'receipt', params: { id: response.data.id } },
-                            () => this.receipt = response.data
-                        ))
-                        .catch(error => Object.values(error.response.data.errors).forEach(
-                            msgBag => this.$bvToast.toast(
-                                msgBag.map(msg => this.$createElement('div', msg)), {
-                                    toaster: 'b-toaster-bottom-right',
-                                    variant: 'danger',
-                                    solid: true,
-                                    noCloseButton: true,
-                                }
-                            )
-                        ))
+            async saveReceipt() {
+                try {
+                    this.receipt = await this.receipt.save()
+                    this.receipt.id && this.$router.replace(
+                        { name: 'receipt', params: { id: this.receipt.id } },
+                    )
+                } catch (error) {
+                    Object.values(error.response.data.errors).forEach(
+                        msgBag => this.$bvToast.toast(
+                            msgBag.map(msg => this.$createElement('div', msg)), {
+                                toaster: 'b-toaster-bottom-right',
+                                variant: 'danger',
+                                solid: true,
+                                noCloseButton: true,
+                            }
+                        )
+                    )
+                }
             },
 
-            registerReceipt() {
-                this.saveReceipt().then(response => {
-                    this.$http.post(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id + '/register')
-                        .then(() => {
-                            this.receipt.state = 1
-                            //setTimeout(() => this.syncReceipt(this.receipt.id), 1000)
-                        })
-                })
+            async registerReceipt() {
+                await this.saveReceipt()
+                await this.receipt.register()
             },
 
-            syncReceipt() {
-                this.$http.get(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id + '/report')
-                    .then(response => {
-                        this.receipt.result = response.data
-                        this.receipt.state = 2
-                    })
+            async syncReceipt() {
+                await this.receipt.sync()
             },
 
-            deleteReceipt() {
-                confirm('Удалить чек?') &&
-
-                this.$http.delete(FiscalRegistrar.basePath + '/api/v1/receipts/' + this.receipt.id)
-                    .then(response => this.$router.replace({ name: 'receipts' }))
+            async deleteReceipt() {
+                if (confirm('Удалить чек?')) {
+                    await this.receipt.delete()
+                    this.$router.replace({ name: 'receipts' })
+                }
             },
 
             addItem() {

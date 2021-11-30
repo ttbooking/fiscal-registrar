@@ -4,6 +4,7 @@ import * as VueDeepSet from 'vue-deepset'
 import Base from './base'
 import Echo from 'laravel-echo'
 import axios from 'axios'
+import { Model } from 'vue-api-query'
 import Routes from './routes'
 import VueRouter from 'vue-router'
 import 'bootstrap'
@@ -21,6 +22,7 @@ Vue.use(VueDeepSet)
 Vue.use(VueRouter)
 
 Vue.prototype.$http = axios.create()
+Model.$http = axios
 
 window.qs = require('qs')
 

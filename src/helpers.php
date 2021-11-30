@@ -33,7 +33,7 @@ if (! function_exists('receipt')) {
 
         // Extract receipt DTO from model
         elseif ($data instanceof Model) {
-            $data = $data->data;
+            $data = $data->payload;
         }
 
         // Make new receipt from receipt DTO

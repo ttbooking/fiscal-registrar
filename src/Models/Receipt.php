@@ -20,7 +20,7 @@ use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
  * @property Enums\Operation|null $operation
  * @property string|null $external_id
  * @property string|null $internal_id
- * @property DTO\Receipt $data
+ * @property DTO\Receipt $payload
  * @property DTO\Result|null $result
  * @property-read string|null $fn_number
  * @property-read int|null $fiscal_document_number
@@ -47,7 +47,7 @@ class Receipt extends Model implements StatefulFiscalRegistrar
 
     protected $casts = [
         'operation' => Enums\Operation::class,
-        'data' => DTO\Receipt::class,
+        'payload' => DTO\Receipt::class,
         'result' => DTO\Result::class,
     ];
 
@@ -88,7 +88,7 @@ class Receipt extends Model implements StatefulFiscalRegistrar
     public function register(
         Enums\Operation $operation = null,
         string $externalId = null,
-        DTO\Receipt $data = null
+        DTO\Receipt $payload = null
     ): string {
         if ($this->state !== self::STATE_CREATED) {
             throw new StateException('Receipt has already been registered.');
@@ -96,16 +96,16 @@ class Receipt extends Model implements StatefulFiscalRegistrar
 
         $this->operation = $operation ?? $this->operation;
         $this->external_id = $externalId ?? $this->external_id ?? $this->generateId();
-        $this->data = $data ?? $this->data;
+        $this->payload = $payload ?? $this->payload;
 
-        if (! isset($this->operation, $this->external_id, $this->data)) {
+        if (! isset($this->operation, $this->external_id, $this->payload)) {
             throw new StateException('Insufficient parameters for operation.');
         }
 
         $this->save();
 
         return FiscalRegistrar::connection($this->getAttribute('connection'))
-            ->register($this->operation, $this->external_id, $this->data);
+            ->register($this->operation, $this->external_id, $this->payload);
     }
 
     public function report(string $id = null, bool $force = false): ?DTO\Result

@@ -20,7 +20,7 @@ class CreateReceiptsTable extends Migration
             $table->string('operation', 32)->nullable();
             $table->string('external_id', 128)->nullable()->index();
             $table->string('internal_id', 128)->nullable()->index();
-            $table->json('data');
+            $table->json('payload');
             $table->json('result')->nullable();
             $table->string('fn_number')->virtualAs('result->>"$.payload.fn_number"')->index();
             $table->unsignedInteger('fiscal_document_number')->virtualAs('result->>"$.payload.fiscal_document_number"');

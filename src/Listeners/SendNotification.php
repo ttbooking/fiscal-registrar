@@ -33,8 +33,8 @@ class SendNotification implements ShouldQueue
     public function handle(Processed $event): void
     {
         $this->notifiable
-            ->route('mail', $event->receipt->data->client->email)
-            ->route('nexmo', $event->receipt->data->client->phone)
+            ->route('mail', $event->receipt->payload->client->email)
+            ->route('nexmo', $event->receipt->payload->client->phone)
             ->notify(new ReceiptProcessed($event->receipt));
     }
 

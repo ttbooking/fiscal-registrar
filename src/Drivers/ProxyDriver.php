@@ -19,7 +19,7 @@ class ProxyDriver extends Driver implements SupportsCallbacks
         parent::__construct($urlGenerator, $config, $connection);
     }
 
-    public function register(Operation $operation, string $externalId, Receipt $data): string
+    public function register(Operation $operation, string $externalId, Receipt $payload): string
     {
         // TODO: Implement register() method.
     }

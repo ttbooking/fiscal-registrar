@@ -23,7 +23,7 @@ trait ReceiptRenderer
 
         static::setupReceiptTableTitle($table, $receipt);
         static::setupReceiptTableHeader($table, $receipt);
-        foreach ($receipt->data->items as $item) {
+        foreach ($receipt->payload->items as $item) {
             static::addReceiptTableItem($table, $item);
         }
         static::setupReceiptTableTotal($table, $receipt);
@@ -58,11 +58,11 @@ trait ReceiptRenderer
         $number = isset($number) ? ' '.static::trans('shared.#').$number : '';
 
         return $table->setRows([
-            [new TableCell($receipt->data->company->name ?? '-', $options)],
-            [new TableCell($receipt->data->company->payment_address ?? '-', $options)],
-            [new TableCell(static::trans('receipt.company.inn').' '.($receipt->data->company->inn ?? '-'), $options)],
+            [new TableCell($receipt->payload->company->name ?? '-', $options)],
+            [new TableCell($receipt->payload->company->payment_address ?? '-', $options)],
+            [new TableCell(static::trans('receipt.company.inn').' '.($receipt->payload->company->inn ?? '-'), $options)],
             [new TableCell(static::trans('receipt.company.payment_site').': '
-                .($receipt->data->company->payment_site ?? '-'), $options)],
+                .($receipt->payload->company->payment_site ?? '-'), $options)],
             [new TableCell('<comment>'.Str::upper(static::trans('receipt.title')).$number.'</comment>', $options)],
             new TableSeparator,
         ]);
@@ -73,9 +73,9 @@ trait ReceiptRenderer
         return $table->addRows([
             [$receipt->operation?->getDescription() ?? '-', $receipt->result?->payload->receipt_datetime->format('d.m.Y H:i') ?? '-'],
             [static::trans('result.shift_number'), $receipt->result?->payload->shift_number ?? '-'],
-            [static::trans('receipt.company.tax_system'), $receipt->data->company->tax_system?->getDescription('short') ?? '-'],
-            [static::trans('receipt.client.phone_or_email'), $receipt->data->client->email ?? $receipt->data->client->phone],
-            [static::trans('receipt.company.email'), $receipt->data->company->email ?? '-'],
+            [static::trans('receipt.company.tax_system'), $receipt->payload->company->tax_system?->getDescription('short') ?? '-'],
+            [static::trans('receipt.client.phone_or_email'), $receipt->payload->client->email ?? $receipt->payload->client->phone],
+            [static::trans('receipt.company.email'), $receipt->payload->company->email ?? '-'],
             [static::trans('result.device_code'), $receipt->result?->extra->device_code ?? '-'],
             [static::trans('result.online_attribute'), static::trans('shared.yes')],
             new TableSeparator,
@@ -100,15 +100,15 @@ trait ReceiptRenderer
 
     protected static function setupReceiptTableTotal(Table $table, Receipt $receipt): Table
     {
-        $vats = $receipt->data->getVats();
+        $vats = $receipt->payload->getVats();
 
         return $table->addRows([
-            [static::trans('receipt.total'), sprintf('%.2f', $receipt->data->total)],
-            [static::trans('receipt.payments.cash'), sprintf('%.2f', $receipt->data->payments->cash)],
-            [static::trans('receipt.payments.electronic'), sprintf('%.2f', $receipt->data->payments->electronic)],
-            [static::trans('receipt.payments.prepaid'), sprintf('%.2f', $receipt->data->payments->prepaid)],
-            [static::trans('receipt.payments.postpaid'), sprintf('%.2f', $receipt->data->payments->postpaid)],
-            [static::trans('receipt.payments.other'), sprintf('%.2f', $receipt->data->payments->other)],
+            [static::trans('receipt.total'), sprintf('%.2f', $receipt->payload->total)],
+            [static::trans('receipt.payments.cash'), sprintf('%.2f', $receipt->payload->payments->cash)],
+            [static::trans('receipt.payments.electronic'), sprintf('%.2f', $receipt->payload->payments->electronic)],
+            [static::trans('receipt.payments.prepaid'), sprintf('%.2f', $receipt->payload->payments->prepaid)],
+            [static::trans('receipt.payments.postpaid'), sprintf('%.2f', $receipt->payload->payments->postpaid)],
+            [static::trans('receipt.payments.other'), sprintf('%.2f', $receipt->payload->payments->other)],
             $vats->vat20 ? [static::trans('receipt.vats.vat20'), sprintf('%.2f', $vats->vat20)] : [],
             $vats->vat10 ? [static::trans('receipt.vats.vat10'), sprintf('%.2f', $vats->vat10)] : [],
             $vats->with_vat0 ? [static::trans('receipt.vats.with_vat0'), sprintf('%.2f', $vats->with_vat0)] : [],

@@ -14,12 +14,12 @@ interface FiscalRegistrar
     /**
      * @param  Operation  $operation
      * @param  string  $externalId
-     * @param  Receipt  $data
+     * @param  Receipt  $payload
      * @return string
      *
      * @throws DriverException
      */
-    public function register(Operation $operation, string $externalId, Receipt $data): string;
+    public function register(Operation $operation, string $externalId, Receipt $payload): string;
 
     /**
      * @param  string  $id

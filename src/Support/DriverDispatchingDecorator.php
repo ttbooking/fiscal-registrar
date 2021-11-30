@@ -42,19 +42,19 @@ class DriverDispatchingDecorator extends Decorator implements
     /**
      * @param  Operation  $operation
      * @param  string  $externalId
-     * @param  DTO\Receipt  $data
+     * @param  DTO\Receipt  $payload
      * @return string
      *
      * @throws Exceptions\FiscalRegistrarException
      */
-    public function register(Operation $operation, string $externalId, DTO\Receipt $data): string
+    public function register(Operation $operation, string $externalId, DTO\Receipt $payload): string
     {
         $receipt = $this->resolveOrMakeReceipt(...func_get_args());
 
         $this->event(new Events\Registering($receipt));
 
-        $receipt->internal_id = $this->getDecoratedInstance()->register($operation, $externalId, $data);
-        $receipt->data = $data;
+        $receipt->internal_id = $this->getDecoratedInstance()->register($operation, $externalId, $payload);
+        $receipt->payload = $payload;
         $receipt->state = Receipt::STATE_REGISTERED;
         $receipt->save();
 
@@ -87,15 +87,15 @@ class DriverDispatchingDecorator extends Decorator implements
     /**
      * @param  Operation  $operation
      * @param  string  $externalId
-     * @param  DTO\Receipt  $data
+     * @param  DTO\Receipt  $payload
      * @return Receipt|Model
      */
-    protected function resolveOrMakeReceipt(Operation $operation, string $externalId, DTO\Receipt $data): Receipt
+    protected function resolveOrMakeReceipt(Operation $operation, string $externalId, DTO\Receipt $payload): Receipt
     {
         return $this->receipt->newQuery()->updateOrCreate([
             'connection' => $this->getConnectionName(),
             'external_id' => $externalId,
-        ], compact('operation', 'data'));
+        ], compact('operation', 'payload'));
     }
 
     /**

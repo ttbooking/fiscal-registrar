@@ -7,7 +7,7 @@
                     { key: 'created_at', label: 'Время' },
                     { key: 'connection', label: 'Соединение' },
                     { key: 'operation', label: 'Тип' },
-                    { key: 'data.total', label: 'Сумма' },
+                    { key: 'payload.total', label: 'Сумма' },
                     { key: 'state', label: 'Статус' },
                 ],
                 receipts: {},
@@ -92,7 +92,7 @@
             <template #cell(operation)="data">
                 {{ data.value ? dictionary.operations[data.value] : '-' }}
             </template>
-            <template #cell(data.total)="data">
+            <template #cell(payload.total)="data">
                 <div class="text-right">{{ data.value }}</div>
             </template>
             <template #cell(state)="data">

@@ -9,7 +9,7 @@ use TTBooking\FiscalRegistrar\Contracts\Receipt as ReceiptContract;
 use TTBooking\FiscalRegistrar\DTO;
 
 /**
- * @method static ReceiptContract make(DTO\Receipt $data)
+ * @method static ReceiptContract make(DTO\Receipt $payload)
  * @method static ReceiptContract resolve(mixed $id)
  */
 class Receipt extends Facade

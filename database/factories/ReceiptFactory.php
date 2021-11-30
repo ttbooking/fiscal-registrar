@@ -41,7 +41,7 @@ class ReceiptFactory extends Factory
             'connection' => $this->faker->randomElement($connections),
             'operation' => $this->faker->randomElement(Operation::values()),
             'external_id' => $this->faker->uuid(),
-            'data' => fn () => new DTO\Receipt(
+            'payload' => fn () => new DTO\Receipt(
 
                 client: new DTO\Receipt\Client(
                     email: config('fiscal-registrar.test_email') ?? $this->faker->safeEmail(),

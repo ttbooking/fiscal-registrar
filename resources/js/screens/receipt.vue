@@ -77,7 +77,7 @@
                     operation: null,
                     external_id: null,
                     internal_id: null,
-                    data: {
+                    payload: {
                         client: {
                             email: null,
                             phone: null,
@@ -165,7 +165,7 @@
             },
 
             addItem() {
-                this.receipt.data.items.push({
+                this.receipt.payload.items.push({
                     agent_info: null,
                     country_code: null,
                     declaration_number: null,
@@ -188,7 +188,7 @@
             },
 
             removeItem(id) {
-                this.receipt.data.items.splice(id, 1)
+                this.receipt.payload.items.splice(id, 1)
             },
 
             getVats(calc = false) {
@@ -202,7 +202,7 @@
                 }
 
                 if (calc) {
-                    for (const item of this.receipt.data.items) {
+                    for (const item of this.receipt.payload.items) {
                         switch (item?.vat.type ?? 'none') {
                             case 'vat20':
                             case 'vat18':
@@ -253,15 +253,15 @@
             },
 
             model() {
-                return this.$deepModel(this.receipt.data)
+                return this.$deepModel(this.receipt.payload)
             },
 
             isClientEmailRequired() {
-                return !this.receipt.data.client.phone
+                return !this.receipt.payload.client.phone
             },
 
             isClientPhoneRequired() {
-                return !this.receipt.data.client.email
+                return !this.receipt.payload.client.email
             },
 
             companyEmailPlaceholder() {
@@ -286,77 +286,77 @@
 
             vatsPlaceholder() {
                 return Object.fromEntries(
-                    Object.entries(this.getVats(!this.receipt.data.vats)).map(([key, val]) => [key, String(val)])
+                    Object.entries(this.getVats(!this.receipt.payload.vats)).map(([key, val]) => [key, String(val)])
                 )
             },
 
             vatsWithoutVat: {
                 get: function () {
-                    return this.receipt.data.vats?.without_vat ?? null
+                    return this.receipt.payload.vats?.without_vat ?? null
                 },
                 set: function (val) {
-                    this.receipt.data.vats ??= this.vats
-                    this.receipt.data.vats.without_vat = val || null
+                    this.receipt.payload.vats ??= this.vats
+                    this.receipt.payload.vats.without_vat = val || null
                 }
             },
 
             vatsWithVat0: {
                 get: function () {
-                    return this.receipt.data.vats?.with_vat0 ?? null
+                    return this.receipt.payload.vats?.with_vat0 ?? null
                 },
                 set: function (val) {
-                    this.receipt.data.vats ??= this.vats
-                    this.receipt.data.vats.with_vat0 = val || null
+                    this.receipt.payload.vats ??= this.vats
+                    this.receipt.payload.vats.with_vat0 = val || null
                 }
             },
 
             vatsVat10: {
                 get: function () {
-                    return this.receipt.data.vats?.vat10 ?? null
+                    return this.receipt.payload.vats?.vat10 ?? null
                 },
                 set: function (val) {
-                    this.receipt.data.vats ??= this.vats
-                    this.receipt.data.vats.vat10 = val || null
+                    this.receipt.payload.vats ??= this.vats
+                    this.receipt.payload.vats.vat10 = val || null
                 }
             },
 
             vatsVat20: {
                 get: function () {
-                    return this.receipt.data.vats?.vat20 ?? null
+                    return this.receipt.payload.vats?.vat20 ?? null
                 },
                 set: function (val) {
-                    this.receipt.data.vats ??= this.vats
-                    this.receipt.data.vats.vat20 = val || null
+                    this.receipt.payload.vats ??= this.vats
+                    this.receipt.payload.vats.vat20 = val || null
                 }
             },
 
             vatsVat110: {
                 get: function () {
-                    return this.receipt.data.vats?.vat110 ?? null
+                    return this.receipt.payload.vats?.vat110 ?? null
                 },
                 set: function (val) {
-                    this.receipt.data.vats ??= this.vats
-                    this.receipt.data.vats.vat110 = val || null
+                    this.receipt.payload.vats ??= this.vats
+                    this.receipt.payload.vats.vat110 = val || null
                 }
             },
 
             vatsVat120: {
                 get: function () {
-                    return this.receipt.data.vats?.vat120 ?? null
+                    return this.receipt.payload.vats?.vat120 ?? null
                 },
                 set: function (val) {
-                    this.receipt.data.vats ??= this.vats
-                    this.receipt.data.vats.vat120 = val || null
+                    this.receipt.payload.vats ??= this.vats
+                    this.receipt.payload.vats.vat120 = val || null
                 }
             },
 
             agentType: {
                 get: function () {
-                    return this.receipt.data.agent_info?.type ?? null
+                    return this.receipt.payload.agent_info?.type ?? null
                 },
                 set: function (val) {
-                    this.receipt.data.agent_info ??= this.agentInfo
-                    this.receipt.data.agent_info.type = val || null
+                    this.receipt.payload.agent_info ??= this.agentInfo
+                    this.receipt.payload.agent_info.type = val || null
                 }
             },
 
@@ -420,24 +420,24 @@
                this.handleRoute(to, from)
             },
 
-            'receipt.data.items': {
+            'receipt.payload.items': {
                 handler: function (items) {
-                    this.receipt.data.total = items.reduce((total, item) => total + item.sum, 0)
+                    this.receipt.payload.total = items.reduce((total, item) => total + item.sum, 0)
                 },
                 deep: true
             },
 
-            'receipt.data.vats': {
+            'receipt.payload.vats': {
                 handler: function (vats) {
                     if (vats === null) return
-                    Object.values(vats).every(vat => vat === null) && (this.receipt.data.vats = null)
+                    Object.values(vats).every(vat => vat === null) && (this.receipt.payload.vats = null)
                 },
                 deep: true
             },
 
-            'receipt.data.agent_info': {
+            'receipt.payload.agent_info': {
                 handler: function (agent_info) {
-                    this.receipt.data.agent_info = agent_info?.type === null ? null : this.emptify(agent_info)
+                    this.receipt.payload.agent_info = agent_info?.type === null ? null : this.emptify(agent_info)
                 },
                 deep: true
             },
@@ -503,22 +503,22 @@ fieldset { margin: 0 }
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Электронный адрес" label-for="clientEmail" description="тег 1008" :class="isClientEmailRequired && 'required'">
-                                                <b-form-input id="clientEmail" type="email" size="sm" placeholder="user@domain.com" :required="isClientEmailRequired" v-model="receipt.data.client.email"></b-form-input>
+                                                <b-form-input id="clientEmail" type="email" size="sm" placeholder="user@domain.com" :required="isClientEmailRequired" v-model="receipt.payload.client.email"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Телефон" label-for="clientPhone" description="тег 1008" :class="isClientPhoneRequired && 'required'">
-                                                <b-form-input id="clientPhone" type="tel" size="sm" placeholder="+79001234567" :required="isClientPhoneRequired" v-model="receipt.data.client.phone"></b-form-input>
+                                                <b-form-input id="clientPhone" type="tel" size="sm" placeholder="+79001234567" :required="isClientPhoneRequired" v-model="receipt.payload.client.phone"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Наименование" label-for="clientName" description="тег 1227">
-                                                <b-form-input id="clientName" type="text" size="sm" placeholder="Иван Иванович Иванов" v-model="receipt.data.client.name"></b-form-input>
+                                                <b-form-input id="clientName" type="text" size="sm" placeholder="Иван Иванович Иванов" v-model="receipt.payload.client.name"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="ИНН" label-for="clientInn" description="тег 1228">
-                                                <b-form-input id="clientInn" type="text" size="sm" placeholder="1234567890" pattern="\d{10}|\d{12}" maxlength="12" v-model="receipt.data.client.inn"></b-form-input>
+                                                <b-form-input id="clientInn" type="text" size="sm" placeholder="1234567890" pattern="\d{10}|\d{12}" maxlength="12" v-model="receipt.payload.client.inn"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                     </b-form-row>
@@ -542,32 +542,32 @@ fieldset { margin: 0 }
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Электронный адрес" label-for="companyEmail" description="тег 1117">
-                                                <b-form-input id="companyEmail" type="email" size="sm" :placeholder="companyEmailPlaceholder" v-model="receipt.data.company.email"></b-form-input>
+                                                <b-form-input id="companyEmail" type="email" size="sm" :placeholder="companyEmailPlaceholder" v-model="receipt.payload.company.email"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Наименование" label-for="companyName" description="тег 1048">
-                                                <b-form-input id="companyName" type="text" size="sm" :placeholder="companyNamePlaceholder" v-model="receipt.data.company.name"></b-form-input>
+                                                <b-form-input id="companyName" type="text" size="sm" :placeholder="companyNamePlaceholder" v-model="receipt.payload.company.name"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="ИНН" label-for="companyInn" description="тег 1018">
-                                                <b-form-input id="companyInn" type="text" size="sm" :placeholder="companyInnPlaceholder" pattern="\d{10}|\d{12}" maxlength="12" v-model="receipt.data.company.inn"></b-form-input>
+                                                <b-form-input id="companyInn" type="text" size="sm" :placeholder="companyInnPlaceholder" pattern="\d{10}|\d{12}" maxlength="12" v-model="receipt.payload.company.inn"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Система налогообложения" label-for="taxSystem" description="тег 1055">
-                                                <b-form-select id="taxSystem" size="sm" v-model="receipt.data.company.tax_system" :options="taxSystemOptions"></b-form-select>
+                                                <b-form-select id="taxSystem" size="sm" v-model="receipt.payload.company.tax_system" :options="taxSystemOptions"></b-form-select>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Место расчетов" label-for="companyPaymentSite" description="тег 1187">
-                                                <b-form-input id="companyPaymentSite" type="text" size="sm" :placeholder="companyPaymentSitePlaceholder" v-model="receipt.data.company.payment_site"></b-form-input>
+                                                <b-form-input id="companyPaymentSite" type="text" size="sm" :placeholder="companyPaymentSitePlaceholder" v-model="receipt.payload.company.payment_site"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Адрес расчетов" label-for="companyPaymentAddress" description="тег 1009">
-                                                <b-form-input id="companyPaymentAddress" type="text" size="sm" :placeholder="companyPaymentAddressPlaceholder" v-model="receipt.data.company.payment_address"></b-form-input>
+                                                <b-form-input id="companyPaymentAddress" type="text" size="sm" :placeholder="companyPaymentAddressPlaceholder" v-model="receipt.payload.company.payment_address"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                     </b-form-row>
@@ -708,7 +708,7 @@ fieldset { margin: 0 }
                             <b-card-text>
                                 В документе должна быть как минимум одна позиция.
                             </b-card-text>
-                            <template v-for="(item, id) in receipt.data.items">
+                            <template v-for="(item, id) in receipt.payload.items">
                                 <receipt-item :key="id" :item="item" :disabled="receipt.state !== 0" @remove="removeItem(id)"></receipt-item>
                                 <hr />
                             </template>
@@ -716,7 +716,7 @@ fieldset { margin: 0 }
                                 <b-form-row class="my-1">
                                     <b-col align-self="end" lg="1" md="2" sm="3">
                                         <b-form-group label="Всего на сумму" label-for="total" description="тег 1020" class="required">
-                                            <b-form-input id="total" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="receipt.data.total" :disabled="receipt.state !== 0"></b-form-input>
+                                            <b-form-input id="total" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="receipt.payload.total" :disabled="receipt.state !== 0"></b-form-input>
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-sm-3" align-self="end" lg="1" md="2" sm="3">
@@ -742,27 +742,27 @@ fieldset { margin: 0 }
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Наличными" label-for="paymentCash" description="тег 1031">
-                                                <b-form-input id="paymentCash" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.data.payments.cash"></b-form-input>
+                                                <b-form-input id="paymentCash" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.payload.payments.cash"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Безналичными" label-for="paymentElectronic" description="тег 1081">
-                                                <b-form-input id="paymentElectronic" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.data.payments.electronic"></b-form-input>
+                                                <b-form-input id="paymentElectronic" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.payload.payments.electronic"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Предоплатой" label-for="paymentPrepaid" description="тег 1215">
-                                                <b-form-input id="paymentPrepaid" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.data.payments.prepaid"></b-form-input>
+                                                <b-form-input id="paymentPrepaid" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.payload.payments.prepaid"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Постоплатой" label-for="paymentPostpaid" description="тег 1216">
-                                                <b-form-input id="paymentPostpaid" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.data.payments.postpaid"></b-form-input>
+                                                <b-form-input id="paymentPostpaid" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.payload.payments.postpaid"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Встр. предст." label-for="paymentOther" description="тег 1217">
-                                                <b-form-input id="paymentOther" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.data.payments.other"></b-form-input>
+                                                <b-form-input id="paymentOther" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.payload.payments.other"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                     </b-form-row>
@@ -780,7 +780,7 @@ fieldset { margin: 0 }
                         <b-card-body>
                             <b-card-text>
                                 Необходимо передать либо сумму налога на позицию, либо сумму налога на чек. Если будет переданы и сумма налога на позицию и сумма налога на чек, сервис учтет только сумму налога на чек.
-                                <span v-if="receipt.data.vats">В данный момент используются суммы налога на чек. Для возврата к использованию сумм налога на позицию, очистите все поля в этом разделе.</span>
+                                <span v-if="receipt.payload.vats">В данный момент используются суммы налога на чек. Для возврата к использованию сумм налога на позицию, очистите все поля в этом разделе.</span>
                                 <span v-else>В данный момент используются суммы налога на позицию. В полях ниже можно увидеть их расчетные величины.</span>
                             </b-card-text>
                             <b-form-group :disabled="receipt.state !== 0">
@@ -834,12 +834,12 @@ fieldset { margin: 0 }
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Доп. реквизит чека" label-for="additionalCheckProps" description="тег 1192">
-                                                <b-form-input id="additionalCheckProps" type="text" size="sm" maxlength="16" v-model="receipt.data.additional_check_props"></b-form-input>
+                                                <b-form-input id="additionalCheckProps" type="text" size="sm" maxlength="16" v-model="receipt.payload.additional_check_props"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="3" md="5" sm="8">
                                             <b-form-group label="ФИО кассира" label-for="cashier" description="тег 1021">
-                                                <b-form-input id="cashier" type="text" size="sm" maxlength="64" v-model="receipt.data.cashier"></b-form-input>
+                                                <b-form-input id="cashier" type="text" size="sm" maxlength="64" v-model="receipt.payload.cashier"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="3" md="4" sm="6">

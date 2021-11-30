@@ -44,11 +44,11 @@ class AtolDriver extends Driver implements SupportsCallbacks
         $this->cache = $cache;
     }
 
-    public function register(Operation $operation, string $externalId, Receipt $data): string
+    public function register(Operation $operation, string $externalId, Receipt $payload): string
     {
         $operationString = Str::camel($operation->getValue());
 
-        $registerRequest = $this->makeRequest($externalId, $data);
+        $registerRequest = $this->makeRequest($externalId, $payload);
 
         $force = false;
         do try {

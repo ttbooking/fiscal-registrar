@@ -14,12 +14,12 @@ interface StatefulFiscalRegistrar extends FiscalRegistrar
     /**
      * @param  Operation|null  $operation
      * @param  string|null  $externalId
-     * @param  Receipt|null  $data
+     * @param  Receipt|null  $payload
      * @return string
      *
      * @throws DriverException
      */
-    public function register(Operation $operation = null, string $externalId = null, Receipt $data = null): string;
+    public function register(Operation $operation = null, string $externalId = null, Receipt $payload = null): string;
 
     /**
      * @param  string|null  $id

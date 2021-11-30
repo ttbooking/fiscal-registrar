@@ -77,10 +77,10 @@
             $number = $receipt->result?->payload->fiscal_receipt_number ?? null;
             $number = isset($number) ? ' '.__('fiscal-registrar::main.shared.#').$number : '';
         @endphp
-        <tr><td colspan="2">{{ $receipt->data->company->name ?? $connectionConfig['company']['name'] ?? '-' }}</td></tr>
-        <tr><td colspan="2">{{ $receipt->data->company->payment_address ?? $connectionConfig['company']['payment_address'] ?? '-' }}</td></tr>
-        <tr><td colspan="2">{{ __('fiscal-registrar::main.receipt.company.inn').' '.($receipt->data->company->inn ?? $connectionConfig['company']['inn'] ?? '-') }}</td></tr>
-        <tr><td colspan="2">{{ __('fiscal-registrar::main.receipt.company.payment_site').': '.($receipt->data->company->payment_site ?? $connectionConfig['company']['payment_site'] ?? '-') }}</td></tr>
+        <tr><td colspan="2">{{ $receipt->payload->company->name ?? $connectionConfig['company']['name'] ?? '-' }}</td></tr>
+        <tr><td colspan="2">{{ $receipt->payload->company->payment_address ?? $connectionConfig['company']['payment_address'] ?? '-' }}</td></tr>
+        <tr><td colspan="2">{{ __('fiscal-registrar::main.receipt.company.inn').' '.($receipt->payload->company->inn ?? $connectionConfig['company']['inn'] ?? '-') }}</td></tr>
+        <tr><td colspan="2">{{ __('fiscal-registrar::main.receipt.company.payment_site').': '.($receipt->payload->company->payment_site ?? $connectionConfig['company']['payment_site'] ?? '-') }}</td></tr>
         <tr><th colspan="2">{{ Str::upper(__('fiscal-registrar::main.receipt.title')).$number }}</th></tr>
         </thead>
         <tbody>
@@ -94,15 +94,15 @@
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.company.tax_system') }}</td>
-            <td>{{ $receipt->data->company->tax_system?->getDescription('short') ?? (isset($connectionConfig['company']['tax_system']) ? __('fiscal-registrar::enum.tax_system_short.'.$connectionConfig['company']['tax_system']) : '-') }}</td>
+            <td>{{ $receipt->payload->company->tax_system?->getDescription('short') ?? (isset($connectionConfig['company']['tax_system']) ? __('fiscal-registrar::enum.tax_system_short.'.$connectionConfig['company']['tax_system']) : '-') }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.client.phone_or_email') }}</td>
-            <td>{{ $receipt->data->client->email ?? $receipt->data->client->phone ?? '-' }}</td>
+            <td>{{ $receipt->payload->client->email ?? $receipt->payload->client->phone ?? '-' }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.company.email') }}</td>
-            <td>{{ $receipt->data->company->email ?? $connectionConfig['company']['email'] ?? '-' }}</td>
+            <td>{{ $receipt->payload->company->email ?? $connectionConfig['company']['email'] ?? '-' }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.result.device_code') }}</td>
@@ -112,7 +112,7 @@
             <td>{{ __('fiscal-registrar::main.shared.yes') }}</td>
         </tr>
         </tbody>
-        @foreach ($receipt->data->items as $item)
+        @foreach ($receipt->payload->items as $item)
             <tbody>
             <tr><th colspan="2">{{ $item->name }}</th></tr>
             <tr><td></td><td>{{ sprintf('%d x %.2f', $item->quantity, $item->price) }}</td></tr>
@@ -143,29 +143,29 @@
         <tbody>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.total') }}</td>
-            <td>{{ sprintf('%.2f', $receipt->data->total) }}</td>
+            <td>{{ sprintf('%.2f', $receipt->payload->total) }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.payments.cash') }}</td>
-            <td>{{ sprintf('%.2f', $receipt->data->payments->cash) }}</td>
+            <td>{{ sprintf('%.2f', $receipt->payload->payments->cash) }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.payments.electronic') }}</td>
-            <td>{{ sprintf('%.2f', $receipt->data->payments->electronic) }}</td>
+            <td>{{ sprintf('%.2f', $receipt->payload->payments->electronic) }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.payments.prepaid') }}</td>
-            <td>{{ sprintf('%.2f', $receipt->data->payments->prepaid) }}</td>
+            <td>{{ sprintf('%.2f', $receipt->payload->payments->prepaid) }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.payments.postpaid') }}</td>
-            <td>{{ sprintf('%.2f', $receipt->data->payments->postpaid) }}</td>
+            <td>{{ sprintf('%.2f', $receipt->payload->payments->postpaid) }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.payments.other') }}</td>
-            <td>{{ sprintf('%.2f', $receipt->data->payments->other) }}</td>
+            <td>{{ sprintf('%.2f', $receipt->payload->payments->other) }}</td>
         </tr>
-        @php ($vats = $receipt->data->getVats())
+        @php ($vats = $receipt->payload->getVats())
         @if ($vats->vat20)
             <tr>
                 <td>{{ __('fiscal-registrar::main.receipt.vats.vat20') }}</td>

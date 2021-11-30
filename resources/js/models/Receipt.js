@@ -25,31 +25,4 @@ export default class Receipt extends Model {
         this.state = 2
         return this
     }
-
-    _create() {
-        return this.request(
-            this._reqConfig(
-                {
-                    method: 'POST',
-                    url: this.endpoint(),
-                    data: this
-                },
-                { forceMethod: true }
-            )
-        ).then((response) => {
-            return this._applyInstance(response.data)
-        })
-    }
-
-    _update() {
-        return this.request(
-            this._reqConfig({
-                method: 'PUT',
-                url: this.endpoint(),
-                data: this
-            })
-        ).then((response) => {
-            return this._applyInstance(response.data)
-        })
-    }
 }

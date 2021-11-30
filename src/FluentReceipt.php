@@ -99,9 +99,9 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         return $this->model;
     }
 
-    public function make(DTO\Receipt $data): static
+    public function make(DTO\Receipt $payload): static
     {
-        return new static($this->model->newInstance(compact('data')));
+        return new static($this->model->newInstance(compact('payload')));
     }
 
     public function resolve($id): static
@@ -113,9 +113,9 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         }
     }
 
-    public function register(Operation $operation = null, string $externalId = null, DTO\Receipt $data = null): string
+    public function register(Operation $operation = null, string $externalId = null, DTO\Receipt $payload = null): string
     {
-        return $this->model->register($operation, $externalId, $data);
+        return $this->model->register($operation, $externalId, $payload);
     }
 
     public function report(string $id = null, bool $force = false): ?DTO\Result

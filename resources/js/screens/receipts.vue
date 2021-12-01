@@ -30,6 +30,9 @@
         methods: {
             resetFilter() {
                 this.query.filter = {
+                    id: null,
+                    external_id: null,
+                    internal_id: null,
                     created_from: null,
                     created_to: null,
                     connection: null,
@@ -102,6 +105,21 @@
         <b-form-group>
             <b-container fluid>
                 <b-form-row class="my-1">
+                    <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group label="Порядковый номер" label-for="receiptId">
+                            <b-form-input id="receiptId" type="number" size="sm" v-model="query.filter.id" debounce="500"></b-form-input>
+                        </b-form-group>
+                    </b-col>
+                    <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group label="Уникальный идентификатор" label-for="receiptExternalId">
+                            <b-form-input id="receiptExternalId" type="text" size="sm" v-model="query.filter.external_id" debounce="500"></b-form-input>
+                        </b-form-group>
+                    </b-col>
+                    <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group label="Идентификатор поставщика" label-for="receiptInternalId">
+                            <b-form-input id="receiptInternalId" type="text" size="sm" v-model="query.filter.internal_id" debounce="500"></b-form-input>
+                        </b-form-group>
+                    </b-col>
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="Время создания от" label-for="receiptCreatedFrom">
                             <b-form-input id="receiptCreatedFrom" type="datetime-local" size="sm" v-model="query.filter.created_from"></b-form-input>

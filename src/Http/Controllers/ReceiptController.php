@@ -32,6 +32,9 @@ class ReceiptController extends Controller
     {
         $receipts = QueryBuilder::for($this->receipt->newQuery())
             ->allowedFilters(
+                AllowedFilter::exact('id', $this->receipt->getKeyName()),
+                'external_id',
+                'internal_id',
                 AllowedFilter::callback('created_from', function (Builder $query, string $value) {
                     $query->where(Receipt::CREATED_AT, '>=', $value);
                 }),

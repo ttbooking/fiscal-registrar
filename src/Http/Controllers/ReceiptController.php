@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 use Spatie\QueryBuilder\AllowedFilter;
@@ -34,12 +35,18 @@ class ReceiptController extends Controller
                 AllowedFilter::exact('connection'),
                 AllowedFilter::exact('operation'),
                 AllowedFilter::callback('min_total', function (Builder $query, float $value) {
-                    $query->whereRaw('payload->>"$.total" >= '.$value);
+                    $query->where('payload->total', '>=', DB::raw($value));
                 }),
                 AllowedFilter::callback('max_total', function (Builder $query, float $value) {
-                    $query->whereRaw('payload->>"$.total" <= '.$value);
+                    $query->where('payload->total', '<=', DB::raw($value));
                 }),
                 AllowedFilter::exact('state'),
+                AllowedFilter::callback('email', function (Builder $query, string $value) {
+                    $query->where('payload->client->email', 'like', $value.'%');
+                }),
+                AllowedFilter::callback('phone', function (Builder $query, string $value) {
+                    $query->where('payload->client->phone', 'like', $value.'%');
+                }),
             )
             ->paginate();
 

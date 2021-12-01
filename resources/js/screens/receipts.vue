@@ -20,6 +20,8 @@
                         min_total: null,
                         max_total: null,
                         state: null,
+                        email: null,
+                        phone: null,
                     },
                 },
                 page: 1,
@@ -94,6 +96,16 @@
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="Статус" label-for="receiptState">
                             <b-form-select id="receiptState" size="sm" v-model="query.filter.state" :options="buildOptions(dictionary.states)"></b-form-select>
+                        </b-form-group>
+                    </b-col>
+                    <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group label="E-mail клиента" label-for="receiptClientEmail">
+                            <b-form-input id="receiptClientEmail" type="email" size="sm" placeholder="user@domain.com" v-model="query.filter.email" debounce="500"></b-form-input>
+                        </b-form-group>
+                    </b-col>
+                    <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group label="Телефон клиента" label-for="receiptClientPhone">
+                            <b-form-input id="receiptClientPhone" type="tel" size="sm" placeholder="+79001234567" v-model="query.filter.phone" debounce="500"></b-form-input>
                         </b-form-group>
                     </b-col>
                 </b-form-row>

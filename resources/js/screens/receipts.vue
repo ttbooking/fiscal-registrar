@@ -1,4 +1,6 @@
 <script>
+    import Receipt from '../models/Receipt'
+
     export default {
         data() {
             return {
@@ -30,22 +32,24 @@
 
         methods: {
             populateQuery() {
-                localStorage.query && (this.query = JSON.parse(localStorage.query))
+                localStorage['fiscal-registrar.query'] && (this.query = JSON.parse(localStorage['fiscal-registrar.query']))
             },
 
-            getReceipts(page = null) {
+            async getReceipts(page = null) {
                 page && (this.query.page = page)
-                this.$http.get(FiscalRegistrar.basePath + '/api/v1/receipts/?' + qs.stringify(this.query))
-                    .then(response => {
-                        this.receipts = response.data
-                    })
+                const receipt = new Receipt
+                Object.entries(this.query.filter)
+                    .filter(([key, val]) => val !== null)
+                    .forEach(([key, val]) => receipt.where(key, val))
+                this.query.page && receipt.page(this.query.page)
+                this.receipts = await receipt.get()
             },
         },
 
         watch: {
             query: {
                 handler: function (query) {
-                    localStorage.query = JSON.stringify(query)
+                    localStorage['fiscal-registrar.query'] = JSON.stringify(query)
                 },
                 deep: true
             },

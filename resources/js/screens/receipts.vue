@@ -14,13 +14,15 @@
                 ],
                 receipts: {},
                 query: {
-                    page: 1,
                     filter: {
                         connection: null,
                         operation: null,
+                        min_total: null,
+                        max_total: null,
                         state: null,
                     },
                 },
+                page: 1,
             }
         },
 
@@ -33,15 +35,16 @@
         methods: {
             populateQuery() {
                 localStorage['fiscal-registrar.query'] && (this.query = JSON.parse(localStorage['fiscal-registrar.query']))
+                localStorage['fiscal-registrar.page'] && (this.page = +localStorage['fiscal-registrar.page'])
             },
 
             async getReceipts(page = null) {
-                page && (this.query.page = page)
+                page && (this.page = page)
                 const receipt = new Receipt
                 Object.entries(this.query.filter)
                     .filter(([key, val]) => val !== null)
                     .forEach(([key, val]) => receipt.where(key, val))
-                this.query.page && receipt.page(this.query.page)
+                this.page && receipt.page(this.page)
                 this.receipts = await receipt.get()
             },
         },
@@ -50,8 +53,12 @@
             query: {
                 handler: function (query) {
                     localStorage['fiscal-registrar.query'] = JSON.stringify(query)
+                    this.getReceipts(1)
                 },
                 deep: true
+            },
+            page: function (page) {
+                localStorage['fiscal-registrar.page'] = page
             },
         },
     }
@@ -66,17 +73,27 @@
                 <b-form-row class="my-1">
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="Соединение" label-for="receiptConnection">
-                            <b-form-select id="receiptConnection" size="sm" v-model="query.filter.connection" :options="selectConnections" @change="getReceipts(1)"></b-form-select>
+                            <b-form-select id="receiptConnection" size="sm" v-model="query.filter.connection" :options="selectConnections"></b-form-select>
                         </b-form-group>
                     </b-col>
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="Операция" label-for="receiptOperation">
-                            <b-form-select id="receiptOperation" size="sm" v-model="query.filter.operation" :options="buildOptions(dictionary.operations)" @change="getReceipts(1)"></b-form-select>
+                            <b-form-select id="receiptOperation" size="sm" v-model="query.filter.operation" :options="buildOptions(dictionary.operations)"></b-form-select>
+                        </b-form-group>
+                    </b-col>
+                    <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group label="Сумма от" label-for="receiptMinTotal">
+                            <b-form-input id="receiptMinTotal" type="number" min="0" :max="query.filter.max_total || 42949672.95" step=".01" size="sm" v-model="query.filter.min_total" debounce="500"></b-form-input>
+                        </b-form-group>
+                    </b-col>
+                    <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group label="Сумма до" label-for="receiptMaxTotal">
+                            <b-form-input id="receiptMaxTotal" type="number" :min="query.filter.min_total || 0" max="42949672.95" step=".01" size="sm" v-model="query.filter.max_total" debounce="500"></b-form-input>
                         </b-form-group>
                     </b-col>
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="Статус" label-for="receiptState">
-                            <b-form-select id="receiptState" size="sm" v-model="query.filter.state" :options="buildOptions(dictionary.states)" @change="getReceipts(1)"></b-form-select>
+                            <b-form-select id="receiptState" size="sm" v-model="query.filter.state" :options="buildOptions(dictionary.states)"></b-form-select>
                         </b-form-group>
                     </b-col>
                 </b-form-row>

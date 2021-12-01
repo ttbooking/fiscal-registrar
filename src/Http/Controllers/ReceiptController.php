@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Http\Controllers;
 
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -32,6 +33,12 @@ class ReceiptController extends Controller
             ->allowedFilters(
                 AllowedFilter::exact('connection'),
                 AllowedFilter::exact('operation'),
+                AllowedFilter::callback('min_total', function (Builder $query, float $value) {
+                    $query->whereRaw('payload->>"$.total" >= '.$value);
+                }),
+                AllowedFilter::callback('max_total', function (Builder $query, float $value) {
+                    $query->whereRaw('payload->>"$.total" <= '.$value);
+                }),
                 AllowedFilter::exact('state'),
             )
             ->paginate();

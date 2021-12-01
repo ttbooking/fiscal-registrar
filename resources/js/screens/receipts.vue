@@ -14,32 +14,37 @@
                 ],
                 receipts: {},
                 query: {
-                    filter: {
-                        created_from: null,
-                        created_to: null,
-                        connection: null,
-                        operation: null,
-                        min_total: null,
-                        max_total: null,
-                        state: null,
-                        email: null,
-                        phone: null,
-                        fn: null,
-                        i: null,
-                        fd: null,
-                    },
+                    filter: {},
                 },
                 page: 1,
             }
         },
 
         mounted() {
-            this.enumConnections()
+            this.resetFilter()
             this.populateQuery()
+            this.enumConnections()
             this.getReceipts()
         },
 
         methods: {
+            resetFilter() {
+                this.query.filter = {
+                    created_from: null,
+                    created_to: null,
+                    connection: null,
+                    operation: null,
+                    min_total: null,
+                    max_total: null,
+                    state: null,
+                    email: null,
+                    phone: null,
+                    fn: null,
+                    i: null,
+                    fd: null,
+                }
+            },
+
             populateQuery() {
                 localStorage['fiscal-registrar.query'] && (this.query = JSON.parse(localStorage['fiscal-registrar.query']))
                 localStorage['fiscal-registrar.page'] && (this.page = +localStorage['fiscal-registrar.page'])
@@ -155,6 +160,11 @@
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="ФПД" label-for="receiptFiscalDocumentAttribute">
                             <b-form-input id="receiptFiscalDocumentAttribute" type="number" size="sm" v-model="query.filter.fd" debounce="500"></b-form-input>
+                        </b-form-group>
+                    </b-col>
+                    <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group class="text-center">
+                            <b-button variant="danger" size="sm" @click="resetFilter">Очистить фильтр</b-button>
                         </b-form-group>
                     </b-col>
                 </b-form-row>

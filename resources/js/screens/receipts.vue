@@ -15,6 +15,8 @@
                 receipts: {},
                 query: {
                     filter: {
+                        created_from: null,
+                        created_to: null,
                         connection: null,
                         operation: null,
                         min_total: null,
@@ -22,6 +24,9 @@
                         state: null,
                         email: null,
                         phone: null,
+                        fn: null,
+                        i: null,
+                        fd: null,
                     },
                 },
                 page: 1,
@@ -74,6 +79,16 @@
             <b-container fluid>
                 <b-form-row class="my-1">
                     <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group label="Время создания от" label-for="receiptCreatedFrom">
+                            <b-form-input id="receiptCreatedFrom" type="datetime-local" size="sm" v-model="query.filter.created_from"></b-form-input>
+                        </b-form-group>
+                    </b-col>
+                    <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group label="Время создания до" label-for="receiptCreatedTo">
+                            <b-form-input id="receiptCreatedTo" type="datetime-local" size="sm" v-model="query.filter.created_to"></b-form-input>
+                        </b-form-group>
+                    </b-col>
+                    <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="Соединение" label-for="receiptConnection">
                             <b-form-select id="receiptConnection" size="sm" v-model="query.filter.connection" :options="selectConnections"></b-form-select>
                         </b-form-group>
@@ -106,6 +121,21 @@
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="Телефон клиента" label-for="receiptClientPhone">
                             <b-form-input id="receiptClientPhone" type="tel" size="sm" placeholder="+79001234567" v-model="query.filter.phone" debounce="500"></b-form-input>
+                        </b-form-group>
+                    </b-col>
+                    <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group label="ФН" label-for="receiptFnNumber">
+                            <b-form-input id="receiptFnNumber" type="number" size="sm" v-model="query.filter.fn" debounce="500"></b-form-input>
+                        </b-form-group>
+                    </b-col>
+                    <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group label="ФД №" label-for="receiptFiscalDocumentNumber">
+                            <b-form-input id="receiptFiscalDocumentNumber" type="number" size="sm" v-model="query.filter.i" debounce="500"></b-form-input>
+                        </b-form-group>
+                    </b-col>
+                    <b-col align-self="end" lg="2" md="3" sm="4">
+                        <b-form-group label="ФПД" label-for="receiptFiscalDocumentAttribute">
+                            <b-form-input id="receiptFiscalDocumentAttribute" type="number" size="sm" v-model="query.filter.fd" debounce="500"></b-form-input>
                         </b-form-group>
                     </b-col>
                 </b-form-row>

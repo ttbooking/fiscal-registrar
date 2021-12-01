@@ -32,6 +32,12 @@ class ReceiptController extends Controller
     {
         $receipts = QueryBuilder::for($this->receipt->newQuery())
             ->allowedFilters(
+                AllowedFilter::callback('created_from', function (Builder $query, string $value) {
+                    $query->where(Receipt::CREATED_AT, '>=', $value);
+                }),
+                AllowedFilter::callback('created_to', function (Builder $query, string $value) {
+                    $query->where(Receipt::CREATED_AT, '<=', $value);
+                }),
                 AllowedFilter::exact('connection'),
                 AllowedFilter::exact('operation'),
                 AllowedFilter::callback('min_total', function (Builder $query, float $value) {
@@ -47,6 +53,9 @@ class ReceiptController extends Controller
                 AllowedFilter::callback('phone', function (Builder $query, string $value) {
                     $query->where('payload->client->phone', 'like', $value.'%');
                 }),
+                AllowedFilter::exact('fn', 'fn_number'),
+                AllowedFilter::exact('i', 'fiscal_document_number'),
+                AllowedFilter::exact('fd', 'fiscal_document_attribute'),
             )
             ->paginate();
 

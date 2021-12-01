@@ -49,10 +49,29 @@
                 page && (this.page = page)
                 const receipt = new Receipt
                 Object.entries(this.query.filter)
-                    .filter(([key, val]) => val !== null)
+                    .filter(([key, val]) => !!val)
                     .forEach(([key, val]) => receipt.where(key, val))
                 this.page && receipt.page(this.page)
                 this.receipts = await receipt.get()
+            },
+        },
+
+        computed: {
+            selectConnections() {
+                return [
+                    { value: null, text: 'любое' },
+                    ...this.buildOptions(
+                        this.connections,
+                        ([name, data]) => ({ value: name, text: data.display_name })
+                    )]
+            },
+
+            selectOperations() {
+                return [{ value: null, text: 'все' }, ...this.buildOptions(this.dictionary.operations)]
+            },
+
+            selectStates() {
+                return [{ value: null, text: 'любой' }, ...this.buildOptions(this.dictionary.states)]
             },
         },
 
@@ -95,7 +114,7 @@
                     </b-col>
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="Операция" label-for="receiptOperation">
-                            <b-form-select id="receiptOperation" size="sm" v-model="query.filter.operation" :options="buildOptions(dictionary.operations)"></b-form-select>
+                            <b-form-select id="receiptOperation" size="sm" v-model="query.filter.operation" :options="selectOperations"></b-form-select>
                         </b-form-group>
                     </b-col>
                     <b-col align-self="end" lg="2" md="3" sm="4">
@@ -110,7 +129,7 @@
                     </b-col>
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="Статус" label-for="receiptState">
-                            <b-form-select id="receiptState" size="sm" v-model="query.filter.state" :options="buildOptions(dictionary.states)"></b-form-select>
+                            <b-form-select id="receiptState" size="sm" v-model="query.filter.state" :options="selectStates"></b-form-select>
                         </b-form-group>
                     </b-col>
                     <b-col align-self="end" lg="2" md="3" sm="4">

@@ -256,6 +256,15 @@
                 return this.$deepModel(this.receipt.payload)
             },
 
+            selectConnections() {
+                return [
+                    { value: null, text: 'автоопределение' },
+                    ...this.buildOptions(
+                        this.connections,
+                        ([name, data]) => ({ value: name, text: data.display_name })
+                    )]
+            },
+
             isClientEmailRequired() {
                 return !this.receipt.payload.client.phone
             },

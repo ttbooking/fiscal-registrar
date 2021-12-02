@@ -23,14 +23,12 @@ class ReceiptController extends Controller
     /**
      * Display a listing of the receipts.
      *
-     * @param  Request  $request
+     * @param  ReceiptQueryBuilder  $query
      * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function index(ReceiptQueryBuilder $query): JsonResponse
     {
-        $receipts = ReceiptQueryBuilder::for($this->receipt->newQuery(), $request)->paginate();
-
-        return Response::json($receipts);
+        return Response::json($query->paginate());
     }
 
     /**

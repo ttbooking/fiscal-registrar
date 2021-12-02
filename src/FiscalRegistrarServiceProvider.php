@@ -177,7 +177,10 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         );
         $this->app->bind(
             ReceiptQueryBuilder::class,
-            $this->app['config']['fiscal-registrar.query'] ?? ReceiptQueryBuilder::class
+            fn () => $this->app->make(
+                $this->app['config']['fiscal-registrar.query'] ?? ReceiptQueryBuilder::class,
+                ['subject' => $this->app->make(Receipt::class)->newQuery()]
+            )
         );
     }
 

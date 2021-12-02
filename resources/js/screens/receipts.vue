@@ -5,16 +5,23 @@
         data() {
             return {
                 fields: [
-                    { key: 'id', label: '#' },
-                    { key: 'created_at', label: 'Время' },
-                    { key: 'connection', label: 'Соединение' },
-                    { key: 'operation', label: 'Тип' },
-                    { key: 'payload.total', label: 'Сумма' },
-                    { key: 'state', label: 'Статус' },
+                    { key: 'id', label: '#', sortable: true },
+                    { key: 'created_at', label: 'Время', sortable: true },
+                    { key: 'connection', label: 'Соединение', sortable: true },
+                    { key: 'operation', label: 'Тип', sortable: true },
+                    { key: 'payload.total', label: 'Сумма', sortable: true },
+                    { key: 'state', label: 'Статус', sortable: true },
                 ],
+                aliases: {
+                    'payload.total': 'total',
+                },
                 receipts: {},
                 query: {
                     filter: {},
+                    sort: {
+                        by: 'id',
+                        desc: false,
+                    },
                 },
                 page: 1,
             }
@@ -59,6 +66,9 @@
                 Object.entries(this.query.filter)
                     .filter(([key, val]) => !!val)
                     .forEach(([key, val]) => receipt.where(key, val))
+                let column = this.aliases[this.query.sort.by] ?? this.query.sort.by
+                this.query.sort.desc && (column = '-' + column)
+                receipt.orderBy(column)
                 this.page && receipt.page(this.page)
                 this.receipts = await receipt.get()
             },
@@ -107,7 +117,7 @@
                 <b-form-row class="my-1">
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="Порядковый номер" label-for="receiptId">
-                            <b-form-input id="receiptId" type="number" size="sm" v-model="query.filter.id" debounce="500"></b-form-input>
+                            <b-form-input id="receiptId" type="number" size="sm" v-model.number="query.filter.id" debounce="500"></b-form-input>
                         </b-form-group>
                     </b-col>
                     <b-col align-self="end" lg="2" md="3" sm="4">
@@ -189,7 +199,7 @@
             </b-container>
         </b-form-group>
 
-        <b-table small striped hover :items="receipts.data" :fields="fields">
+        <b-table small striped hover :items="receipts.data" :fields="fields" no-local-sorting :sort-by.sync="query.sort.by" :sort-desc.sync="query.sort.desc">
             <template #cell(id)="data">
                 <b-link :to="{ name: 'receipt', params: { id: data.value } }">{{ data.value }}</b-link>
             </template>

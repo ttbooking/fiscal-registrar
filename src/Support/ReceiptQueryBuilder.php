@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\AllowedSort;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class ReceiptQueryBuilder extends QueryBuilder
@@ -25,7 +26,7 @@ class ReceiptQueryBuilder extends QueryBuilder
             $this->allowedFilters($filters);
         }
 
-        if ($sorts = $this->configureSorts()) {
+        if ($sorts = array_merge($this->configureBuiltinSorts(), $this->configureSorts())) {
             $this->allowedSorts($sorts);
         }
 
@@ -74,6 +75,22 @@ class ReceiptQueryBuilder extends QueryBuilder
             AllowedFilter::exact('fn', 'fn_number'),
             AllowedFilter::exact('i', 'fiscal_document_number'),
             AllowedFilter::exact('fd', 'fiscal_document_attribute'),
+        ];
+    }
+
+    private function configureBuiltinSorts(): array
+    {
+        return [
+            'id',
+            'external_id',
+            'internal_id',
+            'created_at',
+            'connection',
+            'operation',
+            AllowedSort::callback('total', function (Builder $query, bool $desc) {
+                $query->orderBy(DB::raw('cast(payload->>"$.total" as decimal)'), $desc ? 'desc' : 'asc');
+            }),
+            'state',
         ];
     }
 

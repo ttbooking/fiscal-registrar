@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
-use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class ReceiptQueryBuilder extends QueryBuilder
 {
@@ -45,15 +44,17 @@ class ReceiptQueryBuilder extends QueryBuilder
 
     private function configureBuiltinFilters(): array
     {
+        $receipt = $this->getModel();
+
         return [
-            AllowedFilter::exact('id', $this->receipt->getKeyName()),
+            AllowedFilter::exact('id', $receipt->getKeyName()),
             'external_id',
             'internal_id',
-            AllowedFilter::callback('created_from', function (Builder $query, string $value) {
-                $query->where(Receipt::CREATED_AT, '>=', $value);
+            AllowedFilter::callback('created_from', function (Builder $query, string $value) use ($receipt) {
+                $query->where($receipt::CREATED_AT, '>=', $value);
             }),
-            AllowedFilter::callback('created_to', function (Builder $query, string $value) {
-                $query->where(Receipt::CREATED_AT, '<=', $value);
+            AllowedFilter::callback('created_to', function (Builder $query, string $value) use ($receipt) {
+                $query->where($receipt::CREATED_AT, '<=', $value);
             }),
             AllowedFilter::exact('connection'),
             AllowedFilter::exact('operation'),

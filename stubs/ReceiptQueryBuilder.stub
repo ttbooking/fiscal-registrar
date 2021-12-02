@@ -1,0 +1,35 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Support;
+
+use TTBooking\FiscalRegistrar\Support\ReceiptQueryBuilder as BaseQueryBuilder;
+
+class ReceiptQueryBuilder extends BaseQueryBuilder
+{
+    protected function configureFilters(): array
+    {
+        return [];
+    }
+
+    protected function configureSorts(): array
+    {
+        return [];
+    }
+
+    protected function configureIncludes(): array
+    {
+        return [];
+    }
+
+    protected function configureFields(): array
+    {
+        return [];
+    }
+
+    protected function configureAppends(): array
+    {
+        return [];
+    }
+}

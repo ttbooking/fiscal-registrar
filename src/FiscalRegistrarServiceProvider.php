@@ -13,6 +13,7 @@ use Illuminate\Support\ServiceProvider;
 use TTBooking\FiscalRegistrar\Faker\Extension;
 use TTBooking\FiscalRegistrar\Http\Requests\ReceiptStoreRequest;
 use TTBooking\FiscalRegistrar\Models\Receipt;
+use TTBooking\FiscalRegistrar\Support\ReceiptQueryBuilder;
 
 class FiscalRegistrarServiceProvider extends ServiceProvider //implements DeferrableProvider
 {
@@ -113,6 +114,10 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         ], 'request');
 
         $this->publishes([
+            __DIR__.'/../stubs/ReceiptQueryBuilder.stub' => $this->app->path('Support/ReceiptQueryBuilder.php'),
+        ], 'query');
+
+        $this->publishes([
             __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/fiscal-registrar'),
         ], 'views');
 
@@ -170,6 +175,10 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
             ReceiptStoreRequest::class,
             $this->app['config']['fiscal-registrar.request'] ?? ReceiptStoreRequest::class
         );
+        $this->app->bind(
+            ReceiptQueryBuilder::class,
+            $this->app['config']['fiscal-registrar.query'] ?? ReceiptQueryBuilder::class
+        );
     }
 
     protected function registerSyncJobSchedule(): void
@@ -208,6 +217,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
                 Contracts\Receipt::class,
                 Receipt::class,
                 ReceiptStoreRequest::class,
+                ReceiptQueryBuilder::class,
             ]
         );
     }

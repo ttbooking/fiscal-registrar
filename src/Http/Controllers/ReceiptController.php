@@ -5,17 +5,14 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Http\Controllers;
 
 use Illuminate\Contracts\Config\Repository;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 use TTBooking\FiscalRegistrar\Http\Requests\ReceiptStoreRequest;
 use TTBooking\FiscalRegistrar\Models\Receipt;
+use TTBooking\FiscalRegistrar\Support\ReceiptQueryBuilder;
 
 class ReceiptController extends Controller
 {
@@ -26,41 +23,12 @@ class ReceiptController extends Controller
     /**
      * Display a listing of the receipts.
      *
+     * @param  Request  $request
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $receipts = QueryBuilder::for($this->receipt->newQuery())
-            ->allowedFilters(
-                AllowedFilter::exact('id', $this->receipt->getKeyName()),
-                'external_id',
-                'internal_id',
-                AllowedFilter::callback('created_from', function (Builder $query, string $value) {
-                    $query->where(Receipt::CREATED_AT, '>=', $value);
-                }),
-                AllowedFilter::callback('created_to', function (Builder $query, string $value) {
-                    $query->where(Receipt::CREATED_AT, '<=', $value);
-                }),
-                AllowedFilter::exact('connection'),
-                AllowedFilter::exact('operation'),
-                AllowedFilter::callback('min_total', function (Builder $query, float $value) {
-                    $query->where('payload->total', '>=', DB::raw($value));
-                }),
-                AllowedFilter::callback('max_total', function (Builder $query, float $value) {
-                    $query->where('payload->total', '<=', DB::raw($value));
-                }),
-                AllowedFilter::exact('state'),
-                AllowedFilter::callback('email', function (Builder $query, string $value) {
-                    $query->where('payload->client->email', 'like', $value.'%');
-                }),
-                AllowedFilter::callback('phone', function (Builder $query, string $value) {
-                    $query->where('payload->client->phone', 'like', $value.'%');
-                }),
-                AllowedFilter::exact('fn', 'fn_number'),
-                AllowedFilter::exact('i', 'fiscal_document_number'),
-                AllowedFilter::exact('fd', 'fiscal_document_attribute'),
-            )
-            ->paginate();
+        $receipts = ReceiptQueryBuilder::for($this->receipt->newQuery(), $request)->paginate();
 
         return Response::json($receipts);
     }

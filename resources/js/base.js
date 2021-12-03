@@ -6,6 +6,10 @@ export default {
             return FiscalRegistrar
         },
 
+        queryString() {
+            return queryString
+        },
+
         $echo() {
             return Echo.channel('fiscal-registrar')
         },

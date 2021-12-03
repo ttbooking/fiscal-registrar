@@ -25,6 +25,7 @@ Vue.prototype.$http = axios.create()
 Model.$http = axios
 
 window.qs = require('qs')
+window.queryString = window.qs.parse(window.location.search.replace(/^\?/, ''))
 
 window.Pusher = require('pusher-js')
 window.Echo = new Echo({
@@ -47,6 +48,13 @@ const router = new VueRouter({
     routes: Routes,
     mode: 'history',
     base: routerBasePath,
+    parseQuery(query) {
+        return window.qs.parse(query)
+    },
+    stringifyQuery(query) {
+        let result = window.qs.stringify(query, { encode: false })
+        return result ? '?' + result : ''
+    },
 })
 
 Vue.component('pagination', require('laravel-vue-pagination'))

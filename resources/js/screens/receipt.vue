@@ -966,7 +966,7 @@ fieldset { margin: 0 }
                         <b-button v-if="receipt.id && receipt.state === 0" class="mb-1" variant="danger" size="sm" @click="deleteReceipt">Удалить</b-button>
                     </b-col>
                     <b-col class="text-right" sm="4">
-                        <b-button class="mb-1" size="sm" :to="{ name: 'receipts' }">К списку</b-button>
+                        <b-button class="mb-1" size="sm" :to="{ name: 'receipts', query: queryString }">К списку</b-button>
                     </b-col>
                 </b-form-row>
             </b-container>

@@ -4,8 +4,6 @@
     export default {
         data() {
             return {
-                showFilter: true,
-                showCreateButton: true,
                 fields: [
                     { key: 'id', label: '#', sortable: true },
                     { key: 'created_at', label: 'Время', sortable: true },
@@ -18,60 +16,19 @@
                     'payload.total': 'total',
                 },
                 receipts: {},
-                query: {
-                    filter: {},
-                    sort: {
-                        by: 'id',
-                        desc: false,
-                    },
-                },
                 page: 1,
             }
         },
 
         mounted() {
-            this.resetFilter()
             this.populateQuery()
             this.enumConnections()
             this.getReceipts()
         },
 
         methods: {
-            resetFilter() {
-                this.query.filter = {
-                    id: null,
-                    external_id: null,
-                    internal_id: null,
-                    created_from: null,
-                    created_to: null,
-                    connection: null,
-                    operation: null,
-                    min_total: null,
-                    max_total: null,
-                    state: null,
-                    email: null,
-                    phone: null,
-                    fn: null,
-                    i: null,
-                    fd: null,
-                }
-            },
-
             populateQuery() {
-                const queryString = { ...this.queryString }
-                this.showFilter = !('nofilter' in queryString)
-                delete queryString.nofilter
-                this.showCreateButton = !('nocreate' in queryString)
-                delete queryString.nocreate
-
-                localStorage['fiscal-registrar.page'] && (this.page = +localStorage['fiscal-registrar.page'])
-                if (this.showFilter && localStorage['fiscal-registrar.query']) {
-                    this.query = { ...this.query, ...JSON.parse(localStorage['fiscal-registrar.query']) }
-                }
-
-                queryString.page && (this.page = queryString.page)
-                delete queryString.page
-                this.query = { ...this.query, ...queryString }
+                sessionStorage['fiscal-registrar.page'] && (this.page = +sessionStorage['fiscal-registrar.page'])
             },
 
             async getReceipts(page = null) {
@@ -110,13 +67,12 @@
         watch: {
             query: {
                 handler: function (query) {
-                    this.showFilter && (localStorage['fiscal-registrar.query'] = JSON.stringify(query))
                     this.getReceipts(1)
                 },
                 deep: true
             },
             page: function (page) {
-                localStorage['fiscal-registrar.page'] = page
+                sessionStorage['fiscal-registrar.page'] = page
             },
         },
     }
@@ -126,7 +82,7 @@
     <div>
         <h2 class="text-center">Кассовые чеки</h2>
 
-        <b-form-group v-if="showFilter">
+        <b-form-group v-if="query.showFilter">
             <b-container fluid>
                 <b-form-row class="my-1">
                     <b-col align-self="end" lg="2" md="3" sm="4">
@@ -236,6 +192,6 @@
 
         <pagination :data="receipts" :limit="2" :show-disabled="true" align="center" @pagination-change-page="getReceipts"></pagination>
 
-        <b-button v-if="showCreateButton" :to="{ name: 'new-receipt' }" variant="primary" size="sm">Создать</b-button>
+        <b-button v-if="query.showCreateButton" :to="{ name: 'new-receipt' }" variant="primary" size="sm">Создать</b-button>
     </div>
 </template>

@@ -25,7 +25,7 @@ Vue.prototype.$http = axios.create()
 Model.$http = axios
 
 window.qs = require('qs')
-window.queryString = window.qs.parse(window.location.search.replace(/^\?/, ''))
+window.merge = require('deepmerge')
 
 window.Pusher = require('pusher-js')
 window.Echo = new Echo({

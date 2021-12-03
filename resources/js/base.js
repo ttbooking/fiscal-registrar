@@ -6,10 +6,6 @@ export default {
             return FiscalRegistrar
         },
 
-        queryString() {
-            return queryString
-        },
-
         $echo() {
             return Echo.channel('fiscal-registrar')
         },
@@ -56,10 +52,57 @@ export default {
                     this.connections = response.data
                 })
         },
+
+        resetFilter() {
+            this.query.filter = {
+                id: null,
+                external_id: null,
+                internal_id: null,
+                created_from: null,
+                created_to: null,
+                connection: null,
+                operation: null,
+                min_total: null,
+                max_total: null,
+                state: null,
+                email: null,
+                phone: null,
+                fn: null,
+                i: null,
+                fd: null,
+            }
+        },
+    },
+
+    beforeMount() {
+        this.resetFilter()
+        this.query = merge.all([
+            this.query,
+            JSON.parse(sessionStorage['fiscal-registrar.query'] || '{}'),
+            qs.parse(window.location.search.replace(/^\?/, '')),
+        ])
+    },
+
+    watch: {
+        query: {
+            handler: function (query) {
+                sessionStorage['fiscal-registrar.query'] = JSON.stringify(query)
+            },
+            deep: true
+        },
     },
 
     data() {
         return {
+            query: {
+                showFilter: true,
+                showCreateButton: true,
+                filter: {},
+                sort: {
+                    by: 'id',
+                    desc: false,
+                },
+            },
             connections: {},
             dictionary: {
                 operations: {

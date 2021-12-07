@@ -95,8 +95,8 @@ export default {
     data() {
         return {
             query: {
-                showFilter: true,
-                showCreateButton: true,
+                hideFilter: false,
+                hideCreateButton: false,
                 filter: {},
                 sort: {
                     by: 'id',

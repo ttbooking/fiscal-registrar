@@ -82,7 +82,7 @@
     <div>
         <h2 class="text-center">Кассовые чеки</h2>
 
-        <b-form-group v-if="query.showFilter">
+        <b-form-group v-if="!query.hideFilter">
             <b-container fluid>
                 <b-form-row class="my-1">
                     <b-col align-self="end" lg="2" md="3" sm="4">
@@ -192,6 +192,6 @@
 
         <pagination :data="receipts" :limit="2" :show-disabled="true" align="center" @pagination-change-page="getReceipts"></pagination>
 
-        <b-button v-if="query.showCreateButton" :to="{ name: 'new-receipt' }" variant="primary" size="sm">Создать</b-button>
+        <b-button v-if="!query.hideCreateButton" :to="{ name: 'new-receipt' }" variant="primary" size="sm">Создать</b-button>
     </div>
 </template>

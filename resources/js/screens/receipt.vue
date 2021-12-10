@@ -725,7 +725,7 @@ fieldset { margin: 0 }
                                 <b-form-row class="my-1">
                                     <b-col align-self="end" lg="1" md="2" sm="3">
                                         <b-form-group label="Всего на сумму" label-for="total" description="тег 1020" class="required">
-                                            <b-form-input id="total" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="receipt.payload.total" :disabled="receipt.state !== 0"></b-form-input>
+                                            <b-form-input id="total" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model.number="receipt.payload.total" :disabled="receipt.state !== 0"></b-form-input>
                                         </b-form-group>
                                     </b-col>
                                     <b-col class="mb-sm-3" align-self="end" lg="1" md="2" sm="3">
@@ -751,27 +751,27 @@ fieldset { margin: 0 }
                                     <b-form-row class="my-1">
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Наличными" label-for="paymentCash" description="тег 1031">
-                                                <b-form-input id="paymentCash" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.payload.payments.cash"></b-form-input>
+                                                <b-form-input id="paymentCash" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="receipt.payload.payments.cash"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Безналичными" label-for="paymentElectronic" description="тег 1081">
-                                                <b-form-input id="paymentElectronic" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.payload.payments.electronic"></b-form-input>
+                                                <b-form-input id="paymentElectronic" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="receipt.payload.payments.electronic"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Предоплатой" label-for="paymentPrepaid" description="тег 1215">
-                                                <b-form-input id="paymentPrepaid" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.payload.payments.prepaid"></b-form-input>
+                                                <b-form-input id="paymentPrepaid" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="receipt.payload.payments.prepaid"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Постоплатой" label-for="paymentPostpaid" description="тег 1216">
-                                                <b-form-input id="paymentPostpaid" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.payload.payments.postpaid"></b-form-input>
+                                                <b-form-input id="paymentPostpaid" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="receipt.payload.payments.postpaid"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group label="Встр. предст." label-for="paymentOther" description="тег 1217">
-                                                <b-form-input id="paymentOther" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model="receipt.payload.payments.other"></b-form-input>
+                                                <b-form-input id="paymentOther" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" v-model.number="receipt.payload.payments.other"></b-form-input>
                                             </b-form-group>
                                         </b-col>
                                     </b-form-row>

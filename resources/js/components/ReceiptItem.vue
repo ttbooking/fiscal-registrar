@@ -117,17 +117,17 @@
             </b-col>
             <b-col align-self="end" lg="1" md="2" sm="4">
                 <b-form-group label="Цена" :label-for="'item' + id + 'Price'" description="тег 1079" class="required">
-                    <b-form-input :id="'item' + id + 'Price'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="item.price" :disabled="disabled"></b-form-input>
+                    <b-form-input :id="'item' + id + 'Price'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model.number="item.price" :disabled="disabled"></b-form-input>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="1" md="2" sm="4">
                 <b-form-group label="Кол-во" :label-for="'item' + id + 'Quantity'" description="тег 1023" class="required">
-                    <b-form-input :id="'item' + id + 'Quantity'" type="number" min=".001" max="99999.999" step="any" size="sm" placeholder="1" required v-model="item.quantity" :disabled="disabled"></b-form-input>
+                    <b-form-input :id="'item' + id + 'Quantity'" type="number" min=".001" max="99999.999" step="any" size="sm" placeholder="1" required v-model.number="item.quantity" :disabled="disabled"></b-form-input>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="1" md="2" sm="4">
                 <b-form-group label="Сумма" :label-for="'item' + id + 'Sum'" description="тег 1043" class="required">
-                    <b-form-input :id="'item' + id + 'Sum'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model="item.sum" :disabled="disabled"></b-form-input>
+                    <b-form-input :id="'item' + id + 'Sum'" type="number" min="0" max="42949672.95" step=".01" size="sm" placeholder="0" required v-model.number="item.sum" :disabled="disabled"></b-form-input>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="1" md="2" sm="4">
@@ -152,7 +152,7 @@
             </b-col>
             <b-col align-self="end" lg="1" md="2" sm="4">
                 <b-form-group label="Сумма НДС" :label-for="'item' + id + 'VatSum'" description="тег 1200">
-                    <b-form-input :id="'item' + id + 'VatSum'" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatSum" v-model="item.vat.sum" :disabled="disabled"></b-form-input>
+                    <b-form-input :id="'item' + id + 'VatSum'" type="number" min="0" max="42949672.95" step=".01" size="sm" :placeholder="vatSum" v-model.number="item.vat.sum" :disabled="disabled"></b-form-input>
                 </b-form-group>
             </b-col>
             <b-col align-self="end" lg="3" md="4" sm="6">

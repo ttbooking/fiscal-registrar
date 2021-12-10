@@ -122,12 +122,12 @@
                     </b-col>
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="Сумма от" label-for="receiptMinTotal">
-                            <b-form-input id="receiptMinTotal" type="number" min="0" :max="query.filter.max_total || 42949672.95" step=".01" size="sm" v-model="query.filter.min_total" debounce="500"></b-form-input>
+                            <b-form-input id="receiptMinTotal" type="number" min="0" :max="query.filter.max_total || 42949672.95" step=".01" size="sm" v-model.number="query.filter.min_total" debounce="500"></b-form-input>
                         </b-form-group>
                     </b-col>
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="Сумма до" label-for="receiptMaxTotal">
-                            <b-form-input id="receiptMaxTotal" type="number" :min="query.filter.min_total || 0" max="42949672.95" step=".01" size="sm" v-model="query.filter.max_total" debounce="500"></b-form-input>
+                            <b-form-input id="receiptMaxTotal" type="number" :min="query.filter.min_total || 0" max="42949672.95" step=".01" size="sm" v-model.number="query.filter.max_total" debounce="500"></b-form-input>
                         </b-form-group>
                     </b-col>
                     <b-col align-self="end" lg="2" md="3" sm="4">
@@ -147,17 +147,17 @@
                     </b-col>
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="ФН" label-for="receiptFnNumber">
-                            <b-form-input id="receiptFnNumber" type="number" size="sm" v-model="query.filter.fn" debounce="500"></b-form-input>
+                            <b-form-input id="receiptFnNumber" type="number" size="sm" v-model.number="query.filter.fn" debounce="500"></b-form-input>
                         </b-form-group>
                     </b-col>
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="ФД №" label-for="receiptFiscalDocumentNumber">
-                            <b-form-input id="receiptFiscalDocumentNumber" type="number" size="sm" v-model="query.filter.i" debounce="500"></b-form-input>
+                            <b-form-input id="receiptFiscalDocumentNumber" type="number" size="sm" v-model.number="query.filter.i" debounce="500"></b-form-input>
                         </b-form-group>
                     </b-col>
                     <b-col align-self="end" lg="2" md="3" sm="4">
                         <b-form-group label="ФПД" label-for="receiptFiscalDocumentAttribute">
-                            <b-form-input id="receiptFiscalDocumentAttribute" type="number" size="sm" v-model="query.filter.fd" debounce="500"></b-form-input>
+                            <b-form-input id="receiptFiscalDocumentAttribute" type="number" size="sm" v-model.number="query.filter.fd" debounce="500"></b-form-input>
                         </b-form-group>
                     </b-col>
                     <b-col align-self="end" lg="2" md="3" sm="4">

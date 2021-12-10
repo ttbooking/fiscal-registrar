@@ -83,7 +83,7 @@ final class Receipt extends DataTransferObject
 
     protected static function transformTotal($total, array $args): float
     {
-        return $total ?? collect($args['items'] ?? [])->sum('sum');
+        return (float) ($total ?? collect($args['items'] ?? [])->sum('sum'));
     }
 
     protected static function transformPayments($payments, array $args)

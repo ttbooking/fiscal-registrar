@@ -151,7 +151,7 @@
 
             async registerReceipt() {
                 await this.saveReceipt()
-                await this.receipt.register()
+                this.receipt = await this.receipt.register()
             },
 
             async syncReceipt() {

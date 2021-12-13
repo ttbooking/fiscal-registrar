@@ -130,8 +130,9 @@
 
             async saveReceipt() {
                 try {
+                    const isNew = !this.receipt.id
                     this.receipt = await this.receipt.save()
-                    this.receipt.id && this.$router.replace(
+                    isNew && this.$router.replace(
                         { name: 'receipt', params: { id: this.receipt.id } },
                     )
                 } catch (error) {

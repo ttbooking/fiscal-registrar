@@ -1,8 +1,9 @@
 /vendor
 /node_modules
-/public/vendor.js.LICENSE.txt
-/phpunit.xml
 /.idea
+/public/vendor.js.LICENSE.txt
+/phpstan.neon
+/phpunit.xml
 composer.phar
 composer.lock
 .phpunit.result.cache

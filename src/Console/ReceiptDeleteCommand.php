@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Console;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Attribute\AsCommand;
 use TTBooking\FiscalRegistrar\Contracts\ReceiptFactory;
 
+#[AsCommand(name: 'receipt:delete')]
 class ReceiptDeleteCommand extends Command
 {
     /**
@@ -15,6 +17,17 @@ class ReceiptDeleteCommand extends Command
      * @var string
      */
     protected $signature = 'receipt:delete {id : Receipt identifier}';
+
+    /**
+     * The name of the console command.
+     *
+     * This name is used to identify the command during lazy loading.
+     *
+     * @var string|null
+     *
+     * @deprecated
+     */
+    protected static $defaultName = 'receipt:delete';
 
     /**
      * The console command description.

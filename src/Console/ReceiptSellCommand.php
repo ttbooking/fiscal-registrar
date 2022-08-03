@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Console;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use TTBooking\FiscalRegistrar\Contracts\ReceiptFactory;
 use TTBooking\FiscalRegistrar\Enums\Operation;
 
+#[AsCommand(name: 'receipt:sell')]
 class ReceiptSellCommand extends ReceiptRegisterCommand
 {
     /**
@@ -18,6 +20,17 @@ class ReceiptSellCommand extends ReceiptRegisterCommand
         {id : Receipt identifier}
         {--for= : Connection name}
         {--as= : New identifier}';
+
+    /**
+     * The name of the console command.
+     *
+     * This name is used to identify the command during lazy loading.
+     *
+     * @var string|null
+     *
+     * @deprecated
+     */
+    protected static $defaultName = 'receipt:sell';
 
     /**
      * The console command description.

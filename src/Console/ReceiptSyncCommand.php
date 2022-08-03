@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Console;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Attribute\AsCommand;
 use TTBooking\FiscalRegistrar\Contracts\ReceiptFactory;
 
+#[AsCommand(name: 'receipt:sync')]
 class ReceiptSyncCommand extends Command
 {
     /**
@@ -17,6 +19,17 @@ class ReceiptSyncCommand extends Command
     protected $signature = 'receipt:sync
         {id : Receipt identifier}
         {--force : Force synchronization}';
+
+    /**
+     * The name of the console command.
+     *
+     * This name is used to identify the command during lazy loading.
+     *
+     * @var string|null
+     *
+     * @deprecated
+     */
+    protected static $defaultName = 'receipt:sync';
 
     /**
      * The console command description.

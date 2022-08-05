@@ -15,13 +15,13 @@ class ReceiptStoreRequest extends BaseStoreRequest
      */
     public function authorize(): bool
     {
-        return parent::authorize();
+        return true;
     }
 
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array
+     * @return array<string, string|string[]|\Stringable|\Stringable[]>
      */
     public function rules(): array
     {
@@ -31,7 +31,7 @@ class ReceiptStoreRequest extends BaseStoreRequest
     /**
      * Get custom messages for validator errors.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function messages(): array
     {
@@ -41,7 +41,7 @@ class ReceiptStoreRequest extends BaseStoreRequest
     /**
      * Get custom attributes for validator errors.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function attributes(): array
     {

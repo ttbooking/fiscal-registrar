@@ -14,5 +14,5 @@ interface SupportsCallbacks
      * @param  null|Closure(Result):void  $handler
      * @return void
      */
-    public function processCallback($payload, Closure $handler = null): void;
+    public function processCallback(mixed $payload, Closure $handler = null): void;
 }

@@ -6,13 +6,16 @@ namespace TTBooking\FiscalRegistrar\Contracts;
 
 use InvalidArgumentException;
 
+/**
+ * @template TConnection of object
+ */
 interface Factory
 {
     /**
      * Get a connection instance.
      *
      * @param  string|null  $name
-     * @return object
+     * @return TConnection
      *
      * @throws InvalidArgumentException
      */
@@ -21,7 +24,7 @@ interface Factory
     /**
      * Get all of the created connections.
      *
-     * @return array<string, object>
+     * @return array<string, TConnection>
      */
     public function getConnections(): array;
 }

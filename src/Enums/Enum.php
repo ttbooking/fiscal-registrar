@@ -12,11 +12,15 @@ use Spatie\DataTransferObject\Attributes\CastWith;
 use TTBooking\FiscalRegistrar\Casts\EnumCast;
 use TTBooking\FiscalRegistrar\DTO\Casters\EnumCaster;
 
+/**
+ * @extends BaseEnum<array-key>
+ */
 #[CastWith(EnumCaster::class)]
 abstract class Enum extends BaseEnum implements Castable
 {
     public function getDescription(string $variant = ''): string
     {
+        /** @var string */
         return Lang::get($this->getDescriptionKey($variant));
     }
 
@@ -29,7 +33,11 @@ abstract class Enum extends BaseEnum implements Castable
         ]);
     }
 
-    public static function castUsing(array $arguments)
+    /**
+     * @param  array<mixed>  $arguments
+     * @return EnumCast
+     */
+    public static function castUsing(array $arguments): EnumCast
     {
         return new EnumCast(static::class);
     }

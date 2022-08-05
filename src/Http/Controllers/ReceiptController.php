@@ -88,6 +88,7 @@ class ReceiptController extends Controller
      */
     public function preview(Repository $config, Receipt $receipt): \Illuminate\Contracts\View\View
     {
+        /** @var array{receipt_template?: string} $connectionConfig */
         $connectionConfig = $config->get("fiscal-registrar.connections.{$receipt->connection}", []);
 
         $template = $connectionConfig['receipt_template'] ?? (

@@ -29,13 +29,13 @@ class ReceiptProcessed extends Notification implements ShouldQueue
      * Get the notification's delivery channels.
      *
      * @param  mixed  $notifiable
-     * @return array
+     * @return string[]
      */
-    public function via($notifiable)
+    public function via(mixed $notifiable): array
     {
         switch (true) {
-            case isset($notifiable->routes['mail']): return ['mail'];
-            case isset($notifiable->routes['nexmo']): return ['nexmo'];
+            case is_object($notifiable) && isset($notifiable->routes['mail']): return ['mail'];
+            case is_object($notifiable) && isset($notifiable->routes['nexmo']): return ['nexmo'];
             default: return [];
         }
     }
@@ -46,7 +46,7 @@ class ReceiptProcessed extends Notification implements ShouldQueue
      * @param  mixed  $notifiable
      * @return \Illuminate\Notifications\Messages\MailMessage
      */
-    public function toMail($notifiable)
+    public function toMail(mixed $notifiable): \Illuminate\Notifications\Messages\MailMessage
     {
         return (new MailMessage)->markdown('fiscal-registrar::receipt', ['receipt' => $this->receipt]);
     }
@@ -55,9 +55,9 @@ class ReceiptProcessed extends Notification implements ShouldQueue
      * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return array
+     * @return array<mixed>
      */
-    public function toArray($notifiable)
+    public function toArray(mixed $notifiable): array
     {
         return $this->receipt->toArray();
     }

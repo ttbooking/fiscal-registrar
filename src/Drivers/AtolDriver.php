@@ -78,7 +78,7 @@ class AtolDriver extends Driver implements SupportsCallbacks
         return $this->processReportResponse($reportResponse);
     }
 
-    public function processCallback($payload, Closure $handler = null): void
+    public function processCallback(mixed $payload, Closure $handler = null): void
     {
         try {
             $handler && $handler($this->processReportResponse(

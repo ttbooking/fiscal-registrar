@@ -13,12 +13,15 @@ use TTBooking\FiscalRegistrar\Enums\PaymentObject;
 use TTBooking\FiscalRegistrar\Enums\VatType;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
+/**
+ * @extends Factory<Receipt>
+ */
 class ReceiptFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
-     * @var string
+     * @var class-string<Receipt>
      */
     protected $model = Receipt::class;
 
@@ -27,7 +30,7 @@ class ReceiptFactory extends Factory
     /**
      * Define the model's default state.
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function definition(): array
     {

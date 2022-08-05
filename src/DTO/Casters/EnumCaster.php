@@ -18,6 +18,10 @@ class EnumCaster implements Caster
     ) {
     }
 
+    /**
+     * @param  mixed  $value
+     * @return Enum<array-key>
+     */
     public function cast(mixed $value): Enum
     {
         foreach ($this->classNames as $className) {

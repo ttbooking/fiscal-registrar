@@ -6,16 +6,20 @@ namespace TTBooking\FiscalRegistrar\Support;
 
 use Illuminate\Support\Traits\ForwardsCalls;
 
+/**
+ * @template TDecorated of object
+ */
 class Decorator
 {
     use ForwardsCalls;
 
+    /** @var TDecorated */
     protected object $instance;
 
     /**
      * Decorator constructor.
      *
-     * @param  object  $instance
+     * @param  TDecorated  $instance
      * @return void
      */
     public function __construct(object $instance)
@@ -24,11 +28,12 @@ class Decorator
     }
 
     /**
-     * @param  object  $a
-     * @param  mixed  $b
+     * @template TObject of object
+     * @param  TObject  $a
+     * @param  class-string<TObject>|TObject  $b
      * @return bool
      */
-    final public static function instanceOf(object $a, $b): bool
+    final public static function instanceOf(object $a, string|object $b): bool
     {
         return $a instanceof $b
             || $a instanceof self
@@ -36,7 +41,7 @@ class Decorator
     }
 
     /**
-     * @return object
+     * @return TDecorated
      */
     public function getDecoratedInstance(): object
     {
@@ -44,7 +49,7 @@ class Decorator
     }
 
     /**
-     * @param  object  $instance
+     * @param  TDecorated  $instance
      * @return $this
      */
     public function setDecoratedInstance(object $instance): static
@@ -56,7 +61,7 @@ class Decorator
 
     /**
      * @param  string  $method
-     * @param  array  $parameters
+     * @param  array<mixed>  $parameters
      * @return mixed
      */
     public function __call(string $method, array $parameters)

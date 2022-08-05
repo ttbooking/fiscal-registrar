@@ -58,7 +58,7 @@ class SyncReceipts implements ShouldQueue, ShouldBeUnique
     /**
      * Get the tags that should be assigned to the job.
      *
-     * @return array
+     * @return string[]
      */
     public function tags(): array
     {

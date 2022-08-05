@@ -14,6 +14,9 @@ class StateException extends FiscalRegistrarException implements HttpExceptionIn
         return Response::HTTP_BAD_REQUEST;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getHeaders(): array
     {
         return [];

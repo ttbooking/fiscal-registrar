@@ -12,6 +12,8 @@ use Symfony\Component\Console\Helper\TableCellStyle;
 use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Helper\TableStyle;
 use TTBooking\FiscalRegistrar\DTO\Receipt\Item;
+use TTBooking\FiscalRegistrar\DTO\Result\Payload;
+use TTBooking\FiscalRegistrar\Enums\Operation;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 use TTBooking\FiscalRegistrar\Support\ReceiptQRCode;
 
@@ -28,8 +30,8 @@ trait ReceiptRenderer
         }
         static::setupReceiptTableTotal($table, $receipt);
         if (isset($receipt->result->payload)) {
-            static::setupReceiptTableFooter($table, $receipt);
-            static::setupReceiptTableQRCode($table, $receipt);
+            static::setupReceiptTableFooter($table, $receipt->result->payload);
+            static::setupReceiptTableQRCode($table, $receipt->result->payload, $receipt->operation ?? Operation::Sell());
         }
 
         $table->render();
@@ -71,7 +73,7 @@ trait ReceiptRenderer
     protected static function setupReceiptTableHeader(Table $table, Receipt $receipt): Table
     {
         return $table->addRows([
-            [$receipt->operation?->getDescription() ?? '-', $receipt->result?->payload->receipt_datetime->format('d.m.Y H:i') ?? '-'],
+            [$receipt->operation?->getDescription() ?? '-', $receipt->result?->payload?->receipt_datetime->format('d.m.Y H:i') ?? '-'],
             [static::trans('result.shift_number'), $receipt->result?->payload->shift_number ?? '-'],
             [static::trans('receipt.company.tax_system'), $receipt->payload->company->tax_system?->getDescription('short') ?? '-'],
             [static::trans('receipt.client.phone_or_email'), $receipt->payload->client->email ?? $receipt->payload->client->phone],
@@ -90,7 +92,7 @@ trait ReceiptRenderer
             [new TableCell('<info>'.$item->name.'</info>', ['colspan' => 2])],
             ['', sprintf('%d x %.2f', $item->quantity, $item->price)],
             [static::trans('receipt.items.sum'), sprintf('%.2f', $item->sum)],
-            [static::trans('receipt.items.vat.type'), $item->vat->type->getDescription('short')],
+            [static::trans('receipt.items.vat.type'), $item->vat?->type->getDescription('short') ?? '-'],
             $itemVatSum ? [static::trans('receipt.items.vat.sum'), sprintf('%.2f', $itemVatSum)] : [],
             [static::trans('receipt.items.payment_object'), $item->payment_object->getDescription()],
             [static::trans('receipt.items.payment_method'), $item->payment_method->getDescription()],
@@ -118,23 +120,23 @@ trait ReceiptRenderer
         ]);
     }
 
-    protected static function setupReceiptTableFooter(Table $table, Receipt $receipt): Table
+    protected static function setupReceiptTableFooter(Table $table, Payload $payload): Table
     {
         return $table->addRows([
             new TableSeparator,
-            [static::trans('result.fn_number'), $receipt->result->payload->fn_number],
-            [static::trans('result.ecr_registration_number'), $receipt->result->payload->ecr_registration_number],
-            [static::trans('result.fiscal_document_number'), $receipt->result->payload->fiscal_document_number],
-            [static::trans('result.fiscal_document_attribute'), $receipt->result->payload->fiscal_document_attribute],
+            [static::trans('result.fn_number'), $payload->fn_number],
+            [static::trans('result.ecr_registration_number'), $payload->ecr_registration_number],
+            [static::trans('result.fiscal_document_number'), $payload->fiscal_document_number],
+            [static::trans('result.fiscal_document_attribute'), $payload->fiscal_document_attribute],
             [static::trans('result.ffd_version'), '1.05'],
         ]);
     }
 
-    protected static function setupReceiptTableQRCode(Table $table, Receipt $receipt): Table
+    protected static function setupReceiptTableQRCode(Table $table, Payload $payload, Operation $operation): Table
     {
         $table->addRow(new TableSeparator);
 
-        $qrCode = ReceiptQRCode::for($receipt->result->payload, $receipt->operation)->block();
+        $qrCode = ReceiptQRCode::for($payload, $operation)->block();
         foreach (explode("\n", $qrCode->getString()) as $qrCodeLine) {
             $qrCodeLine && $table->addRow([new TableCell($qrCodeLine, [
                 'colspan' => 2,

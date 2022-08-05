@@ -14,6 +14,9 @@ class ResolverException extends FiscalRegistrarException implements HttpExceptio
         return Response::HTTP_NOT_FOUND;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getHeaders(): array
     {
         return [];

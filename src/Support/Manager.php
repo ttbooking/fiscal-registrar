@@ -11,6 +11,10 @@ use Illuminate\Support\Str;
 use InvalidArgumentException;
 use TTBooking\FiscalRegistrar\Contracts\Factory;
 
+/**
+ * @template TConnection of object
+ * @implements Factory<TConnection>
+ */
 abstract class Manager implements Factory
 {
     /**
@@ -44,7 +48,7 @@ abstract class Manager implements Factory
     /**
      * The array of created connections.
      *
-     * @var array<string, object>
+     * @var array<string, TConnection>
      */
     protected array $connections = [];
 
@@ -52,12 +56,13 @@ abstract class Manager implements Factory
      * Create a new manager instance.
      *
      * @param  Container  $container
+     * @param  Repository  $config
      * @return void
      */
-    public function __construct(Container $container)
+    public function __construct(Container $container, Repository $config)
     {
         $this->container = $container;
-        $this->config = $container->make('config');
+        $this->config = $config;
     }
 
     /**
@@ -69,6 +74,7 @@ abstract class Manager implements Factory
     {
         $configName = $this->getConfigName();
 
+        /** @var string */
         return $this->config->get("{$configName}.default", 'default');
     }
 
@@ -88,7 +94,7 @@ abstract class Manager implements Factory
      * Dynamically call the default connection instance.
      *
      * @param  string  $method
-     * @param  array  $parameters
+     * @param  array<mixed>  $parameters
      * @return mixed
      */
     public function __call(string $method, array $parameters)
@@ -105,7 +111,7 @@ abstract class Manager implements Factory
      */
     public function extend(string $driver, Closure $callback): static
     {
-        $this->customCreators[$driver] = $callback->bindTo($this, $this);
+        $this->customCreators[$driver] = $callback->bindTo($this, $this) ?? $callback;
 
         return $this;
     }
@@ -114,7 +120,7 @@ abstract class Manager implements Factory
      * Resolve the given connection.
      *
      * @param  string  $name
-     * @return object
+     * @return TConnection
      *
      * @throws InvalidArgumentException
      */
@@ -138,8 +144,8 @@ abstract class Manager implements Factory
     /**
      * Call a custom driver creator.
      *
-     * @param  array  $config
-     * @return object
+     * @param  array{driver: string}  $config
+     * @return TConnection
      */
     protected function callCustomCreator(array $config): object
     {
@@ -160,12 +166,13 @@ abstract class Manager implements Factory
      * Get the cache connection configuration.
      *
      * @param  string  $name
-     * @return array
+     * @return array{driver: string}
      */
     protected function getConfig(string $name): array
     {
         $configName = $this->getConfigName();
 
+        /** @var array{driver: string} */
         return $this->config->get("{$configName}.connections.{$name}", []) + ['driver' => $name];
     }
 }

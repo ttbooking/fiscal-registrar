@@ -9,11 +9,11 @@ use MyCLabs\Enum\Enum;
 
 class EnumCast implements CastsAttributes
 {
-    /** @var class-string<Enum> */
+    /** @var class-string<Enum<array-key>> */
     protected string $enumClass;
 
     /**
-     * @param  class-string<Enum>  $enumClass
+     * @param  class-string<Enum<array-key>>  $enumClass
      * @return void
      */
     public function __construct(string $enumClass)

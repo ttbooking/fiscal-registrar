@@ -29,7 +29,7 @@ class ProxyDriver extends Driver implements SupportsCallbacks
         // TODO: Implement report() method.
     }
 
-    public function processCallback($payload, Closure $handler = null): void
+    public function processCallback(mixed $payload, Closure $handler = null): void
     {
         // TODO: Implement processCallback() method.
     }

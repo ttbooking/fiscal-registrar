@@ -16,10 +16,10 @@ interface ReceiptFactory
     public function make(DTO\Receipt $payload): Receipt;
 
     /**
-     * @param  mixed  $id
+     * @param  scalar  $id
      * @return Receipt
      *
      * @throws ResolverException
      */
-    public function resolve($id): Receipt;
+    public function resolve(mixed $id): Receipt;
 }

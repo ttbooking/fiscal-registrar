@@ -40,6 +40,9 @@ abstract class ReceiptEvent implements ShouldBroadcast
         return new Channel('fiscal-registrar');
     }
 
+    /**
+     * @return array<mixed>
+     */
     public function broadcastWith(): array
     {
         return $this->receipt->toArray();

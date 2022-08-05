@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Enums;
 
 /**
- * @method static self OSN
- * @method static self USNIncome
- * @method static self USNIncomeOutcome
- * @method static self ENVD
- * @method static self ESN
- * @method static self Patent
+ * @method static self OSN()
+ * @method static self USNIncome()
+ * @method static self USNIncomeOutcome()
+ * @method static self ENVD()
+ * @method static self ESN()
+ * @method static self Patent()
  */
 final class TaxSystem extends Enum
 {

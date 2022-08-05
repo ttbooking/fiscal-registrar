@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Enums;
 
 /**
- * @method static self BankPayingAgent
- * @method static self BankPayingSubagent
- * @method static self PayingAgent
- * @method static self PayingSubagent
- * @method static self Attorney
- * @method static self CommissionAgent
- * @method static self Another
+ * @method static self BankPayingAgent()
+ * @method static self BankPayingSubagent()
+ * @method static self PayingAgent()
+ * @method static self PayingSubagent()
+ * @method static self Attorney()
+ * @method static self CommissionAgent()
+ * @method static self Another()
  */
 final class AgentType extends Enum
 {

@@ -32,6 +32,7 @@ class ReceiptQRCode
                 'sell_refund' => 2,
                 'buy' => 3,
                 'buy_refund' => 4,
+                default => 1,
             }
         );
     }

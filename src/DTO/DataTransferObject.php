@@ -17,6 +17,9 @@ use Stringable;
 use TTBooking\FiscalRegistrar\Casts\DTOCast;
 use TTBooking\FiscalRegistrar\DTO\Casters\TimestampCaster;
 
+/**
+ * @implements Arrayable<string, mixed>
+ */
 #[DefaultCast(DateTimeInterface::class, TimestampCaster::class)]
 abstract class DataTransferObject extends SpatieDTO implements
     JsonSerializable, Arrayable, Jsonable, Stringable, Castable
@@ -45,7 +48,11 @@ abstract class DataTransferObject extends SpatieDTO implements
         return $this->toJson();
     }
 
-    public static function castUsing(array $arguments)
+    /**
+     * @param  array<mixed>  $arguments
+     * @return DTOCast
+     */
+    public static function castUsing(array $arguments): DTOCast
     {
         return new DTOCast(static::class);
     }

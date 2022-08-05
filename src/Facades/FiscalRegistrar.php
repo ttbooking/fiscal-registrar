@@ -12,9 +12,9 @@ use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Enums\Operation;
 
 /**
- * @method static string getConnectionName
+ * @method static string getConnectionName()
  * @method static FiscalRegistrarContract connection(string $name = null)
- * @method static FiscalRegistrarContract[] getConnections
+ * @method static FiscalRegistrarContract[] getConnections()
  * @method static string register(Operation $operation, string $externalId, Receipt $receipt)
  * @method static Result|null report(string $id)
  * @method static void processCallback(mixed $payload, Closure $handler = null)

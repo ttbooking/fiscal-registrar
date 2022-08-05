@@ -21,7 +21,7 @@ final class Receipt extends DataTransferObject
 
     public ?Receipt\SupplierInfo $supplier_info = null;
 
-    /** @var Receipt\Item[] */
+    /** @var Collection<int, Receipt\Item> */
     #[CastWith(ArrayCaster::class, itemType: Receipt\Item::class)]
     public Collection $items;
 
@@ -76,17 +76,32 @@ final class Receipt extends DataTransferObject
         return $vats;
     }
 
+    /**
+     * @param  array<mixed>|null  $company
+     * @return array<mixed>
+     */
     protected static function transformCompany(?array $company): array
     {
         return $company ?? [];
     }
 
-    protected static function transformTotal($total, array $args): float
+    /**
+     * @param  float|null  $total
+     * @param  array{items?: ?list<array{sum: float}>}  $args
+     * @return float
+     */
+    protected static function transformTotal(?float $total, array $args): float
     {
         return (float) ($total ?? collect($args['items'] ?? [])->sum('sum'));
     }
 
-    protected static function transformPayments($payments, array $args)
+    /**
+     * @template T of array{electronic: float}
+     * @param  T|null  $payments
+     * @param  array{total?: ?float}  $args
+     * @return T
+     */
+    protected static function transformPayments(?array $payments, array $args): array
     {
         return $payments ?? ['electronic' => self::transformTotal($args['total'] ?? null, $args)];
     }

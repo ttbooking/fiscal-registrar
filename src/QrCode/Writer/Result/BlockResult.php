@@ -9,12 +9,16 @@ use Endroid\QrCode\Writer\Result\AbstractResult;
 
 final class BlockResult extends AbstractResult
 {
+    /**
+     * @param MatrixInterface $matrix
+     * @param string[]|string $charset
+     */
     public function __construct(
         protected MatrixInterface $matrix,
         protected array|string $charset
     ) {
         if (is_string($this->charset)) {
-            $this->charset = preg_split('//u', $this->charset, -1, PREG_SPLIT_NO_EMPTY);
+            $this->charset = preg_split('//u', $this->charset, -1, PREG_SPLIT_NO_EMPTY) ?: [];
         }
     }
 

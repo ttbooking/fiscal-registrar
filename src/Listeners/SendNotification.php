@@ -41,7 +41,7 @@ class SendNotification implements ShouldQueue
     /**
      * Get the tags that should be assigned to the queued listener.
      *
-     * @return array
+     * @return string[]
      */
     public function tags(): array
     {

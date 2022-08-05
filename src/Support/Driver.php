@@ -14,10 +14,16 @@ abstract class Driver implements Contracts\ConnectionAware, Contracts\FiscalRegi
 
     protected UrlGenerator $urlGenerator;
 
+    /** @var array<string, mixed> */
     protected array $config;
 
     protected string $connection;
 
+    /**
+     * @param  UrlGenerator  $urlGenerator
+     * @param  array<string, mixed>  $config
+     * @param  string  $connection
+     */
     public function __construct(UrlGenerator $urlGenerator, array $config = [], string $connection = 'default')
     {
         $this->urlGenerator = $urlGenerator;

@@ -6,6 +6,10 @@ parameters:
         - database/factories
         - database/seeders
         - tests
+    ignoreErrors:
+        -
+            message: '#Constant [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+ is unused.#'
+            path: src/Enums/*
 
 includes:
     - vendor/nunomaduro/larastan/extension.neon

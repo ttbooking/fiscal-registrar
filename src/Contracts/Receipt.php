@@ -32,7 +32,7 @@ interface Receipt extends StatefulFiscalRegistrar
      * @param  mixed  $value
      * @return $this
      */
-    public function with(string $key, $value): static;
+    public function with(string $key, mixed $value): static;
 
     /**
      * @return bool

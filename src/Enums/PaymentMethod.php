@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Enums;
 
 /**
- * @method static self FullPrepayment
- * @method static self Prepayment
- * @method static self Advance
- * @method static self FullPayment
- * @method static self PartialPayment
- * @method static self Credit
- * @method static self CreditPayment
+ * @method static self FullPrepayment()
+ * @method static self Prepayment()
+ * @method static self Advance()
+ * @method static self FullPayment()
+ * @method static self PartialPayment()
+ * @method static self Credit()
+ * @method static self CreditPayment()
  */
 final class PaymentMethod extends Enum
 {

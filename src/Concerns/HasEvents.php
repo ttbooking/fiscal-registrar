@@ -45,7 +45,7 @@ trait HasEvents
      * @param  string|object  $event
      * @param  mixed  $payload
      * @param  bool  $halt
-     * @return array|null
+     * @return array<mixed>|null
      */
     protected function event($event, $payload = [], bool $halt = false) : ?array
     {

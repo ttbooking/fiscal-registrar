@@ -15,7 +15,7 @@ use TTBooking\FiscalRegistrar\Exceptions;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
 /**
- * @method Contracts\FiscalRegistrar getDecoratedInstance
+ * @extends Decorator<Contracts\FiscalRegistrar>
  */
 class DriverDispatchingDecorator extends Decorator implements
     Contracts\ConnectionAware,
@@ -35,8 +35,12 @@ class DriverDispatchingDecorator extends Decorator implements
 
     public function getConnectionName(): string
     {
-        return self::instanceOf($this->getDecoratedInstance(), Contracts\ConnectionAware::class)
-            ? $this->getDecoratedInstance()->getConnectionName() : 'unknown';
+        if (self::instanceOf($instance = $this->getDecoratedInstance(), Contracts\ConnectionAware::class)) {
+            /** @var Contracts\ConnectionAware $instance */
+            return $instance->getConnectionName();
+        }
+
+        return 'unknown';
     }
 
     /**
@@ -72,13 +76,14 @@ class DriverDispatchingDecorator extends Decorator implements
         return $result;
     }
 
-    public function processCallback($payload, Closure $handler = null): void
+    public function processCallback(mixed $payload, Closure $handler = null): void
     {
-        if (! self::instanceOf($this->getDecoratedInstance(), Contracts\SupportsCallbacks::class)) {
+        if (! self::instanceOf($instance = $this->getDecoratedInstance(), Contracts\SupportsCallbacks::class)) {
             return;
         }
 
-        $this->getDecoratedInstance()->processCallback($payload, function (DTO\Result $result) use ($handler) {
+        /** @var Contracts\SupportsCallbacks $instance */
+        $instance->processCallback($payload, function (DTO\Result $result) use ($handler) {
             $handler && $handler($result);
             $this->event(new Events\Processed($this->updateReceipt($result)));
         });
@@ -88,10 +93,11 @@ class DriverDispatchingDecorator extends Decorator implements
      * @param  Operation  $operation
      * @param  string  $externalId
      * @param  DTO\Receipt  $payload
-     * @return Receipt|Model
+     * @return Receipt
      */
     protected function resolveOrMakeReceipt(Operation $operation, string $externalId, DTO\Receipt $payload): Receipt
     {
+        /** @var Receipt */
         return $this->receipt->newQuery()->updateOrCreate([
             'connection' => $this->getConnectionName(),
             'external_id' => $externalId,
@@ -100,10 +106,11 @@ class DriverDispatchingDecorator extends Decorator implements
 
     /**
      * @param  DTO\Result  $result
-     * @return Receipt|Model
+     * @return Receipt
      */
     protected function updateReceipt(DTO\Result $result): Receipt
     {
+        /** @var Receipt */
         return tap($this->receipt->newQuery()->where([
             'connection' => $this->getConnectionName(),
             'internal_id' => $result->internal_id,

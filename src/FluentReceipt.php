@@ -12,14 +12,8 @@ use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
 {
-    protected Receipt $model;
-
-    /**
-     * @param  Receipt  $model
-     */
-    final public function __construct(Receipt $model)
+    final public function __construct(protected Receipt $model)
     {
-        $this->model = $model;
     }
 
     public function for(string $connection = null): static
@@ -61,7 +55,7 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         return $this;
     }
 
-    public function with(string $key, $value): static
+    public function with(string $key, mixed $value): static
     {
         if ($this->model->state !== Receipt::STATE_CREATED) {
             throw new Exceptions\StateException('Receipt has invalid state for operation.');
@@ -104,13 +98,13 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         return new static($this->model->newInstance(compact('payload')));
     }
 
-    public function resolve($id): static
+    public function resolve(mixed $id): static
     {
-        try {
-            return new static($this->model->resolveRouteBinding($id, null, true));
-        } catch (RuntimeException $e) {
-            throw new ResolverException('Cannot resolve ['.static::class."] by identifier \"$id\".", $e->getCode(), $e);
+        if (is_null($receipt = $this->model->resolveRouteBinding($id, null, true))) {
+            throw new ResolverException('Cannot resolve ['.static::class."] by identifier \"$id\".");
         }
+
+        return new static($receipt);
     }
 
     public function register(Operation $operation = null, string $externalId = null, DTO\Receipt $payload = null): string
@@ -123,10 +117,17 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         return $this->model->report($id, $force);
     }
 
+    /**
+     * @param  string  $method
+     * @param  array<mixed>  $parameters
+     * @return $this|null
+     */
     public function __call(string $method, array $parameters)
     {
         if (Str::startsWith($method, 'with')) {
             return $this->with(Str::snake(Str::after($method, 'with')), $parameters[0] ?? null);
         }
+
+        return null;
     }
 }

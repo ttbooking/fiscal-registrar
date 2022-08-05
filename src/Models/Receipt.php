@@ -41,6 +41,7 @@ class Receipt extends Model implements StatefulFiscalRegistrar
 
     protected $guarded = ['id', ...self::VIRTUAL_FIELDS, self::CREATED_AT, self::UPDATED_AT];
 
+    /** @var array<string, mixed> */
     protected $attributes = [
         'state' => self::STATE_CREATED,
     ];
@@ -65,21 +66,23 @@ class Receipt extends Model implements StatefulFiscalRegistrar
         });
     }
 
-    public function resolveRouteBinding($value, $field = null, $sole = false): ?self
+    public function resolveRouteBinding($value, $field = null, bool $sole = false): ?self
     {
         $method = $sole ? 'sole' : 'first';
 
-        if (Str::startsWith($value, '@')) {
-            return $this->newQuery()->where(array_filter(array_combine(
-                ['fn_number', 'fiscal_document_number', 'fiscal_document_attribute'],
-                explode(':', ltrim($value, '@'), 3) + array_fill(0, 3, '')
-            )))->$method();
-        }
+        if (is_string($value)) {
+            if (Str::startsWith($value, '@')) {
+                return $this->newQuery()->where(array_filter(array_combine(
+                    ['fn_number', 'fiscal_document_number', 'fiscal_document_attribute'],
+                    explode(':', ltrim($value, '@'), 3) + array_fill(0, 3, '')
+                )))->$method();
+            }
 
-        if (Str::contains($value, ':')) {
-            return $this->newQuery()->where(array_filter(array_combine(
-                ['connection', 'external_id'], explode(':', $value, 2)
-            )))->$method();
+            if (Str::contains($value, ':')) {
+                return $this->newQuery()->where(array_filter(array_combine(
+                    ['connection', 'external_id'], explode(':', $value, 2)
+                )))->$method();
+            }
         }
 
         return $this->newQuery()->where($field ?? $this->getRouteKeyName(), $value)->$method();
@@ -104,8 +107,10 @@ class Receipt extends Model implements StatefulFiscalRegistrar
 
         $this->save();
 
-        return FiscalRegistrar::connection($this->getAttribute('connection'))
-            ->register($this->operation, $this->external_id, $this->payload);
+        /** @var string|null $connection */
+        $connection = $this->getAttribute('connection');
+
+        return FiscalRegistrar::connection($connection)->register($this->operation, $this->external_id, $this->payload);
     }
 
     public function report(string $id = null, bool $force = false): ?DTO\Result
@@ -121,7 +126,10 @@ class Receipt extends Model implements StatefulFiscalRegistrar
                 throw new StateException('Required parameter missing.');
             }
 
-            return FiscalRegistrar::connection($this->getAttribute('connection'))->report($id);
+            /** @var string|null $connection */
+            $connection = $this->getAttribute('connection');
+
+            return FiscalRegistrar::connection($connection)->report($id);
         }
 
         return $this->result;

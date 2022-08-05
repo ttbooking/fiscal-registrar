@@ -6,12 +6,14 @@ namespace TTBooking\FiscalRegistrar;
 
 use Closure;
 use Illuminate\Contracts\Events\Dispatcher;
+use TTBooking\FiscalRegistrar\Contracts\ReceiptUrlGenerator;
+use TTBooking\FiscalRegistrar\Contracts\SupportsCallbacks;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Enums\Operation;
 
 /**
- * @method Contracts\FiscalRegistrar connection(string $name = null)
+ * @extends Support\Manager<Contracts\FiscalRegistrar>
  */
 class FiscalRegistrarManager extends Support\Manager implements
     Contracts\ConnectionAware,
@@ -35,9 +37,11 @@ class FiscalRegistrarManager extends Support\Manager implements
         return $this->connection()->report($id);
     }
 
-    public function processCallback($payload, Closure $handler = null): void
+    public function processCallback(mixed $payload, Closure $handler = null): void
     {
-        $this->connection()->processCallback($payload, $handler);
+        if ($this->connection() instanceof SupportsCallbacks) {
+            $this->connection()->processCallback($payload, $handler);
+        }
     }
 
     /**
@@ -55,42 +59,47 @@ class FiscalRegistrarManager extends Support\Manager implements
     /**
      * Create an instance of the Atol fiscal registrar Driver.
      *
-     * @param  array  $config
+     * @param  array<mixed>  $config
      * @param  string  $connection
      * @return Drivers\AtolDriver
      */
     protected function createAtolDriver(array $config, string $connection): Contracts\FiscalRegistrar
     {
-        return $this->configureInstance(
-            $this->container->make(Drivers\AtolDriver::class, compact('config', 'connection')), $config
-        );
+        /** @var Drivers\AtolDriver $driver */
+        $driver = $this->container->make(Drivers\AtolDriver::class, compact('config', 'connection'));
+
+        return $this->configureInstance($driver, $config);
     }
 
     /**
      * Create an instance of the Proxy fiscal registrar Driver.
      *
-     * @param  array  $config
+     * @param  array<mixed>  $config
      * @param  string  $connection
      * @return Drivers\ProxyDriver
      */
     protected function createProxyDriver(array $config, string $connection): Contracts\FiscalRegistrar
     {
-        return $this->configureInstance(
-            $this->container->make(Drivers\ProxyDriver::class, compact('config', 'connection')), $config
-        );
+        /** @var Drivers\ProxyDriver $driver */
+        $driver = $this->container->make(Drivers\ProxyDriver::class, compact('config', 'connection'));
+
+        return $this->configureInstance($driver, $config);
     }
 
     /**
-     * @param  Contracts\FiscalRegistrar  $fiscalRegistrar
-     * @param  array  $config
-     * @return Contracts\FiscalRegistrar
+     * @template T of Contracts\FiscalRegistrar
+     * @param  T  $fiscalRegistrar
+     * @param  array{url_generator?: ?class-string<ReceiptUrlGenerator>}  $config
+     * @return Contracts\DispatchesEvents&T
      */
     protected function configureInstance(
         Contracts\FiscalRegistrar $fiscalRegistrar,
         array $config
     ): Contracts\FiscalRegistrar {
         if ($fiscalRegistrar instanceof Contracts\GeneratesReceiptUrls && isset($config['url_generator'])) {
-            $fiscalRegistrar->setUrlGenerator($this->container->make($config['url_generator']));
+            /** @var ReceiptUrlGenerator $urlGenerator */
+            $urlGenerator = $this->container->make($config['url_generator']);
+            $fiscalRegistrar->setUrlGenerator($urlGenerator);
         }
 
         if (! $fiscalRegistrar instanceof Contracts\DispatchesEvents) {
@@ -103,11 +112,13 @@ class FiscalRegistrarManager extends Support\Manager implements
     }
 
     /**
-     * @param  Contracts\FiscalRegistrar  $fiscalRegistrar
-     * @return Contracts\FiscalRegistrar|Contracts\DispatchesEvents
+     * @template T of Contracts\FiscalRegistrar
+     * @param  T  $fiscalRegistrar
+     * @return Contracts\DispatchesEvents&T
      */
     protected function decorateInstance(Contracts\FiscalRegistrar $fiscalRegistrar): Contracts\FiscalRegistrar
     {
+        /** @var Contracts\DispatchesEvents&T */
         return $this->container->make(Support\DriverDispatchingDecorator::class, compact('fiscalRegistrar'));
     }
 
@@ -120,7 +131,9 @@ class FiscalRegistrarManager extends Support\Manager implements
     protected function setEventDispatcher(Contracts\DispatchesEvents $instance): static
     {
         if ($this->container->bound(Dispatcher::class)) {
-            $instance->setEventDispatcher($this->container->make(Dispatcher::class));
+            /** @var Dispatcher $events */
+            $events = $this->container->make(Dispatcher::class);
+            $instance->setEventDispatcher($events);
         }
 
         return $this;

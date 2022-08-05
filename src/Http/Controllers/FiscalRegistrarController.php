@@ -9,7 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
 use TTBooking\FiscalRegistrar\Contracts\FiscalRegistrarFactory;
+use TTBooking\FiscalRegistrar\Contracts\SupportsCallbacks;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
+use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Enums\Operation;
 
 class FiscalRegistrarController extends Controller
@@ -30,9 +32,12 @@ class FiscalRegistrarController extends Controller
         $this->factory = $factory;
     }
 
-    public function connections()
+    /**
+     * @return array<string, array{display_name: string, test: bool, company: array<mixed>}>
+     */
+    public function connections(): array
     {
-        /** @var array<string, array> $connections */
+        /** @var array<string, array{display_name?: string, test?: bool, company?: array<mixed>}> $connections */
         $connections = $this->config->get('fiscal-registrar.connections');
 
         return array_combine(
@@ -45,7 +50,7 @@ class FiscalRegistrarController extends Controller
         );
     }
 
-    public function sell(Request $request, string $connection, string $externalId)
+    public function sell(Request $request, string $connection, string $externalId): string
     {
         return $this->factory->connection($connection)->register(
             Operation::Sell(),
@@ -54,7 +59,7 @@ class FiscalRegistrarController extends Controller
         );
     }
 
-    public function sellRefund(Request $request, string $connection, string $externalId)
+    public function sellRefund(Request $request, string $connection, string $externalId): string
     {
         return $this->factory->connection($connection)->register(
             Operation::SellRefund(),
@@ -63,7 +68,7 @@ class FiscalRegistrarController extends Controller
         );
     }
 
-    public function buy(Request $request, string $connection, string $externalId)
+    public function buy(Request $request, string $connection, string $externalId): string
     {
         return $this->factory->connection($connection)->register(
             Operation::Buy(),
@@ -72,7 +77,7 @@ class FiscalRegistrarController extends Controller
         );
     }
 
-    public function buyRefund(Request $request, string $connection, string $externalId)
+    public function buyRefund(Request $request, string $connection, string $externalId): string
     {
         return $this->factory->connection($connection)->register(
             Operation::BuyRefund(),
@@ -81,14 +86,17 @@ class FiscalRegistrarController extends Controller
         );
     }
 
-    public function report(string $connection, string $id)
+    public function report(string $connection, string $id): ?Result
     {
         return $this->factory->connection($connection)->report($id);
     }
 
     public function callback(Request $request, string $connection): \Illuminate\Http\Response
     {
-        $this->factory->connection($connection)->processCallback($request->all());
+        $connection = $this->factory->connection($connection);
+        if ($connection instanceof SupportsCallbacks) {
+            $connection->processCallback($request->all());
+        }
 
         return Response::noContent();
     }

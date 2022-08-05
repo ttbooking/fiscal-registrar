@@ -11,18 +11,19 @@ use TTBooking\FiscalRegistrar\Models\Receipt as Model;
 
 if (! function_exists('receipt')) {
     /**
-     * @param  mixed  $data
+     * @param  ReceiptFactory|ReceiptContract|array<mixed>|Model|DTO\Receipt|scalar|null  $data
      * @return ReceiptFactory|ReceiptContract
      */
-    function receipt($data = null)
+    function receipt(mixed $data = null): ReceiptFactory|ReceiptContract
     {
         // Pass-thru receipt contracts
-        if ($data instanceof ReceiptContract || $data instanceof ReceiptFactory) {
+        if ($data instanceof ReceiptFactory || $data instanceof ReceiptContract) {
             return $data;
         }
 
         // Return receipt factory if no parameters passed
         if (is_null($data)) {
+            /** @var ReceiptFactory */
             return Container::getInstance()->make(ReceiptFactory::class);
         }
 

@@ -43,7 +43,7 @@ final class AtolApiFactory
                 })->build(),
 
             Validation::createValidatorBuilder()
-                ->enableAnnotationMapping(true)
+                ->enableAnnotationMapping()
                 ->addDefaultDoctrineAnnotationReader()
                 ->getValidator()
 

@@ -91,7 +91,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
      */
     protected function registerResources(): void
     {
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'fiscal-registrar');
+        $this->loadTranslationsFrom(__DIR__.'/../lang', 'fiscal-registrar');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'fiscal-registrar');
     }
 

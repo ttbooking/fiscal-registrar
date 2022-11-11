@@ -99,31 +99,31 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
     {
         $this->publishes([
             __DIR__.'/../config/fiscal-registrar.php' => $this->app->configPath('fiscal-registrar.php'),
-        ], 'config');
+        ], ['fiscal-registrar-config', 'fiscal-registrar', 'config']);
 
         $this->publishes([
             __DIR__.'/../database/migrations' => $this->app->databasePath('migrations'),
-        ], 'migrations');
+        ], ['fiscal-registrar-migrations', 'fiscal-registrar', 'migrations']);
 
         $this->publishes([
             __DIR__.'/../stubs/Receipt.stub' => $this->app->path('Models/Receipt.php'),
-        ], 'model');
+        ], ['fiscal-registrar-model', 'fiscal-registrar']);
 
         $this->publishes([
             __DIR__.'/../stubs/ReceiptStoreRequest.stub' => $this->app->path('Http/Requests/ReceiptStoreRequest.php'),
-        ], 'request');
+        ], ['fiscal-registrar-request', 'fiscal-registrar']);
 
         $this->publishes([
             __DIR__.'/../stubs/ReceiptQueryBuilder.stub' => $this->app->path('Support/ReceiptQueryBuilder.php'),
-        ], 'query');
+        ], ['fiscal-registrar-query', 'fiscal-registrar']);
 
         $this->publishes([
             __DIR__.'/../resources/views' => $this->app->resourcePath('views/vendor/fiscal-registrar'),
-        ], 'views');
+        ], ['fiscal-registrar-views', 'fiscal-registrar', 'views']);
 
         $this->publishes([
             __DIR__.'/../public' => public_path('vendor/fiscal-registrar'),
-        ], 'assets');
+        ], ['fiscal-registrar-assets', 'fiscal-registrar', 'assets']);
     }
 
     protected function registerMigrations(): void

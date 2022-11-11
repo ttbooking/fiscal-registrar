@@ -43,7 +43,7 @@ return [
         'intellectual_activity' => 'intellectual activity',
         'payment' => 'payment',
         'agent_commission' => 'agent commission',
-        'award' => 'fee/fine/reward/bonus',
+        'award' => 'award',
         'composite' => 'composite payment object',
         'another' => 'another payment object',
         'property_right' => 'property right',

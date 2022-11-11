@@ -18,11 +18,6 @@ class HomeController extends Controller
         return view('fiscal-registrar::layout', [
             'fiscalRegistrarScriptVariables' => [
                 'path' => config('fiscal-registrar.path'),
-                'pusher' => [
-                    'key' => config('broadcasting.connections.pusher.key'),
-                    'cluster' => config('broadcasting.connections.pusher.options.cluster', 'eu'),
-                    'useTLS' => config('broadcasting.connections.pusher.options.useTLS', true),
-                ],
             ],
         ]);
     }

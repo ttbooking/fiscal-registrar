@@ -22,6 +22,7 @@
     window.FiscalRegistrar = @json($fiscalRegistrarScriptVariables);
 </script>
 
+<script type="text/javascript" src="{{ asset(mix('app.js')) }}"></script>
 <script type="text/javascript" src="{{ asset(mix('manifest.js', 'vendor/fiscal-registrar')) }}"></script>
 <script type="text/javascript" src="{{ asset(mix('vendor.js', 'vendor/fiscal-registrar')) }}"></script>
 <script type="text/javascript" src="{{ asset(mix('app.js', 'vendor/fiscal-registrar')) }}"></script>

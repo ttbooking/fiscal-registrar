@@ -7,18 +7,18 @@ import Routes from './routes'
 import VueRouter from 'vue-router'
 import 'bootstrap'
 
-let token = document.head.querySelector('meta[name="csrf-token"]')
+const token = document.head.querySelector('meta[name="csrf-token"]')
 
 if (token) {
-    axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content
+    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content
 }
 
 Vue.use(BootstrapVue)
 Vue.use(VueDeepSet)
 Vue.use(VueRouter)
 
-Vue.prototype.$http = axios.create()
-Model.$http = axios
+Vue.prototype.$http = window.axios.create()
+Model.$http = window.axios
 
 window.qs = require('qs')
 window.merge = require('deepmerge')

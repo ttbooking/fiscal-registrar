@@ -1,6 +1,6 @@
-const mix = require('laravel-mix')
-const webpack = require('webpack')
-const path = require('path')
+const mix = require("laravel-mix");
+const webpack = require("webpack");
+const path = require("path");
 
 /*
  |--------------------------------------------------------------------------
@@ -23,22 +23,22 @@ mix.options({
         },
     },
 })
-    .setPublicPath('public')
-    .js('resources/js/app.js', 'public')
+    .setPublicPath("public")
+    .js("resources/js/app.js", "public")
     .vue()
-    .sass('resources/sass/app.scss', 'public', {
+    .sass("resources/sass/app.scss", "public", {
         sassOptions: {
             quietDeps: true,
         },
     })
     .version()
     .extract()
-    .copy('resources/img', 'public/img')
+    .copy("resources/img", "public/img")
     .webpackConfig({
         resolve: {
             symlinks: false,
             alias: {
-                '@': path.resolve(__dirname, 'resources/js/'),
+                "@": path.resolve(__dirname, "resources/js/"),
             },
         },
         plugins: [
@@ -47,4 +47,4 @@ mix.options({
                 contextRegExp: /moment$/,
             }),
         ],
-    })
+    });

@@ -10,9 +10,13 @@
     <title>{{ __('fiscal-registrar::main.title') }}{{ config('app.name') ? ' - ' . config('app.name') : '' }}</title>
 
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" />
-    <link href="{{ asset(mix('app.css', 'vendor/fiscal-registrar')) }}" rel="stylesheet" />
 
-    @vite('resources/js/app.js', 'vendor/fiscal-registrar/build')
+    @vite('resources/js/app.js')
+    {{
+        Vite::useHotFile('vendor/fiscal-registrar/hot')
+            ->useBuildDirectory('vendor/fiscal-registrar/build')
+            ->withEntryPoints(['resources/js/app.js'])
+    }}
 </head>
 <body>
 <div id="fiscal-registrar" v-cloak>

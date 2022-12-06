@@ -7,14 +7,9 @@ import Base from "./base";
 import { Model } from "vue-api-query";
 import Routes from "./routes";
 import VueRouter from "vue-router";
+import LaravelVuePagination from "laravel-vue-pagination";
 import "bootstrap";
 import "../sass/app.scss";
-
-const token = document.head.querySelector('meta[name="csrf-token"]');
-
-if (token) {
-    window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
-}
 
 Vue.use(BootstrapVue);
 Vue.use(VueDeepSet);
@@ -48,7 +43,7 @@ const router = new VueRouter({
     },
 });
 
-Vue.component("pagination", require("laravel-vue-pagination"));
+Vue.component("pagination", LaravelVuePagination);
 
 Vue.mixin(Base);
 

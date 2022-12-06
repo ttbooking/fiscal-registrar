@@ -1,11 +1,14 @@
 import Vue from "vue";
 import BootstrapVue from "bootstrap-vue";
 import * as VueDeepSet from "vue-deepset";
+import merge from "deepmerge";
+import qs from "qs";
 import Base from "./base";
 import { Model } from "vue-api-query";
 import Routes from "./routes";
 import VueRouter from "vue-router";
 import "bootstrap";
+import "../sass/app.scss";
 
 const token = document.head.querySelector('meta[name="csrf-token"]');
 
@@ -20,8 +23,8 @@ Vue.use(VueRouter);
 Vue.prototype.$http = window.axios.create();
 Model.$http = window.axios;
 
-window.qs = require("qs");
-window.merge = require("deepmerge");
+window.merge = merge;
+window.qs = qs;
 
 window.FiscalRegistrar.basePath = "/" + window.FiscalRegistrar.path;
 

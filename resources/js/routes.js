@@ -4,24 +4,24 @@ export default [
     {
         path: "/receipts",
         name: "receipts",
-        component: require("./screens/receipts").default,
+        component: () => import("./screens/receipts.vue"),
     },
 
     {
         path: "/receipt/new",
         name: "new-receipt",
-        component: require("./screens/receipt").default,
+        component: () => import("./screens/receipt.vue"),
     },
 
     {
         path: "/receipt/from/:id",
         name: "new-receipt-from-existing",
-        component: require("./screens/receipt").default,
+        component: () => import("./screens/receipt.vue"),
     },
 
     {
         path: "/receipt/:id",
         name: "receipt",
-        component: require("./screens/receipt").default,
+        component: () => import("./screens/receipt.vue"),
     },
 ];

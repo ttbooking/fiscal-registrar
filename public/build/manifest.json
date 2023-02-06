@@ -1,55 +1,57 @@
 {
-  "resources/js/app.js": {
-    "file": "assets/app.b1357bf3.js",
-    "src": "resources/js/app.js",
-    "isEntry": true,
+  "__plugin-vue2_normalizer-fe6cccce.js": {
+    "file": "assets/_plugin-vue2_normalizer-fe6cccce.js",
     "imports": [
-      "_vendor.6cbaa67a.js"
+      "_vendor-317c7b7d.js"
+    ]
+  },
+  "_vendor-317c7b7d.js": {
+    "file": "assets/vendor-317c7b7d.js"
+  },
+  "resources/js/app.css": {
+    "file": "assets/app-362e5336.css",
+    "src": "resources/js/app.css"
+  },
+  "resources/js/app.js": {
+    "css": [
+      "assets/app-362e5336.css"
     ],
     "dynamicImports": [
       "resources/js/screens/receipts.vue",
+      "resources/js/screens/receipt.vue",
+      "resources/js/screens/receipt.vue",
       "resources/js/screens/receipt.vue"
     ],
-    "css": [
-      "assets/app.362e5336.css"
-    ]
-  },
-  "_vendor.6cbaa67a.js": {
-    "file": "assets/vendor.6cbaa67a.js"
-  },
-  "resources/js/screens/receipts.vue": {
-    "file": "assets/receipts.ddf4512a.js",
-    "src": "resources/js/screens/receipts.vue",
-    "isDynamicEntry": true,
+    "file": "assets/app-52c1eb5c.js",
     "imports": [
-      "__plugin-vue2_normalizer.16d09ded.js",
-      "_vendor.6cbaa67a.js"
-    ]
-  },
-  "__plugin-vue2_normalizer.16d09ded.js": {
-    "file": "assets/_plugin-vue2_normalizer.16d09ded.js",
-    "imports": [
-      "_vendor.6cbaa67a.js"
-    ]
-  },
-  "resources/js/screens/receipt.vue": {
-    "file": "assets/receipt.f31184b6.js",
-    "src": "resources/js/screens/receipt.vue",
-    "isDynamicEntry": true,
-    "imports": [
-      "__plugin-vue2_normalizer.16d09ded.js",
-      "_vendor.6cbaa67a.js"
+      "_vendor-317c7b7d.js"
     ],
-    "css": [
-      "assets/receipt.41f92b93.css"
-    ]
+    "isEntry": true,
+    "src": "resources/js/app.js"
   },
   "resources/js/screens/receipt.css": {
-    "file": "assets/receipt.41f92b93.css",
+    "file": "assets/receipt-41f92b93.css",
     "src": "resources/js/screens/receipt.css"
   },
-  "resources/js/app.css": {
-    "file": "assets/app.362e5336.css",
-    "src": "resources/js/app.css"
+  "resources/js/screens/receipt.vue": {
+    "css": [
+      "assets/receipt-41f92b93.css"
+    ],
+    "file": "assets/receipt-4f9c9a4f.js",
+    "imports": [
+      "__plugin-vue2_normalizer-fe6cccce.js",
+      "_vendor-317c7b7d.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/screens/receipt.vue"
+  },
+  "resources/js/screens/receipts.vue": {
+    "file": "assets/receipts-216b52fd.js",
+    "imports": [
+      "__plugin-vue2_normalizer-fe6cccce.js",
+      "_vendor-317c7b7d.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/screens/receipts.vue"
   }
 }

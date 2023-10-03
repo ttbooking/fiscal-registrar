@@ -6,9 +6,9 @@ namespace TTBooking\FiscalRegistrar\Support;
 
 use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\QrCode;
-use Endroid\QrCode\RoundBlockSizeMode\RoundBlockSizeModeMargin;
+use Endroid\QrCode\RoundBlockSizeMode;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Writer\Result\ResultInterface;
 use TTBooking\FiscalRegistrar\DTO\Result\Payload;
@@ -51,10 +51,10 @@ class ReceiptQRCode
     {
         $qrCode = QrCode::create($this->data)
             ->setEncoding(new Encoding('UTF-8'))
-            ->setErrorCorrectionLevel(new ErrorCorrectionLevelHigh)
+            ->setErrorCorrectionLevel(ErrorCorrectionLevel::High)
             ->setSize(100)
             ->setMargin(10)
-            ->setRoundBlockSizeMode(new RoundBlockSizeModeMargin)
+            ->setRoundBlockSizeMode(RoundBlockSizeMode::Margin)
             ->setForegroundColor(new Color(0, 0, 0))
             ->setBackgroundColor(new Color(255, 255, 255, 127));
 

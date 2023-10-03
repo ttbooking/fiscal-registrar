@@ -142,8 +142,8 @@ export default {
                             variant: "danger",
                             solid: true,
                             noCloseButton: true,
-                        }
-                    )
+                        },
+                    ),
                 );
             }
         },
@@ -238,7 +238,7 @@ export default {
             let printWindow = window.open(
                 window.FiscalRegistrar.basePath + "/api/v1/receipts/" + this.receipt.id + "/preview",
                 "ReceiptPreview",
-                "popup,width=500,height=1000"
+                "popup,width=500,height=1000",
             );
             printWindow.onafterprint = printWindow.close;
             printWindow.onload = function () {
@@ -294,7 +294,7 @@ export default {
 
         vatsPlaceholder() {
             return Object.fromEntries(
-                Object.entries(this.getVats(!this.receipt.payload.vats)).map(([key, val]) => [key, String(val)])
+                Object.entries(this.getVats(!this.receipt.payload.vats)).map(([key, val]) => [key, String(val)]),
             );
         },
 

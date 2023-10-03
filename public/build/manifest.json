@@ -1,20 +1,20 @@
 {
-  "__plugin-vue2_normalizer-fe6cccce.js": {
-    "file": "assets/_plugin-vue2_normalizer-fe6cccce.js",
+  "__plugin-vue2_normalizer-88c150df.js": {
+    "file": "assets/_plugin-vue2_normalizer-88c150df.js",
     "imports": [
-      "_vendor-317c7b7d.js"
+      "_vendor-23400ec9.js"
     ]
   },
-  "_vendor-317c7b7d.js": {
-    "file": "assets/vendor-317c7b7d.js"
+  "_vendor-23400ec9.js": {
+    "file": "assets/vendor-23400ec9.js"
   },
   "resources/js/app.css": {
-    "file": "assets/app-362e5336.css",
+    "file": "assets/app-54011172.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
     "css": [
-      "assets/app-362e5336.css"
+      "assets/app-54011172.css"
     ],
     "dynamicImports": [
       "resources/js/screens/receipts.vue",
@@ -22,34 +22,34 @@
       "resources/js/screens/receipt.vue",
       "resources/js/screens/receipt.vue"
     ],
-    "file": "assets/app-52c1eb5c.js",
+    "file": "assets/app-ddb67135.js",
     "imports": [
-      "_vendor-317c7b7d.js"
+      "_vendor-23400ec9.js"
     ],
     "isEntry": true,
     "src": "resources/js/app.js"
   },
   "resources/js/screens/receipt.css": {
-    "file": "assets/receipt-41f92b93.css",
+    "file": "assets/receipt-3f9d6b90.css",
     "src": "resources/js/screens/receipt.css"
   },
   "resources/js/screens/receipt.vue": {
     "css": [
-      "assets/receipt-41f92b93.css"
+      "assets/receipt-3f9d6b90.css"
     ],
-    "file": "assets/receipt-4f9c9a4f.js",
+    "file": "assets/receipt-16853d3f.js",
     "imports": [
-      "__plugin-vue2_normalizer-fe6cccce.js",
-      "_vendor-317c7b7d.js"
+      "__plugin-vue2_normalizer-88c150df.js",
+      "_vendor-23400ec9.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/screens/receipt.vue"
   },
   "resources/js/screens/receipts.vue": {
-    "file": "assets/receipts-216b52fd.js",
+    "file": "assets/receipts-3ca61839.js",
     "imports": [
-      "__plugin-vue2_normalizer-fe6cccce.js",
-      "_vendor-317c7b7d.js"
+      "__plugin-vue2_normalizer-88c150df.js",
+      "_vendor-23400ec9.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/screens/receipts.vue"

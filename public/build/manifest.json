@@ -1,20 +1,16 @@
 {
-  "__plugin-vue2_normalizer-88c150df.js": {
-    "file": "assets/_plugin-vue2_normalizer-88c150df.js",
+  "__plugin-vue2_normalizer-bxzTpfF9.js": {
+    "file": "assets/_plugin-vue2_normalizer-bxzTpfF9.js",
     "imports": [
-      "_vendor-23400ec9.js"
+      "_vendor-Pqrbvlw4.js"
     ]
   },
-  "_vendor-23400ec9.js": {
-    "file": "assets/vendor-23400ec9.js"
-  },
-  "resources/js/app.css": {
-    "file": "assets/app-54011172.css",
-    "src": "resources/js/app.css"
+  "_vendor-Pqrbvlw4.js": {
+    "file": "assets/vendor-Pqrbvlw4.js"
   },
   "resources/js/app.js": {
     "css": [
-      "assets/app-54011172.css"
+      "assets/app-3Fd_40bE.css"
     ],
     "dynamicImports": [
       "resources/js/screens/receipts.vue",
@@ -22,34 +18,30 @@
       "resources/js/screens/receipt.vue",
       "resources/js/screens/receipt.vue"
     ],
-    "file": "assets/app-ddb67135.js",
+    "file": "assets/app-ZuqSH0vk.js",
     "imports": [
-      "_vendor-23400ec9.js"
+      "_vendor-Pqrbvlw4.js"
     ],
     "isEntry": true,
     "src": "resources/js/app.js"
   },
-  "resources/js/screens/receipt.css": {
-    "file": "assets/receipt-3f9d6b90.css",
-    "src": "resources/js/screens/receipt.css"
-  },
   "resources/js/screens/receipt.vue": {
     "css": [
-      "assets/receipt-3f9d6b90.css"
+      "assets/receipt-N6JETo2o.css"
     ],
-    "file": "assets/receipt-16853d3f.js",
+    "file": "assets/receipt-0aiUfRm4.js",
     "imports": [
-      "__plugin-vue2_normalizer-88c150df.js",
-      "_vendor-23400ec9.js"
+      "__plugin-vue2_normalizer-bxzTpfF9.js",
+      "_vendor-Pqrbvlw4.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/screens/receipt.vue"
   },
   "resources/js/screens/receipts.vue": {
-    "file": "assets/receipts-3ca61839.js",
+    "file": "assets/receipts-If_f90fZ.js",
     "imports": [
-      "__plugin-vue2_normalizer-88c150df.js",
-      "_vendor-23400ec9.js"
+      "__plugin-vue2_normalizer-bxzTpfF9.js",
+      "_vendor-Pqrbvlw4.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/screens/receipts.vue"

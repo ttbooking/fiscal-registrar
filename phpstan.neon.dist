@@ -12,4 +12,4 @@ parameters:
             path: src/Enums/*
 
 includes:
-    - vendor/nunomaduro/larastan/extension.neon
+    - vendor/larastan/larastan/extension.neon

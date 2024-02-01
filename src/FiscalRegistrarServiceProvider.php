@@ -190,8 +190,8 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
         if ($this->app->runningInConsole() && ($options['schedule'] ?? false)) {
             $this->callAfterResolving(Schedule::class,
                 fn (Schedule $schedule) => $schedule->job(new Jobs\SyncReceipts(
-                    (int) $options['older_than_minutes'] ?? 5,
-                    (int) $options['batch_size'] ?? 1
+                    (int) ($options['older_than_minutes'] ?? 5),
+                    (int) ($options['batch_size'] ?? 1)
                 ))->cron($options['schedule'])
             );
         }

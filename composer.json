@@ -1,7 +1,7 @@
 {
     "name": "ttbooking/fiscal-registrar",
-    "description": "Fiscal Registrar service.",
     "type": "library",
+    "description": "Fiscal Registrar service.",
     "keywords": ["fiscal registrar", "receipt", "atol", "atol online", "kkm", "54fz", "fz54"],
     "license": "MIT",
     "support": {
@@ -16,20 +16,20 @@
     ],
     "require": {
         "php": "^8.1",
-        "ext-json": "*",
         "endroid/qr-code": "^5.0",
-        "laravel/framework": "^9.19 || ^10.0",
+        "laravel/framework": "^10.0",
         "myclabs/php-enum": "^1.8",
         "spatie/data-transfer-object": "^3.5",
         "spatie/laravel-query-builder": "^5.0",
         "ttbooking/atol-client": "^1.7"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.14",
+        "fakerphp/faker": "^1.9.1",
         "larastan/larastan": "^2.7",
-        "mockery/mockery": "^1.4",
-        "orchestra/testbench": "^7.0 || ^8.0",
-        "phpunit/phpunit": "^9.5.10 || ^10.0"
+        "laravel/pint": "^1.11",
+        "mockery/mockery": "^1.4.4",
+        "orchestra/testbench": "^8.0",
+        "phpunit/phpunit": "^10.0"
     },
     "autoload": {
         "psr-4": {
@@ -45,10 +45,6 @@
         "psr-4": {
             "TTBooking\\FiscalRegistrar\\Tests\\": "tests/"
         }
-    },
-    "scripts": {
-        "analyze": "vendor/bin/phpstan",
-        "test": "vendor/bin/phpunit"
     },
     "extra": {
         "laravel": {
@@ -66,5 +62,10 @@
         "sort-packages": true
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "scripts": {
+        "analyse": "@php vendor/bin/phpstan analyse",
+        "lint": "@php vendor/bin/pint --test",
+        "test": "@php vendor/bin/phpunit"
+    }
 }

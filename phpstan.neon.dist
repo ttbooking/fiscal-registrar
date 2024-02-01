@@ -1,15 +1,24 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
 parameters:
-    level: 9
     paths:
-        - src
         - config
         - database/factories
         - database/seeders
+        - routes
+        - src
         - tests
-    ignoreErrors:
-        -
-            message: '#Constant [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+ is unused.#'
-            path: src/Enums/*
 
-includes:
-    - vendor/larastan/larastan/extension.neon
+    level: 5
+
+    ignoreErrors:
+        - '#^Call to an undefined method TTBooking\\FiscalRegistrar\\Support\\ReceiptQueryBuilder::allowedAppends\(\)\.$#'
+        -
+            message: '#^Call to an undefined method Faker\\Generator::#'
+            path: database/factories/*
+            reportUnmatched: false
+        -
+            message: '#^Constant [a-zA-Z0-9\\_]+::[a-zA-Z0-9\\_]+ is unused.$#'
+            path: src/Enums/*
+            reportUnmatched: false

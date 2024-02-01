@@ -22,11 +22,15 @@ class ProxyDriver extends Driver implements SupportsCallbacks
     public function register(Operation $operation, string $externalId, Receipt $payload): string
     {
         // TODO: Implement register() method.
+
+        return '';
     }
 
     public function report(string $id): ?Result
     {
         // TODO: Implement report() method.
+
+        return null;
     }
 
     public function processCallback(mixed $payload, Closure $handler = null): void

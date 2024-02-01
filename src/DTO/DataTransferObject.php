@@ -24,7 +24,7 @@ use TTBooking\FiscalRegistrar\DTO\Casters\TimestampCaster;
 abstract class DataTransferObject extends SpatieDTO implements
     JsonSerializable, Arrayable, Jsonable, Stringable, Castable
 {
-    public function __construct(...$args)
+    public function __construct(mixed ...$args)
     {
         if (is_array($args[0] ?? null)) {
             $args = $args[0];

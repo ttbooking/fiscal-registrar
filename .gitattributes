@@ -1,4 +1,4 @@
-* text=auto
+* text=auto eol=lf
 
 *.blade.php diff=html
 *.css diff=css
@@ -8,12 +8,14 @@
 
 public/*.css binary
 public/*.js binary
+/.yarn/releases/** binary
+/.yarn/plugins/** binary
 
 /.github export-ignore
 /tests export-ignore
+.editorconfig export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
-.editorconfig export-ignore
-.styleci.yml export-ignore
 phpstan.neon.dist export-ignore
 phpunit.xml.dist export-ignore
+pint.json export-ignore

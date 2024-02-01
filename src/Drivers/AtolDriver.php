@@ -46,7 +46,7 @@ class AtolDriver extends Driver implements SupportsCallbacks
 
     public function register(Operation $operation, string $externalId, Receipt $payload): string
     {
-        $operationString = Str::camel($operation->getValue());
+        $operationString = Str::camel($operation->value);
 
         $registerRequest = $this->makeRequest($externalId, $payload);
 
@@ -57,7 +57,7 @@ class AtolDriver extends Driver implements SupportsCallbacks
             ($this->config['group_code'], $this->getToken($force), $registerRequest);
             $force = true;
         } catch (RuntimeException $e) {
-            throw new Exceptions\DriverException("{$operationString} operation failed.", $e->getCode(), $e);
+            throw new Exceptions\DriverException("$operationString operation failed.", $e->getCode(), $e);
         } while (static::tokenHasExpired($registerResponse));
 
         return $this->processRegisterResponse($registerResponse);
@@ -84,20 +84,17 @@ class AtolDriver extends Driver implements SupportsCallbacks
             $handler && $handler($this->processReportResponse(
                 $this->converter->getResponseObject(AtolReport\ReportResponse::class, json_encode($payload))
             ));
-        } catch (Exceptions\DriverException $e) {
+        } catch (Exceptions\DriverException) {
             // Suppress driver exceptions during callback execution
         }
     }
 
     /**
-     * @param  bool  $force
-     * @return string
-     *
      * @throws Exceptions\DriverException
      */
     protected function getToken(bool $force = false): string
     {
-        $key = "fiscal-registrar:{$this->connection}:token";
+        $key = "fiscal-registrar:$this->connection:token";
 
         $tokenRetriever = function () {
             $tokenResponse = $this->api->getToken(new AtolGetToken\GetTokenRequest(
@@ -105,11 +102,11 @@ class AtolDriver extends Driver implements SupportsCallbacks
                 $this->config['password']
             ));
 
-            if (! is_null($error = $tokenResponse->getError())) {
-                throw new Exceptions\DriverException($error->getText(), $error->getCode());
+            if (! is_null($error = $tokenResponse->error)) {
+                throw new Exceptions\DriverException($error->text, $error->code);
             }
 
-            return $tokenResponse->getToken();
+            return $tokenResponse->token;
         };
 
         return $force
@@ -123,20 +120,20 @@ class AtolDriver extends Driver implements SupportsCallbacks
      */
     protected static function tokenHasExpired($atolResponse): bool
     {
-        return ! is_null($error = $atolResponse->getError())
-            && $error->getType()->equals(ErrorType::SYSTEM())
-            && $error->getCode() === 11;
+        return ! is_null($error = $atolResponse->error)
+            && $error->type === ErrorType::System
+            && $error->code === 11;
     }
 
     protected function makeRequest(string $externalId, Receipt $receipt): AtolRegister\RegisterRequest
     {
         $receipt->company->name ??= $this->config['company']['name'] ?? null;
         $receipt->company->tax_system ??= isset($this->config['company']['tax_system'])
-            ? new TaxSystem($this->config['company']['tax_system']) : null;
+            ? TaxSystem::from($this->config['company']['tax_system']) : null;
         $receipt->company->payment_address ??= $this->config['company']['payment_address']
             ?? '109316, Регион 77, Москва, Волгоградский проспект, дом 42, корпус 9';
 
-        $registerRequest = new AtolRegister\RegisterRequest(
+        return new AtolRegister\RegisterRequest(
 
             $externalId,
 
@@ -147,21 +144,19 @@ class AtolDriver extends Driver implements SupportsCallbacks
                     $receipt->client->phone
                 ),
 
-                (new AtolRegister\Company(
+                new AtolRegister\Company(
                     $receipt->company->email ??= $this->config['company']['email'] ?? null,
                     $receipt->company->inn ??= $this->config['company']['inn'] ?? null,
-                    $receipt->company->payment_site ??= $this->config['company']['payment_site'] ?? null
-                ))->setSno(
-                    $receipt->company->tax_system
-                        ? AtolRegister\Sno::from($receipt->company->tax_system->getValue()) : null
+                    $receipt->company->payment_site ??= $this->config['company']['payment_site'] ?? null,
+                    $receipt->company->tax_system ? AtolRegister\Sno::from($receipt->company->tax_system->value) : null
                 ),
 
                 collect($receipt->items)->map(function (Receipt\Item $item) {
                     return new AtolRegister\Item(
                         $item->name, $item->price, $item->quantity, $item->sum,
-                        AtolRegister\PaymentMethod::from($item->payment_method->getValue()),
+                        AtolRegister\PaymentMethod::from($item->payment_method->value),
                         new AtolRegister\Vat(
-                            AtolRegister\VatType::from($item->vat->type->getValue()),
+                            AtolRegister\VatType::from($item->vat->type->value),
                             $item->getVatSum()
                         )
                     );
@@ -174,63 +169,59 @@ class AtolDriver extends Driver implements SupportsCallbacks
                     })
                     ->all()
 
-                    ?: [new AtolRegister\Payment(AtolRegister\PaymentType::ELECTRONIC(), 0)],
+                    ?: [new AtolRegister\Payment(AtolRegister\PaymentType::Electronic, 0)],
 
                 $receipt->total
 
             ),
 
-            date_create()
+            date_create(),
+
+            ($callbackUrl = $this->getCallbackUrl()) ? new AtolRegister\Service($callbackUrl) : null
 
         );
-
-        if ($callbackUrl = $this->getCallbackUrl()) {
-            $registerRequest->setService(new AtolRegister\Service($callbackUrl));
-        }
-
-        return $registerRequest;
     }
 
     protected function processRegisterResponse(AtolRegister\RegisterResponse $registerResponse): string
     {
-        if (! is_null($error = $registerResponse->getError())) {
-            throw new Exceptions\DriverException($error->getText(), $error->getCode());
+        if (! is_null($error = $registerResponse->error)) {
+            throw new Exceptions\DriverException($error->text, $error->code);
         }
 
-        return $registerResponse->getUuid();
+        return $registerResponse->uuid;
     }
 
     protected function processReportResponse(AtolReport\ReportResponse $reportResponse): ?Result
     {
-        if (! is_null($error = $reportResponse->getError())) {
-            if ($error->getCode() === 34) {
+        if (! is_null($error = $reportResponse->error)) {
+            if ($error->code === 34) {
                 return null;
             }
-            throw new Exceptions\DriverException($error->getText(), $error->getCode());
+            throw new Exceptions\DriverException($error->text, $error->code);
         }
 
         $result = new Result(
-            internal_id: $reportResponse->getUuid(),
-            timestamp: $reportResponse->getTimestamp(),
-            status: $reportResponse->getStatus()->getValue(),
+            internal_id: $reportResponse->uuid,
+            timestamp: $reportResponse->timestamp,
+            status: $reportResponse->status->value,
             payload: new Result\Payload(
-                fiscal_receipt_number: $reportResponse->getPayload()->getFiscalReceiptNumber(),
-                shift_number: $reportResponse->getPayload()->getShiftNumber(),
-                receipt_datetime: $reportResponse->getPayload()->getReceiptDatetime(),
-                total: $reportResponse->getPayload()->getTotal(),
-                fn_number: $reportResponse->getPayload()->getFnNumber(),
-                ecr_registration_number: $reportResponse->getPayload()->getEcrRegistrationNumber(),
-                fiscal_document_number: $reportResponse->getPayload()->getFiscalDocumentNumber(),
-                fiscal_document_attribute: $reportResponse->getPayload()->getFiscalDocumentAttribute(),
-                fns_site: $reportResponse->getPayload()->getFnsSite(),
-                ofd_inn: $reportResponse->getPayload()->getOfdInn(),
-                ofd_receipt_url: $reportResponse->getPayload()->getOfdReceiptUrl(),
+                fiscal_receipt_number: $reportResponse->payload->fiscalReceiptNumber,
+                shift_number: $reportResponse->payload->shiftNumber,
+                receipt_datetime: $reportResponse->payload->receiptDatetime,
+                total: $reportResponse->payload->total,
+                fn_number: $reportResponse->payload->fnNumber,
+                ecr_registration_number: $reportResponse->payload->ecrRegistrationNumber,
+                fiscal_document_number: $reportResponse->payload->fiscalDocumentNumber,
+                fiscal_document_attribute: $reportResponse->payload->fiscalDocumentAttribute,
+                fns_site: $reportResponse->payload->fnsSite,
+                ofd_inn: $reportResponse->payload->ofdInn,
+                ofd_receipt_url: $reportResponse->payload->ofdReceiptUrl,
             ),
             extra: (object) [
-                'group_code' => $reportResponse->getGroupCode(),
-                'daemon_code' => $reportResponse->getDaemonCode(),
-                'device_code' => $reportResponse->getDeviceCode(),
-                'callback_url' => $reportResponse->getCallbackUrl(),
+                'group_code' => $reportResponse->groupCode,
+                'daemon_code' => $reportResponse->daemonCode,
+                'device_code' => $reportResponse->deviceCode,
+                'callback_url' => $reportResponse->callbackUrl,
             ],
         );
 

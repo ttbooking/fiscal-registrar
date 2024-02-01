@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Enums;
 
-/**
- * @method static self Sell()
- * @method static self SellRefund()
- * @method static self Buy()
- * @method static self BuyRefund()
- */
-final class Operation extends Enum
+enum Operation: string
 {
-    private const Sell = 'sell';
-    private const SellRefund = 'sell_refund';
-    private const Buy = 'buy';
-    private const BuyRefund = 'buy_refund';
+    use Translatable;
+
+    case Sell = 'sell';
+    case SellRefund = 'sell_refund';
+    case Buy = 'buy';
+    case BuyRefund = 'buy_refund';
 }

@@ -21,10 +21,6 @@ class SyncReceipts implements ShouldQueue, ShouldBeUnique
 
     /**
      * Create a new job instance.
-     *
-     * @param  int  $olderThanMinutes
-     * @param  int  $batchSize
-     * @return void
      */
     public function __construct(int $olderThanMinutes = 5, int $batchSize = 1)
     {
@@ -34,11 +30,8 @@ class SyncReceipts implements ShouldQueue, ShouldBeUnique
 
     /**
      * Execute the job.
-     *
-     * @param  Receipt  $receipt
-     * @return void
      */
-    public function handle(Receipt $receipt)
+    public function handle(Receipt $receipt): void
     {
         $receipt->newQuery()
 

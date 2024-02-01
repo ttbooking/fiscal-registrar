@@ -54,8 +54,6 @@ class Receipt extends Model implements StatefulFiscalRegistrar
 
     /**
      * Perform any actions required after the model boots.
-     *
-     * @return void
      */
     public static function booted(): void
     {

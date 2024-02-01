@@ -8,7 +8,10 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use TTBooking\FiscalRegistrar\Contracts\ReceiptFactory;
 
-#[AsCommand(name: 'receipt:show')]
+#[AsCommand(
+    name: 'receipt:show',
+    description: 'Show receipt',
+)]
 class ReceiptShowCommand extends Command
 {
     use ReceiptRenderer;
@@ -21,17 +24,6 @@ class ReceiptShowCommand extends Command
     protected $signature = 'receipt:show {id : Receipt identifier}';
 
     /**
-     * The name of the console command.
-     *
-     * This name is used to identify the command during lazy loading.
-     *
-     * @var string|null
-     *
-     * @deprecated
-     */
-    protected static $defaultName = 'receipt:show';
-
-    /**
      * The console command description.
      *
      * @var string
@@ -40,11 +32,8 @@ class ReceiptShowCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @param  ReceiptFactory  $receipt
-     * @return void
      */
-    public function handle(ReceiptFactory $receipt)
+    public function handle(ReceiptFactory $receipt): void
     {
         $this->receipt($receipt->resolve($this->argument('id'))->getModel());
     }

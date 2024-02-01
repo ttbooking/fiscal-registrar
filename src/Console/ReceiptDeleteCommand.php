@@ -8,7 +8,10 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use TTBooking\FiscalRegistrar\Contracts\ReceiptFactory;
 
-#[AsCommand(name: 'receipt:delete')]
+#[AsCommand(
+    name: 'receipt:delete',
+    description: 'Delete receipt',
+)]
 class ReceiptDeleteCommand extends Command
 {
     /**
@@ -19,17 +22,6 @@ class ReceiptDeleteCommand extends Command
     protected $signature = 'receipt:delete {id : Receipt identifier}';
 
     /**
-     * The name of the console command.
-     *
-     * This name is used to identify the command during lazy loading.
-     *
-     * @var string|null
-     *
-     * @deprecated
-     */
-    protected static $defaultName = 'receipt:delete';
-
-    /**
      * The console command description.
      *
      * @var string
@@ -38,11 +30,8 @@ class ReceiptDeleteCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @param  ReceiptFactory  $receipt
-     * @return void
      */
-    public function handle(ReceiptFactory $receipt)
+    public function handle(ReceiptFactory $receipt): void
     {
         $receipt->resolve($this->argument('id'))->delete();
 

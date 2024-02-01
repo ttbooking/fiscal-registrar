@@ -31,7 +31,7 @@ trait ReceiptRenderer
         static::setupReceiptTableTotal($table, $receipt);
         if (isset($receipt->result->payload)) {
             static::setupReceiptTableFooter($table, $receipt->result->payload);
-            static::setupReceiptTableQRCode($table, $receipt->result->payload, $receipt->operation ?? Operation::Sell());
+            static::setupReceiptTableQRCode($table, $receipt->result->payload, $receipt->operation ?? Operation::Sell);
         }
 
         $table->render();

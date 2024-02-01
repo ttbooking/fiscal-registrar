@@ -1,23 +1,20 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use TTBooking\FiscalRegistrar\Http\Controllers\FiscalRegistrarController;
+use TTBooking\FiscalRegistrar\Http\Controllers\HomeController;
+use TTBooking\FiscalRegistrar\Http\Controllers\ReceiptController;
 
 Route::prefix('api/v1')->group(function () {
 
-    Route::get('/connection', 'FiscalRegistrarController@connections')->name('fiscal-registrar.connections');
+    Route::get('/connection', [FiscalRegistrarController::class, 'connections'])->name('fiscal-registrar.connections');
 
     Route::prefix('connection/{connection}')->group(function () {
-        // Registry Routes...
-        Route::post('/sell/{externalId}', 'FiscalRegistrarController@sell')->name('fiscal-registrar.sell');
-        Route::post('/sell-refund/{externalId}', 'FiscalRegistrarController@sellRefund')->name('fiscal-registrar.sell-refund');
-        Route::post('/buy/{externalId}', 'FiscalRegistrarController@buy')->name('fiscal-registrar.buy');
-        Route::post('/buy-refund/{externalId}', 'FiscalRegistrarController@buyRefund')->name('fiscal-registrar.buy-refund');
-
-        // Report Routes...
-        Route::get('/report/{id}', 'FiscalRegistrarController@report')->name('fiscal-registrar.report');
+        Route::post('/{operation}/{externalId}', [FiscalRegistrarController::class, 'register'])->name('fiscal-registrar.register');
+        Route::get('/report/{id}', [FiscalRegistrarController::class, 'report'])->name('fiscal-registrar.report');
     });
 
-    Route::apiResource('receipts', 'ReceiptController')->names([
+    Route::apiResource('receipts', ReceiptController::class)->names([
         'index' => 'fiscal-registrar.receipts.index',
         'store' => 'fiscal-registrar.receipts.store',
         'show' => 'fiscal-registrar.receipts.show',
@@ -26,12 +23,12 @@ Route::prefix('api/v1')->group(function () {
     ]);
 
     Route::prefix('receipts/{receipt}')->group(function () {
-        Route::get('/preview', 'ReceiptController@preview')->name('fiscal-registrar.receipts.preview');
-        Route::post('/register', 'ReceiptController@register')->name('fiscal-registrar.receipts.register');
-        Route::get('/report', 'ReceiptController@report')->name('fiscal-registrar.receipts.report');
+        Route::get('/preview', [ReceiptController::class, 'preview'])->name('fiscal-registrar.receipts.preview');
+        Route::post('/register', [ReceiptController::class, 'register'])->name('fiscal-registrar.receipts.register');
+        Route::get('/report', [ReceiptController::class, 'report'])->name('fiscal-registrar.receipts.report');
     });
 
 });
 
 // Catch-all Route...
-Route::get('/{view?}', 'HomeController@index')->where('view', '(.*)')->name('fiscal-registrar.index');
+Route::get('/{view?}', [HomeController::class, 'index'])->where('view', '(.*)')->name('fiscal-registrar.index');

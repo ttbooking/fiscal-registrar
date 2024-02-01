@@ -33,10 +33,10 @@ final class Item extends DataTransferObject
     public ?string $nomenclature_code = null;
 
     // 1214
-    public PaymentMethod $payment_method;
+    public PaymentMethod $payment_method = PaymentMethod::FullPrepayment;
 
     // 1212
-    public PaymentObject $payment_object;
+    public PaymentObject $payment_object = PaymentObject::Commodity;
 
     public ?Item\Vat $vat = null;
 
@@ -72,11 +72,11 @@ final class Item extends DataTransferObject
 
     protected static function transformPaymentMethod($payment_method)
     {
-        return $payment_method ?? PaymentMethod::FullPrepayment();
+        return $payment_method ?? PaymentMethod::FullPrepayment;
     }
 
     protected static function transformPaymentObject($payment_object)
     {
-        return $payment_object ?? PaymentObject::Commodity();
+        return $payment_object ?? PaymentObject::Commodity;
     }
 }

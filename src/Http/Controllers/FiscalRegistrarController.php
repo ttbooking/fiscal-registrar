@@ -50,40 +50,9 @@ class FiscalRegistrarController extends Controller
         );
     }
 
-    public function sell(Request $request, string $connection, string $externalId): string
+    public function register(Request $request, string $connection, Operation $operation, string $externalId): string
     {
-        return $this->factory->connection($connection)->register(
-            Operation::Sell(),
-            $externalId,
-            new Receipt($request->all())
-        );
-    }
-
-    public function sellRefund(Request $request, string $connection, string $externalId): string
-    {
-        return $this->factory->connection($connection)->register(
-            Operation::SellRefund(),
-            $externalId,
-            new Receipt($request->all())
-        );
-    }
-
-    public function buy(Request $request, string $connection, string $externalId): string
-    {
-        return $this->factory->connection($connection)->register(
-            Operation::Buy(),
-            $externalId,
-            new Receipt($request->all())
-        );
-    }
-
-    public function buyRefund(Request $request, string $connection, string $externalId): string
-    {
-        return $this->factory->connection($connection)->register(
-            Operation::BuyRefund(),
-            $externalId,
-            new Receipt($request->all())
-        );
+        return $this->factory->connection($connection)->register($operation, $externalId, new Receipt($request->all()));
     }
 
     public function report(string $connection, string $id): ?Result

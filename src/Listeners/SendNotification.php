@@ -11,17 +11,11 @@ use TTBooking\FiscalRegistrar\Notifications\ReceiptProcessed;
 
 class SendNotification implements ShouldQueue
 {
-    protected AnonymousNotifiable $notifiable;
-
     /**
      * Create the event listener.
-     *
-     * @param  AnonymousNotifiable  $notifiable
-     * @return void
      */
-    public function __construct(AnonymousNotifiable $notifiable)
+    public function __construct(protected AnonymousNotifiable $notifiable)
     {
-        $this->notifiable = $notifiable;
     }
 
     /**

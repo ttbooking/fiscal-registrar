@@ -4,22 +4,15 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Enums;
 
-/**
- * @method static self FullPrepayment()
- * @method static self Prepayment()
- * @method static self Advance()
- * @method static self FullPayment()
- * @method static self PartialPayment()
- * @method static self Credit()
- * @method static self CreditPayment()
- */
-final class PaymentMethod extends Enum
+enum PaymentMethod: string
 {
-    private const FullPrepayment = 'full_prepayment';
-    private const Prepayment = 'prepayment';
-    private const Advance = 'advance';
-    private const FullPayment = 'full_payment';
-    private const PartialPayment = 'partial_payment';
-    private const Credit = 'credit';
-    private const CreditPayment = 'credit_payment';
+    use Translatable;
+
+    case FullPrepayment = 'full_prepayment';
+    case Prepayment = 'prepayment';
+    case Advance = 'advance';
+    case FullPayment = 'full_payment';
+    case PartialPayment = 'partial_payment';
+    case Credit = 'credit';
+    case CreditPayment = 'credit_payment';
 }

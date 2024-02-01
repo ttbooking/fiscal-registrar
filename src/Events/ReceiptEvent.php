@@ -21,9 +21,6 @@ abstract class ReceiptEvent implements ShouldBroadcast
 
     /**
      * Create a new event instance.
-     *
-     * @param  Receipt  $receipt
-     * @return void
      */
     public function __construct(Receipt $receipt)
     {

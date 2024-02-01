@@ -42,7 +42,7 @@ class ReceiptFactory extends Factory
         return [
             'state' => Receipt::STATE_CREATED,
             'connection' => $this->faker->randomElement($connections),
-            'operation' => $this->faker->randomElement(Operation::values()),
+            'operation' => $this->faker->randomElement(Operation::cases()),
             'external_id' => $this->faker->uuid(),
             'payload' => fn () => new DTO\Receipt(
 
@@ -56,9 +56,9 @@ class ReceiptFactory extends Factory
                     quantity: $quantity = $this->faker->numberBetween(1, 10),
                     sum: $price * $quantity,
                     measurement_unit: $this->faker->optional()->randomElement(['шт.', 'кг']),
-                    payment_method: PaymentMethod::FullPrepayment(),
-                    payment_object: PaymentObject::Commodity(),
-                    vat: new DTO\Receipt\Item\Vat(type: VatType::VAT20()),
+                    payment_method: PaymentMethod::FullPrepayment,
+                    payment_object: PaymentObject::Commodity,
+                    vat: new DTO\Receipt\Item\Vat(type: VatType::VAT20),
                 ), range(1, $this->faker->numberBetween(1, 10))),
 
             ),

@@ -27,12 +27,11 @@ class ReceiptQRCode
             $payload->fn_number,
             $payload->fiscal_document_number,
             $payload->fiscal_document_attribute,
-            match ($operation->getValue()) {
-                'sell' => 1,
-                'sell_refund' => 2,
-                'buy' => 3,
-                'buy_refund' => 4,
-                default => 1,
+            match ($operation) {
+                Operation::Sell => 1,
+                Operation::SellRefund => 2,
+                Operation::Buy => 3,
+                Operation::BuyRefund => 4,
             }
         );
     }

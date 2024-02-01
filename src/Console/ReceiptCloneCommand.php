@@ -8,7 +8,10 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use TTBooking\FiscalRegistrar\Contracts\ReceiptFactory;
 
-#[AsCommand(name: 'receipt:clone')]
+#[AsCommand(
+    name: 'receipt:clone',
+    description: 'Clone receipt',
+)]
 class ReceiptCloneCommand extends Command
 {
     /**
@@ -19,17 +22,6 @@ class ReceiptCloneCommand extends Command
     protected $signature = 'receipt:clone {id : Receipt identifier}';
 
     /**
-     * The name of the console command.
-     *
-     * This name is used to identify the command during lazy loading.
-     *
-     * @var string|null
-     *
-     * @deprecated
-     */
-    protected static $defaultName = 'receipt:clone';
-
-    /**
      * The console command description.
      *
      * @var string
@@ -38,11 +30,8 @@ class ReceiptCloneCommand extends Command
 
     /**
      * Execute the console command.
-     *
-     * @param  ReceiptFactory  $receipt
-     * @return void
      */
-    public function handle(ReceiptFactory $receipt)
+    public function handle(ReceiptFactory $receipt): void
     {
         $receipt->resolve($this->argument('id'))->clone()->save();
 

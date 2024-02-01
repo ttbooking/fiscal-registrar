@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\DTO\Receipt;
 
 use Spatie\DataTransferObject\Attributes\CastWith;
+use Spatie\DataTransferObject\Casters\EnumCaster;
 use TTBooking\FiscalRegistrar\DTO\Casters\RoundingCaster;
 use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 use TTBooking\FiscalRegistrar\Enums\PaymentMethod;
@@ -33,9 +34,11 @@ final class Item extends DataTransferObject
     public ?string $nomenclature_code = null;
 
     // 1214
+    #[CastWith(EnumCaster::class, PaymentMethod::class)]
     public PaymentMethod $payment_method = PaymentMethod::FullPrepayment;
 
     // 1212
+    #[CastWith(EnumCaster::class, PaymentObject::class)]
     public PaymentObject $payment_object = PaymentObject::Commodity;
 
     public ?Item\Vat $vat = null;

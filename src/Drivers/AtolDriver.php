@@ -131,8 +131,7 @@ class AtolDriver extends Driver implements SupportsCallbacks
     protected function makeRequest(string $externalId, Receipt $receipt): AtolRegister\RegisterRequest
     {
         $receipt->company->name ??= $this->config['company']['name'] ?? null;
-        $receipt->company->tax_system ??= isset($this->config['company']['tax_system'])
-            ? TaxSystem::from($this->config['company']['tax_system']) : null;
+        $receipt->company->tax_system ??= $this->config['company']['tax_system'] ?? null;
         $receipt->company->payment_address ??= $this->config['company']['payment_address']
             ?? '109316, Регион 77, Москва, Волгоградский проспект, дом 42, корпус 9';
 

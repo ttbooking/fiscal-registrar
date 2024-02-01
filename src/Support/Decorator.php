@@ -29,9 +29,9 @@ class Decorator
 
     /**
      * @template TObject of object
+     *
      * @param  TObject  $a
      * @param  class-string<TObject>|TObject  $b
-     * @return bool
      */
     final public static function instanceOf(object $a, string|object $b): bool
     {
@@ -60,7 +60,6 @@ class Decorator
     }
 
     /**
-     * @param  string  $method
      * @param  array<mixed>  $parameters
      * @return mixed
      */

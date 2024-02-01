@@ -15,10 +15,9 @@ final class AtolApiFactory
     /** @var array<string, AtolApi> */
     private array $instances = [];
 
-    /** @var ObjectConverter|null */
     private ?ObjectConverter $converter;
 
-    public function make(string $baseUri = null): AtolApi
+    public function make(?string $baseUri = null): AtolApi
     {
         $baseUri = isset($baseUri) ? rtrim($baseUri, '/') : 'https://online.atol.ru/possystem';
 

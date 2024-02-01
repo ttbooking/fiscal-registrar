@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Support;
 
 use Closure;
-use Illuminate\Database\Eloquent\Model;
 use TTBooking\FiscalRegistrar\Concerns;
 use TTBooking\FiscalRegistrar\Contracts;
 use TTBooking\FiscalRegistrar\DTO;
@@ -17,11 +16,7 @@ use TTBooking\FiscalRegistrar\Models\Receipt;
 /**
  * @extends Decorator<Contracts\FiscalRegistrar>
  */
-class DriverDispatchingDecorator extends Decorator implements
-    Contracts\ConnectionAware,
-    Contracts\FiscalRegistrar,
-    Contracts\SupportsCallbacks,
-    Contracts\DispatchesEvents
+class DriverDispatchingDecorator extends Decorator implements Contracts\ConnectionAware, Contracts\DispatchesEvents, Contracts\FiscalRegistrar, Contracts\SupportsCallbacks
 {
     use Concerns\HasEvents;
 
@@ -44,11 +39,6 @@ class DriverDispatchingDecorator extends Decorator implements
     }
 
     /**
-     * @param  Operation  $operation
-     * @param  string  $externalId
-     * @param  DTO\Receipt  $payload
-     * @return string
-     *
      * @throws Exceptions\FiscalRegistrarException
      */
     public function register(Operation $operation, string $externalId, DTO\Receipt $payload): string
@@ -76,7 +66,7 @@ class DriverDispatchingDecorator extends Decorator implements
         return $result;
     }
 
-    public function processCallback(mixed $payload, Closure $handler = null): void
+    public function processCallback(mixed $payload, ?Closure $handler = null): void
     {
         if (! self::instanceOf($instance = $this->getDecoratedInstance(), Contracts\SupportsCallbacks::class)) {
             return;
@@ -89,12 +79,6 @@ class DriverDispatchingDecorator extends Decorator implements
         });
     }
 
-    /**
-     * @param  Operation  $operation
-     * @param  string  $externalId
-     * @param  DTO\Receipt  $payload
-     * @return Receipt
-     */
     protected function resolveOrMakeReceipt(Operation $operation, string $externalId, DTO\Receipt $payload): Receipt
     {
         /** @var Receipt */
@@ -104,10 +88,6 @@ class DriverDispatchingDecorator extends Decorator implements
         ], compact('operation', 'payload'));
     }
 
-    /**
-     * @param  DTO\Result  $result
-     * @return Receipt
-     */
     protected function updateReceipt(DTO\Result $result): Receipt
     {
         /** @var Receipt */

@@ -10,8 +10,7 @@ use Endroid\QrCode\Writer\Result\AbstractResult;
 final class BlockResult extends AbstractResult
 {
     /**
-     * @param MatrixInterface $matrix
-     * @param string[]|string $charset
+     * @param  string[]|string  $charset
      */
     public function __construct(
         protected MatrixInterface $matrix,

@@ -51,13 +51,15 @@ class AtolDriver extends Driver implements SupportsCallbacks
         $registerRequest = $this->makeRequest($externalId, $payload);
 
         $force = false;
-        do try {
-            /** @var AtolRegister\RegisterResponse $registerResponse */
-            $registerResponse = $this->api->{$operationString}
-            ($this->config['group_code'], $this->getToken($force), $registerRequest);
-            $force = true;
-        } catch (RuntimeException $e) {
-            throw new Exceptions\DriverException("$operationString operation failed.", $e->getCode(), $e);
+        do {
+            try {
+                /** @var AtolRegister\RegisterResponse $registerResponse */
+                $registerResponse = $this->api->{$operationString}
+                ($this->config['group_code'], $this->getToken($force), $registerRequest);
+                $force = true;
+            } catch (RuntimeException $e) {
+                throw new Exceptions\DriverException("$operationString operation failed.", $e->getCode(), $e);
+            }
         } while (static::tokenHasExpired($registerResponse));
 
         return $this->processRegisterResponse($registerResponse);
@@ -68,17 +70,19 @@ class AtolDriver extends Driver implements SupportsCallbacks
         // TODO: implement
 
         $force = false;
-        do try {
-            $reportResponse = $this->api->report($this->config['group_code'], $this->getToken($force), $id);
-            $force = true;
-        } catch (RuntimeException $e) {
-            throw new Exceptions\DriverException('Report operation failed.', $e->getCode(), $e);
+        do {
+            try {
+                $reportResponse = $this->api->report($this->config['group_code'], $this->getToken($force), $id);
+                $force = true;
+            } catch (RuntimeException $e) {
+                throw new Exceptions\DriverException('Report operation failed.', $e->getCode(), $e);
+            }
         } while (static::tokenHasExpired($reportResponse));
 
         return $this->processReportResponse($reportResponse);
     }
 
-    public function processCallback(mixed $payload, Closure $handler = null): void
+    public function processCallback(mixed $payload, ?Closure $handler = null): void
     {
         try {
             $handler && $handler($this->processReportResponse(
@@ -116,7 +120,6 @@ class AtolDriver extends Driver implements SupportsCallbacks
 
     /**
      * @param  AtolRegister\RegisterResponse|AtolReport\ReportResponse  $atolResponse
-     * @return bool
      */
     protected static function tokenHasExpired($atolResponse): bool
     {

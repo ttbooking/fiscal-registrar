@@ -20,9 +20,6 @@ class SendNotification implements ShouldQueue
 
     /**
      * Handle the event.
-     *
-     * @param  Processed  $event
-     * @return void
      */
     public function handle(Processed $event): void
     {

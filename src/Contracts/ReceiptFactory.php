@@ -9,15 +9,10 @@ use TTBooking\FiscalRegistrar\Exceptions\ResolverException;
 
 interface ReceiptFactory
 {
-    /**
-     * @param  DTO\Receipt  $payload
-     * @return Receipt
-     */
     public function make(DTO\Receipt $payload): Receipt;
 
     /**
      * @param  scalar  $id
-     * @return Receipt
      *
      * @throws ResolverException
      */

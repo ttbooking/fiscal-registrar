@@ -29,8 +29,6 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
 
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -47,8 +45,6 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
 
     /**
      * Register the Fiscal Registrar event listeners.
-     *
-     * @return void
      */
     protected function registerEvents(): void
     {
@@ -60,8 +56,6 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
 
     /**
      * Register the Fiscal Registrar routes.
-     *
-     * @return void
      */
     protected function registerRoutes(): void
     {
@@ -86,8 +80,6 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
 
     /**
      * Register the Fiscal Registrar resources.
-     *
-     * @return void
      */
     protected function registerResources(): void
     {
@@ -147,8 +139,6 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
     public function register(): void
     {

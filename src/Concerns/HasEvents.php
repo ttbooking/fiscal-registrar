@@ -11,15 +11,11 @@ trait HasEvents
 {
     /**
      * The event dispatcher implementation.
-     *
-     * @var Dispatcher|null
      */
     protected ?Dispatcher $events;
 
     /**
      * Get the event dispatcher instance.
-     *
-     * @return Dispatcher|null
      */
     public function getEventDispatcher(): ?Dispatcher
     {
@@ -29,7 +25,6 @@ trait HasEvents
     /**
      * Set the event dispatcher instance.
      *
-     * @param  Dispatcher|null  $events
      * @return $this
      */
     public function setEventDispatcher(?Dispatcher $events): DispatchesEvents
@@ -44,10 +39,9 @@ trait HasEvents
      *
      * @param  string|object  $event
      * @param  mixed  $payload
-     * @param  bool  $halt
      * @return array<mixed>|null
      */
-    protected function event($event, $payload = [], bool $halt = false) : ?array
+    protected function event($event, $payload = [], bool $halt = false): ?array
     {
         return isset($this->events) ? $this->events->dispatch($event, $payload, $halt) : null;
     }

@@ -33,7 +33,7 @@ class ProxyDriver extends Driver implements SupportsCallbacks
         return null;
     }
 
-    public function processCallback(mixed $payload, Closure $handler = null): void
+    public function processCallback(mixed $payload, ?Closure $handler = null): void
     {
         // TODO: Implement processCallback() method.
     }

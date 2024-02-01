@@ -12,7 +12,6 @@ use TTBooking\FiscalRegistrar\Models\Receipt as Model;
 if (! function_exists('receipt')) {
     /**
      * @param  ReceiptFactory|ReceiptContract|array<mixed>|Model|DTO\Receipt|scalar|null  $data
-     * @return ReceiptFactory|ReceiptContract
      */
     function receipt(mixed $data = null): ReceiptFactory|ReceiptContract
     {

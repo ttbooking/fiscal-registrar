@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Support;
 
-use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Contracts\ReceiptUrlGenerator;
+use TTBooking\FiscalRegistrar\DTO\Result;
 
 class PlatformaOfdReceiptUrlGenerator implements ReceiptUrlGenerator
 {
@@ -16,7 +16,7 @@ class PlatformaOfdReceiptUrlGenerator implements ReceiptUrlGenerator
         }
 
         return sprintf(
-            "https://lk.platformaofd.ru/web/noauth/cheque?fn=%s&fp=%d&i=%d",
+            'https://lk.platformaofd.ru/web/noauth/cheque?fn=%s&fp=%d&i=%d',
             $result->payload->fn_number,
             $result->payload->fiscal_document_attribute,
             $result->payload->fiscal_document_number

@@ -13,9 +13,7 @@ class Extension extends Factory
     protected static array $extensionProviders = ['Commodity'];
 
     /**
-     * @param  Generator  $generator
      * @param  string  $locale
-     * @return Generator
      */
     public static function extend(Generator $generator, $locale = self::DEFAULT_LOCALE): Generator
     {
@@ -30,7 +28,6 @@ class Extension extends Factory
     /**
      * @param  string  $provider
      * @param  string  $locale
-     * @return string
      */
     protected static function getProviderClassname($provider, $locale = ''): string
     {
@@ -52,7 +49,6 @@ class Extension extends Factory
     /**
      * @param  string  $provider
      * @param  string  $locale
-     * @return string|null
      */
     protected static function findProviderClassname($provider, $locale = ''): ?string
     {

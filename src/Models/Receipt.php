@@ -32,7 +32,9 @@ class Receipt extends Model implements StatefulFiscalRegistrar
     use HasFactory;
 
     const STATE_CREATED = 0;
+
     const STATE_REGISTERED = 1;
+
     const STATE_PROCESSED = 2;
 
     protected const VIRTUAL_FIELDS = ['fn_number', 'fiscal_document_number', 'fiscal_document_attribute', 'total'];
@@ -87,9 +89,9 @@ class Receipt extends Model implements StatefulFiscalRegistrar
     }
 
     public function register(
-        Enums\Operation $operation = null,
-        string $externalId = null,
-        DTO\Receipt $payload = null
+        ?Enums\Operation $operation = null,
+        ?string $externalId = null,
+        ?DTO\Receipt $payload = null
     ): string {
         if ($this->state !== self::STATE_CREATED) {
             throw new StateException('Receipt has already been registered.');
@@ -111,7 +113,7 @@ class Receipt extends Model implements StatefulFiscalRegistrar
         return FiscalRegistrar::connection($connection)->register($this->operation, $this->external_id, $this->payload);
     }
 
-    public function report(string $id = null, bool $force = false): ?DTO\Result
+    public function report(?string $id = null, bool $force = false): ?DTO\Result
     {
         if ($this->state === self::STATE_CREATED) {
             throw new StateException('Receipt is unregistered.');

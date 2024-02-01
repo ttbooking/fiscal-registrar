@@ -13,28 +13,23 @@ use TTBooking\FiscalRegistrar\Contracts\Factory;
 
 /**
  * @template TConnection of object
+ *
  * @implements Factory<TConnection>
  */
 abstract class Manager implements Factory
 {
     /**
      * The container instance.
-     *
-     * @var Container
      */
     protected Container $container;
 
     /**
      * The configuration repository instance.
-     *
-     * @var Repository
      */
     protected Repository $config;
 
     /**
      * Configuration name.
-     *
-     * @var string
      */
     protected string $configName;
 
@@ -55,8 +50,6 @@ abstract class Manager implements Factory
     /**
      * Create a new manager instance.
      *
-     * @param  Container  $container
-     * @param  Repository  $config
      * @return void
      */
     public function __construct(Container $container, Repository $config)
@@ -67,8 +60,6 @@ abstract class Manager implements Factory
 
     /**
      * Get the default driver name.
-     *
-     * @return string
      */
     public function getDefaultDriver(): string
     {
@@ -78,7 +69,7 @@ abstract class Manager implements Factory
         return $this->config->get("{$configName}.default", 'default');
     }
 
-    public function connection(string $name = null): object
+    public function connection(?string $name = null): object
     {
         $name ??= $this->getDefaultDriver();
 
@@ -93,7 +84,6 @@ abstract class Manager implements Factory
     /**
      * Dynamically call the default connection instance.
      *
-     * @param  string  $method
      * @param  array<mixed>  $parameters
      * @return mixed
      */
@@ -105,8 +95,6 @@ abstract class Manager implements Factory
     /**
      * Register a custom driver creator Closure.
      *
-     * @param  string  $driver
-     * @param  Closure  $callback
      * @return $this
      */
     public function extend(string $driver, Closure $callback): static
@@ -119,7 +107,6 @@ abstract class Manager implements Factory
     /**
      * Resolve the given connection.
      *
-     * @param  string  $name
      * @return TConnection
      *
      * @throws InvalidArgumentException
@@ -154,8 +141,6 @@ abstract class Manager implements Factory
 
     /**
      * Get the configuration name.
-     *
-     * @return string
      */
     protected function getConfigName(): string
     {
@@ -165,7 +150,6 @@ abstract class Manager implements Factory
     /**
      * Get the cache connection configuration.
      *
-     * @param  string  $name
      * @return array{driver: string}
      */
     protected function getConfig(string $name): array

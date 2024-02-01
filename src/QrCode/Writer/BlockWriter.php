@@ -16,20 +16,17 @@ final class BlockWriter implements WriterInterface
 {
     public const WRITER_OPTION_CHARSET = 'charset';
 
-    public const BLOCK_CHARSET_DEFAULT  = ' ▀▄█';
+    public const BLOCK_CHARSET_DEFAULT = ' ▀▄█';
+
     public const BLOCK_CHARSET_INVERTED = '█▄▀ ';
 
     /**
-     * @param  QrCodeInterface  $qrCode
-     * @param  LogoInterface|null  $logo
-     * @param  LabelInterface|null  $label
      * @param  array{charset?: ?string}  $options
-     * @return ResultInterface
      */
     public function write(
         QrCodeInterface $qrCode,
-        LogoInterface $logo = null,
-        LabelInterface $label = null,
+        ?LogoInterface $logo = null,
+        ?LabelInterface $label = null,
         array $options = []
     ): ResultInterface {
         $matrixFactory = new MatrixFactory;

@@ -140,7 +140,7 @@ trait ReceiptRenderer
         foreach (explode("\n", $qrCode->getString()) as $qrCodeLine) {
             $qrCodeLine && $table->addRow([new TableCell($qrCodeLine, [
                 'colspan' => 2,
-                'style' => new TableCellStyle(['align' => 'center'])
+                'style' => new TableCellStyle(['align' => 'center']),
             ])]);
         }
 

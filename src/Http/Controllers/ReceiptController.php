@@ -22,9 +22,6 @@ class ReceiptController extends Controller
 
     /**
      * Display a listing of the receipts.
-     *
-     * @param  ReceiptQueryBuilder  $query
-     * @return JsonResponse
      */
     public function index(ReceiptQueryBuilder $query): JsonResponse
     {
@@ -33,9 +30,6 @@ class ReceiptController extends Controller
 
     /**
      * Store a newly created receipt in storage.
-     *
-     * @param  ReceiptStoreRequest  $request
-     * @return JsonResponse
      */
     public function store(ReceiptStoreRequest $request): JsonResponse
     {
@@ -46,9 +40,6 @@ class ReceiptController extends Controller
 
     /**
      * Display the specified receipt.
-     *
-     * @param  Receipt  $receipt
-     * @return JsonResponse
      */
     public function show(Receipt $receipt): JsonResponse
     {
@@ -57,10 +48,6 @@ class ReceiptController extends Controller
 
     /**
      * Update the specified receipt in storage.
-     *
-     * @param  ReceiptStoreRequest  $request
-     * @param  Receipt  $receipt
-     * @return JsonResponse
      */
     public function update(ReceiptStoreRequest $request, Receipt $receipt): JsonResponse
     {
@@ -71,9 +58,6 @@ class ReceiptController extends Controller
 
     /**
      * Remove the specified receipt from storage.
-     *
-     * @param  Receipt  $receipt
-     * @return \Illuminate\Http\Response
      */
     public function destroy(Receipt $receipt): \Illuminate\Http\Response
     {
@@ -82,10 +66,6 @@ class ReceiptController extends Controller
         return Response::noContent();
     }
 
-    /**
-     * @param  Receipt  $receipt
-     * @return \Illuminate\Contracts\View\View
-     */
     public function preview(Repository $config, Receipt $receipt): \Illuminate\Contracts\View\View
     {
         /** @var array{receipt_template?: string} $connectionConfig */
@@ -98,20 +78,11 @@ class ReceiptController extends Controller
         return View::make("fiscal-registrar::receipt.$template", compact('receipt', 'connectionConfig'));
     }
 
-    /**
-     * @param  Receipt  $receipt
-     * @return JsonResponse
-     */
     public function register(Receipt $receipt): JsonResponse
     {
         return Response::json($receipt->register());
     }
 
-    /**
-     * @param  Request  $request
-     * @param  Receipt  $receipt
-     * @return JsonResponse
-     */
     public function report(Request $request, Receipt $receipt): JsonResponse
     {
         return Response::json($receipt->report(null, (bool) $request->query('force')));

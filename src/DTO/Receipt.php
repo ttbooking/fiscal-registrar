@@ -86,9 +86,7 @@ final class Receipt extends DataTransferObject
     }
 
     /**
-     * @param  float|null  $total
      * @param  array{items?: ?list<array{sum: float}>}  $args
-     * @return float
      */
     protected static function transformTotal(?float $total, array $args): float
     {
@@ -97,6 +95,7 @@ final class Receipt extends DataTransferObject
 
     /**
      * @template T of array{electronic: float}
+     *
      * @param  T|null  $payments
      * @param  array{total?: ?float}  $args
      * @return T

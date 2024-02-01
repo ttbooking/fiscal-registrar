@@ -12,21 +12,12 @@ use TTBooking\FiscalRegistrar\Exceptions\DriverException;
 interface StatefulFiscalRegistrar extends FiscalRegistrar
 {
     /**
-     * @param  Operation|null  $operation
-     * @param  string|null  $externalId
-     * @param  Receipt|null  $payload
-     * @return string
-     *
      * @throws DriverException
      */
-    public function register(Operation $operation = null, string $externalId = null, Receipt $payload = null): string;
+    public function register(?Operation $operation = null, ?string $externalId = null, ?Receipt $payload = null): string;
 
     /**
-     * @param  string|null  $id
-     * @param  bool  $force
-     * @return Result|null
-     *
      * @throws DriverException
      */
-    public function report(string $id = null, bool $force = false): ?Result;
+    public function report(?string $id = null, bool $force = false): ?Result;
 }

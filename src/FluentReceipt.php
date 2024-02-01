@@ -5,18 +5,17 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar;
 
 use Illuminate\Support\Str;
-use RuntimeException;
 use TTBooking\FiscalRegistrar\Enums\Operation;
 use TTBooking\FiscalRegistrar\Exceptions\ResolverException;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
-class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
+class FluentReceipt implements Contracts\Receipt, Contracts\ReceiptFactory
 {
     final public function __construct(protected Receipt $model)
     {
     }
 
-    public function for(string $connection = null): static
+    public function for(?string $connection = null): static
     {
         if ($this->model->state !== Receipt::STATE_CREATED) {
             throw new Exceptions\StateException('Receipt has invalid state for operation.');
@@ -29,7 +28,7 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         return $this;
     }
 
-    public function do(Operation $operation = null): static
+    public function do(?Operation $operation = null): static
     {
         if ($this->model->state !== Receipt::STATE_CREATED) {
             throw new Exceptions\StateException('Receipt has invalid state for operation.');
@@ -42,7 +41,7 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         return $this;
     }
 
-    public function as(string $id = null): static
+    public function as(?string $id = null): static
     {
         if ($this->model->state !== Receipt::STATE_CREATED) {
             throw new Exceptions\StateException('Receipt has invalid state for operation.');
@@ -107,18 +106,17 @@ class FluentReceipt implements Contracts\ReceiptFactory, Contracts\Receipt
         return new static($receipt);
     }
 
-    public function register(Operation $operation = null, string $externalId = null, DTO\Receipt $payload = null): string
+    public function register(?Operation $operation = null, ?string $externalId = null, ?DTO\Receipt $payload = null): string
     {
         return $this->model->register($operation, $externalId, $payload);
     }
 
-    public function report(string $id = null, bool $force = false): ?DTO\Result
+    public function report(?string $id = null, bool $force = false): ?DTO\Result
     {
         return $this->model->report($id, $force);
     }
 
     /**
-     * @param  string  $method
      * @param  array<mixed>  $parameters
      * @return $this|null
      */

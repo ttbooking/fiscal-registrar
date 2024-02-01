@@ -15,10 +15,7 @@ use TTBooking\FiscalRegistrar\Enums\Operation;
 /**
  * @extends Support\Manager<Contracts\FiscalRegistrar>
  */
-class FiscalRegistrarManager extends Support\Manager implements
-    Contracts\ConnectionAware,
-    Contracts\FiscalRegistrarFactory,
-    Contracts\FiscalRegistrar
+class FiscalRegistrarManager extends Support\Manager implements Contracts\ConnectionAware, Contracts\FiscalRegistrar, Contracts\FiscalRegistrarFactory
 {
     protected string $configName = 'fiscal-registrar';
 
@@ -37,7 +34,7 @@ class FiscalRegistrarManager extends Support\Manager implements
         return $this->connection()->report($id);
     }
 
-    public function processCallback(mixed $payload, Closure $handler = null): void
+    public function processCallback(mixed $payload, ?Closure $handler = null): void
     {
         if ($this->connection() instanceof SupportsCallbacks) {
             $this->connection()->processCallback($payload, $handler);
@@ -60,7 +57,6 @@ class FiscalRegistrarManager extends Support\Manager implements
      * Create an instance of the Atol fiscal registrar Driver.
      *
      * @param  array<mixed>  $config
-     * @param  string  $connection
      * @return Drivers\AtolDriver
      */
     protected function createAtolDriver(array $config, string $connection): Contracts\FiscalRegistrar
@@ -75,7 +71,6 @@ class FiscalRegistrarManager extends Support\Manager implements
      * Create an instance of the Proxy fiscal registrar Driver.
      *
      * @param  array<mixed>  $config
-     * @param  string  $connection
      * @return Drivers\ProxyDriver
      */
     protected function createProxyDriver(array $config, string $connection): Contracts\FiscalRegistrar
@@ -88,6 +83,7 @@ class FiscalRegistrarManager extends Support\Manager implements
 
     /**
      * @template T of Contracts\FiscalRegistrar
+     *
      * @param  T  $fiscalRegistrar
      * @param  array{url_generator?: ?class-string<ReceiptUrlGenerator>}  $config
      * @return Contracts\DispatchesEvents&T
@@ -113,6 +109,7 @@ class FiscalRegistrarManager extends Support\Manager implements
 
     /**
      * @template T of Contracts\FiscalRegistrar
+     *
      * @param  T  $fiscalRegistrar
      * @return Contracts\DispatchesEvents&T
      */
@@ -125,7 +122,6 @@ class FiscalRegistrarManager extends Support\Manager implements
     /**
      * Set the event dispatcher on the given driver instance.
      *
-     * @param  Contracts\DispatchesEvents  $instance
      * @return $this
      */
     protected function setEventDispatcher(Contracts\DispatchesEvents $instance): static

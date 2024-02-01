@@ -11,7 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 
-class SyncReceipts implements ShouldQueue, ShouldBeUnique
+class SyncReceipts implements ShouldBeUnique, ShouldQueue
 {
     use InteractsWithQueue, Queueable;
 

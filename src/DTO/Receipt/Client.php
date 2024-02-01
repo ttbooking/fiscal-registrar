@@ -10,6 +10,7 @@ final class Client extends DataTransferObject
 {
     // 1008
     public ?string $email = null;
+
     public ?string $phone = null;
 
     // 1227

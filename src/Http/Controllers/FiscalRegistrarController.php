@@ -22,9 +22,6 @@ class FiscalRegistrarController extends Controller
 
     /**
      * Create a new controller instance.
-     *
-     * @param Repository $config
-     * @param FiscalRegistrarFactory $factory
      */
     public function __construct(Repository $config, FiscalRegistrarFactory $factory)
     {

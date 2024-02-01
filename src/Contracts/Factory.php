@@ -14,12 +14,11 @@ interface Factory
     /**
      * Get a connection instance.
      *
-     * @param  string|null  $name
      * @return TConnection
      *
      * @throws InvalidArgumentException
      */
-    public function connection(string $name = null): object;
+    public function connection(?string $name = null): object;
 
     /**
      * Get all of the created connections.

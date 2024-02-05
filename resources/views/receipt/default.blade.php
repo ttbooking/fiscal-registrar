@@ -94,7 +94,7 @@
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.company.tax_system') }}</td>
-            <td>{{ $receipt->payload->company->tax_system?->getDescription('short') ?? (isset($connectionConfig['company']['tax_system']) ? __('fiscal-registrar::enum.tax_system_short.'.$connectionConfig['company']['tax_system']) : '-') }}</td>
+            <td>{{ $receipt->payload->company->tax_system?->getDescription('short') ?? $connectionConfig['company']['tax_system']?->getDescription('short') ?? '-' }}</td>
         </tr>
         <tr>
             <td>{{ __('fiscal-registrar::main.receipt.client.phone_or_email') }}</td>

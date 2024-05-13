@@ -1,16 +1,22 @@
 {
-  "__plugin-vue2_normalizer-zQREu-xu.js": {
-    "file": "assets/_plugin-vue2_normalizer-zQREu-xu.js",
+  "__plugin-vue2_normalizer-420fugDt.js": {
+    "file": "assets/_plugin-vue2_normalizer-420fugDt.js",
+    "name": "_plugin-vue2_normalizer",
     "imports": [
-      "_vendor-lvXhfeXr.js"
+      "_vendor-CKZNi4nT.js"
     ]
   },
-  "_vendor-lvXhfeXr.js": {
-    "file": "assets/vendor-lvXhfeXr.js"
+  "_vendor-CKZNi4nT.js": {
+    "file": "assets/vendor-CKZNi4nT.js",
+    "name": "vendor"
   },
   "resources/js/app.js": {
-    "css": [
-      "assets/app-3Fd_40bE.css"
+    "file": "assets/app-DMhc6gQ7.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "imports": [
+      "_vendor-CKZNi4nT.js"
     ],
     "dynamicImports": [
       "resources/js/screens/receipts.vue",
@@ -18,32 +24,31 @@
       "resources/js/screens/receipt.vue",
       "resources/js/screens/receipt.vue"
     ],
-    "file": "assets/app-fCJ-HPvX.js",
-    "imports": [
-      "_vendor-lvXhfeXr.js"
-    ],
-    "isEntry": true,
-    "src": "resources/js/app.js"
+    "css": [
+      "assets/app-DcV3_jRs.css"
+    ]
   },
   "resources/js/screens/receipt.vue": {
-    "css": [
-      "assets/receipt-N6JETo2o.css"
-    ],
-    "file": "assets/receipt-GV5iCKiM.js",
-    "imports": [
-      "__plugin-vue2_normalizer-zQREu-xu.js",
-      "_vendor-lvXhfeXr.js"
-    ],
+    "file": "assets/receipt-DAdw-NtN.js",
+    "name": "receipt",
+    "src": "resources/js/screens/receipt.vue",
     "isDynamicEntry": true,
-    "src": "resources/js/screens/receipt.vue"
+    "imports": [
+      "__plugin-vue2_normalizer-420fugDt.js",
+      "_vendor-CKZNi4nT.js"
+    ],
+    "css": [
+      "assets/receipt-3okROjag.css"
+    ]
   },
   "resources/js/screens/receipts.vue": {
-    "file": "assets/receipts-EICgsAoG.js",
-    "imports": [
-      "__plugin-vue2_normalizer-zQREu-xu.js",
-      "_vendor-lvXhfeXr.js"
-    ],
+    "file": "assets/receipts-Dyty_LsS.js",
+    "name": "receipts",
+    "src": "resources/js/screens/receipts.vue",
     "isDynamicEntry": true,
-    "src": "resources/js/screens/receipts.vue"
+    "imports": [
+      "__plugin-vue2_normalizer-420fugDt.js",
+      "_vendor-CKZNi4nT.js"
+    ]
   }
 }

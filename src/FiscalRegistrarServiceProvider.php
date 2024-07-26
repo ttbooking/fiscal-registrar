@@ -18,11 +18,11 @@ use TTBooking\FiscalRegistrar\Support\ReceiptQueryBuilder;
 class FiscalRegistrarServiceProvider extends ServiceProvider //implements DeferrableProvider
 {
     /**
-     * All of the container singletons that should be registered.
+     * All of the singletons that should be registered.
      *
      * @var array<string, string>
      */
-    public array $singletons = [
+    public $singletons = [
         'fiscal-registrar' => FiscalRegistrarManager::class,
         'fiscal-registrar.receipt' => FluentReceipt::class,
     ];

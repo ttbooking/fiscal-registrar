@@ -8,13 +8,13 @@
         "prettify": "prettier --write resources"
     },
     "dependencies": {
-        "@babel/runtime": "^7.24.5",
+        "@babel/runtime": "^7.25.7",
         "bootstrap-vue": "^2.23.1",
         "deepmerge": "^4.3.1",
         "jquery": "^3.7.1",
         "laravel-vue-pagination": "^2.3.1",
         "moment": "^2.30.1",
-        "qs": "^6.12.1",
+        "qs": "^6.13.0",
         "vue": "^2.7.16",
         "vue-api-query": "^1.11.0",
         "vue-deepset": "^0.6.3",
@@ -22,10 +22,10 @@
     },
     "devDependencies": {
         "@vitejs/plugin-vue2": "^2.3.1",
-        "laravel-vite-plugin": "^1.0.2",
-        "prettier": "3.2.5",
-        "sass": "^1.77.1",
-        "vite": "^5.2.11"
+        "laravel-vite-plugin": "^1.0.5",
+        "prettier": "3.3.3",
+        "sass": "1.77.6",
+        "vite": "^5.4.9"
     },
-    "packageManager": "yarn@4.2.2"
+    "packageManager": "yarn@4.5.1"
 }

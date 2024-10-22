@@ -1,8 +1,17 @@
-import { defineConfig, splitVendorChunkPlugin } from "vite";
+import { defineConfig } from "vite";
 import laravel from "laravel-vite-plugin";
 import vue from "@vitejs/plugin-vue2";
 
 export default defineConfig({
+    build: {
+        chunkSizeWarningLimit: 1000,
+        rollupOptions: {
+            output: {
+                manualChunks: (id) => (id.includes("node_modules") ? "vendor" : null),
+            },
+        },
+        sourcemap: true,
+    },
     css: {
         preprocessorOptions: {
             scss: {
@@ -10,15 +19,11 @@ export default defineConfig({
             },
         },
     },
-    build: {
-        chunkSizeWarningLimit: 1000,
-    },
     plugins: [
         laravel({
             input: "resources/js/app.js",
             refresh: true,
         }),
-        splitVendorChunkPlugin(),
         vue({
             template: {
                 transformAssetUrls: {

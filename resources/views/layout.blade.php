@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="shortcut icon" href="{{ asset('/vendor/fiscal-registrar/img/favicon.png') }}" />
 
-    <title>{{ __('fiscal-registrar::main.title') }}{{ config('app.name') ? ' - ' . config('app.name') : '' }}</title>
+    <title>{{ __('fiscal-registrar::main.title') }}{{ config('app.name') ? ' - '.config('app.name') : '' }}</title>
 
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" />
 

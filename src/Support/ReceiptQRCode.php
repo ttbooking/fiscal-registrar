@@ -43,19 +43,21 @@ class ReceiptQRCode
 
     public function block(): ResultInterface
     {
-        return (new BlockWriter)->write(QrCode::create($this->data));
+        return (new BlockWriter)->write(new QrCode($this->data));
     }
 
     public function png(): ResultInterface
     {
-        $qrCode = QrCode::create($this->data)
-            ->setEncoding(new Encoding('UTF-8'))
-            ->setErrorCorrectionLevel(ErrorCorrectionLevel::High)
-            ->setSize(100)
-            ->setMargin(10)
-            ->setRoundBlockSizeMode(RoundBlockSizeMode::Margin)
-            ->setForegroundColor(new Color(0, 0, 0))
-            ->setBackgroundColor(new Color(255, 255, 255, 127));
+        $qrCode = new QrCode(
+            data: $this->data,
+            encoding: new Encoding('UTF-8'),
+            errorCorrectionLevel: ErrorCorrectionLevel::High,
+            size: 100,
+            margin: 10,
+            roundBlockSizeMode: RoundBlockSizeMode::Margin,
+            foregroundColor: new Color(0, 0, 0),
+            backgroundColor: new Color(255, 255, 255, 127),
+        );
 
         return (new PngWriter)->write($qrCode);
     }

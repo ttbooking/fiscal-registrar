@@ -13,9 +13,11 @@ final class BlockResult extends AbstractResult
      * @param  string[]|string  $charset
      */
     public function __construct(
-        protected MatrixInterface $matrix,
+        MatrixInterface $matrix,
         protected array|string $charset
     ) {
+        parent::__construct($matrix);
+
         if (is_string($this->charset)) {
             $this->charset = preg_split('//u', $this->charset, -1, PREG_SPLIT_NO_EMPTY) ?: [];
         }
@@ -24,8 +26,8 @@ final class BlockResult extends AbstractResult
     public function getString(): string
     {
         $binaryString = '';
-        for ($rowIndex = 0; $rowIndex < $this->matrix->getBlockCount(); $rowIndex += 2) {
-            for ($columnIndex = 0; $columnIndex < $this->matrix->getBlockCount(); $columnIndex++) {
+        for ($rowIndex = 0; $rowIndex < $this->getMatrix()->getBlockCount(); $rowIndex += 2) {
+            for ($columnIndex = 0; $columnIndex < $this->getMatrix()->getBlockCount(); $columnIndex++) {
                 $binaryString .= $this->charset[bindec(
                     $this->getBlockValue($rowIndex + 1, $columnIndex).
                     $this->getBlockValue($rowIndex, $columnIndex)
@@ -44,12 +46,12 @@ final class BlockResult extends AbstractResult
 
     protected function getBlockValue(int $rowIndex, int $columnIndex): int
     {
-        $blockCount = $this->matrix->getBlockCount();
+        $blockCount = $this->getMatrix()->getBlockCount();
 
         if ($rowIndex >= $blockCount || $columnIndex >= $blockCount) {
             return 0;
         }
 
-        return $this->matrix->getBlockValue($rowIndex, $columnIndex);
+        return $this->getMatrix()->getBlockValue($rowIndex, $columnIndex);
     }
 }

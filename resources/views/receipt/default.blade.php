@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <title>{{ __('fiscal-registrar::main.title') }}{{ config('app.name') ? ' - ' . config('app.name') : '' }}</title>
+    <title>{{ __('fiscal-registrar::main.title') }}{{ config('app.name') ? ' - '.config('app.name') : '' }}</title>
 
     <style>
         @media print {
@@ -228,7 +228,7 @@
         @if ($receipt->result)
             <tfoot>
             <tr>
-                <td colspan="2"><img src="{{ ReceiptQRCode::for($receipt->result->payload, $receipt->operation)->png()->getDataUri() }}" /></td>
+                <td colspan="2"><img src="{{ ReceiptQRCode::for($receipt->result->payload, $receipt->operation)->png()->getDataUri() }}" alt="" /></td>
             </tr>
             </tfoot>
         @endif

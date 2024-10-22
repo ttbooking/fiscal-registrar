@@ -6,6 +6,4 @@ namespace TTBooking\FiscalRegistrar\Exceptions;
 
 use RuntimeException;
 
-abstract class FiscalRegistrarException extends RuntimeException
-{
-}
+abstract class FiscalRegistrarException extends RuntimeException {}

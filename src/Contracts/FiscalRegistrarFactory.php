@@ -7,6 +7,4 @@ namespace TTBooking\FiscalRegistrar\Contracts;
 /**
  * @extends Factory<FiscalRegistrar>
  */
-interface FiscalRegistrarFactory extends Factory
-{
-}
+interface FiscalRegistrarFactory extends Factory {}

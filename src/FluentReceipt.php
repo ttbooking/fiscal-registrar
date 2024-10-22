@@ -11,9 +11,7 @@ use TTBooking\FiscalRegistrar\Models\Receipt;
 
 class FluentReceipt implements Contracts\Receipt, Contracts\ReceiptFactory
 {
-    final public function __construct(protected Receipt $model)
-    {
-    }
+    final public function __construct(protected Receipt $model) {}
 
     public function for(?string $connection = null): static
     {

@@ -16,9 +16,7 @@ use TTBooking\FiscalRegistrar\Support\ReceiptQueryBuilder;
 
 class ReceiptController extends Controller
 {
-    public function __construct(protected Receipt $receipt)
-    {
-    }
+    public function __construct(protected Receipt $receipt) {}
 
     /**
      * Display a listing of the receipts.

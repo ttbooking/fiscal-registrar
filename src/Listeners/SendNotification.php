@@ -14,9 +14,7 @@ class SendNotification implements ShouldQueue
     /**
      * Create the event listener.
      */
-    public function __construct(protected AnonymousNotifiable $notifiable)
-    {
-    }
+    public function __construct(protected AnonymousNotifiable $notifiable) {}
 
     /**
      * Handle the event.

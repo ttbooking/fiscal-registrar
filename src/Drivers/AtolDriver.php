@@ -19,7 +19,6 @@ use TTBooking\FiscalRegistrar\Contracts\SupportsCallbacks;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Enums\Operation;
-use TTBooking\FiscalRegistrar\Enums\TaxSystem;
 use TTBooking\FiscalRegistrar\Exceptions;
 use TTBooking\FiscalRegistrar\Support\Driver;
 

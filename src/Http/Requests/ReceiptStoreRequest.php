@@ -106,6 +106,10 @@ class ReceiptStoreRequest extends FormRequest
             'payload.vats.without_vat' => 'sometimes|numeric|between:0,99999999.99',
             'payload.vats.vat120' => 'sometimes|numeric|between:0,99999999.99',
             'payload.vats.vat110' => 'sometimes|numeric|between:0,99999999.99',
+            'payload.vats.vat5' => 'sometimes|numeric|between:0,99999999.99',
+            'payload.vats.vat7' => 'sometimes|numeric|between:0,99999999.99',
+            'payload.vats.vat105' => 'sometimes|numeric|between:0,99999999.99',
+            'payload.vats.vat107' => 'sometimes|numeric|between:0,99999999.99',
 
             'payload.total' => 'required|numeric|between:0,99999999.99',
             'payload.additional_check_props' => 'sometimes|nullable|string|max:16',
@@ -205,6 +209,10 @@ class ReceiptStoreRequest extends FormRequest
             'payload.vats.without_vat' => __('fiscal-registrar::main.receipt.vats.without_vat'),
             'payload.vats.vat120' => __('fiscal-registrar::main.receipt.vats.vat120'),
             'payload.vats.vat110' => __('fiscal-registrar::main.receipt.vats.vat110'),
+            'payload.vats.vat5' => __('fiscal-registrar::main.receipt.vats.vat5'),
+            'payload.vats.vat7' => __('fiscal-registrar::main.receipt.vats.vat7'),
+            'payload.vats.vat105' => __('fiscal-registrar::main.receipt.vats.vat105'),
+            'payload.vats.vat107' => __('fiscal-registrar::main.receipt.vats.vat107'),
 
             'payload.total' => __('fiscal-registrar::main.receipt.total'),
             'payload.additional_check_props' => __('fiscal-registrar::main.receipt.additional_check_props'),

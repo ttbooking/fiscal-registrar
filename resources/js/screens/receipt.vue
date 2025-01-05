@@ -15,8 +15,12 @@ export default {
             vats: {
                 without_vat: null,
                 with_vat0: null,
+                vat5: null,
+                vat7: null,
                 vat10: null,
                 vat20: null,
+                vat105: null,
+                vat107: null,
                 vat110: null,
                 vat120: null,
             },
@@ -195,8 +199,12 @@ export default {
             const vats = {
                 without_vat: 0,
                 with_vat0: 0,
+                vat5: 0,
+                vat7: 0,
                 vat10: 0,
                 vat20: 0,
+                vat105: 0,
+                vat107: 0,
                 vat110: 0,
                 vat120: 0,
             };
@@ -223,6 +231,18 @@ export default {
                             break;
                         case "vat110":
                             vats.vat110 += this.extractVat(item.sum, item.vat.type);
+                            break;
+                        case "vat5":
+                            vats.vat5 += this.extractVat(item.sum, item.vat.type);
+                            break;
+                        case "vat7":
+                            vats.vat7 += this.extractVat(item.sum, item.vat.type);
+                            break;
+                        case "vat105":
+                            vats.vat105 += this.extractVat(item.sum, item.vat.type);
+                            break;
+                        case "vat107":
+                            vats.vat107 += this.extractVat(item.sum, item.vat.type);
                     }
                 }
             }
@@ -318,6 +338,26 @@ export default {
             },
         },
 
+        vatsVat5: {
+            get: function () {
+                return this.receipt.payload.vats?.vat5 ?? null;
+            },
+            set: function (val) {
+                this.receipt.payload.vats ??= this.vats;
+                this.receipt.payload.vats.vat5 = val || null;
+            },
+        },
+
+        vatsVat7: {
+            get: function () {
+                return this.receipt.payload.vats?.vat7 ?? null;
+            },
+            set: function (val) {
+                this.receipt.payload.vats ??= this.vats;
+                this.receipt.payload.vats.vat7 = val || null;
+            },
+        },
+
         vatsVat10: {
             get: function () {
                 return this.receipt.payload.vats?.vat10 ?? null;
@@ -335,6 +375,26 @@ export default {
             set: function (val) {
                 this.receipt.payload.vats ??= this.vats;
                 this.receipt.payload.vats.vat20 = val || null;
+            },
+        },
+
+        vatsVat105: {
+            get: function () {
+                return this.receipt.payload.vats?.vat105 ?? null;
+            },
+            set: function (val) {
+                this.receipt.payload.vats ??= this.vats;
+                this.receipt.payload.vats.vat105 = val || null;
+            },
+        },
+
+        vatsVat107: {
+            get: function () {
+                return this.receipt.payload.vats?.vat107 ?? null;
+            },
+            set: function (val) {
+                this.receipt.payload.vats ??= this.vats;
+                this.receipt.payload.vats.vat107 = val || null;
             },
         },
 
@@ -1176,6 +1236,42 @@ fieldset {
                                         </b-col>
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group
+                                                label="Сумма НДС чека по ставке 5%"
+                                                label-for="vat5"
+                                                description="тег 1199"
+                                            >
+                                                <b-form-input
+                                                    id="vat5"
+                                                    type="number"
+                                                    min="0"
+                                                    max="42949672.95"
+                                                    step=".01"
+                                                    size="sm"
+                                                    :placeholder="vatsPlaceholder.vat5"
+                                                    v-model.number="vatsVat5"
+                                                ></b-form-input>
+                                            </b-form-group>
+                                        </b-col>
+                                        <b-col align-self="end" lg="2" md="3" sm="4">
+                                            <b-form-group
+                                                label="Сумма НДС чека по ставке 7%"
+                                                label-for="vat7"
+                                                description="тег 1199"
+                                            >
+                                                <b-form-input
+                                                    id="vat7"
+                                                    type="number"
+                                                    min="0"
+                                                    max="42949672.95"
+                                                    step=".01"
+                                                    size="sm"
+                                                    :placeholder="vatsPlaceholder.vat7"
+                                                    v-model.number="vatsVat7"
+                                                ></b-form-input>
+                                            </b-form-group>
+                                        </b-col>
+                                        <b-col align-self="end" lg="2" md="3" sm="4">
+                                            <b-form-group
                                                 label="Сумма НДС чека по ставке 10%"
                                                 label-for="vat10"
                                                 description="тег 1103"
@@ -1207,6 +1303,42 @@ fieldset {
                                                     size="sm"
                                                     :placeholder="vatsPlaceholder.vat20"
                                                     v-model.number="vatsVat20"
+                                                ></b-form-input>
+                                            </b-form-group>
+                                        </b-col>
+                                        <b-col align-self="end" lg="2" md="3" sm="4">
+                                            <b-form-group
+                                                label="Сумма НДС чека по расч. ставке 5/105"
+                                                label-for="vat105"
+                                                description="тег 1199"
+                                            >
+                                                <b-form-input
+                                                    id="vat105"
+                                                    type="number"
+                                                    min="0"
+                                                    max="42949672.95"
+                                                    step=".01"
+                                                    size="sm"
+                                                    :placeholder="vatsPlaceholder.vat105"
+                                                    v-model.number="vatsVat105"
+                                                ></b-form-input>
+                                            </b-form-group>
+                                        </b-col>
+                                        <b-col align-self="end" lg="2" md="3" sm="4">
+                                            <b-form-group
+                                                label="Сумма НДС чека по расч. ставке 7/107"
+                                                label-for="vat107"
+                                                description="тег 1199"
+                                            >
+                                                <b-form-input
+                                                    id="vat107"
+                                                    type="number"
+                                                    min="0"
+                                                    max="42949672.95"
+                                                    step=".01"
+                                                    size="sm"
+                                                    :placeholder="vatsPlaceholder.vat107"
+                                                    v-model.number="vatsVat107"
                                                 ></b-form-input>
                                             </b-form-group>
                                         </b-col>

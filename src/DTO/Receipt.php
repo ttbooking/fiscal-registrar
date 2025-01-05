@@ -70,6 +70,18 @@ final class Receipt extends DataTransferObject
                     break;
                 case VatType::VAT110:
                     $vats->vat110 += $item->getVatSum();
+                    break;
+                case VatType::VAT5:
+                    $vats->vat5 += $item->getVatSum();
+                    break;
+                case VatType::VAT7:
+                    $vats->vat7 += $item->getVatSum();
+                    break;
+                case VatType::VAT105:
+                    $vats->vat105 += $item->getVatSum();
+                    break;
+                case VatType::VAT107:
+                    $vats->vat107 += $item->getVatSum();
             }
         }
 

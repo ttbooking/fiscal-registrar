@@ -82,9 +82,13 @@ return [
     'vat_type' => [
         'none' => 'w/o VAT',
         'vat0' => 'VAT 0%',
+        'vat5' => 'VAT 5%',
+        'vat7' => 'VAT 7%',
         'vat10' => 'VAT 10%',
         'vat18' => 'VAT 18%',
         'vat20' => 'VAT 20%',
+        'vat105' => 'VAT 5/105',
+        'vat107' => 'VAT 7/107',
         'vat110' => 'VAT 10/110',
         'vat118' => 'VAT 18/118',
         'vat120' => 'VAT 20/120',

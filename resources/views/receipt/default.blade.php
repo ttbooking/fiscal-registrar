@@ -202,6 +202,30 @@
                 <td>{{ sprintf('%.2f', $vats->vat110) }}</td>
             </tr>
         @endif
+        @if ($vats->vat5)
+            <tr>
+                <td>{{ __('fiscal-registrar::main.receipt.vats.vat5') }}</td>
+                <td>{{ sprintf('%.2f', $vats->vat5) }}</td>
+            </tr>
+        @endif
+        @if ($vats->vat7)
+            <tr>
+                <td>{{ __('fiscal-registrar::main.receipt.vats.vat7') }}</td>
+                <td>{{ sprintf('%.2f', $vats->vat7) }}</td>
+            </tr>
+        @endif
+        @if ($vats->vat105)
+            <tr>
+                <td>{{ __('fiscal-registrar::main.receipt.vats.vat105') }}</td>
+                <td>{{ sprintf('%.2f', $vats->vat105) }}</td>
+            </tr>
+        @endif
+        @if ($vats->vat107)
+            <tr>
+                <td>{{ __('fiscal-registrar::main.receipt.vats.vat107') }}</td>
+                <td>{{ sprintf('%.2f', $vats->vat107) }}</td>
+            </tr>
+        @endif
         </tbody>
         <tbody>
         <tr>

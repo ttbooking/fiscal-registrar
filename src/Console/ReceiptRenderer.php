@@ -117,6 +117,10 @@ trait ReceiptRenderer
             $vats->without_vat ? [static::trans('receipt.vats.without_vat'), sprintf('%.2f', $vats->without_vat)] : [],
             $vats->vat120 ? [static::trans('receipt.vats.vat120'), sprintf('%.2f', $vats->vat120)] : [],
             $vats->vat110 ? [static::trans('receipt.vats.vat110'), sprintf('%.2f', $vats->vat110)] : [],
+            $vats->vat5 ? [static::trans('receipt.vats.vat5'), sprintf('%.2f', $vats->vat5)] : [],
+            $vats->vat7 ? [static::trans('receipt.vats.vat7'), sprintf('%.2f', $vats->vat7)] : [],
+            $vats->vat105 ? [static::trans('receipt.vats.vat105'), sprintf('%.2f', $vats->vat105)] : [],
+            $vats->vat107 ? [static::trans('receipt.vats.vat107'), sprintf('%.2f', $vats->vat107)] : [],
         ]);
     }
 

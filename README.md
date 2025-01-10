@@ -5,7 +5,7 @@ For the time being it supports most of the *Fiscal Data Format* (FDF, _ru_ ФФ�
 
 # 2. Requirements
 
-* PHP 8.1 or greater;
+* PHP 8.2 or greater;
 * Laravel Framework 10 or greater;
 * Highly recommended: RDBMS with JSON column support;
 * ATOL Online & FDO contracts and connection requisites (not needed for testing purposes).

@@ -17,18 +17,18 @@
     "require": {
         "php": "^8.2",
         "endroid/qr-code": "^6.0",
-        "laravel/framework": "^10.0 || ^11.0",
+        "laravel/framework": "^10.0 || ^11.0 || ^12.0",
         "spatie/data-transfer-object": "^3.5",
         "spatie/laravel-query-builder": "^5.0 || ^6.0",
         "ttbooking/atol-client": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
-        "larastan/larastan": "^2.7",
+        "larastan/larastan": "^2.7 || ^3.0",
         "laravel/pint": "^1.17",
         "mockery/mockery": "^1.4.4",
-        "orchestra/testbench": "^8.0 || ^9.0",
-        "phpunit/phpunit": "^10.0 || ^11.0"
+        "orchestra/testbench": "^8.0 || ^9.0 || ^10.0",
+        "phpunit/phpunit": "^10.0 || ^11.0 || ^12.0"
     },
     "autoload": {
         "psr-4": {

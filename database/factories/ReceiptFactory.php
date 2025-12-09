@@ -58,7 +58,7 @@ class ReceiptFactory extends Factory
                     measurement_unit: $this->faker->optional()->randomElement(['шт.', 'кг']),
                     payment_method: PaymentMethod::FullPrepayment,
                     payment_object: PaymentObject::Commodity,
-                    vat: new DTO\Receipt\Item\Vat(type: VatType::VAT20),
+                    vat: new DTO\Receipt\Item\Vat(type: VatType::VAT22),
                 ), range(1, $this->faker->numberBetween(1, 10))),
 
             ),

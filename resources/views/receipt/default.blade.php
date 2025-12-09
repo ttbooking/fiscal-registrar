@@ -166,10 +166,10 @@
             <td>{{ sprintf('%.2f', $receipt->payload->payments->other) }}</td>
         </tr>
         @php ($vats = $receipt->payload->getVats())
-        @if ($vats->vat20)
+        @if ($vats->vat22)
             <tr>
-                <td>{{ __('fiscal-registrar::main.receipt.vats.vat20') }}</td>
-                <td>{{ sprintf('%.2f', $vats->vat20) }}</td>
+                <td>{{ __('fiscal-registrar::main.receipt.vats.vat22') }}</td>
+                <td>{{ sprintf('%.2f', $vats->vat22) }}</td>
             </tr>
         @endif
         @if ($vats->vat10)
@@ -190,10 +190,10 @@
                 <td>{{ sprintf('%.2f', $vats->without_vat) }}</td>
             </tr>
         @endif
-        @if ($vats->vat120)
+        @if ($vats->vat122)
             <tr>
-                <td>{{ __('fiscal-registrar::main.receipt.vats.vat120') }}</td>
-                <td>{{ sprintf('%.2f', $vats->vat120) }}</td>
+                <td>{{ __('fiscal-registrar::main.receipt.vats.vat122') }}</td>
+                <td>{{ sprintf('%.2f', $vats->vat122) }}</td>
             </tr>
         @endif
         @if ($vats->vat110)

@@ -18,11 +18,11 @@ export default {
                 vat5: null,
                 vat7: null,
                 vat10: null,
-                vat20: null,
+                vat22: null,
                 vat105: null,
                 vat107: null,
                 vat110: null,
-                vat120: null,
+                vat122: null,
             },
             agentInfo: {
                 type: null,
@@ -186,7 +186,7 @@ export default {
                 user_data: null,
                 vat: {
                     sum: null,
-                    type: "vat20",
+                    type: "vat22",
                 },
             });
         },
@@ -202,19 +202,20 @@ export default {
                 vat5: 0,
                 vat7: 0,
                 vat10: 0,
-                vat20: 0,
+                vat22: 0,
                 vat105: 0,
                 vat107: 0,
                 vat110: 0,
-                vat120: 0,
+                vat122: 0,
             };
 
             if (calc) {
                 for (const item of this.receipt.payload.items) {
                     switch (item?.vat.type ?? "none") {
+                        case "vat22":
                         case "vat20":
                         case "vat18":
-                            vats.vat20 += this.extractVat(item.sum, item.vat.type);
+                            vats.vat22 += this.extractVat(item.sum, item.vat.type);
                             break;
                         case "vat10":
                             vats.vat10 += this.extractVat(item.sum, item.vat.type);
@@ -225,9 +226,10 @@ export default {
                         case "none":
                             vats.without_vat += item.sum;
                             break;
+                        case "vat122":
                         case "vat120":
                         case "vat118":
-                            vats.vat120 += this.extractVat(item.sum, item.vat.type);
+                            vats.vat122 += this.extractVat(item.sum, item.vat.type);
                             break;
                         case "vat110":
                             vats.vat110 += this.extractVat(item.sum, item.vat.type);
@@ -368,13 +370,13 @@ export default {
             },
         },
 
-        vatsVat20: {
+        vatsVat22: {
             get: function () {
-                return this.receipt.payload.vats?.vat20 ?? null;
+                return this.receipt.payload.vats?.vat22 ?? null;
             },
             set: function (val) {
                 this.receipt.payload.vats ??= this.vats;
-                this.receipt.payload.vats.vat20 = val || null;
+                this.receipt.payload.vats.vat22 = val || null;
             },
         },
 
@@ -408,13 +410,13 @@ export default {
             },
         },
 
-        vatsVat120: {
+        vatsVat122: {
             get: function () {
-                return this.receipt.payload.vats?.vat120 ?? null;
+                return this.receipt.payload.vats?.vat122 ?? null;
             },
             set: function (val) {
                 this.receipt.payload.vats ??= this.vats;
-                this.receipt.payload.vats.vat120 = val || null;
+                this.receipt.payload.vats.vat122 = val || null;
             },
         },
 
@@ -1291,18 +1293,18 @@ fieldset {
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group
                                                 label="Сумма НДС чека по ставке 20%"
-                                                label-for="vat20"
+                                                label-for="vat22"
                                                 description="тег 1102"
                                             >
                                                 <b-form-input
-                                                    id="vat20"
+                                                    id="vat22"
                                                     type="number"
                                                     min="0"
                                                     max="42949672.95"
                                                     step=".01"
                                                     size="sm"
-                                                    :placeholder="vatsPlaceholder.vat20"
-                                                    v-model.number="vatsVat20"
+                                                    :placeholder="vatsPlaceholder.vat22"
+                                                    v-model.number="vatsVat22"
                                                 ></b-form-input>
                                             </b-form-group>
                                         </b-col>
@@ -1363,18 +1365,18 @@ fieldset {
                                         <b-col align-self="end" lg="2" md="3" sm="4">
                                             <b-form-group
                                                 label="Сумма НДС чека по расч. ставке 20/120"
-                                                label-for="vat120"
+                                                label-for="vat122"
                                                 description="тег 1106"
                                             >
                                                 <b-form-input
-                                                    id="vat120"
+                                                    id="vat122"
                                                     type="number"
                                                     min="0"
                                                     max="42949672.95"
                                                     step=".01"
                                                     size="sm"
-                                                    :placeholder="vatsPlaceholder.vat120"
-                                                    v-model.number="vatsVat120"
+                                                    :placeholder="vatsPlaceholder.vat122"
+                                                    v-model.number="vatsVat122"
                                                 ></b-form-input>
                                             </b-form-group>
                                         </b-col>

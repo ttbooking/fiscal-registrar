@@ -11,7 +11,7 @@
     "name": "vendor"
   },
   "resources/js/app.js": {
-    "file": "assets/app-CXI2htSA.js",
+    "file": "assets/app-D65sB4t3.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -29,7 +29,7 @@
     ]
   },
   "resources/js/screens/receipt.vue": {
-    "file": "assets/receipt-tZb5fgpE.js",
+    "file": "assets/receipt-CJ25qIhW.js",
     "name": "receipt",
     "src": "resources/js/screens/receipt.vue",
     "isDynamicEntry": true,
@@ -38,7 +38,7 @@
       "_vendor-B8UUPTre.js"
     ],
     "css": [
-      "assets/receipt-B78QawAJ.css"
+      "assets/receipt-4lFGsstj.css"
     ]
   },
   "resources/js/screens/receipts.vue": {

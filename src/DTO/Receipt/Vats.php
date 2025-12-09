@@ -12,7 +12,7 @@ final class Vats extends DataTransferObject
 {
     // 1102
     #[CastWith(RoundingCaster::class)]
-    public float|int $vat20 = 0;
+    public float|int $vat22 = 0;
 
     // 1103
     #[CastWith(RoundingCaster::class)]
@@ -28,7 +28,7 @@ final class Vats extends DataTransferObject
 
     // 1106
     #[CastWith(RoundingCaster::class)]
-    public float|int $vat120 = 0;
+    public float|int $vat122 = 0;
 
     // 1107
     #[CastWith(RoundingCaster::class)]

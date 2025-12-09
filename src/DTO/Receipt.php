@@ -51,9 +51,10 @@ final class Receipt extends DataTransferObject
         $vats = new Vats;
         foreach ($this->items as $item) {
             switch ($item->vat?->type ?? VatType::None) {
+                case VatType::VAT22:
                 case VatType::VAT20:
                 case VatType::VAT18:
-                    $vats->vat20 += $item->getVatSum();
+                    $vats->vat22 += $item->getVatSum();
                     break;
                 case VatType::VAT10:
                     $vats->vat10 += $item->getVatSum();
@@ -64,9 +65,10 @@ final class Receipt extends DataTransferObject
                 case VatType::None:
                     $vats->without_vat += $item->sum;
                     break;
+                case VatType::VAT122:
                 case VatType::VAT120:
                 case VatType::VAT118:
-                    $vats->vat120 += $item->getVatSum();
+                    $vats->vat122 += $item->getVatSum();
                     break;
                 case VatType::VAT110:
                     $vats->vat110 += $item->getVatSum();

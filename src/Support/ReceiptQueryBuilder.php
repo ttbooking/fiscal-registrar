@@ -23,23 +23,19 @@ class ReceiptQueryBuilder extends QueryBuilder
     private function applyConfiguration(): void
     {
         if ($filters = array_merge($this->configureBuiltinFilters(), $this->configureFilters())) {
-            $this->allowedFilters($filters);
+            $this->allowedFilters(...$filters);
         }
 
         if ($sorts = array_merge($this->configureBuiltinSorts(), $this->configureSorts())) {
-            $this->allowedSorts($sorts);
+            $this->allowedSorts(...$sorts);
         }
 
         if ($includes = $this->configureIncludes()) {
-            $this->allowedIncludes($includes);
+            $this->allowedIncludes(...$includes);
         }
 
         if ($fields = $this->configureFields()) {
-            $this->allowedFields($fields);
-        }
-
-        if ($appends = $this->configureAppends()) {
-            $this->allowedAppends($appends);
+            $this->allowedFields(...$fields);
         }
     }
 
@@ -110,11 +106,6 @@ class ReceiptQueryBuilder extends QueryBuilder
     }
 
     protected function configureFields(): array
-    {
-        return [];
-    }
-
-    protected function configureAppends(): array
     {
         return [];
     }

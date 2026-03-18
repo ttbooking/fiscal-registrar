@@ -1,5 +1,11 @@
 <?php
 
+use TTBooking\FiscalRegistrar\Enums\TaxSystem;
+use TTBooking\FiscalRegistrar\Http\Requests\ReceiptStoreRequest;
+use TTBooking\FiscalRegistrar\Models\Receipt;
+use TTBooking\FiscalRegistrar\Support\PlatformaOfdReceiptUrlGenerator;
+use TTBooking\FiscalRegistrar\Support\ReceiptQueryBuilder;
+
 return [
 
     /*
@@ -40,7 +46,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'model' => TTBooking\FiscalRegistrar\Models\Receipt::class,
+    'model' => Receipt::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -48,7 +54,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'request' => TTBooking\FiscalRegistrar\Http\Requests\ReceiptStoreRequest::class,
+    'request' => ReceiptStoreRequest::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -56,7 +62,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'query' => TTBooking\FiscalRegistrar\Support\ReceiptQueryBuilder::class,
+    'query' => ReceiptQueryBuilder::class,
 
     /*
     |--------------------------------------------------------------------------
@@ -103,11 +109,11 @@ return [
             'login' => 'v4-online-atol-ru',
             'password' => 'iGFFuihss',
             'group_code' => 'v4-online-atol-ru_4179',
-            'url_generator' => TTBooking\FiscalRegistrar\Support\PlatformaOfdReceiptUrlGenerator::class,
+            'url_generator' => PlatformaOfdReceiptUrlGenerator::class,
             'company' => [
                 'name' => 'ООО "АТОЛ Онлайн Тест"',
                 'inn' => '5544332219',
-                'tax_system' => TTBooking\FiscalRegistrar\Enums\TaxSystem::OSN,
+                'tax_system' => TaxSystem::OSN,
                 'payment_address' => '109316, Регион 77, Москва, Волгоградский проспект, дом 42, корпус 9',
                 'payment_site' => 'https://v4.online.atol.ru',
                 'email' => 'info@atol.ru',

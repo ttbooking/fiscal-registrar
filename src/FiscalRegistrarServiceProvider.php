@@ -6,6 +6,7 @@ namespace TTBooking\FiscalRegistrar;
 
 use Faker\Generator;
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Route;
@@ -15,7 +16,7 @@ use TTBooking\FiscalRegistrar\Http\Requests\ReceiptStoreRequest;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 use TTBooking\FiscalRegistrar\Support\ReceiptQueryBuilder;
 
-class FiscalRegistrarServiceProvider extends ServiceProvider //implements DeferrableProvider
+class FiscalRegistrarServiceProvider extends ServiceProvider // implements DeferrableProvider
 {
     /**
      * All of the singletons that should be registered.
@@ -49,7 +50,7 @@ class FiscalRegistrarServiceProvider extends ServiceProvider //implements Deferr
     protected function registerEvents(): void
     {
         if ($this->app['config']['fiscal-registrar.notify_client'] &&
-            $this->app->bound(\Illuminate\Contracts\Notifications\Dispatcher::class)) {
+            $this->app->bound(Dispatcher::class)) {
             Event::listen(Events\Processed::class, Listeners\SendNotification::class);
         }
     }

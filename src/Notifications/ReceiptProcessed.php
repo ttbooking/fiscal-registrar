@@ -41,7 +41,7 @@ class ReceiptProcessed extends Notification implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      */
-    public function toMail(mixed $notifiable): \Illuminate\Notifications\Messages\MailMessage
+    public function toMail(mixed $notifiable): MailMessage
     {
         return (new MailMessage)->markdown('fiscal-registrar::receipt', ['receipt' => $this->receipt]);
     }

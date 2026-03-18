@@ -8,7 +8,6 @@ use Illuminate\Support\Collection;
 use Spatie\DataTransferObject\Attributes\CastWith;
 use Spatie\DataTransferObject\Casters\ArrayCaster;
 use TTBooking\FiscalRegistrar\DTO\Casters\RoundingCaster;
-use TTBooking\FiscalRegistrar\DTO\Receipt\Vats;
 use TTBooking\FiscalRegistrar\Enums\VatType;
 
 final class Receipt extends DataTransferObject
@@ -42,15 +41,15 @@ final class Receipt extends DataTransferObject
     // 1084
     public ?Receipt\AdditionalUserProps $additional_user_props = null;
 
-    public function getVats(): Vats
+    public function getVats(): Receipt\Vats
     {
         if ($this->vats) {
             return $this->vats;
         }
 
-        $vats = new Vats;
+        $vats = new Receipt\Vats;
         foreach ($this->items as $item) {
-            switch ($item->vat?->type ?? VatType::None) {
+            switch ($item->vat->type ?? VatType::None) {
                 case VatType::VAT22:
                 case VatType::VAT20:
                 case VatType::VAT18:

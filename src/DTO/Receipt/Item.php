@@ -59,7 +59,7 @@ final class Item extends DataTransferObject
 
     public function getVatSum(): float
     {
-        return $this->vat?->sum ?? round(
+        return $this->vat->sum ?? round(
             $this->sum - $this->sum / (1 + (float) $this->vat?->type->getRate()),
             2, PHP_ROUND_HALF_EVEN
         );

@@ -5,19 +5,21 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\DTO;
 
 use DateTimeInterface;
-use Spatie\DataTransferObject\Attributes\CastWith;
+use Spatie\LaravelData\Attributes\WithCast;
 use TTBooking\FiscalRegistrar\DTO\Casters\ResultExtraCaster;
+use TTBooking\FiscalRegistrar\DTO\Casters\TimestampCaster;
 
 final class Result extends DataTransferObject
 {
     public string $internal_id;
 
+    #[WithCast(TimestampCaster::class)]
     public DateTimeInterface $timestamp;
 
     public string $status;
 
     public ?Result\Payload $payload = null;
 
-    #[CastWith(ResultExtraCaster::class)]
+    #[WithCast(ResultExtraCaster::class)]
     public ?object $extra = null;
 }

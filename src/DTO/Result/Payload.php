@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\DTO\Result;
 
 use DateTimeInterface;
-use Spatie\DataTransferObject\Attributes\CastWith;
+use Spatie\LaravelData\Attributes\WithCast;
 use TTBooking\FiscalRegistrar\DTO\Casters\RoundingCaster;
+use TTBooking\FiscalRegistrar\DTO\Casters\TimestampCaster;
 use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 
 final class Payload extends DataTransferObject
@@ -18,10 +19,11 @@ final class Payload extends DataTransferObject
     public int $shift_number;
 
     // 1012
+    #[WithCast(TimestampCaster::class)]
     public DateTimeInterface $receipt_datetime;
 
     // 1020
-    #[CastWith(RoundingCaster::class)]
+    #[WithCast(RoundingCaster::class)]
     public float|int $total;
 
     // 1041

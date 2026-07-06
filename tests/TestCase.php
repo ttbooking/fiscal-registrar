@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\Tests;
 
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
+use Spatie\LaravelData\LaravelDataServiceProvider;
 use TTBooking\FiscalRegistrar\Facades\FiscalRegistrar;
 use TTBooking\FiscalRegistrar\Facades\Receipt;
 use TTBooking\FiscalRegistrar\FiscalRegistrarServiceProvider;
@@ -14,7 +15,7 @@ abstract class TestCase extends OrchestraTestCase
 {
     protected function getPackageProviders($app): array
     {
-        return [FiscalRegistrarServiceProvider::class];
+        return [LaravelDataServiceProvider::class, FiscalRegistrarServiceProvider::class];
     }
 
     protected function getPackageAliases($app): array

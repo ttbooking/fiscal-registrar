@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\DTO\Receipt;
 
-use Spatie\DataTransferObject\Attributes\CastWith;
-use Spatie\DataTransferObject\Casters\EnumCaster;
+use Spatie\LaravelData\Attributes\WithCast;
 use TTBooking\FiscalRegistrar\DTO\Casters\RoundingCaster;
 use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 use TTBooking\FiscalRegistrar\Enums\PaymentMethod;
@@ -17,14 +16,14 @@ final class Item extends DataTransferObject
     public string $name;
 
     // 1079
-    #[CastWith(RoundingCaster::class)]
+    #[WithCast(RoundingCaster::class)]
     public float|int $price;
 
     // 1023
     public int $quantity = 1;
 
     // 1043
-    #[CastWith(RoundingCaster::class)]
+    #[WithCast(RoundingCaster::class)]
     public float|int $sum;
 
     // 1197
@@ -34,11 +33,9 @@ final class Item extends DataTransferObject
     public ?string $nomenclature_code = null;
 
     // 1214
-    #[CastWith(EnumCaster::class, PaymentMethod::class)]
     public PaymentMethod $payment_method = PaymentMethod::FullPrepayment;
 
     // 1212
-    #[CastWith(EnumCaster::class, PaymentObject::class)]
     public PaymentObject $payment_object = PaymentObject::Commodity;
 
     public ?Item\Vat $vat = null;
@@ -51,7 +48,7 @@ final class Item extends DataTransferObject
     public ?string $user_data = null;
 
     // 1229
-    #[CastWith(RoundingCaster::class)]
+    #[WithCast(RoundingCaster::class)]
     public float|int|null $excise = null;
 
     // 1230
@@ -68,18 +65,16 @@ final class Item extends DataTransferObject
         );
     }
 
-    protected static function transformSum($sum, array $args)
+    /**
+     * @param  array<string, mixed>  $properties
+     * @return array<string, mixed>
+     */
+    public static function prepareForPipeline(array $properties): array
     {
-        return $sum ?? ($args['price'] ?? 0) * ($args['quantity'] ?? 1);
-    }
+        $properties['sum'] ??= ($properties['price'] ?? 0) * ($properties['quantity'] ?? 1);
+        $properties['payment_method'] ??= PaymentMethod::FullPrepayment;
+        $properties['payment_object'] ??= PaymentObject::Commodity;
 
-    protected static function transformPaymentMethod($payment_method)
-    {
-        return $payment_method ?? PaymentMethod::FullPrepayment;
-    }
-
-    protected static function transformPaymentObject($payment_object)
-    {
-        return $payment_object ?? PaymentObject::Commodity;
+        return $properties;
     }
 }

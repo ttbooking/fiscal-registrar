@@ -19,6 +19,7 @@ use TTBooking\FiscalRegistrar\Contracts\SupportsCallbacks;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Enums\Operation;
+use TTBooking\FiscalRegistrar\Enums\VatType;
 use TTBooking\FiscalRegistrar\Exceptions;
 use TTBooking\FiscalRegistrar\Support\Driver;
 
@@ -157,7 +158,7 @@ class AtolDriver extends Driver implements SupportsCallbacks
                         $item->name, $item->price, $item->quantity, $item->sum,
                         AtolRegister\PaymentMethod::from($item->payment_method->value),
                         new AtolRegister\Vat(
-                            AtolRegister\VatType::from($item->vat->type->value),
+                            AtolRegister\VatType::from(($item->vat->type ?? VatType::None)->value),
                             $item->getVatSum()
                         )
                     );

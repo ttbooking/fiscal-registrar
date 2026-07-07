@@ -28,7 +28,7 @@ if (! function_exists('receipt')) {
 
         // Try to convert array to receipt DTO
         if (is_array($data)) {
-            $data = new DTO\Receipt($data);
+            $data = DTO\Receipt::from($data);
         }
 
         // Extract receipt DTO from model

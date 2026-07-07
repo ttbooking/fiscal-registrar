@@ -8,14 +8,16 @@ use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 
 final class Client extends DataTransferObject
 {
-    // 1008
-    public ?string $email = null;
+    public function __construct(
+        // 1008
+        public ?string $email = null,
 
-    public ?string $phone = null;
+        public ?string $phone = null,
 
-    // 1227
-    public ?string $name = null;
+        // 1227
+        public ?string $name = null,
 
-    // 1228
-    public ?string $inn = null;
+        // 1228
+        public ?string $inn = null,
+    ) {}
 }

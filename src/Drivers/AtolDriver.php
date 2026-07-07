@@ -201,30 +201,30 @@ class AtolDriver extends Driver implements SupportsCallbacks
             throw new Exceptions\DriverException($error->text, $error->code);
         }
 
-        $result = new Result(
-            internal_id: $reportResponse->uuid,
-            timestamp: $reportResponse->timestamp,
-            status: $reportResponse->status->value,
-            payload: new Result\Payload(
-                fiscal_receipt_number: $reportResponse->payload->fiscalReceiptNumber,
-                shift_number: $reportResponse->payload->shiftNumber,
-                receipt_datetime: $reportResponse->payload->receiptDatetime,
-                total: $reportResponse->payload->total,
-                fn_number: $reportResponse->payload->fnNumber,
-                ecr_registration_number: $reportResponse->payload->ecrRegistrationNumber,
-                fiscal_document_number: $reportResponse->payload->fiscalDocumentNumber,
-                fiscal_document_attribute: $reportResponse->payload->fiscalDocumentAttribute,
-                fns_site: $reportResponse->payload->fnsSite,
-                ofd_inn: $reportResponse->payload->ofdInn,
-                ofd_receipt_url: $reportResponse->payload->ofdReceiptUrl,
-            ),
-            extra: (object) [
+        $result = Result::from([
+            'internal_id' => $reportResponse->uuid,
+            'timestamp' => $reportResponse->timestamp,
+            'status' => $reportResponse->status->value,
+            'payload' => Result\Payload::from([
+                'fiscal_receipt_number' => $reportResponse->payload->fiscalReceiptNumber,
+                'shift_number' => $reportResponse->payload->shiftNumber,
+                'receipt_datetime' => $reportResponse->payload->receiptDatetime,
+                'total' => $reportResponse->payload->total,
+                'fn_number' => $reportResponse->payload->fnNumber,
+                'ecr_registration_number' => $reportResponse->payload->ecrRegistrationNumber,
+                'fiscal_document_number' => $reportResponse->payload->fiscalDocumentNumber,
+                'fiscal_document_attribute' => $reportResponse->payload->fiscalDocumentAttribute,
+                'fns_site' => $reportResponse->payload->fnsSite,
+                'ofd_inn' => $reportResponse->payload->ofdInn,
+                'ofd_receipt_url' => $reportResponse->payload->ofdReceiptUrl,
+            ]),
+            'extra' => [
                 'group_code' => $reportResponse->groupCode,
                 'daemon_code' => $reportResponse->daemonCode,
                 'device_code' => $reportResponse->deviceCode,
                 'callback_url' => $reportResponse->callbackUrl,
             ],
-        );
+        ]);
 
         $result->payload->ofd_receipt_url = $this->getReceiptUrl($result);
 

@@ -12,8 +12,10 @@ parameters:
 
     level: 5
 
+    configDirectories:
+        - config
+
     ignoreErrors:
-        - '#^Call to an undefined method TTBooking\\FiscalRegistrar\\Support\\ReceiptQueryBuilder::allowedAppends\(\)\.$#'
         -
             message: '#^Call to an undefined method Faker\\Generator::#'
             path: database/factories/*

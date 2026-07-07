@@ -49,7 +49,7 @@ class FiscalRegistrarController extends Controller
 
     public function register(Request $request, string $connection, Operation $operation, string $externalId): string
     {
-        return $this->factory->connection($connection)->register($operation, $externalId, new Receipt($request->all()));
+        return $this->factory->connection($connection)->register($operation, $externalId, Receipt::from($request->all()));
     }
 
     public function report(string $connection, string $id): ?Result

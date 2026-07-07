@@ -8,7 +8,11 @@ use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 
 final class SupplierInfo extends DataTransferObject
 {
-    // 1171
-    /** @var string[]|null */
-    public ?array $phones = null;
+    /**
+     * @param  string[]|null  $phones
+     */
+    public function __construct(
+        // 1171
+        public ?array $phones = null,
+    ) {}
 }

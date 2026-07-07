@@ -5,41 +5,43 @@ declare(strict_types=1);
 namespace TTBooking\FiscalRegistrar\DTO;
 
 use Illuminate\Support\Collection;
-use Spatie\DataTransferObject\Attributes\CastWith;
-use Spatie\DataTransferObject\Casters\ArrayCaster;
+use Spatie\LaravelData\Attributes\WithCast;
 use TTBooking\FiscalRegistrar\DTO\Casters\RoundingCaster;
 use TTBooking\FiscalRegistrar\Enums\VatType;
 
 final class Receipt extends DataTransferObject
 {
-    public Receipt\Client $client;
+    /**
+     * @param  Collection<int, Receipt\Item>  $items
+     */
+    public function __construct(
+        public Receipt\Client $client,
 
-    public Receipt\Company $company;
+        public Receipt\Company $company = new Receipt\Company,
 
-    public ?Receipt\AgentInfo $agent_info = null;
+        public ?Receipt\AgentInfo $agent_info = null,
 
-    public ?Receipt\SupplierInfo $supplier_info = null;
+        public ?Receipt\SupplierInfo $supplier_info = null,
 
-    /** @var Collection<int, Receipt\Item> */
-    #[CastWith(ArrayCaster::class, itemType: Receipt\Item::class)]
-    public Collection $items;
+        public Collection $items = new Collection,
 
-    public Receipt\Payments $payments;
+        public Receipt\Payments $payments = new Receipt\Payments,
 
-    public ?Receipt\Vats $vats = null;
+        public ?Receipt\Vats $vats = null,
 
-    // 1020
-    #[CastWith(RoundingCaster::class)]
-    public float|int $total;
+        // 1020
+        #[WithCast(RoundingCaster::class)]
+        public float|int $total = 0,
 
-    // 1192
-    public ?string $additional_check_props = null;
+        // 1192
+        public ?string $additional_check_props = null,
 
-    // 1021
-    public ?string $cashier = null;
+        // 1021
+        public ?string $cashier = null,
 
-    // 1084
-    public ?Receipt\AdditionalUserProps $additional_user_props = null;
+        // 1084
+        public ?Receipt\AdditionalUserProps $additional_user_props = null,
+    ) {}
 
     public function getVats(): Receipt\Vats
     {
@@ -90,31 +92,18 @@ final class Receipt extends DataTransferObject
     }
 
     /**
-     * @param  array<mixed>|null  $company
-     * @return array<mixed>
+     * @param  array<string, mixed>  $properties
+     * @return array<string, mixed>
      */
-    protected static function transformCompany(?array $company): array
+    public static function prepareForPipeline(array $properties): array
     {
-        return $company ?? [];
-    }
+        $properties['company'] ??= [];
+        $properties['total'] = (float) ($properties['total'] ?? collect($properties['items'] ?? [])->sum(
+            static fn ($item) => data_get($item, 'sum')
+                ?? (data_get($item, 'price') ?? 0) * (data_get($item, 'quantity') ?? 1)
+        ));
+        $properties['payments'] ??= ['electronic' => $properties['total']];
 
-    /**
-     * @param  array{items?: ?list<array{sum: float}>}  $args
-     */
-    protected static function transformTotal(?float $total, array $args): float
-    {
-        return (float) ($total ?? collect($args['items'] ?? [])->sum('sum'));
-    }
-
-    /**
-     * @template T of array{electronic: float}
-     *
-     * @param  T|null  $payments
-     * @param  array{total?: ?float}  $args
-     * @return T
-     */
-    protected static function transformPayments(?array $payments, array $args): array
-    {
-        return $payments ?? ['electronic' => self::transformTotal($args['total'] ?? null, $args)];
+        return $properties;
     }
 }

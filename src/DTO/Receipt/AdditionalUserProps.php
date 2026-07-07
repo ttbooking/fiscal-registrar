@@ -8,9 +8,11 @@ use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 
 final class AdditionalUserProps extends DataTransferObject
 {
-    // 1085
-    public string $name;
+    public function __construct(
+        // 1085
+        public string $name,
 
-    // 1086
-    public string $value;
+        // 1086
+        public string $value,
+    ) {}
 }

@@ -15,7 +15,7 @@ final class AtolApiFactory
     /** @var array<string, AtolApi> */
     private array $instances = [];
 
-    private ?ObjectConverter $converter;
+    private ObjectConverter $converter;
 
     public function make(?string $baseUri = null): AtolApi
     {

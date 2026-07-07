@@ -21,7 +21,7 @@ final class Item extends DataTransferObject
         public float|int $price,
 
         // 1023
-        public int $quantity = 1,
+        public float|int $quantity = 1,
 
         // 1043
         #[WithCast(RoundingCaster::class)]
@@ -74,6 +74,11 @@ final class Item extends DataTransferObject
     public static function prepareForPipeline(array $properties): array
     {
         $properties['sum'] ??= ($properties['price'] ?? 0) * ($properties['quantity'] ?? 1);
+
+        if (isset($properties['country_code'])) {
+            $properties['country_code'] = (string) $properties['country_code'];
+        }
+
         $properties['payment_method'] ??= PaymentMethod::FullPrepayment;
         $properties['payment_object'] ??= PaymentObject::Commodity;
 

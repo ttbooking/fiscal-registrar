@@ -50,34 +50,36 @@ class AtolDriver extends Driver implements SupportsCallbacks
 
         $registerRequest = $this->makeRequest($externalId, $payload);
 
-        $force = false;
-        do {
+        foreach ([false, true] as $force) {
             try {
                 /** @var AtolRegister\RegisterResponse $registerResponse */
                 $registerResponse = $this->api->{$operationString}
                 ($this->config['group_code'], $this->getToken($force), $registerRequest);
-                $force = true;
             } catch (RuntimeException $e) {
                 throw new Exceptions\DriverException("$operationString operation failed.", $e->getCode(), $e);
             }
-        } while (static::tokenHasExpired($registerResponse));
+
+            if (! static::tokenHasExpired($registerResponse)) {
+                break;
+            }
+        }
 
         return $this->processRegisterResponse($registerResponse);
     }
 
     public function report(string $id): ?Result
     {
-        // TODO: implement
-
-        $force = false;
-        do {
+        foreach ([false, true] as $force) {
             try {
                 $reportResponse = $this->api->report($this->config['group_code'], $this->getToken($force), $id);
-                $force = true;
             } catch (RuntimeException $e) {
                 throw new Exceptions\DriverException('Report operation failed.', $e->getCode(), $e);
             }
-        } while (static::tokenHasExpired($reportResponse));
+
+            if (! static::tokenHasExpired($reportResponse)) {
+                break;
+            }
+        }
 
         return $this->processReportResponse($reportResponse);
     }

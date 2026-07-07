@@ -8,10 +8,14 @@ use TTBooking\FiscalRegistrar\DTO\DataTransferObject;
 
 final class PayingAgent extends DataTransferObject
 {
-    // 1044
-    public ?string $operation = null;
+    /**
+     * @param  string[]|null  $phones
+     */
+    public function __construct(
+        // 1044
+        public ?string $operation = null,
 
-    // 1073
-    /** @var string[]|null */
-    public ?array $phones = null;
+        // 1073
+        public ?array $phones = null,
+    ) {}
 }

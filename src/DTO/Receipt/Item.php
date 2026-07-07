@@ -12,50 +12,52 @@ use TTBooking\FiscalRegistrar\Enums\PaymentObject;
 
 final class Item extends DataTransferObject
 {
-    // 1030
-    public string $name;
+    public function __construct(
+        // 1030
+        public string $name,
 
-    // 1079
-    #[WithCast(RoundingCaster::class)]
-    public float|int $price;
+        // 1079
+        #[WithCast(RoundingCaster::class)]
+        public float|int $price,
 
-    // 1023
-    public int $quantity = 1;
+        // 1023
+        public int $quantity = 1,
 
-    // 1043
-    #[WithCast(RoundingCaster::class)]
-    public float|int $sum;
+        // 1043
+        #[WithCast(RoundingCaster::class)]
+        public float|int $sum = 0,
 
-    // 1197
-    public ?string $measurement_unit = null;
+        // 1197
+        public ?string $measurement_unit = null,
 
-    // 1162
-    public ?string $nomenclature_code = null;
+        // 1162
+        public ?string $nomenclature_code = null,
 
-    // 1214
-    public PaymentMethod $payment_method = PaymentMethod::FullPrepayment;
+        // 1214
+        public PaymentMethod $payment_method = PaymentMethod::FullPrepayment,
 
-    // 1212
-    public PaymentObject $payment_object = PaymentObject::Commodity;
+        // 1212
+        public PaymentObject $payment_object = PaymentObject::Commodity,
 
-    public ?Item\Vat $vat = null;
+        public ?Item\Vat $vat = null,
 
-    public ?AgentInfo $agent_info = null;
+        public ?AgentInfo $agent_info = null,
 
-    public ?Item\SupplierInfo $supplier_info = null;
+        public ?Item\SupplierInfo $supplier_info = null,
 
-    // 1191
-    public ?string $user_data = null;
+        // 1191
+        public ?string $user_data = null,
 
-    // 1229
-    #[WithCast(RoundingCaster::class)]
-    public float|int|null $excise = null;
+        // 1229
+        #[WithCast(RoundingCaster::class)]
+        public float|int|null $excise = null,
 
-    // 1230
-    public ?string $country_code = null;
+        // 1230
+        public ?string $country_code = null,
 
-    // 1231
-    public ?string $declaration_number = null;
+        // 1231
+        public ?string $declaration_number = null,
+    ) {}
 
     public function getVatSum(): float
     {

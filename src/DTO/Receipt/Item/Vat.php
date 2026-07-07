@@ -11,10 +11,12 @@ use TTBooking\FiscalRegistrar\Enums\VatType;
 
 final class Vat extends DataTransferObject
 {
-    // 1199
-    public VatType $type;
+    public function __construct(
+        // 1199
+        public VatType $type,
 
-    // 1200
-    #[WithCast(RoundingCaster::class)]
-    public float|int|null $sum = null;
+        // 1200
+        #[WithCast(RoundingCaster::class)]
+        public float|int|null $sum = null,
+    ) {}
 }

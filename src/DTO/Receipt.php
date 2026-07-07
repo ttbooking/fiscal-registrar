@@ -11,33 +11,37 @@ use TTBooking\FiscalRegistrar\Enums\VatType;
 
 final class Receipt extends DataTransferObject
 {
-    public Receipt\Client $client;
+    /**
+     * @param  Collection<int, Receipt\Item>  $items
+     */
+    public function __construct(
+        public Receipt\Client $client,
 
-    public Receipt\Company $company;
+        public Receipt\Company $company = new Receipt\Company,
 
-    public ?Receipt\AgentInfo $agent_info = null;
+        public ?Receipt\AgentInfo $agent_info = null,
 
-    public ?Receipt\SupplierInfo $supplier_info = null;
+        public ?Receipt\SupplierInfo $supplier_info = null,
 
-    /** @var Collection<int, Receipt\Item> */
-    public Collection $items;
+        public Collection $items = new Collection,
 
-    public Receipt\Payments $payments;
+        public Receipt\Payments $payments = new Receipt\Payments,
 
-    public ?Receipt\Vats $vats = null;
+        public ?Receipt\Vats $vats = null,
 
-    // 1020
-    #[WithCast(RoundingCaster::class)]
-    public float|int $total;
+        // 1020
+        #[WithCast(RoundingCaster::class)]
+        public float|int $total = 0,
 
-    // 1192
-    public ?string $additional_check_props = null;
+        // 1192
+        public ?string $additional_check_props = null,
 
-    // 1021
-    public ?string $cashier = null;
+        // 1021
+        public ?string $cashier = null,
 
-    // 1084
-    public ?Receipt\AdditionalUserProps $additional_user_props = null;
+        // 1084
+        public ?Receipt\AdditionalUserProps $additional_user_props = null,
+    ) {}
 
     public function getVats(): Receipt\Vats
     {

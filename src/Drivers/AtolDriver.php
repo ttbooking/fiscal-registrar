@@ -160,7 +160,12 @@ class AtolDriver extends Driver implements SupportsCallbacks
                         new AtolRegister\Vat(
                             AtolRegister\VatType::from(($item->vat->type ?? VatType::None)->value),
                             $item->getVatSum()
-                        )
+                        ),
+                        $item->measurement_unit,
+                        AtolRegister\PaymentObject::from($item->payment_object->value),
+                        static::makeAgentInfo($item->agent_info),
+                        static::makeSupplierInfo($item->supplier_info),
+                        $item->user_data
                     );
                 })->all(),
 
@@ -173,7 +178,9 @@ class AtolDriver extends Driver implements SupportsCallbacks
 
                     ?: [new AtolRegister\Payment(AtolRegister\PaymentType::Electronic, 0)],
 
-                $receipt->total
+                $receipt->total,
+
+                static::makeVats($receipt->vats)
 
             ),
 
@@ -182,6 +189,65 @@ class AtolDriver extends Driver implements SupportsCallbacks
             ($callbackUrl = $this->getCallbackUrl()) ? new AtolRegister\Service($callbackUrl) : null
 
         );
+    }
+
+    protected static function makeAgentInfo(?Receipt\AgentInfo $agentInfo): ?AtolRegister\AgentInfo
+    {
+        if (is_null($agentInfo)) {
+            return null;
+        }
+
+        return new AtolRegister\AgentInfo(
+            AtolRegister\AgentType::from($agentInfo->type->value),
+            is_null($agentInfo->paying_agent) ? null : new AtolRegister\PayingAgent(
+                $agentInfo->paying_agent->operation ?? '',
+                $agentInfo->paying_agent->phones ?? []
+            ),
+            is_null($agentInfo->receive_payments_operator) ? null : new AtolRegister\ReceivePaymentsOperator(
+                $agentInfo->receive_payments_operator->phones ?? []
+            ),
+            is_null($agentInfo->money_transfer_operator) ? null : new AtolRegister\MoneyTransferOperator(
+                $agentInfo->money_transfer_operator->phones ?? [],
+                $agentInfo->money_transfer_operator->name ?? '',
+                $agentInfo->money_transfer_operator->address ?? '',
+                $agentInfo->money_transfer_operator->inn ?? ''
+            )
+        );
+    }
+
+    protected static function makeSupplierInfo(?Receipt\Item\SupplierInfo $supplierInfo): ?AtolRegister\SupplierInfo
+    {
+        if (is_null($supplierInfo)) {
+            return null;
+        }
+
+        return new AtolRegister\SupplierInfo(
+            $supplierInfo->phones ?? [],
+            $supplierInfo->name ?? '',
+            $supplierInfo->inn ?? ''
+        );
+    }
+
+    /**
+     * @return list<AtolRegister\Vat>|null
+     */
+    protected static function makeVats(?Receipt\Vats $vats): ?array
+    {
+        if (is_null($vats)) {
+            return null;
+        }
+
+        return collect($vats)
+            ->filter()
+            ->map(static fn (float|int $sum, string $type) => new AtolRegister\Vat(
+                AtolRegister\VatType::from(match ($type) {
+                    'with_vat0' => 'vat0',
+                    'without_vat' => 'none',
+                    default => $type,
+                }),
+                $sum
+            ))
+            ->values()->all() ?: null;
     }
 
     protected function processRegisterResponse(AtolRegister\RegisterResponse $registerResponse): string

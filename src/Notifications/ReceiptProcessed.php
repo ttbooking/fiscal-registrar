@@ -46,17 +46,15 @@ class ReceiptProcessed extends Notification implements ShouldQueue
 
     /**
      * Get the mail representation of the notification.
-     *
-     * The mail body is the same receipt render the preview endpoint
-     * serves, honoring per-connection receipt_template configuration.
      */
     public function toMail(mixed $notifiable): MailMessage
     {
-        $view = ReceiptView::for($this->receipt);
-
         return (new MailMessage)
             ->subject((string) __('fiscal-registrar::main.notification.subject'))
-            ->view($view->name(), $view->getData());
+            ->markdown('fiscal-registrar::mail.receipt', [
+                'receipt' => $this->receipt,
+                'receiptHtml' => ReceiptView::body($this->receipt),
+            ]);
     }
 
     /**

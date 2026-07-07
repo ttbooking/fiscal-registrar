@@ -24,6 +24,8 @@ return [
 
     'notification' => [
         'subject' => 'Receipt',
+        'intro' => 'Your electronic receipt.',
+        'view_receipt' => 'View receipt at FDO',
         'sms' => 'Receipt for :total RUB.',
     ],
 

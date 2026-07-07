@@ -22,16 +22,20 @@ class ReceiptProcessedNotificationTest extends TestCase
         return $receipt;
     }
 
-    public function test_mail_notification_renders_receipt_view(): void
+    public function test_mail_notification_embeds_receipt_render(): void
     {
         $mail = (new ReceiptProcessed($this->makeReceipt()))->toMail(new AnonymousNotifiable);
 
         $rendered = (string) $mail->render();
 
-        // Mail body is the same receipt render the preview endpoint serves
+        // Intro from the mail template wrapper
+        $this->assertStringContainsString(__('fiscal-registrar::main.notification.intro'), $rendered);
+
+        // Embedded receipt render survives the markdown pipeline intact
         $this->assertStringContainsString('id="receipt"', $rendered);
         $this->assertStringContainsString('Product', $rendered);
         $this->assertStringContainsString('100.00', $rendered);
+        $this->assertStringNotContainsString('<code>', $rendered);
     }
 
     public function test_via_selects_mail_channel_by_route(): void

@@ -22,6 +22,17 @@ return [
 
     ],
 
+    'notification' => [
+        'subject' => 'Receipt',
+        'intro' => 'Your electronic receipt.',
+        'item' => 'Item',
+        'quantity' => 'Qty',
+        'amount' => 'Amount',
+        'total' => 'Total',
+        'view_receipt' => 'View receipt at FDO',
+        'sms' => 'Receipt for :total RUB.',
+    ],
+
     'shared' => [
         'yes' => 'yes',
         'no' => 'no',

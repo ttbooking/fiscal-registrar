@@ -11,6 +11,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Messages\VonageMessage;
 use Illuminate\Notifications\Notification;
 use TTBooking\FiscalRegistrar\Models\Receipt;
+use TTBooking\FiscalRegistrar\Support\ReceiptView;
 
 class ReceiptProcessed extends Notification implements ShouldQueue
 {
@@ -45,12 +46,17 @@ class ReceiptProcessed extends Notification implements ShouldQueue
 
     /**
      * Get the mail representation of the notification.
+     *
+     * The mail body is the same receipt render the preview endpoint
+     * serves, honoring per-connection receipt_template configuration.
      */
     public function toMail(mixed $notifiable): MailMessage
     {
+        $view = ReceiptView::for($this->receipt);
+
         return (new MailMessage)
             ->subject((string) __('fiscal-registrar::main.notification.subject'))
-            ->markdown('fiscal-registrar::mail.receipt', ['receipt' => $this->receipt]);
+            ->view($view->name(), $view->getData());
     }
 
     /**

@@ -22,12 +22,14 @@ class ReceiptProcessedNotificationTest extends TestCase
         return $receipt;
     }
 
-    public function test_mail_notification_renders(): void
+    public function test_mail_notification_renders_receipt_view(): void
     {
         $mail = (new ReceiptProcessed($this->makeReceipt()))->toMail(new AnonymousNotifiable);
 
         $rendered = (string) $mail->render();
 
+        // Mail body is the same receipt render the preview endpoint serves
+        $this->assertStringContainsString('id="receipt"', $rendered);
         $this->assertStringContainsString('Product', $rendered);
         $this->assertStringContainsString('100.00', $rendered);
     }

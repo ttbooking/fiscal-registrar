@@ -139,39 +139,39 @@ class AtolDriver extends Driver implements SupportsCallbacks
 
         return new AtolRegister\RegisterRequest(
 
-            $externalId,
+            externalId: $externalId,
 
-            new AtolRegister\Receipt(
+            receipt: new AtolRegister\Receipt(
 
-                new AtolRegister\Client(
-                    $receipt->client->email,
-                    $receipt->client->phone
+                client: new AtolRegister\Client(
+                    email: $receipt->client->email,
+                    phone: $receipt->client->phone
                 ),
 
-                new AtolRegister\Company(
-                    $receipt->company->email ??= $this->config['company']['email'] ?? null,
-                    $receipt->company->inn ??= $this->config['company']['inn'] ?? null,
-                    $receipt->company->payment_site ??= $this->config['company']['payment_site'] ?? null,
-                    $receipt->company->tax_system ? AtolRegister\Sno::from($receipt->company->tax_system->value) : null
+                company: new AtolRegister\Company(
+                    email: $receipt->company->email ??= $this->config['company']['email'] ?? null,
+                    inn: $receipt->company->inn ??= $this->config['company']['inn'] ?? null,
+                    paymentAddress: $receipt->company->payment_site ??= $this->config['company']['payment_site'] ?? null,
+                    sno: $receipt->company->tax_system ? AtolRegister\Sno::from($receipt->company->tax_system->value) : null
                 ),
 
-                collect($receipt->items)->map(function (Receipt\Item $item) {
+                items: collect($receipt->items)->map(function (Receipt\Item $item) {
                     return new AtolRegister\Item(
-                        $item->name, $item->price, $item->quantity, $item->sum,
-                        AtolRegister\PaymentMethod::from($item->payment_method->value),
-                        new AtolRegister\Vat(
-                            AtolRegister\VatType::from(($item->vat->type ?? VatType::None)->value),
-                            $item->getVatSum()
+                        name: $item->name, price: $item->price, quantity: $item->quantity, sum: $item->sum,
+                        paymentMethod: AtolRegister\PaymentMethod::from($item->payment_method->value),
+                        vat: new AtolRegister\Vat(
+                            type: AtolRegister\VatType::from(($item->vat->type ?? VatType::None)->value),
+                            sum: $item->getVatSum()
                         ),
-                        $item->measurement_unit,
-                        AtolRegister\PaymentObject::from($item->payment_object->value),
-                        static::makeAgentInfo($item->agent_info),
-                        static::makeSupplierInfo($item->supplier_info),
-                        $item->user_data
+                        measurementUnit: $item->measurement_unit,
+                        paymentObject: AtolRegister\PaymentObject::from($item->payment_object->value),
+                        agentInfo: static::makeAgentInfo($item->agent_info),
+                        supplierInfo: static::makeSupplierInfo($item->supplier_info),
+                        userData: $item->user_data
                     );
                 })->all(),
 
-                collect($receipt->payments)
+                payments: collect($receipt->payments)
                     ->values()->filter()
                     ->map(function (float|int $sum, int $type) {
                         return new AtolRegister\Payment(AtolRegister\PaymentType::from($type), $sum);
@@ -180,15 +180,15 @@ class AtolDriver extends Driver implements SupportsCallbacks
 
                     ?: [new AtolRegister\Payment(AtolRegister\PaymentType::Electronic, 0)],
 
-                $receipt->total,
+                total: $receipt->total,
 
-                static::makeVats($receipt->vats)
+                vats: static::makeVats($receipt->vats)
 
             ),
 
-            date_create(),
+            timestamp: date_create(),
 
-            ($callbackUrl = $this->getCallbackUrl()) ? new AtolRegister\Service($callbackUrl) : null
+            service: ($callbackUrl = $this->getCallbackUrl()) ? new AtolRegister\Service($callbackUrl) : null
 
         );
     }
@@ -200,19 +200,19 @@ class AtolDriver extends Driver implements SupportsCallbacks
         }
 
         return new AtolRegister\AgentInfo(
-            AtolRegister\AgentType::from($agentInfo->type->value),
-            is_null($agentInfo->paying_agent) ? null : new AtolRegister\PayingAgent(
-                $agentInfo->paying_agent->operation ?? '',
-                $agentInfo->paying_agent->phones ?? []
+            type: AtolRegister\AgentType::from($agentInfo->type->value),
+            payingAgent: is_null($agentInfo->paying_agent) ? null : new AtolRegister\PayingAgent(
+                operation: $agentInfo->paying_agent->operation ?? '',
+                phones: $agentInfo->paying_agent->phones ?? []
             ),
-            is_null($agentInfo->receive_payments_operator) ? null : new AtolRegister\ReceivePaymentsOperator(
-                $agentInfo->receive_payments_operator->phones ?? []
+            receivePaymentsOperator: is_null($agentInfo->receive_payments_operator) ? null : new AtolRegister\ReceivePaymentsOperator(
+                phones: $agentInfo->receive_payments_operator->phones ?? []
             ),
-            is_null($agentInfo->money_transfer_operator) ? null : new AtolRegister\MoneyTransferOperator(
-                $agentInfo->money_transfer_operator->phones ?? [],
-                $agentInfo->money_transfer_operator->name ?? '',
-                $agentInfo->money_transfer_operator->address ?? '',
-                $agentInfo->money_transfer_operator->inn ?? ''
+            moneyTransferOperator: is_null($agentInfo->money_transfer_operator) ? null : new AtolRegister\MoneyTransferOperator(
+                phones: $agentInfo->money_transfer_operator->phones ?? [],
+                name: $agentInfo->money_transfer_operator->name ?? '',
+                address: $agentInfo->money_transfer_operator->address ?? '',
+                inn: $agentInfo->money_transfer_operator->inn ?? ''
             )
         );
     }
@@ -224,9 +224,9 @@ class AtolDriver extends Driver implements SupportsCallbacks
         }
 
         return new AtolRegister\SupplierInfo(
-            $supplierInfo->phones ?? [],
-            $supplierInfo->name ?? '',
-            $supplierInfo->inn ?? ''
+            phones: $supplierInfo->phones ?? [],
+            name: $supplierInfo->name ?? '',
+            inn: $supplierInfo->inn ?? ''
         );
     }
 

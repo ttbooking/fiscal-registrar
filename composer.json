@@ -26,9 +26,13 @@
         "fakerphp/faker": "^1.9.1",
         "larastan/larastan": "^3.0",
         "laravel/pint": "^1.17",
+        "laravel/vonage-notification-channel": "^3.3",
         "mockery/mockery": "^1.4.4",
         "orchestra/testbench": "^10.0 || ^11.0",
         "phpunit/phpunit": "^12.0 || ^13.0"
+    },
+    "suggest": {
+        "laravel/vonage-notification-channel": "Required to send receipt notifications via SMS (^3.0)."
     },
     "autoload": {
         "psr-4": {

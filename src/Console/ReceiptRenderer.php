@@ -90,7 +90,7 @@ trait ReceiptRenderer
 
         return $table->addRows([
             [new TableCell('<info>'.$item->name.'</info>', ['colspan' => 2])],
-            ['', sprintf('%d x %.2f', $item->quantity, $item->price)],
+            ['', sprintf('%g x %.2f', $item->quantity, $item->price)],
             [static::trans('receipt.items.sum'), sprintf('%.2f', $item->sum)],
             [static::trans('receipt.items.vat.type'), $item->vat?->type->getDescription('short') ?? '-'],
             $itemVatSum ? [static::trans('receipt.items.vat.sum'), sprintf('%.2f', $itemVatSum)] : [],

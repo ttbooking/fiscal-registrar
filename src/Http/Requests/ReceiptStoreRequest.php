@@ -52,7 +52,7 @@ class ReceiptStoreRequest extends FormRequest
             'payload.agent_info.money_transfer_operator.address' => 'sometimes|nullable|string|max:256',
             'payload.agent_info.money_transfer_operator.inn' => ['sometimes', 'nullable', 'string', 'numeric', 'regex:/^(\d{10}|\d{12})$/'],
 
-            'payload.supplier_info' => 'nullable|array',
+            'payload.supplier_info' => 'required_with:payload.agent_info|nullable|array',
             'payload.supplier_info.phones' => 'sometimes|nullable|array',
             'payload.supplier_info.phones.*' => 'required|string|max:19',
 
@@ -67,7 +67,7 @@ class ReceiptStoreRequest extends FormRequest
             'payload.items.*.payment_method' => ['sometimes', 'nullable', 'string', Rule::enum(Enums\PaymentMethod::class)],
             'payload.items.*.payment_object' => ['sometimes', 'nullable', 'string', Rule::enum(Enums\PaymentObject::class)],
             'payload.items.*.vat' => 'sometimes|nullable|array',
-            'payload.items.*.vat.type' => ['required', 'string', Rule::enum(Enums\VatType::class)],
+            'payload.items.*.vat.type' => ['required_with:payload.items.*.vat', 'string', Rule::enum(Enums\VatType::class)],
             'payload.items.*.vat.sum' => 'sometimes|nullable|numeric|between:0,99999999.99',
             'payload.items.*.agent_info' => 'sometimes|nullable|array',
             'payload.items.*.agent_info.type' => ['required_with:payload.items.*.agent_info', 'string', Rule::enum(Enums\AgentType::class)],
@@ -82,7 +82,7 @@ class ReceiptStoreRequest extends FormRequest
             'payload.items.*.agent_info.money_transfer_operator.name' => 'sometimes|nullable|string|max:64',
             'payload.items.*.agent_info.money_transfer_operator.address' => 'sometimes|nullable|string|max:256',
             'payload.items.*.agent_info.money_transfer_operator.inn' => ['sometimes', 'nullable', 'string', 'numeric', 'regex:/^(\d{10}|\d{12})$/'],
-            'payload.items.*.supplier_info' => 'required_with:items.*.agent_info|nullable|array',
+            'payload.items.*.supplier_info' => 'required_with:payload.items.*.agent_info|nullable|array',
             'payload.items.*.supplier_info.phones' => 'sometimes|nullable|array',
             'payload.items.*.supplier_info.phones.*' => 'required|string|max:19',
             'payload.items.*.supplier_info.name' => 'sometimes|nullable|string|max:64',

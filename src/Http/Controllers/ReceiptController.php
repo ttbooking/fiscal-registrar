@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace TTBooking\FiscalRegistrar\Http\Controllers;
 
-use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\View;
 use TTBooking\FiscalRegistrar\Http\Requests\ReceiptStoreRequest;
 use TTBooking\FiscalRegistrar\Models\Receipt;
 use TTBooking\FiscalRegistrar\Support\ReceiptQueryBuilder;
+use TTBooking\FiscalRegistrar\Support\ReceiptView;
 
 class ReceiptController extends Controller
 {
@@ -64,16 +64,9 @@ class ReceiptController extends Controller
         return Response::noContent();
     }
 
-    public function preview(Repository $config, Receipt $receipt): \Illuminate\Contracts\View\View
+    public function preview(Receipt $receipt): View
     {
-        /** @var array{receipt_template?: string} $connectionConfig */
-        $connectionConfig = $config->get("fiscal-registrar.connections.{$receipt->connection}", []);
-
-        $template = $connectionConfig['receipt_template'] ?? (
-            View::exists("fiscal-registrar::receipt.{$receipt->connection}") ? $receipt->connection : 'default'
-        );
-
-        return View::make("fiscal-registrar::receipt.$template", compact('receipt', 'connectionConfig'));
+        return ReceiptView::for($receipt);
     }
 
     public function register(Receipt $receipt): JsonResponse

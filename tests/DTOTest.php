@@ -79,6 +79,40 @@ class DTOTest extends TestCase
         $this->assertSame(PaymentObject::Commodity, $item->payment_object);
     }
 
+    public function test_receipt_creation_via_constructor(): void
+    {
+        $receipt = new DTO\Receipt(
+            client: new DTO\Receipt\Client(email: 'client@example.com'),
+            items: [
+                new DTO\Receipt\Item(name: 'Product A', price: 100.004, quantity: 20),
+                new DTO\Receipt\Item(name: 'Product B', price: 50, sum: 50),
+            ],
+        );
+
+        // Same derivation as with from(): company empty, sum, total and payments computed
+        $this->assertInstanceOf(DTO\Receipt\Company::class, $receipt->company);
+        $this->assertInstanceOf(Collection::class, $receipt->items);
+        $this->assertSame(2000.08, $receipt->items->first()?->sum);
+        $this->assertSame(2050.08, $receipt->total);
+        $this->assertSame(2050.08, $receipt->payments->electronic);
+        $this->assertSame(0, $receipt->payments->cash);
+    }
+
+    public function test_receipt_constructor_respects_explicit_values(): void
+    {
+        $receipt = new DTO\Receipt(
+            client: new DTO\Receipt\Client(email: 'client@example.com'),
+            items: collect([new DTO\Receipt\Item(name: 'Product', price: 100)]),
+            payments: new DTO\Receipt\Payments(cash: 100),
+            total: 100,
+        );
+
+        $this->assertSame(100.0, $receipt->items->first()?->sum);
+        $this->assertSame(100.0, $receipt->total);
+        $this->assertSame(100, $receipt->payments->cash);
+        $this->assertSame(0, $receipt->payments->electronic);
+    }
+
     public function test_receipt_serialization(): void
     {
         $receipt = DTO\Receipt::from([

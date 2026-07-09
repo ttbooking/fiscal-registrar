@@ -11,8 +11,17 @@ use TTBooking\FiscalRegistrar\Enums\VatType;
 
 final class Receipt extends DataTransferObject
 {
+    /** @var Collection<int, Receipt\Item> */
+    public Collection $items;
+
+    public Receipt\Payments $payments;
+
+    // 1020
+    #[WithCast(RoundingCaster::class)]
+    public float|int $total;
+
     /**
-     * @param  Collection<int, Receipt\Item>  $items
+     * @param  Collection<int, Receipt\Item>|Receipt\Item[]  $items
      */
     public function __construct(
         public Receipt\Client $client,
@@ -23,15 +32,13 @@ final class Receipt extends DataTransferObject
 
         public ?Receipt\SupplierInfo $supplier_info = null,
 
-        public Collection $items = new Collection,
+        Collection|array $items = new Collection,
 
-        public Receipt\Payments $payments = new Receipt\Payments,
+        ?Receipt\Payments $payments = null,
 
         public ?Receipt\Vats $vats = null,
 
-        // 1020
-        #[WithCast(RoundingCaster::class)]
-        public float|int $total = 0,
+        float|int|null $total = null,
 
         // 1192
         public ?string $additional_check_props = null,
@@ -41,7 +48,11 @@ final class Receipt extends DataTransferObject
 
         // 1084
         public ?Receipt\AdditionalUserProps $additional_user_props = null,
-    ) {}
+    ) {
+        $this->items = Collection::make($items);
+        $this->total = round((float) ($total ?? $this->items->sum('sum')), 2, PHP_ROUND_HALF_EVEN);
+        $this->payments = $payments ?? new Receipt\Payments(electronic: $this->total);
+    }
 
     public function getVats(): Receipt\Vats
     {

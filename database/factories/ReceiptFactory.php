@@ -44,24 +44,23 @@ class ReceiptFactory extends Factory
             'connection' => $this->faker->randomElement($connections),
             'operation' => $this->faker->randomElement(Operation::cases()),
             'external_id' => $this->faker->uuid(),
-            'payload' => fn () => DTO\Receipt::from([
+            'payload' => fn () => new DTO\Receipt(
 
-                'client' => [
-                    'email' => config('fiscal-registrar.test_email') ?? $this->faker->safeEmail(),
-                ],
+                client: new DTO\Receipt\Client(
+                    email: config('fiscal-registrar.test_email') ?? $this->faker->safeEmail(),
+                ),
 
-                'items' => array_map(fn () => DTO\Receipt\Item::from([
-                    'name' => $this->faker->unique()->commodity(),
-                    'price' => $price = $this->faker->numberBetween(1, 10000),
-                    'quantity' => $quantity = $this->faker->numberBetween(1, 10),
-                    'sum' => $price * $quantity,
-                    'measurement_unit' => $this->faker->optional()->randomElement(['шт.', 'кг']),
-                    'payment_method' => PaymentMethod::FullPrepayment,
-                    'payment_object' => PaymentObject::Commodity,
-                    'vat' => ['type' => VatType::VAT22],
-                ]), range(1, $this->faker->numberBetween(1, 10))),
+                items: array_map(fn () => new DTO\Receipt\Item(
+                    name: $this->faker->unique()->commodity(),
+                    price: $this->faker->numberBetween(1, 10000),
+                    quantity: $this->faker->numberBetween(1, 10),
+                    measurement_unit: $this->faker->optional()->randomElement(['шт.', 'кг']),
+                    payment_method: PaymentMethod::FullPrepayment,
+                    payment_object: PaymentObject::Commodity,
+                    vat: new DTO\Receipt\Item\Vat(type: VatType::VAT22),
+                ), range(1, $this->faker->numberBetween(1, 10))),
 
-            ]),
+            ),
         ];
     }
 

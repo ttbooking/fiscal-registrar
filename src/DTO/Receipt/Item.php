@@ -12,6 +12,10 @@ use TTBooking\FiscalRegistrar\Enums\PaymentObject;
 
 final class Item extends DataTransferObject
 {
+    // 1043
+    #[WithCast(RoundingCaster::class)]
+    public float|int $sum;
+
     public function __construct(
         // 1030
         public string $name,
@@ -23,9 +27,7 @@ final class Item extends DataTransferObject
         // 1023
         public int $quantity = 1,
 
-        // 1043
-        #[WithCast(RoundingCaster::class)]
-        public float|int $sum = 0,
+        float|int|null $sum = null,
 
         // 1197
         public ?string $measurement_unit = null,
@@ -57,7 +59,9 @@ final class Item extends DataTransferObject
 
         // 1231
         public ?string $declaration_number = null,
-    ) {}
+    ) {
+        $this->sum = round((float) ($sum ?? $this->price * $this->quantity), 2, PHP_ROUND_HALF_EVEN);
+    }
 
     public function getVatSum(): float
     {

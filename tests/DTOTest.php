@@ -113,6 +113,29 @@ class DTOTest extends TestCase
         $this->assertSame(0, $receipt->payments->electronic);
     }
 
+    public function test_item_supports_fractional_quantity(): void
+    {
+        $item = DTO\Receipt\Item::from([
+            'name' => 'Weighted product',
+            'price' => 100,
+            'quantity' => 0.5,
+        ]);
+
+        $this->assertSame(0.5, $item->quantity);
+        $this->assertSame(50.0, $item->sum);
+    }
+
+    public function test_numeric_country_code_is_cast_to_string(): void
+    {
+        $item = DTO\Receipt\Item::from([
+            'name' => 'Product',
+            'price' => 100,
+            'country_code' => 156,
+        ]);
+
+        $this->assertSame('156', $item->country_code);
+    }
+
     public function test_receipt_serialization(): void
     {
         $receipt = DTO\Receipt::from([

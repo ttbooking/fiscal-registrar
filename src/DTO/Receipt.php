@@ -21,7 +21,7 @@ final class Receipt extends DataTransferObject
     public float|int $total;
 
     /**
-     * @param  Collection<int, Receipt\Item>|Receipt\Item[]  $items
+     * @param  iterable<int, Receipt\Item>  $items
      */
     public function __construct(
         public Receipt\Client $client,
@@ -32,7 +32,7 @@ final class Receipt extends DataTransferObject
 
         public ?Receipt\SupplierInfo $supplier_info = null,
 
-        Collection|array $items = new Collection,
+        iterable $items = [],
 
         ?Receipt\Payments $payments = null,
 
@@ -49,7 +49,7 @@ final class Receipt extends DataTransferObject
         // 1084
         public ?Receipt\AdditionalUserProps $additional_user_props = null,
     ) {
-        $this->items = Collection::make($items);
+        $this->items = collect($items);
         $this->total = round((float) ($total ?? $this->items->sum('sum')), 2, PHP_ROUND_HALF_EVEN);
         $this->payments = $payments ?? new Receipt\Payments(electronic: $this->total);
     }

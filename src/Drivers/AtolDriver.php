@@ -19,6 +19,7 @@ use TTBooking\FiscalRegistrar\Contracts\SupportsCallbacks;
 use TTBooking\FiscalRegistrar\DTO\Receipt;
 use TTBooking\FiscalRegistrar\DTO\Result;
 use TTBooking\FiscalRegistrar\Enums\Operation;
+use TTBooking\FiscalRegistrar\Enums\VatType;
 use TTBooking\FiscalRegistrar\Exceptions;
 use TTBooking\FiscalRegistrar\Support\Driver;
 
@@ -49,34 +50,36 @@ class AtolDriver extends Driver implements SupportsCallbacks
 
         $registerRequest = $this->makeRequest($externalId, $payload);
 
-        $force = false;
-        do {
+        foreach ([false, true] as $force) {
             try {
                 /** @var AtolRegister\RegisterResponse $registerResponse */
                 $registerResponse = $this->api->{$operationString}
                 ($this->config['group_code'], $this->getToken($force), $registerRequest);
-                $force = true;
             } catch (RuntimeException $e) {
                 throw new Exceptions\DriverException("$operationString operation failed.", $e->getCode(), $e);
             }
-        } while (static::tokenHasExpired($registerResponse));
+
+            if (! static::tokenHasExpired($registerResponse)) {
+                break;
+            }
+        }
 
         return $this->processRegisterResponse($registerResponse);
     }
 
     public function report(string $id): ?Result
     {
-        // TODO: implement
-
-        $force = false;
-        do {
+        foreach ([false, true] as $force) {
             try {
                 $reportResponse = $this->api->report($this->config['group_code'], $this->getToken($force), $id);
-                $force = true;
             } catch (RuntimeException $e) {
                 throw new Exceptions\DriverException('Report operation failed.', $e->getCode(), $e);
             }
-        } while (static::tokenHasExpired($reportResponse));
+
+            if (! static::tokenHasExpired($reportResponse)) {
+                break;
+            }
+        }
 
         return $this->processReportResponse($reportResponse);
     }
@@ -136,34 +139,39 @@ class AtolDriver extends Driver implements SupportsCallbacks
 
         return new AtolRegister\RegisterRequest(
 
-            $externalId,
+            externalId: $externalId,
 
-            new AtolRegister\Receipt(
+            receipt: new AtolRegister\Receipt(
 
-                new AtolRegister\Client(
-                    $receipt->client->email,
-                    $receipt->client->phone
+                client: new AtolRegister\Client(
+                    email: $receipt->client->email,
+                    phone: $receipt->client->phone
                 ),
 
-                new AtolRegister\Company(
-                    $receipt->company->email ??= $this->config['company']['email'] ?? null,
-                    $receipt->company->inn ??= $this->config['company']['inn'] ?? null,
-                    $receipt->company->payment_site ??= $this->config['company']['payment_site'] ?? null,
-                    $receipt->company->tax_system ? AtolRegister\Sno::from($receipt->company->tax_system->value) : null
+                company: new AtolRegister\Company(
+                    email: $receipt->company->email ??= $this->config['company']['email'] ?? null,
+                    inn: $receipt->company->inn ??= $this->config['company']['inn'] ?? null,
+                    paymentAddress: $receipt->company->payment_site ??= $this->config['company']['payment_site'] ?? null,
+                    sno: $receipt->company->tax_system ? AtolRegister\Sno::from($receipt->company->tax_system->value) : null
                 ),
 
-                collect($receipt->items)->map(function (Receipt\Item $item) {
+                items: collect($receipt->items)->map(function (Receipt\Item $item) {
                     return new AtolRegister\Item(
-                        $item->name, $item->price, $item->quantity, $item->sum,
-                        AtolRegister\PaymentMethod::from($item->payment_method->value),
-                        new AtolRegister\Vat(
-                            AtolRegister\VatType::from($item->vat->type->value),
-                            $item->getVatSum()
-                        )
+                        name: $item->name, price: $item->price, quantity: $item->quantity, sum: $item->sum,
+                        paymentMethod: AtolRegister\PaymentMethod::from($item->payment_method->value),
+                        vat: new AtolRegister\Vat(
+                            type: AtolRegister\VatType::from(($item->vat->type ?? VatType::None)->value),
+                            sum: $item->getVatSum()
+                        ),
+                        measurementUnit: $item->measurement_unit,
+                        paymentObject: AtolRegister\PaymentObject::from($item->payment_object->value),
+                        agentInfo: static::makeAgentInfo($item->agent_info),
+                        supplierInfo: static::makeSupplierInfo($item->supplier_info),
+                        userData: $item->user_data
                     );
                 })->all(),
 
-                collect($receipt->payments)
+                payments: collect($receipt->payments)
                     ->values()->filter()
                     ->map(function (float|int $sum, int $type) {
                         return new AtolRegister\Payment(AtolRegister\PaymentType::from($type), $sum);
@@ -172,15 +180,76 @@ class AtolDriver extends Driver implements SupportsCallbacks
 
                     ?: [new AtolRegister\Payment(AtolRegister\PaymentType::Electronic, 0)],
 
-                $receipt->total
+                total: $receipt->total,
+
+                vats: static::makeVats($receipt->vats)
 
             ),
 
-            date_create(),
+            timestamp: date_create(),
 
-            ($callbackUrl = $this->getCallbackUrl()) ? new AtolRegister\Service($callbackUrl) : null
+            service: ($callbackUrl = $this->getCallbackUrl()) ? new AtolRegister\Service($callbackUrl) : null
 
         );
+    }
+
+    protected static function makeAgentInfo(?Receipt\AgentInfo $agentInfo): ?AtolRegister\AgentInfo
+    {
+        if (is_null($agentInfo)) {
+            return null;
+        }
+
+        return new AtolRegister\AgentInfo(
+            type: AtolRegister\AgentType::from($agentInfo->type->value),
+            payingAgent: is_null($agentInfo->paying_agent) ? null : new AtolRegister\PayingAgent(
+                operation: $agentInfo->paying_agent->operation ?? '',
+                phones: $agentInfo->paying_agent->phones ?? []
+            ),
+            receivePaymentsOperator: is_null($agentInfo->receive_payments_operator) ? null : new AtolRegister\ReceivePaymentsOperator(
+                phones: $agentInfo->receive_payments_operator->phones ?? []
+            ),
+            moneyTransferOperator: is_null($agentInfo->money_transfer_operator) ? null : new AtolRegister\MoneyTransferOperator(
+                phones: $agentInfo->money_transfer_operator->phones ?? [],
+                name: $agentInfo->money_transfer_operator->name ?? '',
+                address: $agentInfo->money_transfer_operator->address ?? '',
+                inn: $agentInfo->money_transfer_operator->inn ?? ''
+            )
+        );
+    }
+
+    protected static function makeSupplierInfo(?Receipt\Item\SupplierInfo $supplierInfo): ?AtolRegister\SupplierInfo
+    {
+        if (is_null($supplierInfo)) {
+            return null;
+        }
+
+        return new AtolRegister\SupplierInfo(
+            phones: $supplierInfo->phones ?? [],
+            name: $supplierInfo->name ?? '',
+            inn: $supplierInfo->inn ?? ''
+        );
+    }
+
+    /**
+     * @return list<AtolRegister\Vat>|null
+     */
+    protected static function makeVats(?Receipt\Vats $vats): ?array
+    {
+        if (is_null($vats)) {
+            return null;
+        }
+
+        return collect($vats)
+            ->filter()
+            ->map(static fn (float|int $sum, string $type) => new AtolRegister\Vat(
+                AtolRegister\VatType::from(match ($type) {
+                    'with_vat0' => 'vat0',
+                    'without_vat' => 'none',
+                    default => $type,
+                }),
+                $sum
+            ))
+            ->values()->all() ?: null;
     }
 
     protected function processRegisterResponse(AtolRegister\RegisterResponse $registerResponse): string

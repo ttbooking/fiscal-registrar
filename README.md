@@ -6,7 +6,7 @@ For the time being it supports most of the *Fiscal Data Format* (FDF, _ru_ ФФ�
 # 2. Requirements
 
 * PHP 8.2 or greater;
-* Laravel Framework 10 or greater;
+* Laravel Framework 12 or greater;
 * Highly recommended: RDBMS with JSON column support;
 * ATOL Online & FDO contracts and connection requisites (not needed for testing purposes).
 
@@ -95,19 +95,3 @@ The `Receipt` DTO mostly resembles similar structure described in ATOL Online do
 `public function report(string $id): ?Result`
 
 Check out current receipt status using identifier, returned by `register` method.
-
-# 6. Storage-agnostic FiscalRegistrar facade
-
-# 7. Receipt facade w/ fluent interface
-
-# 8. receipt() helper function
-
-# 9. Web API counterparts
-
-This package also may work as a microservice via its RESTful API.
-
-# 10. Available console commands
-
-# 11. Web UI (separate package, take a look)
-
-# 12. Extending functionality / Writing drivers

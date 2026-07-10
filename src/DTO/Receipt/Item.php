@@ -60,7 +60,10 @@ final class Item extends DataTransferObject
         // 1231
         public ?string $declaration_number = null,
     ) {
+        $this->price = is_float($this->price) ? round($this->price, 2, PHP_ROUND_HALF_EVEN) : $this->price;
+        $this->quantity = is_float($this->quantity) ? round($this->quantity, 3, PHP_ROUND_HALF_EVEN) : $this->quantity;
         $this->sum = round((float) ($sum ?? $this->price * $this->quantity), 2, PHP_ROUND_HALF_EVEN);
+        $this->excise = is_float($this->excise) ? round($this->excise, 2, PHP_ROUND_HALF_EVEN) : $this->excise;
     }
 
     public function getVatSum(): float

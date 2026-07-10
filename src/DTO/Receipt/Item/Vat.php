@@ -18,5 +18,7 @@ final class Vat extends DataTransferObject
         // 1200
         #[WithCast(RoundingCaster::class)]
         public float|int|null $sum = null,
-    ) {}
+    ) {
+        $this->sum = is_float($this->sum) ? round($this->sum, 2, PHP_ROUND_HALF_EVEN) : $this->sum;
+    }
 }
